@@ -1,0 +1,42 @@
+{
+	"sfc": {
+		"prefix": "sfc",
+		"scope": "vue",
+		"description": "Vue 3 SFC script setup typescript",
+		"body": [
+			"<script setup lang=\"ts\">",
+			"interface I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props} {",
+			"$0",
+			"}"
+			"const props = defineProps<I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props}>();"
+			"</script>",
+			"",
+			"<template>",
+			"</template>"
+			"",
+			"<style scoped>",
+			"</style>"
+		],
+	},
+	"props": {
+		"prefix": "props",
+		"scope": "typescript",
+		"description": "Vue 3 SFC props",
+		"body": [
+			"interface I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props} {",
+			"$0",
+			"}"
+			"const props = defineProps<I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props}>();"
+		],
+	},
+	"emits": {
+		"prefix": "emits",
+		"scope": "typescript",
+		"description": "Vue 3 SFC emits",
+		"body": [
+			"const emit = defineEmits<{",
+			"\tupdate: [value: string]",
+			"}>();"
+		],
+	}
+}
