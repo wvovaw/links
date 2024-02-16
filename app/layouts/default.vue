@@ -27,7 +27,7 @@ const title = computed(() => t(route.meta.title as string));
           <Meta :id="meta.id" :property="meta.property" :content="meta.content" />
         </template>
       </Head>
-      <Body class="bg-bg font-sans">
+      <Body class="font-sans">
         <NavigationBar>
           <template #left>
             <div class="font-headings font-bold text-2xl text-center flex items-center">

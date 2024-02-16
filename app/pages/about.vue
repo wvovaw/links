@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { locale } = useI18n();
-const { data } = await useAsyncData("about", () => queryContent(`_articles/${locale.value}/about`).findOne());
+const { data } = await useAsyncData("about", () => queryContent(`_articles/about.${locale.value}`).findOne());
 
 definePageMeta({
   title: "site.pages.about.title",
@@ -8,9 +8,7 @@ definePageMeta({
 </script>
 
 <template>
-  <!-- TODO: Change some prose styles -->
-  <!-- TODO: MDC instead of MD, unocss MDC extractor, make MDC document shine -->
-  <div class="prose text-fg">
+  <div class="prose">
     <ContentRenderer :value="data!">
       <ContentRendererMarkdown :value="data!" />
     </ContentRenderer>

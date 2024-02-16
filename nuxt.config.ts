@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   unocss: {
     preflight: true,
   },
-  css: ["~assets/css/global.css", "~assets/css/procrastination.css"],
+  css: ["~assets/css/global.css", "~assets/css/shadcn.css"],
   content: {
     markdown: {
       remarkPlugins: {},
@@ -27,7 +27,6 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: "locales",
     locales: [{
-
       code: "en",
       iso: "en-US",
       name: "English",

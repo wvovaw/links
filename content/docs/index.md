@@ -1,10 +1,8 @@
 ---
-title: Wuxt docs
-description: Wuxt documentation
+title: Getting started
+description: Links documentation index page
 ---
 
 # Docs index
 
-::TestComp
-And it support slots
-::
+To get started follow [Nuxt Content docs](https://content.nuxt.com/)

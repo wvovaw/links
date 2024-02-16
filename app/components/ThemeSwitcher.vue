@@ -13,20 +13,18 @@ const { cycle } = themeStore;
 
 <template>
   <UIButton class="active:none" @click="cycle">
-    <template #icon-start>
-      <div
-        v-if="state === 'light'"
-        class="i-lucide:sun-medium w-1.3rem h-1.3rem"
-      />
-      <div
-        v-if="state === 'dark'"
-        class="i-lucide:moon w-1.3rem h-1.3rem"
-      />
-      <div
-        v-if="state === 'auto'"
-        class="i-lucide:monitor w-1.3rem h-1.3rem"
-      />
-    </template>
+    <div
+      v-if="state === 'light'"
+      class="i-lucide:sun-medium w-1.3rem h-1.3rem"
+    />
+    <div
+      v-if="state === 'dark'"
+      class="i-lucide:moon w-1.3rem h-1.3rem"
+    />
+    <div
+      v-if="state === 'auto'"
+      class="i-lucide:monitor w-1.3rem h-1.3rem"
+    />
     <span
       v-if="!iconOnly"
       class="ml-2 capitalize"

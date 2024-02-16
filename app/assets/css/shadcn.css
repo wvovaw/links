@@ -1,0 +1,139 @@
+:root {
+  --light-background: 210 30% 95%;
+  --light-foreground: 210 25% 10%;
+  --light-card: 210 30% 95%;
+  --light-card-foreground: 210 25% 10%;
+  --light-popover: 210 30% 95%;
+  --light-popover-foreground: 210 25% 10%;
+  --light-primary: 200 60% 50%;
+  --light-primary-foreground: 210 30% 95%;
+  --light-secondary: 200 100% 85%;
+  --light-secondary-foreground: 210 25% 10%;
+  --light-muted: 210 40% 40%;
+  --light-muted-foreground: 210 25% 70%;
+  --light-accent: 220 100% 60%;
+  --light-accent-foreground: 210 30% 95%;
+  --light-destructive: 10 70% 50%;
+  --light-destructive-foreground: 210 25% 10%;
+  --light-border: 210 40% 40%;
+  --light-input: 210 40% 40%;
+  --light-ring: 220 100% 40%;
+  --light-radius: 0.8rem;
+
+  --dark-background: 210 30% 5%;
+  --dark-foreground: 210 25% 90%;
+  --dark-card: 210 30% 5%;
+  --dark-card-foreground: 210 25% 90%;
+  --dark-popover: 210 30% 5%;
+  --dark-popover-foreground: 210 25% 90%;
+  --dark-primary: 200 60% 55%;
+  --dark-primary-foreground: 210 30% 5%;
+  --dark-secondary: 200 100% 15%;
+  --dark-secondary-foreground: 210 25% 90%;
+  --dark-muted: 210 40% 60%;
+  --dark-muted-foreground: 210 25% 90%;
+  --dark-accent: 220 100% 40%;
+  --dark-accent-foreground: 210 30% 5%;
+  --dark-destructive: 10 70% 30%;
+  --dark-destructive-foreground: 210 25% 90%;
+  --dark-border: 210 40% 20%;
+  --dark-input: 210 40% 60%;
+  --dark-ring: 220 100% 60%;
+  --dark-radius: 0.8rem;
+}
+
+html[data-theme="light"] {
+  --background: var(--light-background);
+  --foreground: var(--light-foreground);
+  --card: var(--light-card);
+  --card-foreground: var(--light-card-foreground);
+  --popover: var(--light-popover);
+  --popover-foreground: var(--light-primary-foreground);
+  --primary: var(--light-primary);
+  --primary-foreground: var(--light-primary-foreground);
+  --secondary: var(--light-secondary);
+  --secondary-foreground: var(--light-secondary-foreground);
+  --muted: var(--light-muted);
+  --muted-foreground: var(--light-muted-foreground);
+  --accent: var(--light-accent);
+  --accent-foreground: var(--light-accent-foreground);
+  --destructive: var(--light-destructive);
+  --destructive-foreground: var(--light-destructive-foreground);
+  --border: var(--light-border);
+  --input: var(--light-input);
+  --ring: var(--light-ring);
+  --radius: var(--light-radius);
+}
+  
+html[data-theme="dark"] {
+  --background: var(--dark-background);
+  --foreground: var(--dark-foreground);
+  --card: var(--dark-card);
+  --card-foreground: var(--dark-card-foreground);
+  --popover: var(--dark-popover);
+  --popover-foreground: var(--dark-primary-foreground);
+  --primary: var(--dark-primary);
+  --primary-foreground: var(--dark-primary-foreground);
+  --secondary: var(--dark-secondary);
+  --secondary-foreground: var(--dark-secondary-foreground);
+  --muted: var(--dark-muted);
+  --muted-foreground: var(--dark-muted-foreground);
+  --accent: var(--dark-accent);
+  --accent-foreground: var(--dark-accent-foreground);
+  --destructive: var(--dark-destructive);
+  --destructive-foreground: var(--dark-destructive-foreground);
+  --border: var(--dark-border);
+  --input: var(--dark-input);
+  --ring: var(--dark-ring);
+  --radius: var(--dark-radius);
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --background: var(--dark-background);
+    --foreground: var(--dark-foreground);
+    --card: var(--dark-card);
+    --card-foreground: var(--dark-card-foreground);
+    --popover: var(--dark-popover);
+    --popover-foreground: var(--dark-primary-foreground);
+    --primary: var(--dark-primary);
+    --primary-foreground: var(--dark-primary-foreground);
+    --secondary: var(--dark-secondary);
+    --secondary-foreground: var(--dark-secondary-foreground);
+    --muted: var(--dark-muted);
+    --muted-foreground: var(--dark-muted-foreground);
+    --accent: var(--dark-accent);
+    --accent-foreground: var(--dark-accent-foreground);
+    --destructive: var(--dark-destructive);
+    --destructive-foreground: var(--dark-destructive-foreground);
+    --border: var(--dark-border);
+    --input: var(--dark-input);
+    --ring: var(--dark-ring);
+    --radius: var(--dark-radius);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html[data-theme="auto"] {
+    --background: var(--light-background);
+    --foreground: var(--light-foreground);
+    --card: var(--light-card);
+    --card-foreground: var(--light-card-foreground);
+    --popover: var(--light-popover);
+    --popover-foreground: var(--light-primary-foreground);
+    --primary: var(--light-primary);
+    --primary-foreground: var(--light-primary-foreground);
+    --secondary: var(--light-secondary);
+    --secondary-foreground: var(--light-secondary-foreground);
+    --muted: var(--light-muted);
+    --muted-foreground: var(--light-muted-foreground);
+    --accent: var(--light-accent);
+    --accent-foreground: var(--light-accent-foreground);
+    --destructive: var(--light-destructive);
+    --destructive-foreground: var(--light-destructive-foreground);
+    --border: var(--light-border);
+    --input: var(--light-input);
+    --ring: var(--light-ring);
+    --radius: var(--light-radius);
+  }
+}

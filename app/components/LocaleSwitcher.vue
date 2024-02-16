@@ -11,7 +11,7 @@ function onChangeLocale(newLocale: string) {
 </script>
 
 <template>
-  <select class="bg-bg fg-fg" :value="locale" @change.prevent="(e: Event) => onChangeLocale((e.target as HTMLSelectElement).value)">
+  <select class="bg-background fg-foreground" :value="locale" @change.prevent="(e: Event) => onChangeLocale((e.target as HTMLSelectElement).value)">
     <option v-for="l of locales" :key="l.code" :value="l.code">
       {{ l.name }}
     </option>
