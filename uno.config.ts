@@ -82,10 +82,5 @@ export default defineConfig({
   extractors: [extractorMdc()],
   content: {
     filesystem: ["content/**/*.{md,mdc}"],
-    pipeline: {
-      include: [
-        /\.(vue|svelte|[jt]s|[jt]sx|md[xc]?|astro|elm|php|phtml|html)($|\?)/,
-      ],
-    },
   },
 });

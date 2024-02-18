@@ -16,41 +16,39 @@ const title = computed(() => t(route.meta.title as string));
 </script>
 
 <template>
-  <div>
-    <Html :lang="head.htmlAttrs.lang" :dir="head.htmlAttrs.dir">
-      <Head>
-        <Title>{{ title }}</Title>
-        <template v-for="link in head.link" :key="link.id">
-          <Link :id="link.id" :rel="link.rel" :href="link.href" :hreflang="link.hreflang" />
-        </template>
-        <template v-for="meta in head.meta" :key="meta.id">
-          <Meta :id="meta.id" :property="meta.property" :content="meta.content" />
-        </template>
-      </Head>
-      <Body class="font-sans">
-        <NavigationBar>
-          <template #left>
-            <div class="font-headings font-bold text-2xl text-center flex items-center">
-              {{ t("site.sitename") }}
-            </div>
-          </template>
-          <template #right>
-            <div class="flex items-center gap-2">
-              <ClientOnly>
-                <LocaleSwitcher />
-              </ClientOnly>
-              <ThemeSwitcher icon-only />
-            </div>
-          </template>
-        </NavigationBar>
-
-        <div class="grid place-content-center m-4">
-          <div class="container">
-            <NavigationMenu />
-            <slot />
+  <Html :lang="head.htmlAttrs.lang" :dir="head.htmlAttrs.dir">
+    <Head>
+      <Title>{{ title }}</Title>
+      <template v-for="link in head.link" :key="link.id">
+        <Link :id="link.id" :rel="link.rel" :href="link.href" :hreflang="link.hreflang" />
+      </template>
+      <template v-for="meta in head.meta" :key="meta.id">
+        <Meta :id="meta.id" :property="meta.property" :content="meta.content" />
+      </template>
+    </Head>
+    <Body class="font-sans">
+      <NavigationBar>
+        <template #left>
+          <div class="font-headings font-bold text-2xl text-center flex items-center">
+            {{ t("site.sitename") }}
           </div>
+        </template>
+        <template #right>
+          <div class="flex items-center gap-2">
+            <ClientOnly>
+              <LocaleSwitcher />
+            </ClientOnly>
+            <ThemeSwitcher icon-only />
+          </div>
+        </template>
+      </NavigationBar>
+
+      <div class="grid place-content-center m-4">
+        <div class="container">
+          <NavigationMenu />
+          <slot />
         </div>
-      </Body>
-    </Html>
-  </div>
+      </div>
+    </Body>
+  </Html>
 </template>

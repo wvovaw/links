@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   unocss: {
     preflight: true,
   },
-  css: ["~assets/css/global.css", "~assets/css/shadcn.css"],
+  css: ["~assets/css/global.css", "~assets/css/moon.css"],
   content: {
     markdown: {
       remarkPlugins: {},
@@ -61,7 +61,7 @@ export default defineNuxtConfig({
   experimental: {
     typedPages: true,
   },
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   extends: ["nuxt.structure.ts"],
-  watch: ["nuxt.structure.ts"],
+  watch: ["nuxt.structure.ts", "uno.config.ts"],
 });
