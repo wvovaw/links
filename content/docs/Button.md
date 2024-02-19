@@ -11,3 +11,7 @@ title: Button component
 :ui-docs-button-variants{title="Variants"}
 
 :ui-docs-button-sizes{title="Sizes"}
+
+:ui-docs-button-full-width{title="Full width"}
+
+:ui-docs-button-disabled{title="Disabled"}

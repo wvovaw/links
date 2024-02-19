@@ -5,34 +5,19 @@ import { UIButton } from "~ui/Button";
 
 <template>
   <Previewbox>
-    <UIButton size="xs">
-      <template #iconLeft>
-        <span class="i-lucide-box" />
-      </template>
+    <UIButton size="xs" icon="i-lucide:box">
       XS Button
     </UIButton>
-    <UIButton size="sm">
-      <template #iconLeft>
-        <span class="i-lucide-box" />
-      </template>
+    <UIButton size="sm" icon="i-lucide:box">
       SM Button
     </UIButton>
-    <UIButton>
-      <template #iconLeft>
-        <span class="i-lucide-box" />
-      </template>
+    <UIButton icon="i-lucide:box">
       MD Button
     </UIButton>
-    <UIButton size="lg">
-      <template #iconLeft>
-        <span class="i-lucide-box" />
-      </template>
+    <UIButton size="lg" icon="i-lucide:box">
       LG Button
     </UIButton>
-    <UIButton size="xl">
-      <template #iconLeft>
-        <span class="i-lucide-box" />
-      </template>
+    <UIButton size="xl" icon="i-lucide:box">
       XL Button
     </UIButton>
   </Previewbox>

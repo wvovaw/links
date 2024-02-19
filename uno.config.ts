@@ -11,7 +11,9 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetMoonDS(),
-    presetIcons(),
+    presetIcons({
+      scale: 1.2,
+    }),
     presetWebFonts({
       provider: "google",
       fonts: {

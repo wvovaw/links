@@ -9,22 +9,19 @@ defineProps<{
 const themeStore = useThemeStore();
 const { state } = storeToRefs(themeStore);
 const { cycle } = themeStore;
+
+const icon = computed(() => {
+  if (state.value === "dark")
+    return "i-lucide:moon";
+  if (state.value === "light")
+    return "i-lucide:sun-medium";
+  if (state.value === "auto")
+    return "i-lucide:monitor";
+});
 </script>
 
 <template>
-  <UIButton class="active:none" @click="cycle">
-    <div
-      v-if="state === 'light'"
-      class="i-lucide:sun-medium w-1.3rem h-1.3rem"
-    />
-    <div
-      v-if="state === 'dark'"
-      class="i-lucide:moon w-1.3rem h-1.3rem"
-    />
-    <div
-      v-if="state === 'auto'"
-      class="i-lucide:monitor w-1.3rem h-1.3rem"
-    />
+  <UIButton class="active:none" :icon="icon" @click="cycle">
     <span
       v-if="!iconOnly"
       class="ml-2 capitalize"
