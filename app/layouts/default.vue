@@ -26,10 +26,10 @@ const title = computed(() => t(route.meta.title as string));
         <Meta :id="meta.id" :property="meta.property" :content="meta.content" />
       </template>
     </Head>
-    <Body class="font-sans">
+    <Body>
       <NavigationBar>
         <template #left>
-          <div class="font-headings font-bold text-2xl text-center flex items-center">
+          <div class="font-averta font-semibold text-2xl text-center flex items-center">
             {{ t("site.sitename") }}
           </div>
         </template>

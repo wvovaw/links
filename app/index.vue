@@ -17,7 +17,7 @@ addRouteMiddleware("theme-cookie-update", () => {
 
 <template>
   <Html :data-theme="cookie.theme">
-    <Body class="bg-background text-foreground">
+    <Body class="bg-goku text-bulma font-dm-sans font-regular">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

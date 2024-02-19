@@ -3,6 +3,7 @@ import { NavigationBar } from "~components/NavigationBar";
 import ThemeSwitcher from "~components/ThemeSwitcher.vue";
 import { DocsAsideNavigation } from "~components/DocsAsideNavigation";
 
+const { t } = useI18n();
 const head = useLocaleHead({
   addDirAttribute: true,
   identifierAttribute: "id",
@@ -20,49 +21,31 @@ const head = useLocaleHead({
         <Meta :id="meta.id" :property="meta.property" :content="meta.content" />
       </template>
     </Head>
-    <Body class="bg-background font-sans">
+    <Body>
       <NavigationBar>
+        <template #left>
+          <span class="font-averta font-semibold text-2xl text-center flex items-center">
+            {{ t("site.sitename") }}
+          </span>
+        </template>
         <template #right>
           <ThemeSwitcher />
         </template>
       </NavigationBar>
-      <div class="docs-grid">
-        <aside class="docs-grid__aside">
-          <DocsAsideNavigation />
-        </aside>
-        <main class="docs-grid__content">
+      <div class="grid grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] gap-8">
+        <DocsAsideNavigation />
+        <main class="p-4 md:p-0">
           <slot />
         </main>
-        <section class="docs-grid__toc">
+        <aside class="hidden lg:block sticky top-0 h-100vh p-6 border-(l-1 beerus) bg-gohan">
           <div class="w-full text-center">
             Table of contents
           </div>
-        </section>
+        </aside>
       </div>
     </Body>
   </Html>
 </template>
 
 <style scoped>
-.docs-grid {
-  display: grid;
-  grid-template-columns: minmax(250px, 250px) minmax(320px, 1fr) minmax(250px, 250px);
-  gap: 2em;
-}
-.docs-grid__aside {
-  position: sticky;
-  top:0;
-  height: 100vh;
-  padding: 1.5rem;
-  border-right: 1px hsl(var(--border)) solid;
-}
-.docs-grid__content {
-}
-.docs-grid__toc {
-  position: sticky;
-  top:0;
-  height: 100vh;
-  padding: 1.5rem;
-  border-left: 1px hsl(var(--border)) solid;
-}
 </style>
