@@ -32,9 +32,9 @@ const head = useLocaleHead({
           <ThemeSwitcher />
         </template>
       </NavigationBar>
-      <div class="grid grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] gap-8">
-        <DocsAsideNavigation />
-        <main class="p-4 md:p-0 max-w-screen-lg">
+      <div class="md:grid md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)] lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] gap-8">
+        <DocsAsideNavigation class="hidden md:block " />
+        <main class="p-4 lg:p-0 max-w-screen-lg">
           <slot />
         </main>
         <aside class="hidden lg:block sticky top-0 h-100vh p-6 border-(l-1 beerus) bg-gohan">

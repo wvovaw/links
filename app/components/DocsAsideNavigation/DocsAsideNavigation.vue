@@ -9,7 +9,7 @@ const links = computed(() => navigation.value![0].children);
 </script>
 
 <template>
-  <aside class="hidden md:block sticky top-0 h-100vh p-6 border-(r-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
+  <aside class="sticky top-0 h-100vh p-6 border-(r-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
     <nav class="overflow-y-auto space-y-8 text-moon-16">
       <section class="space-y-2">
         <h2 class="text-moon-18 font-semibold  uppercase">

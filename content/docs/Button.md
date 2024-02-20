@@ -10,6 +10,10 @@ title: Button component
 
 :ui-docs-button-variants{title="Variants"}
 
+> Notice that buttons have "focus" state styling. Click on a field and tab through them
+
+:ui-docs-button-colors{title="Colors"}
+
 :ui-docs-button-sizes{title="Sizes"}
 
 :ui-docs-button-full-width{title="Full width"}

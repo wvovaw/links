@@ -7,13 +7,13 @@ const isHovered = useElementHover(btnEl);
 
 // TODO: Implement loading state
 const buttonVariants = cva(
-  "relative z-0 flex justify-center items-center font-medium no-underline overflow-hidden whitespace-nowrap select-none transition duration-200",
+  "relative z-0 flex justify-center items-center font-medium no-underline overflow-hidden whitespace-nowrap select-none transition-(colors shadow transform) duration-200 ",
   {
     variants: {
       variant: {
-        fill: "",
-        outline: "text-bulma bg-transparent ring-inset ring-1 ring-trunks focus:ring-bulma",
-        ghost: "text-trunks bg-transparent",
+        fill: "focus:(ring-3 outline-none)",
+        outline: "bg-transparent ring-inset ring-1 focus:(ring-3 outline-none) font-semibold",
+        ghost: "bg-transparent text-trunks focus:(ring-1 outline-none)",
         link: "text-bulma bg-transparent ring-none underline-offset-4 hover:underline",
       },
       size: {
@@ -22,6 +22,13 @@ const buttonVariants = cva(
         md: "px-4 h-10 py-2 text-moon-14 rounded-moon-i-sm ",
         lg: "px-4 h-12 py-3 text-moon-16 rounded-moon-i-sm",
         xl: "px-6 h-14 py-4 text-moon-16 rounded-moon-i-md",
+      },
+      color: {
+        piccolo: "",
+        hit: "",
+        roshi: "",
+        chichi: "",
+        krillin: "",
       },
       fullWidth: {
         true: "w-full",
@@ -33,26 +40,108 @@ const buttonVariants = cva(
       },
       disabled: {
         true: "opacity-60 cursor-not-allowed",
-        false: "active:scale-90",
+        false: "",
       },
       animation: {
-        error: "animate-error bg-chichi!",
+        error: "animate-error bg-chichi! ring-chichi-60!",
         pulse: "animate-pulse2",
       },
     },
     compoundVariants: [
       {
+        disabled: false,
+        variant: ["fill", "outline", "ghost"],
+        class: "active:scale-90",
+      },
+      /* Fill buttons */
+      {
         variant: ["fill"],
-        class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)]",
+        color: ["piccolo"],
+        class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)] ring-jiren",
       },
       {
+        variant: ["fill"],
+        color: ["hit"],
+        class: "text-goten bg-hit [box-shadow:_0_0_0_0_var(--hit)] ring-jira",
+      },
+      {
+        variant: ["fill"],
+        color: ["chichi"],
+        class: "text-popo bg-chichi [box-shadow:_0_0_0_0_var(--chichi)] ring-chichi-60",
+      },
+      {
+        variant: ["fill"],
+        color: ["krillin"],
+        class: "text-popo bg-krillin [box-shadow:_0_0_0_0_var(--krillin)] ring-krillin-60",
+      },
+      {
+        variant: ["fill"],
+        color: ["roshi"],
+        class: "text-bulma bg-roshi [box-shadow:_0_0_0_0_var(--roshi)] ring-roshi-60",
+      },
+      /* Outline buttons */
+      {
+        variant: ["outline"],
+        color: ["piccolo"],
+        class: "text-piccolo ring-piccolo",
+      },
+      {
+        variant: ["outline"],
+        color: ["hit"],
+        class: "text-hit ring-hit",
+      },
+      {
+        variant: ["outline"],
+        color: ["chichi"],
+        class: "text-chichi ring-chichi",
+      },
+      {
+        variant: ["outline"],
+        color: ["krillin"],
+        class: "text-krillin ring-krillin",
+      },
+      {
+        variant: ["outline"],
+        color: ["roshi"],
+        class: "text-roshi ring-roshi",
+      },
+      /* Ghost buttons (only enabled colored) */
+      {
         variant: "ghost",
+        color: ["piccolo", "hit", "chichi", "krillin", "roshi"],
         disabled: false,
-        class: "hover:text-bulma",
+        class: "hover:text-bulma ring-bulma focus:ring-1px",
+      },
+      /* Link buttons */
+      {
+        variant: "link",
+        color: "piccolo",
+        class: "text-piccolo font-semibold",
+      },
+      {
+        variant: "link",
+        color: "hit",
+        class: "text-hit font-semibold",
+      },
+      {
+        variant: "link",
+        color: "chichi",
+        class: "text-chichi font-semibold",
+      },
+      {
+        variant: "link",
+        color: "krillin",
+        class: "text-krillin font-semibold",
+      },
+      {
+        variant: "link",
+        color: "roshi",
+        class: "text-roshi font-semibold",
       },
     ],
     defaultVariants: {
       variant: "fill",
+      color: "piccolo",
       size: "md",
       iconPos: "left",
       fullWidth: false,
@@ -64,6 +153,7 @@ type ButtonVariants = VariantProps<typeof buttonVariants>;
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants["variant"];
   size?: ButtonVariants["size"];
+  color?: ButtonVariants["color"];
   icon?: string;
   iconPos?: ButtonVariants["iconPos"];
   fullWidth?: Extract<ButtonVariants["fullWidth"], boolean>;
@@ -76,6 +166,7 @@ withDefaults(defineProps<Props>(), {
   as: "button",
   variant: "fill",
   size: "md",
+  color: "piccolo",
   iconPos: "left",
   fullWidth: false,
 });
@@ -84,7 +175,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <Primitive
     ref="btnEl"
-    :class="buttonVariants({ variant, size, fullWidth, iconPos, animation, disabled })"
+    :class="buttonVariants({ variant, size, color, fullWidth, iconPos, animation, disabled })"
     :as-child="asChild"
     :as="as"
     :disabled="disabled"
@@ -114,8 +205,13 @@ withDefaults(defineProps<Props>(), {
       aria-hidden="true"
       class="z-[-1] block absolute inset-0 pointer-events-none transition-background-color duration-[.2s] ease-in-out"
       :class="{
-        'bg-jiren': isHovered && variant === 'ghost',
-        'bg-heles': isHovered && !['link', 'ghost'].includes(variant!),
+        'bg-heles': isHovered && ['fill', 'outline'].includes(variant!),
+
+        'bg-jiren': isHovered && variant === 'ghost' && color === 'piccolo',
+        'bg-jira': isHovered && variant === 'ghost' && color === 'hit',
+        'bg-chichi-10': isHovered && variant === 'ghost' && color === 'chichi',
+        'bg-roshi-10': isHovered && variant === 'ghost' && color === 'roshi',
+        'bg-krillin-10': isHovered && variant === 'ghost' && color === 'krillin',
       }"
     />
   </Primitive>

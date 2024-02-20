@@ -37,6 +37,9 @@ export default definePreset((_options?: PresetMoonOptions) => {
         jiren: {
           DEFAULT: "var(--jiren)",
         },
+        jira: {
+          DEFAULT: "var(--jira)",
+        },
         heles: {
           DEFAULT: "var(--heles)",
         },
