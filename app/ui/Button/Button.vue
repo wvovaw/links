@@ -42,6 +42,10 @@ const buttonVariants = cva(
         true: "opacity-60 cursor-not-allowed",
         false: "",
       },
+      loading: {
+        true: "",
+        false: "",
+      },
       animation: {
         error: "animate-error bg-chichi! ring-chichi-60!",
         pulse: "animate-pulse2",
@@ -156,6 +160,7 @@ interface Props extends PrimitiveProps {
   color?: ButtonVariants["color"];
   icon?: string;
   iconPos?: ButtonVariants["iconPos"];
+  loading?: Extract<ButtonVariants["loading"], boolean>;
   fullWidth?: Extract<ButtonVariants["fullWidth"], boolean>;
   disabled?: Extract<ButtonVariants["disabled"], boolean>;
   animation?: ButtonVariants["animation"];
@@ -168,38 +173,43 @@ withDefaults(defineProps<Props>(), {
   size: "md",
   color: "piccolo",
   iconPos: "left",
-  fullWidth: false,
+  // loading: false,
 });
 </script>
 
 <template>
   <Primitive
     ref="btnEl"
-    :class="buttonVariants({ variant, size, color, fullWidth, iconPos, animation, disabled })"
+    :class="buttonVariants({ variant, size, color, fullWidth, iconPos, animation, loading, disabled })"
     :as-child="asChild"
     :as="as"
     :disabled="disabled"
     v-bind="$attrs"
   >
-    <!-- TODO: Change icon size and margins depending on props.size -->
     <span
-      v-if="icon && iconPos === 'left'"
+      v-if="((icon || loading) && iconPos === 'left')"
       aria-hidden="true"
-      :class="[icon, {
-        'mr-1': ['xs', 'sm'].includes(size!),
-        'mr-2': ['md', 'lg', 'xl'].includes(size!),
-        'absolute block start-3': fullWidth,
-      }]"
+      :class="[
+        loading && iconPos === 'left' ? 'i-lucide:loader animate-spin' : icon,
+        {
+          'mr-1': ['xs', 'sm'].includes(size!),
+          'mr-2': ['md', 'lg', 'xl'].includes(size!),
+          'absolute block start-3': fullWidth,
+        },
+      ]"
     />
     <slot />
     <span
-      v-if="icon && iconPos === 'right'"
+      v-if="((icon || loading) && iconPos === 'right')"
       aria-hidden="true"
-      :class="[icon, {
-        'ml-1': ['xs', 'sm'].includes(size!),
-        'mr-2': ['md', 'lg', 'xl'].includes(size!),
-        'absolute block end-3': fullWidth,
-      }]"
+      :class="[
+        loading && iconPos === 'right' ? 'i-lucide:loader animate-spin' : icon,
+        {
+          'ml-1': ['xs', 'sm'].includes(size!),
+          'ml-2': ['md', 'lg', 'xl'].includes(size!),
+          'absolute block end-3': fullWidth,
+        },
+      ]"
     />
     <span
       aria-hidden="true"

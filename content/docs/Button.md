@@ -21,3 +21,5 @@ title: Button component
 :ui-docs-button-disabled{title="Disabled"}
 
 :ui-docs-button-animation{title="Animation"}
+
+:ui-docs-button-loading{title="Loading"}
