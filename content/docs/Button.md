@@ -1,5 +1,5 @@
 ---
-title: Button component
+title: Button
 ---
 
 # Button
@@ -17,6 +17,10 @@ title: Button component
 :ui-docs-button-sizes{title="Sizes"}
 
 :ui-docs-button-full-width{title="Full width"}
+
+:ui-docs-button-icons-only{title="Icons only"}
+
+> Icons only buttons are not 1/1 for now and needs to be fixed
 
 :ui-docs-button-disabled{title="Disabled"}
 

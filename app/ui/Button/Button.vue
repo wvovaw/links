@@ -4,8 +4,9 @@ import { type VariantProps, cva } from "cva";
 
 const btnEl = ref<HTMLElement | null>(null);
 const isHovered = useElementHover(btnEl);
+const sl = useSlots();
+const noChildren = !!sl?.default;
 
-// TODO: Implement loading state
 const buttonVariants = cva(
   "relative z-0 flex justify-center items-center font-medium no-underline overflow-hidden whitespace-nowrap select-none transition-(colors shadow transform) duration-200 ",
   {
@@ -192,8 +193,8 @@ withDefaults(defineProps<Props>(), {
       :class="[
         loading && iconPos === 'left' ? 'i-lucide:loader animate-spin' : icon,
         {
-          'mr-1': ['xs', 'sm'].includes(size!),
-          'mr-2': ['md', 'lg', 'xl'].includes(size!),
+          'mr-1': noChildren && ['xs', 'sm'].includes(size!),
+          'mr-2': noChildren && ['md', 'lg', 'xl'].includes(size!),
           'absolute block start-3': fullWidth,
         },
       ]"
@@ -205,8 +206,8 @@ withDefaults(defineProps<Props>(), {
       :class="[
         loading && iconPos === 'right' ? 'i-lucide:loader animate-spin' : icon,
         {
-          'ml-1': ['xs', 'sm'].includes(size!),
-          'ml-2': ['md', 'lg', 'xl'].includes(size!),
+          'ml-1': noChildren && ['xs', 'sm'].includes(size!),
+          'ml-2': noChildren && ['md', 'lg', 'xl'].includes(size!),
           'absolute block end-3': fullWidth,
         },
       ]"
