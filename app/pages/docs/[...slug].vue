@@ -3,7 +3,5 @@ definePageMeta({ layout: "docs" });
 </script>
 
 <template>
-  <main class="prose">
-    <ContentDoc />
-  </main>
+  <ContentDoc class="prose w-full max-w-full" />
 </template>

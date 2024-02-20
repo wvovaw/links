@@ -131,113 +131,113 @@ export default definePreset((_options?: PresetMoonOptions) => {
       },
       fontFamily: {
         "averta":
-          "var(--averta), -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif",
+          "var(--averta), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif",
         "dm-sans":
-          "var(--dm-sans), -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif",
+          "var(--dm-sans), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif",
       },
       fontSize: {
         "moon-9": [
           "0.5625rem",
           {
-            lineHeight: "1rem",
+            "line-height": "1rem",
           },
         ],
         "moon-9-caption": [
           "0.5625rem",
           {
-            lineHeight: "1rem",
-            letterSpacing: "0.0625rem",
+            "line-height": "1rem",
+            "letterSpacing": "0.0625rem",
           },
         ],
         "moon-10": [
           "0.625rem",
           {
-            lineHeight: "1rem",
+            "line-height": "1rem",
           },
         ],
         "moon-10-caption": [
           "0.625rem",
           {
-            lineHeight: "1rem",
-            letterSpacing: "0.0313rem",
+            "line-height": "1rem",
+            "letterSpacing": "0.0313rem",
           },
         ],
         "moon-12": [
           "0.75rem",
           {
-            lineHeight: "1rem",
+            "line-height": "1rem",
           },
         ],
         "moon-14": [
           "0.875rem",
           {
-            lineHeight: "1.5rem",
+            "line-height": "1.5rem",
           },
         ],
         "moon-16": [
           "1rem",
           {
-            lineHeight: "1.5rem",
+            "line-height": "1.5rem",
           },
         ],
         "moon-18": [
           "1.125rem",
           {
-            lineHeight: "1.5rem",
+            "line-height": "1.5rem",
           },
         ],
         "moon-20": [
           "1.25rem",
           {
-            lineHeight: "2rem",
+            "line-height": "2rem",
           },
         ],
         "moon-24": [
           "1.5rem",
           {
-            lineHeight: "2rem",
+            "line-height": "2rem",
           },
         ],
         "moon-32": [
           "2rem",
           {
-            lineHeight: "2.5rem",
-            letterSpacing: "-0.03125rem",
+            "line-height": "2.5rem",
+            "letterSpacing": "-0.03125rem",
           },
         ],
         "moon-40": [
           "2.5rem",
           {
-            lineHeight: "3rem",
-            letterSpacing: "-0.03125rem",
+            "line-height": "3rem",
+            "letterSpacing": "-0.03125rem",
           },
         ],
         "moon-48": [
           "3rem",
           {
-            lineHeight: "3.5rem",
-            letterSpacing: "-0.0625rem",
+            "line-height": "3.5rem",
+            "letterSpacing": "-0.0625rem",
           },
         ],
         "moon-56": [
           "3.5rem",
           {
-            lineHeight: "4rem",
-            letterSpacing: "-0.09375rem",
+            "line-height": "4rem",
+            "letterSpacing": "-0.09375rem",
           },
         ],
         "moon-64": [
           "4rem",
           {
-            lineHeight: "4.5rem",
-            letterSpacing: "-0.125rem",
+            "line-height": "4.5rem",
+            "letterSpacing": "-0.125rem",
           },
         ],
         "moon-72": [
           "4.5rem",
           {
-            lineHeight: "4.75rem",
-            letterSpacing: "-0.15625rem",
+            "line-height": "4.75rem",
+            "letterSpacing": "-0.15625rem",
           },
         ],
       },
@@ -245,69 +245,42 @@ export default definePreset((_options?: PresetMoonOptions) => {
         regular: "400",
         semibold: "600",
       },
-      keyframes: {
-        "error": {
-          "10%, 90%": { transform: "translate3d(-1px, 0, 0)" },
-          "20%, 80%": { transform: "translate3d(2px, 0, 0)" },
-          "30%, 50%, 70%": { transform: "translate3d(-4px, 0, 0)" },
-          "40%, 60%": { transform: "translate3d(4px, 0, 0)" },
-        },
-        "explode": {
-          "0%": { transform: "translate(-50%, -50%) scale(0)", opacity: 1 },
-          "50%": { transform: "translate(-50%, -50%) scale(1)", opacity: 0.4 },
-          "80%": { transform: "translate(-50%, -50%) scale(1)", opacity: 0 },
-          "100%": { transform: "translate(-50%, -50%) scale(1)", opacity: 0 },
-        },
-        "rotation": {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" },
-        },
-        "pulse2": {
-          "10%, 90%": { transform: "translate3d(-1px, 0, 0)" },
-          "0%": { transform: "scale(1)" },
-          "70%": { transform: "scale(1)", boxShadow: "0 0 0 30px transparent" },
-          "100%": { transform: "scale(1)", boxShadow: "0 0 0 0 transparent" },
-        },
-        // Toast
-        "toast-hide": {
-          "0%": { opacity: 1 },
-          "100%": { opacity: 0 },
-        },
-        "toast-slide-in-right": {
-          "0%": { transform: `translateX(calc(100% + 1rem))` },
-          "100%": { transform: "translateX(0)" },
-        },
-        "toast-slide-in-left": {
-          "0%": { transform: `translateX(calc(-100% + 1rem))` },
-          "100%": { transform: "translateX(0)" },
-        },
-        "toast-slide-in-down": {
-          "0%": { transform: `translateY(calc(100% + 1rem))` },
-          "100%": { transform: "translateY(0)" },
-        },
-        "toast-slide-in-up": {
-          "0%": { transform: `translateY(calc(-100% + 1rem))` },
-          "100%": { transform: "translateY(0)" },
-        },
-        "toast-swipe-out": {
-          "0%": { transform: "translateX(var(--radix-toast-swipe-end-x))" },
-          "100%": {
-            transform: `translateX(calc(100% + 1rem))`,
-          },
-        },
-      },
       animation: {
-        // Toast
-        "toast-hide": "toast-hide 300ms ease-in forwards",
-        "toast-slide-in-right":
-          "toast-slide-in-right 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "toast-slide-in-left":
-          "toast-slide-in-left 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "toast-slide-in-down":
-          "toast-slide-in-down 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "toast-slide-in-up":
-          "toast-slide-in-up 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "toast-swipe-out": "toast-swipe-out 100ms ease-out forwards",
+        keyframes: {
+          "error": "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 20%, 80% { transform: translate3d(2px, 0, 0) } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0) } 40%, 60% { transform: translate3d(4px, 0, 0) } }",
+          "explode": "{ 0% { transform: translate(-50%, -50%) scale(0); opacity: 1 } 50% { transform: translate(-50%, -50%) scale(1); opacity: 0.4 } 80%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0 } }",
+          "rotation": "{ 0% { transform: rotate(0deg) } 100% { transform: rotate(360deg) } }",
+          "pulse2": "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 0% { transform: scale(1) } 70% { transform: scale(1); box-shadow: 0 0 0 30px transparent } 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent } }",
+          // Toast
+          "toast-hide": "{ 0% { opacity: 1 } 100% { opacity: 0 } }",
+          "toast-slide-in-right": "{ 0% { transform: translateX(calc(100% + 1rem)) } 100% { transform: translateX(0) } }",
+          "toast-slide-in-left": "{ 0% { transform: translateX(calc(-100% + 1rem)) } 100% { transform: translateX(0) } }",
+          "toast-slide-in-down": "{ 0% { transform: translateY(calc(100% + 1rem)) } 100% { transform: translateY(0) } }",
+          "toast-slide-in-up": "{ 0% { transform: translateY(calc(-100% + 1rem)) } 100% { transform: translateY(0) } }",
+          "toast-swipe-out": "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } }",
+        },
+        durations: {
+          pulse2: "1.5s",
+          error: ".82s",
+        },
+        counts: {
+          pulse2: "infinite",
+          error: "1",
+        },
+        fillMode: {
+          error: "both",
+        },
+        timingFns: {
+          "pulse2": "ease-out",
+          "error": "cubic-bezier(.36,.07,.19,.97)",
+          // Toast
+          "toast-hide": "toast-hide 300ms ease-in forwards",
+          "toast-slide-in-right": "toast-slide-in-right 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-slide-in-left": "toast-slide-in-left 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-slide-in-down": "toast-slide-in-down 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-slide-in-up": "toast-slide-in-up 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-swipe-out": "toast-swipe-out 100ms ease-out forwards",
+        },
       },
     },
   };

@@ -5,6 +5,7 @@ import { type VariantProps, cva } from "cva";
 const btnEl = ref<HTMLElement | null>(null);
 const isHovered = useElementHover(btnEl);
 
+// TODO: Implement loading state
 const buttonVariants = cva(
   "relative z-0 flex justify-center items-center font-medium no-underline overflow-hidden whitespace-nowrap select-none transition duration-200",
   {
@@ -12,7 +13,7 @@ const buttonVariants = cva(
       variant: {
         fill: "",
         outline: "text-bulma bg-transparent ring-inset ring-1 ring-trunks focus:ring-bulma",
-        ghost: "text-trunks bg-transparent hover:text-bulma",
+        ghost: "text-trunks bg-transparent",
         link: "text-bulma bg-transparent ring-none underline-offset-4 hover:underline",
       },
       size: {
@@ -31,20 +32,23 @@ const buttonVariants = cva(
         right: "",
       },
       disabled: {
-        true: "opacity-60 text-goten cursor-not-allowed",
+        true: "opacity-60 cursor-not-allowed",
         false: "active:scale-90",
       },
       animation: {
-        progres: "",
-        success: "",
-        error: "",
-        pulse: "",
+        error: "animate-error bg-chichi!",
+        pulse: "animate-pulse2",
       },
     },
     compoundVariants: [
       {
         variant: ["fill"],
-        class: "text-goten bg-piccolo",
+        class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)]",
+      },
+      {
+        variant: "ghost",
+        disabled: false,
+        class: "hover:text-bulma",
       },
     ],
     defaultVariants: {

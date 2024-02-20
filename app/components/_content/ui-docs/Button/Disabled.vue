@@ -5,8 +5,17 @@ import { UIButton } from "~ui/Button";
 
 <template>
   <PreviewFrame>
-    <UIButton disabled @click="console.log('lol')">
+    <UIButton disabled>
       Disabled
+    </UIButton>
+    <UIButton variant="outline" disabled>
+      Disabled outline
+    </UIButton>
+    <UIButton variant="ghost" disabled>
+      Disabled ghost
+    </UIButton>
+    <UIButton variant="link" disabled>
+      Disabled link
     </UIButton>
   </PreviewFrame>
 </template>

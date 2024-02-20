@@ -15,3 +15,5 @@ title: Button component
 :ui-docs-button-full-width{title="Full width"}
 
 :ui-docs-button-disabled{title="Disabled"}
+
+:ui-docs-button-animation{title="Animation"}
