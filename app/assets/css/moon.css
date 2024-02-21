@@ -8,9 +8,9 @@
 /* MOON - Light theme tokens */
 :root[data-theme="light"] {
   --piccolo: rgba(78 70 180); /* #4e46b4 */
-  --jiren: rgba(78 70 180 / 0.12); /* #4e46b4 */
+  --jiren: rgba(78 70 180 / 0.32); /* #4e46b4 */
   --hit: rgba(64 166 159); /* #40a69f */
-  --jira: rgba(64 166 159 / 0.12); /* #40a69f */
+  --jira: rgba(64 166 159 / 0.32); /* #40a69f */
   --beerus: rgba(226 226 226); /* #e2e2e2 */
   --gohan: rgba(255 255 255); /* #ffffff */
   --goten: rgba(255 255 255); /* #ffffff */
@@ -18,7 +18,7 @@
   --bulma: rgba(0 0 0); /* #000000 */
   --trunks: rgba(89 93 98); /* #595D62 */
   --popo: rgba(0 0 0); /* #000000 */
-  --heles: rgba(0 0 0 / 0.04); /* #000000 */
+  --heles: rgba(0 0 0 / 0.12); /* #000000 */
   --zeno: rgba(0 0 0 / 0.56); /* #000000 */
 
   /* support-colors  */
@@ -100,7 +100,7 @@
   --bulma: rgba(255 255 255); /* #ffffff */
   --trunks: rgba(153 156 160); /* #999ca0 */
   --popo: rgba(0 0 0); /* #000000 */
-  --heles: rgba(255 255 255 / 0.12); /* #ffffff */
+  --heles: rgba(255 255 255 / 0.13); /* #ffffff */
   --zeno: rgba(0 0 0 / 0.56); /* #000000 */
 
   /* support-colors  */
@@ -171,9 +171,9 @@
 @media (prefers-color-scheme: light) {
   :root[data-theme="auto"] {
     --piccolo: rgba(78 70 180); /* #4e46b4 */
-    --jiren: rgba(78 70 180 / 0.12); /* #4e46b4 */
+    --jiren: rgba(78 70 180 / 0.32); /* #4e46b4 */
     --hit: rgba(64 166 159); /* #40a69f */
-    --jira: rgba(64 166 159 / 0.12); /* #40a69f */
+    --jira: rgba(64 166 159 / 0.32); /* #40a69f */
     --beerus: rgba(226 226 226); /* #e2e2e2 */
     --gohan: rgba(255 255 255); /* #ffffff */
     --goten: rgba(255 255 255); /* #ffffff */
@@ -181,7 +181,7 @@
     --bulma: rgba(0 0 0); /* #000000 */
     --trunks: rgba(89 93 98); /* #595D62 */
     --popo: rgba(0 0 0); /* #000000 */
-    --heles: rgba(0 0 0 / 0.04); /* #000000 */
+    --heles: rgba(0 0 0 / 0.12); /* #000000 */
     --zeno: rgba(0 0 0 / 0.56); /* #000000 */
 
     /* support-colors  */
@@ -264,7 +264,7 @@
     --bulma: rgba(255 255 255); /* #ffffff */
     --trunks: rgba(153 156 160); /* #999ca0 */
     --popo: rgba(0 0 0); /* #000000 */
-    --heles: rgba(255 255 255 / 0.12); /* #ffffff */
+    --heles: rgba(255 255 255 / 0.13); /* #ffffff */
     --zeno: rgba(0 0 0 / 0.56); /* #000000 */
 
     /* support-colors  */

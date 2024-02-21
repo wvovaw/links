@@ -5,7 +5,7 @@ import { type VariantProps, cva } from "cva";
 const btnEl = ref<HTMLElement | null>(null);
 const isHovered = useElementHover(btnEl);
 const sl = useSlots();
-const noChildren = !!sl?.default; // checking if default slot is empty
+const noChildren = !sl?.default; // checking if default slot is empty
 
 const buttonVariants = cva(
   "relative z-0 flex justify-center items-center font-medium no-underline overflow-hidden whitespace-nowrap select-none transition-(colors shadow transform) duration-200 ",
@@ -34,6 +34,13 @@ const buttonVariants = cva(
       animation: { error: "animate-error bg-chichi! ring-chichi-60!", pulse: "animate-pulse2" },
     },
     compoundVariants: [
+      /* Sizing and paddings for icon-only buttons */
+      { iconOnly: true, size: ["xs"], class: "h-6! w-6!" },
+      { iconOnly: true, size: ["sm"], class: "h-8! w-8!" },
+      { iconOnly: true, size: ["md"], class: "h-10! w-10!" },
+      { iconOnly: true, size: ["lg"], class: "h-12! w-12!" },
+      { iconOnly: true, size: ["xl"], class: "h-14! w-14!" },
+
       /* Sizing and paddings withou icons */
       { hasIconOrLoading: false, size: ["xs"], class: "px-2 py-1" },
       { hasIconOrLoading: false, size: ["sm"], class: "px-3 py-1" },
@@ -42,16 +49,16 @@ const buttonVariants = cva(
       { hasIconOrLoading: false, size: ["xl"], class: "px-6 py-4" },
 
       /* Sizing and paddings depending on icon pos */
-      { hasIconOrLoading: true, iconPos: "left", size: ["xs"], class: "ps-2 pe-2 py-1 gap-1" },
-      { hasIconOrLoading: true, iconPos: "right", size: ["xs"], class: "ps-2 pe-2 py-1 gap-1" },
-      { hasIconOrLoading: true, iconPos: "left", size: ["sm"], class: "ps-2 pe-2 py-1 gap-1" },
-      { hasIconOrLoading: true, iconPos: "right", size: ["sm"], class: "ps-2 pe-2 py-1 gap-1" },
-      { hasIconOrLoading: true, iconPos: "left", size: ["md"], class: "ps-3 pe-3 py-2 gap-2" },
-      { hasIconOrLoading: true, iconPos: "right", size: ["md"], class: "ps-3 pe-3 py-2 gap-2" },
-      { hasIconOrLoading: true, iconPos: "left", size: ["lg"], class: "ps-3 pe-4 py-3 gap-2" },
-      { hasIconOrLoading: true, iconPos: "right", size: ["lg"], class: "ps-4 pe-3 py-3 gap-2" },
-      { hasIconOrLoading: true, iconPos: "left", size: ["xl"], class: "ps-4 pe-5 py-4 gap-2" },
-      { hasIconOrLoading: true, iconPos: "right", size: ["xl"], class: "ps-5 pe-4 py-4 gap-2" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "left", size: ["xs"], class: "ps-2 pe-2 py-1 gap-1" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "right", size: ["xs"], class: "ps-2 pe-2 py-1 gap-1" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "left", size: ["sm"], class: "ps-2 pe-2 py-1 gap-1" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "right", size: ["sm"], class: "ps-2 pe-2 py-1 gap-1" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "left", size: ["md"], class: "ps-3 pe-3 py-2 gap-2" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "right", size: ["md"], class: "ps-3 pe-3 py-2 gap-2" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "left", size: ["lg"], class: "ps-3 pe-4 py-3 gap-2" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "right", size: ["lg"], class: "ps-4 pe-3 py-3 gap-2" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "left", size: ["xl"], class: "ps-4 pe-5 py-4 gap-2" },
+      { iconOnly: false, hasIconOrLoading: true, iconPos: "right", size: ["xl"], class: "ps-5 pe-4 py-4 gap-2" },
 
       /* scale animation */
       { disabled: false, variant: ["fill", "outline", "ghost"], class: "active:scale-90" },
@@ -87,11 +94,9 @@ const buttonVariants = cva(
 
 const buttonIconVariants = cva("", {
   variants: {
-    loading: { true: "i-lucide:loader! animate-spin", false: "" },
-    iconPos: { left: "", right: "" },
-    iconOnly: { true: "", false: "" },
-    size: { xs: "", sm: "", md: "", lg: "", xl: "" },
     fullWidth: { true: "", false: "" },
+    iconPos: { left: "", right: "" },
+    loading: { true: "i-lucide:loader! animate-spin", false: "" },
   },
   compoundVariants: [
     { iconPos: "left", fullWidth: true, class: "absolute block start-3" },
@@ -99,7 +104,6 @@ const buttonIconVariants = cva("", {
   ],
   defaultVariants: {
     iconPos: "left",
-    size: "md",
   },
 });
 
@@ -139,13 +143,13 @@ withDefaults(defineProps<Props>(), {
     <span
       v-if="iconPos === 'left' && (icon || loading)"
       aria-hidden="true"
-      :class="[icon, buttonIconVariants({ size, iconPos, iconOnly: noChildren, fullWidth, loading })]"
+      :class="[icon, buttonIconVariants({ iconPos, fullWidth, loading })]"
     />
     <slot />
     <span
       v-if="iconPos === 'right' && (icon || loading)"
       aria-hidden="true"
-      :class="[icon, buttonIconVariants({ size, iconPos, iconOnly: noChildren, fullWidth, loading })]"
+      :class="[icon, buttonIconVariants({ iconPos, fullWidth, loading })]"
     />
     <span
       aria-hidden="true"
@@ -154,9 +158,9 @@ withDefaults(defineProps<Props>(), {
         'bg-heles': isHovered && ['fill', 'outline'].includes(variant!),
         'bg-jiren': isHovered && variant === 'ghost' && color === 'piccolo',
         'bg-jira': isHovered && variant === 'ghost' && color === 'hit',
-        'bg-chichi-10': isHovered && variant === 'ghost' && color === 'chichi',
-        'bg-roshi-10': isHovered && variant === 'ghost' && color === 'roshi',
-        'bg-krillin-10': isHovered && variant === 'ghost' && color === 'krillin',
+        'bg-chichi-60': isHovered && variant === 'ghost' && color === 'chichi',
+        'bg-roshi-60': isHovered && variant === 'ghost' && color === 'roshi',
+        'bg-krillin-60': isHovered && variant === 'ghost' && color === 'krillin',
       }"
     />
   </Primitive>
