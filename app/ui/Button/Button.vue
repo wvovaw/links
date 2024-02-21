@@ -5,7 +5,7 @@ import { type VariantProps, cva } from "cva";
 const btnEl = ref<HTMLElement | null>(null);
 const isHovered = useElementHover(btnEl);
 const sl = useSlots();
-const noChildren = !!sl?.default;
+const noChildren = !!sl?.default; // checking if default slot is empty
 
 const buttonVariants = cva(
   "relative z-0 flex justify-center items-center font-medium no-underline overflow-hidden whitespace-nowrap select-none transition-(colors shadow transform) duration-200 ",
@@ -18,150 +18,100 @@ const buttonVariants = cva(
         link: "text-bulma bg-transparent ring-none underline-offset-4 hover:underline",
       },
       size: {
-        xs: "px-2 h-6 py-1 text-moon-12 rounded-moon-i-xs",
-        sm: "px-3 h-8 py-1 text-moon-14 rounded-moon-i-sm",
-        md: "px-4 h-10 py-2 text-moon-14 rounded-moon-i-sm ",
-        lg: "px-4 h-12 py-3 text-moon-16 rounded-moon-i-sm",
-        xl: "px-6 h-14 py-4 text-moon-16 rounded-moon-i-md",
+        xs: "h-6  text-moon-12 rounded-moon-i-xs",
+        sm: "h-8  text-moon-14 rounded-moon-i-sm",
+        md: "h-10 text-moon-14 rounded-moon-i-sm ",
+        lg: "h-12 text-moon-16 rounded-moon-i-sm",
+        xl: "h-14 text-moon-16 rounded-moon-i-md",
       },
-      color: {
-        piccolo: "",
-        hit: "",
-        roshi: "",
-        chichi: "",
-        krillin: "",
-      },
-      fullWidth: {
-        true: "w-full",
-        false: "",
-      },
-      iconPos: {
-        left: "",
-        right: "",
-      },
-      disabled: {
-        true: "opacity-60 cursor-not-allowed",
-        false: "",
-      },
-      loading: {
-        true: "",
-        false: "",
-      },
-      animation: {
-        error: "animate-error bg-chichi! ring-chichi-60!",
-        pulse: "animate-pulse2",
-      },
+      color: { piccolo: "", hit: "", roshi: "", chichi: "", krillin: "" },
+      fullWidth: { true: "w-full", false: "" },
+      hasIconOrLoading: { true: "", false: "" },
+      iconOnly: { true: "", false: "" },
+      iconPos: { left: "", right: "" },
+
+      disabled: { true: "opacity-60 cursor-not-allowed", false: "" },
+      animation: { error: "animate-error bg-chichi! ring-chichi-60!", pulse: "animate-pulse2" },
     },
     compoundVariants: [
-      {
-        disabled: false,
-        variant: ["fill", "outline", "ghost"],
-        class: "active:scale-90",
-      },
+      /* Sizing and paddings withou icons */
+      { hasIconOrLoading: false, size: ["xs"], class: "px-2 py-1" },
+      { hasIconOrLoading: false, size: ["sm"], class: "px-3 py-1" },
+      { hasIconOrLoading: false, size: ["md"], class: "px-4 py-2" },
+      { hasIconOrLoading: false, size: ["lg"], class: "px-4 py-3" },
+      { hasIconOrLoading: false, size: ["xl"], class: "px-6 py-4" },
+
+      /* Sizing and paddings depending on icon pos */
+      { hasIconOrLoading: true, iconPos: "left", size: ["xs"], class: "ps-2 pe-2 py-1 gap-1" },
+      { hasIconOrLoading: true, iconPos: "right", size: ["xs"], class: "ps-2 pe-2 py-1 gap-1" },
+      { hasIconOrLoading: true, iconPos: "left", size: ["sm"], class: "ps-2 pe-2 py-1 gap-1" },
+      { hasIconOrLoading: true, iconPos: "right", size: ["sm"], class: "ps-2 pe-2 py-1 gap-1" },
+      { hasIconOrLoading: true, iconPos: "left", size: ["md"], class: "ps-3 pe-3 py-2 gap-2" },
+      { hasIconOrLoading: true, iconPos: "right", size: ["md"], class: "ps-3 pe-3 py-2 gap-2" },
+      { hasIconOrLoading: true, iconPos: "left", size: ["lg"], class: "ps-3 pe-4 py-3 gap-2" },
+      { hasIconOrLoading: true, iconPos: "right", size: ["lg"], class: "ps-4 pe-3 py-3 gap-2" },
+      { hasIconOrLoading: true, iconPos: "left", size: ["xl"], class: "ps-4 pe-5 py-4 gap-2" },
+      { hasIconOrLoading: true, iconPos: "right", size: ["xl"], class: "ps-5 pe-4 py-4 gap-2" },
+
+      /* scale animation */
+      { disabled: false, variant: ["fill", "outline", "ghost"], class: "active:scale-90" },
       /* Fill buttons */
-      {
-        variant: ["fill"],
-        color: ["piccolo"],
-        class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)] ring-jiren",
-      },
-      {
-        variant: ["fill"],
-        color: ["hit"],
-        class: "text-goten bg-hit [box-shadow:_0_0_0_0_var(--hit)] ring-jira",
-      },
-      {
-        variant: ["fill"],
-        color: ["chichi"],
-        class: "text-popo bg-chichi [box-shadow:_0_0_0_0_var(--chichi)] ring-chichi-60",
-      },
-      {
-        variant: ["fill"],
-        color: ["krillin"],
-        class: "text-popo bg-krillin [box-shadow:_0_0_0_0_var(--krillin)] ring-krillin-60",
-      },
-      {
-        variant: ["fill"],
-        color: ["roshi"],
-        class: "text-bulma bg-roshi [box-shadow:_0_0_0_0_var(--roshi)] ring-roshi-60",
-      },
+      { variant: ["fill"], color: ["piccolo"], class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)] ring-jiren" },
+      { variant: ["fill"], color: ["hit"], class: "text-goten bg-hit [box-shadow:_0_0_0_0_var(--hit)] ring-jira" },
+      { variant: ["fill"], color: ["chichi"], class: "text-popo bg-chichi [box-shadow:_0_0_0_0_var(--chichi)] ring-chichi-60" },
+      { variant: ["fill"], color: ["krillin"], class: "text-popo bg-krillin [box-shadow:_0_0_0_0_var(--krillin)] ring-krillin-60" },
+      { variant: ["fill"], color: ["roshi"], class: "text-bulma bg-roshi [box-shadow:_0_0_0_0_var(--roshi)] ring-roshi-60" },
       /* Outline buttons */
-      {
-        variant: ["outline"],
-        color: ["piccolo"],
-        class: "text-piccolo ring-piccolo",
-      },
-      {
-        variant: ["outline"],
-        color: ["hit"],
-        class: "text-hit ring-hit",
-      },
-      {
-        variant: ["outline"],
-        color: ["chichi"],
-        class: "text-chichi ring-chichi",
-      },
-      {
-        variant: ["outline"],
-        color: ["krillin"],
-        class: "text-krillin ring-krillin",
-      },
-      {
-        variant: ["outline"],
-        color: ["roshi"],
-        class: "text-roshi ring-roshi",
-      },
+      { variant: ["outline"], color: ["piccolo"], class: "text-piccolo ring-piccolo" },
+      { variant: ["outline"], color: ["hit"], class: "text-hit ring-hit" },
+      { variant: ["outline"], color: ["chichi"], class: "text-chichi ring-chichi" },
+      { variant: ["outline"], color: ["krillin"], class: "text-krillin ring-krillin" },
+      { variant: ["outline"], color: ["roshi"], class: "text-roshi ring-roshi" },
       /* Ghost buttons (only enabled colored) */
-      {
-        variant: "ghost",
-        color: ["piccolo", "hit", "chichi", "krillin", "roshi"],
-        disabled: false,
-        class: "hover:text-bulma ring-bulma focus:ring-1px",
-      },
+      { variant: ["ghost"], color: ["piccolo", "hit", "chichi", "krillin", "roshi"], disabled: false, class: "hover:text-bulma ring-bulma focus:ring-1px" },
       /* Link buttons */
-      {
-        variant: "link",
-        color: "piccolo",
-        class: "text-piccolo font-semibold",
-      },
-      {
-        variant: "link",
-        color: "hit",
-        class: "text-hit font-semibold",
-      },
-      {
-        variant: "link",
-        color: "chichi",
-        class: "text-chichi font-semibold",
-      },
-      {
-        variant: "link",
-        color: "krillin",
-        class: "text-krillin font-semibold",
-      },
-      {
-        variant: "link",
-        color: "roshi",
-        class: "text-roshi font-semibold",
-      },
+      { variant: ["link"], color: ["piccolo"], class: "text-piccolo font-semibold" },
+      { variant: ["link"], color: ["hit"], class: "text-hit font-semibold" },
+      { variant: ["link"], color: ["chichi"], class: "text-chichi font-semibold" },
+      { variant: ["link"], color: ["krillin"], class: "text-krillin font-semibold" },
+      { variant: ["link"], color: ["roshi"], class: "text-roshi font-semibold" },
     ],
     defaultVariants: {
       variant: "fill",
       color: "piccolo",
       size: "md",
-      iconPos: "left",
       fullWidth: false,
     },
   },
 );
-type ButtonVariants = VariantProps<typeof buttonVariants>;
 
+const buttonIconVariants = cva("", {
+  variants: {
+    loading: { true: "i-lucide:loader! animate-spin", false: "" },
+    iconPos: { left: "", right: "" },
+    iconOnly: { true: "", false: "" },
+    size: { xs: "", sm: "", md: "", lg: "", xl: "" },
+    fullWidth: { true: "", false: "" },
+  },
+  compoundVariants: [
+    { iconPos: "left", fullWidth: true, class: "absolute block start-3" },
+    { iconPos: "right", fullWidth: true, class: "absolute block end-3" },
+  ],
+  defaultVariants: {
+    iconPos: "left",
+    size: "md",
+  },
+});
+
+type ButtonVariants = VariantProps<typeof buttonVariants>;
+type ButtonIconVariants = VariantProps<typeof buttonIconVariants>;
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants["variant"];
   size?: ButtonVariants["size"];
   color?: ButtonVariants["color"];
   icon?: string;
-  iconPos?: ButtonVariants["iconPos"];
-  loading?: Extract<ButtonVariants["loading"], boolean>;
+  iconPos?: ButtonIconVariants["iconPos"];
+  loading?: Extract<ButtonIconVariants["loading"], boolean>;
   fullWidth?: Extract<ButtonVariants["fullWidth"], boolean>;
   disabled?: Extract<ButtonVariants["disabled"], boolean>;
   animation?: ButtonVariants["animation"];
@@ -174,50 +124,34 @@ withDefaults(defineProps<Props>(), {
   size: "md",
   color: "piccolo",
   iconPos: "left",
-  // loading: false,
 });
 </script>
 
 <template>
   <Primitive
     ref="btnEl"
-    :class="buttonVariants({ variant, size, color, fullWidth, iconPos, animation, loading, disabled })"
+    :class="buttonVariants({ variant, size, color, fullWidth, hasIconOrLoading: (!!icon || loading), iconPos, iconOnly: noChildren, animation, disabled })"
     :as-child="asChild"
     :as="as"
     :disabled="disabled"
     v-bind="$attrs"
   >
     <span
-      v-if="((icon || loading) && iconPos === 'left')"
+      v-if="iconPos === 'left' && (icon || loading)"
       aria-hidden="true"
-      :class="[
-        loading && iconPos === 'left' ? 'i-lucide:loader animate-spin' : icon,
-        {
-          'mr-1': noChildren && ['xs', 'sm'].includes(size!),
-          'mr-2': noChildren && ['md', 'lg', 'xl'].includes(size!),
-          'absolute block start-3': fullWidth,
-        },
-      ]"
+      :class="[icon, buttonIconVariants({ size, iconPos, iconOnly: noChildren, fullWidth, loading })]"
     />
     <slot />
     <span
-      v-if="((icon || loading) && iconPos === 'right')"
+      v-if="iconPos === 'right' && (icon || loading)"
       aria-hidden="true"
-      :class="[
-        loading && iconPos === 'right' ? 'i-lucide:loader animate-spin' : icon,
-        {
-          'ml-1': noChildren && ['xs', 'sm'].includes(size!),
-          'ml-2': noChildren && ['md', 'lg', 'xl'].includes(size!),
-          'absolute block end-3': fullWidth,
-        },
-      ]"
+      :class="[icon, buttonIconVariants({ size, iconPos, iconOnly: noChildren, fullWidth, loading })]"
     />
     <span
       aria-hidden="true"
       class="z-[-1] block absolute inset-0 pointer-events-none transition-background-color duration-[.2s] ease-in-out"
       :class="{
         'bg-heles': isHovered && ['fill', 'outline'].includes(variant!),
-
         'bg-jiren': isHovered && variant === 'ghost' && color === 'piccolo',
         'bg-jira': isHovered && variant === 'ghost' && color === 'hit',
         'bg-chichi-10': isHovered && variant === 'ghost' && color === 'chichi',

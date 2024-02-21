@@ -20,8 +20,6 @@ title: Button
 
 :ui-docs-button-icons-only{title="Icons only"}
 
-> Icons only buttons are not 1/1 for now and needs to be fixed
-
 :ui-docs-button-disabled{title="Disabled"}
 
 :ui-docs-button-animation{title="Animation"}
