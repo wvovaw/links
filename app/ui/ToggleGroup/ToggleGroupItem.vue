@@ -1,19 +1,17 @@
 <script setup lang="ts">
+import type { HTMLAttributes } from "vue";
+import { ToggleGroupItem, type ToggleGroupItemProps, useForwardProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
-import { Toggle, type ToggleEmits, type ToggleProps, useForwardPropsEmits } from "radix-vue";
 
 const toggleEl = ref<HTMLElement | null>(null);
 const sl = useSlots();
 const noChildren = !sl?.default; // checking if default slot is empty
 
-const emits = defineEmits<ToggleEmits>();
-
+// FIXME: Try to fix it after UI moved to separate package of a monorepo
+// This is a dupe of the Toggle.vue variants
 const toggleVariants = cva("z-0 overflow-hidden flex flex-row items-center justify-center text-moon-14 font-medium relative whitespace-nowrap select-none space-between cursor-pointer transition duration-200", {
   variants: {
-    variant: {
-      default: "",
-      ghost: "",
-    },
+    variant: { default: "", ghost: "" },
     color: { piccolo: "", hit: "", roshi: "", chichi: "", krillin: "" },
     withStroke: { true: "", false: "" },
     iconOnly: { true: "", false: "" },
@@ -62,38 +60,51 @@ const toggleVariants = cva("z-0 overflow-hidden flex flex-row items-center justi
     iconPos: "left",
   },
 });
-type ToggleVariants = VariantProps<typeof toggleVariants>;
+type ToggleGroupItemVariants = VariantProps<typeof toggleVariants>;
 
-const props = withDefaults(defineProps<ToggleProps & {
-  variant?: ToggleVariants["variant"];
-  color?: ToggleVariants["color"];
-  size?: ToggleVariants["size"];
-  withStroke?: Extract<ToggleVariants["withStroke"], boolean>;
-  iconPos?: ToggleVariants["iconPos"];
+const props = withDefaults(defineProps<ToggleGroupItemProps & {
+  class?: HTMLAttributes["class"];
+  variant?: ToggleGroupItemVariants["variant"];
+  color?: ToggleGroupItemVariants["color"];
+  withStroke?: ToggleGroupItemVariants["withStroke"];
+  size?: ToggleGroupItemVariants["size"];
   icon?: string;
-  disabled?: boolean;
+  iconPos?: ToggleGroupItemVariants["iconPos"];
 }>(), {
-  variant: "default",
-  color: "piccolo",
   iconPos: "left",
-  withStroke: false,
   size: "md",
+  color: "piccolo",
 });
 
-const delegatedProps = computed(() => {
-  const { variant: _v, color: _c, size: _s, icon: _i, iconPos: _ip, withStroke: _ws, ...delegated } = props;
+// Provided by ToggleGroup.vue
+const context = inject<{
+  variant: ToggleGroupItemVariants["variant"];
+  color: ToggleGroupItemVariants["color"];
+  size: ToggleGroupItemVariants["size"];
+  withStroke: Extract<ToggleGroupItemVariants["withStroke"], boolean>;
+  disabled: boolean;
+}>("toggleGroup");
 
+const delegatedProps = computed(() => {
+  const { class: _, variant: _v, size: _s, color: _c, withStroke: _ws, ...delegated } = props;
   return delegated;
 });
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <Toggle
-    v-bind="forwarded"
+  <ToggleGroupItem
+    v-bind="forwardedProps"
     ref="toggleEl"
-    :class="toggleVariants({ variant, color, size, withStroke, iconPos, disabled, iconOnly: noChildren })"
+    :class="toggleVariants({
+      variant: context?.variant || variant,
+      size: context?.size || size,
+      color: context?.color || color,
+      withStroke: context?.withStroke || withStroke,
+      disabled: context?.disabled || disabled,
+      iconOnly: noChildren,
+    })"
   >
     <span
       v-if="icon && iconPos === 'left'"
@@ -108,5 +119,5 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       class="text-moon-16"
       :class="icon"
     />
-  </Toggle>
+  </ToggleGroupItem>
 </template>
