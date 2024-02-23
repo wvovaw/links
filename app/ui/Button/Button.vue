@@ -121,7 +121,6 @@ interface Props extends PrimitiveProps {
   animation?: ButtonVariants["animation"];
 }
 
-// eslint-disable-next-line vue/define-macros-order
 withDefaults(defineProps<Props>(), {
   as: "button",
   variant: "fill",

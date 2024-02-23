@@ -6,6 +6,11 @@ export default antfu({
     quotes: "double",
     semi: true,
   },
+  vue: {
+    overrides: {
+      "vue/define-macros-order": "off",
+    },
+  },
   javascript: {
     overrides: {
       "no-console": ["off"],

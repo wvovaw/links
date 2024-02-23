@@ -63,5 +63,5 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: false },
   extends: ["nuxt.structure.ts"],
-  watch: ["nuxt.structure.ts", "uno.config.ts"],
+  watch: ["nuxt.structure.ts", "uno.config.ts", "uno.preset-moon.ts"],
 });
