@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ButtonHTMLAttributes } from "vue";
 import { Primitive, type PrimitiveProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
 
@@ -119,6 +120,7 @@ interface Props extends PrimitiveProps {
   fullWidth?: Extract<ButtonVariants["fullWidth"], boolean>;
   disabled?: Extract<ButtonVariants["disabled"], boolean>;
   animation?: ButtonVariants["animation"];
+  type?: ButtonHTMLAttributes["type"];
 }
 
 withDefaults(defineProps<Props>(), {

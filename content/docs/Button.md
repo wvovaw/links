@@ -37,7 +37,7 @@ ___
 
 ## API Reference
 
-### Props
+#### Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -52,3 +52,4 @@ ___
 | `iconPos` | left \| right | No | left | Icon will be placed on the **left** or **right** from children content
 | `loading` | `boolean` | No | - | Activates loading spinner in place of the icon. Recommended only using with icon provided to prevent layout shifts |
 | `animation` | error \| pulse | No | - | Set error or pulse animation |
+| `type` | `ButtonHTMLAttributes["type"]` | No | - | HTML button type attribute |

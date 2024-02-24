@@ -29,7 +29,7 @@ ___
 
 ## API Reference
 
-### Props
+#### Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -45,7 +45,7 @@ ___
 | `iconPos ` | left \| right | No | left | Icon will be placed on the **left** or **right** from children content |
 | `withStroke ` | `boolean` | No | - | If `true`, toggle will have stroke line when `hover:` and `data-state="on"` |
 
-### Emits
+#### Emits
 
 | Name | Payload |
 |------|---------|
@@ -55,7 +55,7 @@ ___
 
 ## Accessibility
 
-### Keyboard Interactions
+#### Keyboard Interactions
 
 | Key | Description |
 |-----|-------------|

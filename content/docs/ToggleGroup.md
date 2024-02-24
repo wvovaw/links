@@ -1,6 +1,6 @@
 ---
 title: ToggleGroup
-description:
+description: the ToggleGroup component, a container for grouping multiple Toggle components. Learn about the various customization options, including single and multiple selection modes, sizing, colors, and layouts. Utilize the provided examples to integrate the ToggleGroup seamlessly into your web application.
 ---
 
 # Toggle Group
