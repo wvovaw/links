@@ -9,13 +9,10 @@ const msg = computed(() => chosenPet.value ? `You like ${chosenPet.value}s` : "Y
 
 <template>
   <PreviewFrame>
-    <div class="flex flex-col gap-2">
-      <span>{{ msg }}</span>
-      <!-- type=single by default -->
-      <UIToggleGroup v-model="chosenPet" type="single">
-        <UIToggleGroupItem value="cat" icon="i-lucide:cat" />
-        <UIToggleGroupItem value="dog" icon="i-lucide:dog" />
-      </UIToggleGroup>
-    </div>
+    <span class="w-full text-center">{{ msg }}</span>
+    <UIToggleGroup v-model="chosenPet" type="single">
+      <UIToggleGroupItem value="cat" icon="i-lucide:cat" />
+      <UIToggleGroupItem value="dog" icon="i-lucide:dog" />
+    </UIToggleGroup>
   </PreviewFrame>
 </template>

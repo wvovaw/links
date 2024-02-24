@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<ToggleGroupRootProps & {
   class?: HTMLAttributes["class"];
   variant?: ToggleGroupVariants["variant"];
   color?: ToggleGroupVariants["color"];
-  withStroke?: ToggleGroupVariants["withStroke"];
+  withStroke?: Extract<ToggleGroupVariants["withStroke"], boolean>;
   size?: ToggleGroupVariants["size"];
 }>(), {
   type: "single",
