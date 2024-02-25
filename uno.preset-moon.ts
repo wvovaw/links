@@ -108,6 +108,11 @@ export default definePreset((_options?: PresetMoonOptions) => {
         10000: "10000",
       },
       boxShadow: {
+        "moon-xs": "var(--shadow-xs)",
+        "moon-sm": "var(--shadow-sm)",
+        "moon-md": "var(--shadow-md)",
+        "moon-lg": "var(--shadow-lg)",
+        "moon-xl": "var(--shadow-xl)",
         // TODO: This doesn't work well with UNOCSS, use this values as arbituary instead
         // "inset": "0 0 0 1px inset var(--piccolo)",
         // "interactive": "0 0 0 2px inset",
@@ -118,11 +123,6 @@ export default definePreset((_options?: PresetMoonOptions) => {
         // "input-err": "0 0 0 var(--border-i-width) var(--chichi) inset",
         // "input-focus": "0 0 0 var(--border-i-width) var(--piccolo) inset",
         // "input-cell-focus": "0 0 0 var(--border-width) var(--bulma) inset",
-        "moon-xs": "var(--shadow-xs)",
-        "moon-sm": "var(--shadow-sm)",
-        "moon-md": "var(--shadow-md)",
-        "moon-lg": "var(--shadow-lg)",
-        "moon-xl": "var(--shadow-xl)",
         // "textarea": "0 0 0 var(--border-width) var(--beerus)",
         // "textarea-hov": "0 0 0 var(--border-i-width) rgb(var(--bulma) / 7%), 0 0 0 var(--border-i-width) rgb(var(--beerus))",
         // "textarea-focus": "0 0 0 var(--border-i-width) var(--piccolo)",

@@ -12,28 +12,28 @@ import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
         </h5>
         <UIRadioGroup color="piccolo">
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r0" value="1" />
-            <label for="r0">One</label>
+            <UIRadioGroupItem id="colors-00" value="1" />
+            <label for="colors-00">One</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r1" value="2" />
-            <label for="r1">Two</label>
+            <UIRadioGroupItem id="colors-01" value="2" />
+            <label for="colors-01">Two</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r2" value="3" />
-            <label for="r2">Three</label>
+            <UIRadioGroupItem id="colors-02" value="3" />
+            <label for="colors-02">Three</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r3" value="4" />
-            <label for="r3">Four</label>
+            <UIRadioGroupItem id="colors-03" value="4" />
+            <label for="colors-03">Four</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r4" value="5" />
-            <label for="r4">Five</label>
+            <UIRadioGroupItem id="colors-04" value="5" />
+            <label for="colors-04">Five</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r5" value="6" />
-            <label for="r5">Six</label>
+            <UIRadioGroupItem id="colors-05" value="6" />
+            <label for="colors-05">Six</label>
           </span>
         </UIRadioGroup>
       </div>
@@ -43,28 +43,28 @@ import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
         </h5>
         <UIRadioGroup color="piccolo">
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r0" value="1" />
-            <label for="r0">1</label>
+            <UIRadioGroupItem id="colors-10" value="1" />
+            <label for="colors-10">1</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r1" value="2" />
-            <label for="r1">2</label>
+            <UIRadioGroupItem id="colors-11" value="2" />
+            <label for="colors-11">2</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r2" value="3" color="chichi" />
-            <label for="r2">3 <i class="text-trunks">(overriden with "chichi")</i></label>
+            <UIRadioGroupItem id="colors-12" value="3" color="chichi" />
+            <label for="colors-12">3 <i class="text-trunks">(overriden with "chichi")</i></label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r3" value="4" />
-            <label for="r3">4</label>
+            <UIRadioGroupItem id="colors-13" value="4" />
+            <label for="colors-13">4</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r4" value="5" color="roshi" />
-            <label for="r2">5 <i class="text-trunks">(overriden with "roshi")</i></label>
+            <UIRadioGroupItem id="colors-14" value="5" color="roshi" />
+            <label for="colors-14">5 <i class="text-trunks">(overriden with "roshi")</i></label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r5" value="6" />
-            <label for="r5">6</label>
+            <UIRadioGroupItem id="colors-15" value="6" />
+            <label for="colors-15">6</label>
           </span>
         </UIRadioGroup>
       </div>

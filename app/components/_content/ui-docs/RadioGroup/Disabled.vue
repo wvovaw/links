@@ -12,16 +12,16 @@ import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
         </h5>
         <UIRadioGroup disabled>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r0" value="1" />
-            <label for="r0">One</label>
+            <UIRadioGroupItem id="disabled-00" value="1" />
+            <label for="disabled-00">One</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r1" value="2" />
-            <label for="r1">Two</label>
+            <UIRadioGroupItem id="disabled-01" value="2" />
+            <label for="disabled-01">Two</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r2" value="3" />
-            <label for="r2">Three</label>
+            <UIRadioGroupItem id="disabled-02" value="3" />
+            <label for="disabled-02">Three</label>
           </span>
         </UIRadioGroup>
       </div>
@@ -31,16 +31,16 @@ import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
         </h5>
         <UIRadioGroup color="piccolo">
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r0" value="1" />
-            <label for="r0">1</label>
+            <UIRadioGroupItem id="disabled-10" value="1" />
+            <label for="disabled-10">1</label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r1" value="2" disabled />
-            <label for="r1">2 <i class="text-trunks">(explicitly disabled)</i></label>
+            <UIRadioGroupItem id="disabled-11" value="2" disabled />
+            <label for="disabled-11">2 <i class="text-trunks">(explicitly disabled)</i></label>
           </span>
           <span class="flex items-center space-x-2">
-            <UIRadioGroupItem id="r2" value="3" color="chichi" />
-            <label for="r2">3</label>
+            <UIRadioGroupItem id="disabled-12" value="3" color="chichi" />
+            <label for="disabled-12">3</label>
           </span>
         </UIRadioGroup>
       </div>

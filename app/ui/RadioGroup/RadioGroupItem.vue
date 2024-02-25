@@ -3,7 +3,7 @@ import { type HTMLAttributes, computed, inject } from "vue";
 import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps, useForwardProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
 
-const radioGroupItemVariants = cva("relative aspect-square h-4.5 w-4.5 rounded-full border border-trunks ring-offset-2 ring-offset-goku focus:outline-none focus-visible:ring-2 ring-bulma disabled:cursor-not-allowed disabled:opacity-50", {
+const radioGroupItemVariants = cva("relative aspect-square h-4.5 w-4.5 rounded-full border border-trunks ring-offset-2 ring-offset-goku focus:outline-none focus-visible:ring-2 ring-bulma", {
   variants: {
     color: { default: "data-[state=checked]:(border-bulma text-bulma)", piccolo: "data-[state=checked]:(border-piccolo text-piccolo)", hit: "data-[state=checked]:(border-hit text-hit)", chichi: "data-[state=checked]:(border-chichi text-chichi)", krillin: "data-[state=checked]:(border-krillin text-krillin)", roshi: "data-[state=checked]:(border-roshi text-roshi)" },
     disabled: { true: "cursor-default opacity-60", false: "cursor-pointer" },

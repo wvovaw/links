@@ -72,7 +72,7 @@ ___
 | `disabeld` | `boolean` | No | - | When `true`, prevents user from interaction |
 | `required` | `boolean` | No | - | When `true`, indicates that the user must check a the radio item before the owning form can be submited |
 | `name` | `string` | No | - | The name of the radio item |
-| `id` | `string` | No | - | The name of the radio item |
+| `id` | `string` | No | - | The id of the radio item (Used to label with `for` attribute) |
 | `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No | default | Radio item color |
 
 #### Data Attributes
