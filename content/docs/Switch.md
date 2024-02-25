@@ -28,7 +28,7 @@ ___
 | `as` | `AsTag` \| Component | No | div | Setting a root HTML element. button is default |
 | `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
 | `checked` | `boolean` | No | false | The controlled state of the Switch. Can be bind as `v-model:checked` |
-| `defaultValue` | `boolean` | No | - | The state of the switch when it is initially rendered. Use when you do not need to control its state |
+| `defaultChecked` | `boolean` | No | - | The state of the switch when it is initially rendered. Use when you do not need to control its state |
 | `disabeld` | `boolean` | No | - | When `true`, prevents user from interaction |
 | `name` | `string` | No | - | The name of the Switch. Submitted with its owning form as part of a name/value pair |
 | `value` | `string` | No | "on" | The value given as data when submited with a `name` |

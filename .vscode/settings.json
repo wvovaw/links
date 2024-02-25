@@ -40,5 +40,6 @@
   "files.associations": {
     "*.md": "mdc",
     "*.mdc": "mdc"
-  }
+  },
+  "todo-tree.tree.showBadges": false
 }

@@ -45,7 +45,7 @@ provide("toggleGroup", {
 });
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _cl, color: _co, variant: _v, withStroke: _ws, size: _s, ...delegated } = props;
   return delegated;
 });
 
