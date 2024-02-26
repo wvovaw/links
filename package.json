@@ -24,6 +24,7 @@
     "@unocss/extractor-mdc": "^0.58.5",
     "@unocss/nuxt": "^0.58.5",
     "@unocss/reset": "^0.58.5",
+    "@unocss/transformer-directives": "^0.58.5",
     "@vitest/ui": "^1.3.0",
     "@vue/test-utils": "^2.4.4",
     "@vueuse/nuxt": "^10.7.2",
