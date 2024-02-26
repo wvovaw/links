@@ -13,13 +13,15 @@ Explore the following examples to understand different use cases and visual styl
 
 :ui-docs-input-default{title="Default"}
 
-:ui-docs-input-sizes{title="Sizes"}
-
 :ui-docs-input-colors{title="Colors"}
 
-:ui-docs-input-states{title="Different states"}
+:ui-docs-input-sizes{title="Sizes"}
 
 :ui-docs-input-labels{title="With labels"}
+
+:ui-docs-input-hints{title="With hint messages"}
+
+:ui-docs-input-states{title="Different states"}
 
 :ui-docs-input-text-input-types{title="Text input types"}
 

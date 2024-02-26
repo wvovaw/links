@@ -6,28 +6,24 @@ import { UIInput, UIInputHint, UIInputLabel } from "~ui/Input";
 <template>
   <PreviewFrame>
     <div>
-      <UIInputLabel for="hints-01" size="sm" disabled>
+      <UIInputLabel for="hints-01" size="sm">
         Small input
       </UIInputLabel>
-      <UIInput id="hints-01" size="sm" placeholder="disabled" disabled />
-      <UIInputHint disabled>
-        Small input hint message
-      </UIInputHint>
+      <UIInput id="hints-01" size="sm" placeholder="sm" />
+      <UIInputHint>Small input hint message</UIInputHint>
     </div>
     <div>
       <UIInputLabel for="hints-02">
         Medium input
       </UIInputLabel>
-      <UIInput id="hints-02" model-value="Some error" error error-message="I am an error" placeholder="md (default)" />
-      <UIInputHint error>
-        <span class="i-lucide:info" /> An error occured
-      </UIInputHint>
+      <UIInput id="hints-02" placeholder="md (default)" />
+      <UIInputHint>Medium input hint message</UIInputHint>
     </div>
     <div>
       <UIInputLabel for="hints-03" size="lg">
         Large input
       </UIInputLabel>
-      <UIInput id="hints-03" size="lg" model-value="readonly value" read-only placeholder="lg" />
+      <UIInput id="hints-03" size="lg" placeholder="lg" />
       <UIInputHint>Large input hint message</UIInputHint>
     </div>
   </PreviewFrame>
