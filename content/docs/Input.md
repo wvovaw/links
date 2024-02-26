@@ -19,6 +19,8 @@ Explore the following examples to understand different use cases and visual styl
 
 :ui-docs-input-states{title="Different states"}
 
+:ui-docs-input-labels{title="With labels"}
+
 :ui-docs-input-text-input-types{title="Text input types"}
 
 :ui-docs-input-v-model{title="v-model binding"}

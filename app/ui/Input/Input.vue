@@ -20,6 +20,7 @@ const inputVariants = cva(``, {
 });
 type InputVariants = VariantProps<typeof inputVariants>;
 
+// TODO: prepend and append icons
 const props = withDefaults(defineProps<{
   type?: Exclude<InputTypeHTMLAttribute, "button" | "checkbox" | "color" | "file" | "hidden" | "image" | "month" | "radio" | "range" | "reset" | "submit" | "week">;
   class?: HTMLAttributes["class"];
@@ -31,7 +32,7 @@ const props = withDefaults(defineProps<{
   color?: InputVariants["color"];
   size?: InputVariants["size"];
   fullWidth?: boolean;
-  error?: InputVariants["error"];
+  error?: boolean;
   errorMessage?: string;
   dir?: "ltr" | "rtl";
 }>(), {
@@ -48,16 +49,22 @@ const modelValue = useVModel(props, "modelValue", emits, {
 });
 
 const inpEl = ref<HTMLInputElement | undefined>();
-watch([() => props.error, () => modelValue.value], (newV, _oldV) => {
-  const [err, val] = newV;
-  if (val && val?.toString().length > 0 && err) {
-    inpEl.value?.setCustomValidity(props.errorMessage);
-    inpEl.value?.setAttribute("aria-invalid", "true");
-  }
-  else {
-    inpEl.value?.setCustomValidity("");
-    inpEl.value?.removeAttribute("aria-invalid");
-  }
+function setError() {
+  inpEl.value?.setCustomValidity(props.errorMessage);
+  inpEl.value?.setAttribute("aria-invalid", "true");
+}
+function cleanError() {
+  inpEl.value?.setCustomValidity("");
+  inpEl.value?.removeAttribute("aria-invalid");
+}
+watch(() => props.error, (err) => {
+  if (err)
+    setError();
+  else cleanError();
+});
+onMounted(() => {
+  if (props.error)
+    setError();
 });
 </script>
 
@@ -155,7 +162,7 @@ input:invalid,
 input:invalid:hover,
 input:invalid:focus,
 input:invalid:focus-visible {
-  color: var(--chichi);
+  /* color: var(--chichi); */
   box-shadow: 0 0 0 var(--border-i-width) var(--chichi) inset;
 }
 input:invalid::placeholder {

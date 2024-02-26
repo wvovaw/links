@@ -6,7 +6,7 @@ import { UIInput } from "~ui/Input";
 <template>
   <PreviewFrame>
     <UIInput placeholder="Disabled" disabled />
-    <UIInput placeholder="Error" error />
+    <UIInput model-value="Some error text" placeholder="Error" error error-message="I am an error" />
     <UIInput placeholder="Readonly" model-value="Readonly with value" read-only />
   </PreviewFrame>
 </template>
