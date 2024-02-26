@@ -1,11 +1,11 @@
 ---
 title: Switch
-description: The Switch component, a customizable toggle switch for web applications. Learn about various customization options, including sizes, colors, and accessibility features. Check out examples and the comprehensive API reference to integrate the Switch into your projects.
+description: A UI component that allows users to switch between two options like on and off.
 ---
 
 # Switch
 
-The `Switch` component is a versatile toggle switch designed for web applications. This documentation provides a detailed guide to the `Switch` component, covering customization options such as sizes, colors, and accessibility features. Explore examples and refer to the API reference for seamless integration into your projects.
+The `Switch` component is a highly versatile and essential element in user interface design. It allows users to toggle between two states, such as on and off, enabling a more interactive user experience. With customizable sizes, colors, and the ability to be used within forms, the `Switch` component is designed for flexibility and ease of use. Its adherence to the roving tabindex accessibility standard ensures it is accessible to all users.
 
 ## Examples
 

@@ -1,11 +1,11 @@
 ---
 title: Button
-description: The Button component is a fundamental UI element designed to trigger actions in web applications. This guide provides detailed insights into the customization options available, including variants, colors, sizes, and various states like disabled and loading. Utilize the provided examples to seamlessly integrate and adapt the Button component to meet your specific requirements.
+description: A UI component that allows users to perform an action or submit a form.
 ---
 
 # Button
 
-The `Button` component serves as a fundamental UI element, specifically designed to trigger actions within web applications. This page provides an in-depth guide to the `Button` component, offering a rich set of settings for customization. Explore various options such as variants, colors, and sizes to effortlessly adapt the Button's appearance to suit your specific requirements.
+A `Button` is a UI element that allows users to perform a click or tap action. This `Button` component offers various styles, sizes, and states to fit different use cases. It can display as a default button, a link, or even with animations. It also supports full width, disabled state, and loading state.
 
 ## Examples
 
@@ -41,15 +41,15 @@ ___
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `AsTag` \| Component | No | button | Setting a root HTML element. button is default |
-| `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `disabeld` | `boolean` | No | - | When `true`, prevents user from interaction |
-| `variant` | filled \| outline \| ghost \| link | No | filled | Variant of a visual look of a button |
+| `as` | `AsTag` \| Component | No | button | Sets the root HTML element. button is default |
+| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| `disabled` | `boolean` | No | - | When `true`, prevents user from interaction |
+| `variant` | filled \| outline \| ghost \| link | No | filled | Variant of the visual look of the button |
 | `size` | xs \| sm \| md \| lg \| xl | No | md | Button size |
 | `color` | [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No | piccolo | Button color |
-| `fullWidth` | `boolean` | No | - | If `true` button width will be 100% of its parent |
+| `fullWidth` | `boolean` | No | - | If `true`, button width will be 100% of its parent |
 | `icon` | `string` | No | - | Iconify icon name |
 | `iconPos` | left \| right | No | left | Icon will be placed on the **left** or **right** from children content
 | `loading` | `boolean` | No | - | Activates loading spinner in place of the icon. Recommended only using with icon provided to prevent layout shifts |
-| `animation` | error \| pulse | No | - | Set error or pulse animation |
+| `animation` | error \| pulse | No | - | Sets error or pulse animation |
 | `type` | `ButtonHTMLAttributes["type"]` | No | - | HTML button type attribute |

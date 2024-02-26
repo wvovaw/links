@@ -1,9 +1,11 @@
 ---
 title: Checkbox
-description:
+description: A UI component that allows users to select one or more options from a set.
 ---
 
 # Checkbox
+
+A `Checkbox` is a user interface component that provides users with a way to select one or more options from a set. It's a simple and effective way to give users choices. This `Checkbox` component supports different sizes, colors, and states, including an indeterminate state. It can also be disabled if needed.
 
 ## Examples
 

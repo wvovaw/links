@@ -1,10 +1,12 @@
 ---
 title: Radio Group
-description:
+description: A UI component that allows users to select one option from a set of mutually exclusive choices.
 TODO: add "With label" example after `Label` implemented
 ---
 
 # Radio Group
+
+A `RadioGroup` is a UI component that allows users to select one option from a set of mutually exclusive choices. It consists of a group of radio items that can have different colors, sizes, and states. It can also be rendered as a different HTML element or a custom component.
 
 ## Anatomy
 
@@ -34,7 +36,7 @@ ___
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `AsTag` \| Component | No | div | Setting a root HTML element. button is default |
+| `as` | `AsTag` \| Component | No | div | Sets the root HTML element. button is default |
 | `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
 | `modelvalue` | `string` | No | - | The controlled value of the radio item to check. Can be binded as `v-model` |
 | `defaultValue` | `string` | No | - | The value of the radio item that should be checked when initially rendered. Use when you do not need to control the state of the radio items |

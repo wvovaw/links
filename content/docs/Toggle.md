@@ -1,11 +1,11 @@
 ---
 title: Toggle
-description: The Toggle component is a versatile UI element designed for toggling between two states. This guide covers various customization options, including variants, sizes, colors, and the integration of icons. Learn about the API reference to seamlessly incorporate the Toggle component into your web application.
+description: A UI component that lets users to choose one of two possible states like on or off.
 ---
 
 # Toggle Documentation
 
-The `Toggle` component is a versatile UI element designed for toggling between two states. This page provides comprehensive documentation for the `Toggle` component, covering various customization options such as variants, sizes, colors, and the integration of icons. Explore the examples to understand different use cases and visual styles.
+A `Toggle` is a UI component that lets users switch between two states. It's a simple and effective way to give users a choice. This `Toggle` component supports different sizes, colors, states and can include icons.
 
 ## Examples
 

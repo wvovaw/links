@@ -1,11 +1,11 @@
 ---
 title: Toggle Group
-description: the ToggleGroup component, a container for grouping multiple Toggle components. Learn about the various customization options, including single and multiple selection modes, sizing, colors, and layouts. Utilize the provided examples to integrate the ToggleGroup seamlessly into your web application.
+description: A UI component ToggleGroup is a container for grouping multiple Toggle components.
 ---
 
 # Toggle Group
 
-Toggle Group is basically a [Toggle components](/docs/toggle) grouped by one context. Here's an example of [single](#singular) and [multiple](#multiple) model values.
+A `Toggle Group` is basically a [Toggle components](/docs/toggle) grouped by one context. It can provide the common visuals and context to child Toggle components. Here's an example of [single](#singular) and [multiple](#multiple) model values.
 
 ## Anatomy
 
