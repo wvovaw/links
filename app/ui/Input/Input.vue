@@ -82,30 +82,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-input,
-input:before,
-input:after {
-  box-sizing: border-box;
-}
-input {
-  display: block;
-  appearance: none;
-  position: relative;
-  z-index: 2;
-  box-shadow: inset 0 0 0 1px var(--beerus);
-  transition-property: box-shadow;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration:150ms;
-  background: var(--goku);
-  color: var(--bulma);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin: 0;
-  @apply text-moon-16;
-}
-input:hover {
-  box-shadow: inset 0 0 0 var(--border-i-width) var(--trunks), inset 0 0 0 var(--border-i-width) var(--beerus);
-}
+@import "./input.css";
 /* Sizes */
 .i-sm {
   height: 2rem;
@@ -118,55 +95,6 @@ input:hover {
 .i-lg {
   height: 3rem;
   @apply leading-[3rem] rounded-moon-i-sm input-lg-dt-shared;
-}
-/* Colors */
-.i-piccolo:focus,
-.i-piccolo:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--border-i-width) var(--piccolo) inset;
-}
-.i-hit:focus,
-.i-hit:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--border-i-width) var(--hit) inset;
-}
-
-input::placeholder {
-  animation-delay: 75ms;
-  color: var(--trunks);
-  opacity: 100%;
-  transition-property: opacity;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-  user-select: none;
-}
-
-/* Read-only, disabled states */
-input:read-only {
-  outline: 0;
-  border: 0;
-  cursor: text;
-}
-input:read-only:hover,
-input:read-only:focus,
-input:read-only:focus-visible {
-  box-shadow: 0 0 0 var(--border-width) var(--beerus) inset;
-}
-input:disabled {
-  opacity: var(--opacity-moon);
-  cursor: not-allowed;
-}
-
-/* Invalid state */
-input:invalid,
-input:invalid:hover,
-input:invalid:focus,
-input:invalid:focus-visible {
-  /* color: var(--chichi); */
-  box-shadow: 0 0 0 var(--border-i-width) var(--chichi) inset;
-}
-input:invalid::placeholder {
-  color: var(--chichi-60);
 }
 
 /* Input type related styles */

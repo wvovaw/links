@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
+import type { HTMLAttributes } from "vue";
 import { toKebabCase } from "~utils/strings";
 
 const previewFrameVariants = cva("flex flex-wrap items-center justify-around p-4 gap-2 w-full text-moon-14 rounded-moon-s-sm not-prose", {
@@ -16,6 +17,7 @@ const previewFrameVariants = cva("flex flex-wrap items-center justify-around p-4
 type PreviewFrameVariants = VariantProps<typeof previewFrameVariants>;
 
 const props = defineProps<{
+  class?: HTMLAttributes["class"];
   title?: string;
   variant?: PreviewFrameVariants["variant"];
 }>();
@@ -33,7 +35,7 @@ const anchor = `#${props.title ? toKebabCase(props.title) : ""}`;
         </a>
       </h3>
     </header>
-    <div :class="previewFrameVariants({ variant })">
+    <div :class="[previewFrameVariants({ variant }), props.class]">
       <slot />
     </div>
   </section>
