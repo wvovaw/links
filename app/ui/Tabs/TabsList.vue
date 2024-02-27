@@ -1,31 +1,34 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed, inject, provide } from "vue";
+import { type HTMLAttributes, computed, inject, provide, readonly, toRefs } from "vue";
 import { TabsList, type TabsListProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
 
-const tabsListVariants = cva("flex items-center justify-center w-fit bg-gohan ", {
+const tabsListVariants = cva("flex items-center justify-center w-fit", {
   variants: {
-    size: {
-      sm: "rounded-moon-s-sm gap-1 p-1",
-      md: "rounded-moon-s-sm gap-1 p-1",
-      lg: "rounded-moon-s-md gap-2 p-2",
+    variant: {
+      pill: "bg-gohan",
+      tab: "",
     },
+    size: { sm: "", md: "", lg: "" },
     orientation: {
       horizontal: "flex-row",
       vertical: "flex-col",
     },
   },
-  defaultVariants: {
-    size: "sm",
-  },
+  compoundVariants: [
+    { variant: "pill", size: ["sm", "md"], class: "rounded-moon-s-sm gap-1 p-1" },
+    { variant: "pill", size: "lg", class: "rounded-moon-s-md gap-2 p-2" },
+  ],
 });
 type TabsSegmentVariants = VariantProps<typeof tabsListVariants>;
 
 const props = withDefaults(defineProps<TabsListProps & {
   class?: HTMLAttributes["class"];
   size?: TabsSegmentVariants["size"];
+  variant?: TabsSegmentVariants["variant"];
 }>(), {
-  size: "sm",
+  size: "md",
+  variant: "pill",
 });
 
 const delegatedProps = computed(() => {
@@ -34,16 +37,19 @@ const delegatedProps = computed(() => {
 });
 
 // Provided by Tabs.vue
-const { orientation } = inject<{ orientation: "horizontal" | "vertical" }>("tabs");
+const { orientation } = inject<{ orientation: "horizontal" | "vertical" }>("tabs", { orientation: "horizontal" });
+
+const { size, variant } = toRefs(props);
 provide("tabsList", {
-  size: props.size,
+  size: readonly(size),
+  variant: readonly(variant),
 });
 </script>
 
 <template>
   <TabsList
     v-bind="delegatedProps"
-    :class="[tabsListVariants({ size, orientation }), props.class]"
+    :class="[tabsListVariants({ size, variant, orientation }), props.class]"
   >
     <slot />
   </TabsList>

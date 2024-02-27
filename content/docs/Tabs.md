@@ -24,9 +24,11 @@ description
 
 :ui-docs-tabs-default{title="Default"}
 
-<!-- :ui-docs-radio-group-colors{title="Colors"} -->
+:ui-docs-tabs-variants{title="Variants"}
 
-<!-- :ui-docs-radio-group-disabled{title="Disabled"} -->
+:ui-docs-tabs-sizes{title="Sizes"}
+
+:ui-docs-tabs-disabled{title="Disabled"}
 
 ___
 
@@ -70,7 +72,8 @@ ___
 | `as` | `AsTag` \| Component | No | div | Setting a root HTML element. button is default |
 | `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
 | `loop` | `boolean` | No | true | When `loop` is `true`, keyboard navigation will loop from last tab to first, and vice versa |
-| `size` | sm \| md \| lg | No | sm | Size of the tabs list and tabs triggers |
+| `size` | sm \| md \| lg | No | md | Size of the tabs list and tabs triggers |
+| `variant` | tab \| pill | No | pill | Visual variant of the tabs list and tabs triggers |
 
 #### Data Attributes
 
