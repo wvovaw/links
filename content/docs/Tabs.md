@@ -30,6 +30,8 @@ description
 
 :ui-docs-tabs-disabled{title="Disabled"}
 
+:ui-docs-tabs-examples{title="Examples"}
+
 ___
 
 ## API Reference

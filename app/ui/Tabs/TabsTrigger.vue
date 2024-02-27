@@ -5,7 +5,7 @@ import { computed, inject } from "vue";
 import { TabsTrigger, type TabsTriggerProps, useForwardProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
 
-const tabsTriggerVariants = cva("flex items-center justify-center w-full whitespace-nowrap font-medium cursor-pointer duration-300", {
+const tabsTriggerVariants = cva("flex items-center justify-center w-full overflow-clip whitespace-nowrap font-medium cursor-pointer duration-300", {
   variants: {
     variant: {
       pill: "rounded-moon-i-sm transition-colors data-[active=true]:text-goten data-[active=false]:text-trunks data-[active=false]:hover:bg-heles data-[active=true]:bg-popo",
