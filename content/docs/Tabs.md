@@ -5,7 +5,7 @@ description: A UI component allowing user to switch between content sections tha
 
 # Tabs
 
-description
+Tabs is a component allowing users to navigate between views within the same context. Only one content associated with the selected tab displayed at a time.
 
 ## Anatomy
 
