@@ -3,22 +3,20 @@ import type { HTMLAttributes, InputTypeHTMLAttribute } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
 
-const inputVariants = cva(``, {
+const insertInputVariants = cva("h-[3.5rem] leading-[3.5rem] rounded-moon-i-sm input-dt-shared pt-[1.25rem]", {
   variants: {
     color: { piccolo: "i-piccolo", hit: "i-hit" },
-    size: { sm: "i-sm", md: "i-md", lg: "i-lg" },
     fullWidth: { true: "w-full max-w-full ", false: "" },
     disabled: { true: "", false: "" },
     error: { true: "", false: "" },
   },
   compoundVariants: [],
   defaultVariants: {
-    size: "md",
     color: "piccolo",
     fullWidth: false,
   },
 });
-type InputVariants = VariantProps<typeof inputVariants>;
+type InsertInputVariants = VariantProps<typeof insertInputVariants>;
 
 // TODO: prepend and append icons
 const props = withDefaults(defineProps<{
@@ -27,16 +25,16 @@ const props = withDefaults(defineProps<{
   defaultValue?: string | number;
   modelValue?: string | number;
   placeholder?: string;
+  label?: string;
   disabled?: boolean;
   readOnly?: boolean;
-  color?: InputVariants["color"];
-  size?: InputVariants["size"];
+  color?: InsertInputVariants["color"];
   fullWidth?: boolean;
   error?: boolean;
   errorMessage?: string;
   dir?: "ltr" | "rtl";
 }>(), {
-  errorMessage: "Input error",
+  errorMessage: "InsertInput error",
 });
 
 const emits = defineEmits<{
@@ -69,31 +67,41 @@ onMounted(() => {
 </script>
 
 <template>
-  <input
-    ref="inpEl"
-    v-model="modelValue"
-    :class="[inputVariants({ color, size, fullWidth, disabled, error }), props.class]"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :readonly="readOnly"
-    :type="type"
-    v-bind="$attrs"
-  >
+  <div class="relative rounded-moon-i-sm bg-goku" :class="{ 'w-full': fullWidth }">
+    <input
+      ref="inpEl"
+      v-model="modelValue"
+      :class="[insertInputVariants({ color, fullWidth, disabled, error }), props.class]"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :readonly="readOnly"
+      :type="type"
+      v-bind="$attrs"
+    >
+    <label class="absolute text-moon-12 text-trunks top-3 start-4 z-[1] transition-all">{{ label }}</label>
+  </div>
 </template>
 
 <style scoped>
 @import "./input.css";
-/* Sizes */
-.i-sm {
-  height: 2rem;
-  @apply leading-8 rounded-moon-i-xs input-dt-shared;
+input {
+  display: unset;
+  max-width: unset;
+  width: 100%;
 }
-.i-md {
-  height: 2.5rem;
-  @apply leading-10 rounded-moon-i-sm input-dt-shared;
- }
-.i-lg {
-  height: 3rem;
-  @apply leading-[3rem] rounded-moon-i-sm input-lg-dt-shared;
+input:before,input:after {
+  box-sizing: unset;
+}
+input:not(:focus):not([disabled]):placeholder-shown+label {
+    top: 50%;
+    margin-top: -0.438rem;
+    font-size: 1rem;
+    line-height: 1rem;
+}
+input::placeholder {
+  opacity: 1000%;
+}
+input:not(:focus):not([disabled])::placeholder {
+  opacity: 0%;
 }
 </style>
