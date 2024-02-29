@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ButtonHTMLAttributes } from "vue";
+import type { ButtonHTMLAttributes, HTMLAttributes } from "vue";
 import { Primitive, type PrimitiveProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
 
@@ -110,20 +110,20 @@ const buttonIconVariants = cva("", {
 
 type ButtonVariants = VariantProps<typeof buttonVariants>;
 type ButtonIconVariants = VariantProps<typeof buttonIconVariants>;
-interface Props extends PrimitiveProps {
+
+const props = withDefaults(defineProps<PrimitiveProps & {
+  class?: HTMLAttributes["class"];
+  type?: ButtonHTMLAttributes["type"];
   variant?: ButtonVariants["variant"];
   size?: ButtonVariants["size"];
   color?: ButtonVariants["color"];
   icon?: string;
   iconPos?: ButtonIconVariants["iconPos"];
-  loading?: Extract<ButtonIconVariants["loading"], boolean>;
-  fullWidth?: Extract<ButtonVariants["fullWidth"], boolean>;
-  disabled?: Extract<ButtonVariants["disabled"], boolean>;
   animation?: ButtonVariants["animation"];
-  type?: ButtonHTMLAttributes["type"];
-}
-
-withDefaults(defineProps<Props>(), {
+  loading?: boolean;
+  fullWidth?: boolean;
+  disabled?: boolean;
+}>(), {
   as: "button",
   variant: "fill",
   size: "md",
@@ -135,10 +135,10 @@ withDefaults(defineProps<Props>(), {
 <template>
   <Primitive
     ref="btnEl"
-    :class="buttonVariants({ variant, size, color, fullWidth, hasIconOrLoading: (!!icon || loading), iconPos, iconOnly: noChildren, animation, disabled })"
-    :as-child="asChild"
-    :as="as"
+    :class="[buttonVariants({ variant, size, color, fullWidth, hasIconOrLoading: (!!icon || loading), iconPos, iconOnly: noChildren, animation, disabled }), props.class]"
     :disabled="disabled"
+    :as="as"
+    :as-child="asChild"
     v-bind="$attrs"
   >
     <span
