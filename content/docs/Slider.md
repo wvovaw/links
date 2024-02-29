@@ -11,15 +11,11 @@ description: A UI component that allows user to select one ore more numbers from
 
 :ui-docs-slider-default{title="Default"}
 
-<!-- :ui-docs-slider-variants{title="Variants"} -->
+:ui-docs-slider-sizes{title="Sizes"}
 
-<!-- :ui-docs-slider-sizes{title="Sizes"} -->
+:ui-docs-slider-colors{title="Colors"}
 
-<!-- :ui-docs-slider-colors{title="Colors"} -->
-
-<!-- :ui-docs-slider-icons{title="Icons"} -->
-
-<!-- :ui-docs-slider-clickable{title="Clickable icons"} -->
+:ui-docs-slider-multiple{title="Multiple thumbs"}
 
 ___
 
@@ -37,12 +33,14 @@ ___
 | `min` | `number` | No | 0 | The minumum value of the range. |
 | `minStepsBetweenThumbs` | `number` | No | 0 | The minimum permited steps between multiple thumbs. |
 | `step` | `number` | No | 1 | The stepping interval. |
+| `nOfThumbs` | `number` | No | 1 | Amount of thumbs on a slider. |
 | `modelValue` | `number[]` | No | - | The controlled value of the slider. Can be bound with `v-model`. |
 | `name` | `string` | No | - | The name of the slider. |
 | `disabled` | `boolean` | No | - | When `true`, prevents user from interaction |
 | `dir` | ltr \| rtl | No | ltr | The reading direction of the combobox when applicable.<br>If omitted, inherits globally from `DirectionProvider` or assumes LTR (left-to-right) reading mode |
 | `orientation` | vertical \| horizontal | No | - | The orientation of the component, which determines how focus moves: **horizontal** for left/right arrows and **vertical** for up/down arrows |
 | `size` | sm \| md \| lg | No | md | Size of a slider |
+| `color` | [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No | piccolo | Slider color |
 
 #### Emits
 
