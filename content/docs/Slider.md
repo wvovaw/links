@@ -21,6 +21,7 @@ description: A UI component that allows user to select one ore more numbers from
 
 > Transition fires when a slider value changes from out of it.
 
+:ui-docs-slider-thumb{title="Thumb scoped slot"}
 ___
 
 ## API Reference
@@ -52,6 +53,22 @@ ___
 |------|---------|
 | `update:modelValue` | `[payload: number[]]` Event handler called when the slider value changes |
 | `valueCommit` | `[payload: number[]]` Event handler called when the value changes at the end of an interaction.<br>Useful when you only need to capture a final value e.g. to update a backend service. |
+
+#### Slots
+
+##### Default
+
+| Name | Payload |
+|------|---------|
+| `modelValue` |  `number[]` Current slider values |
+
+##### Thumb
+
+Depending on the `n-of-thumbs` prop value there will be n slots available named `thumb-i` (where i &isin; 1 - n). They're providing `value` prop - the number value of the thumb it represents.
+
+| Name | Payload |
+|------|---------|
+| `value` |  `number` Value of the thumb values |
 
 ___
 

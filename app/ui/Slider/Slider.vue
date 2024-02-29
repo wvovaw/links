@@ -27,7 +27,7 @@ const rangeVariants = cva("absolute h-full", { variants, compoundVariants: [
   { color: "krillin", class: "bg-krillin" },
   { color: "roshi", class: "bg-roshi" },
 ] });
-const thumbVariants = cva("cursor-grab block rounded-full shadow-(moon-lg popo) focus:outline-none focus-visible:outline-none", {
+const thumbVariants = cva("absolute border-box cursor-grab block rounded-full shadow-(moon-lg popo) focus:outline-none focus-visible:outline-none", {
   variants,
   compoundVariants: [
     { color: "piccolo", class: "border-piccolo bg-goten focus:(ring-jiren bg-piccolo)" },
@@ -79,14 +79,18 @@ const transitionClass = computed(() => {
     @keydown="active = true"
     @keyup="active = false"
   >
-    <SliderTrack :class="trackVariants({ color, size })">
-      <SliderRange :class="[rangeVariants({ color, size }), transitionClass]" />
-    </SliderTrack>
+    <template #default="{ modelValue }">
+      <SliderTrack :class="trackVariants({ color, size })">
+        <SliderRange :class="[rangeVariants({ color, size }), transitionClass]" />
+      </SliderTrack>
 
-    <SliderThumb
-      v-for="thumb of nOfThumbs"
-      :key="thumb"
-      :class="[thumbVariants({ color, size }), transitionClass]"
-    />
+      <SliderThumb
+        v-for="thumb of nOfThumbs"
+        :key="thumb"
+        :class="[thumbVariants({ color, size }), transitionClass]"
+      >
+        <slot :name="`thumb-${thumb}`" :value="modelValue[thumb - 1]" />
+      </SliderThumb>
+    </template>
   </SliderRoot>
 </template>
