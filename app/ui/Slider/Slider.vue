@@ -59,21 +59,34 @@ const delegatedProps = computed(() => {
   return delegated;
 });
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+// Active means in current interaction.
+// If user clicks somewhere on the track there's no transition on it
+const active = ref(false);
+const transitionClass = computed(() => {
+  if (active.value)
+    return "";
+  else return "transition-all duration-400 ease-out";
+});
 </script>
 
 <template>
   <SliderRoot
     :class="[rootVariants({ color, size }), props.class]"
     v-bind="forwarded"
+    @pointerdown="active = true"
+    @pointerup="active = false"
+    @keydown="active = true"
+    @keyup="active = false"
   >
     <SliderTrack :class="trackVariants({ color, size })">
-      <SliderRange :class="rangeVariants({ color, size })" />
+      <SliderRange :class="[rangeVariants({ color, size }), transitionClass]" />
     </SliderTrack>
 
     <SliderThumb
       v-for="thumb of nOfThumbs"
       :key="thumb"
-      :class="thumbVariants({ color, size })"
+      :class="[thumbVariants({ color, size }), transitionClass]"
     />
   </SliderRoot>
 </template>

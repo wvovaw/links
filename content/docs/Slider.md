@@ -17,6 +17,10 @@ description: A UI component that allows user to select one ore more numbers from
 
 :ui-docs-slider-multiple{title="Multiple thumbs"}
 
+:ui-docs-slider-transition{title="Transition"}
+
+> Transition fires when a slider value changes from out of it.
+
 ___
 
 ## API Reference
