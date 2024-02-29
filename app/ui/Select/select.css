@@ -36,6 +36,10 @@ select:hover :not(select:disabled) {
   height: 3rem;
   @apply leading-[3rem] rounded-moon-i-sm input-lg-dt-shared;
 }
+.s-insert {
+  height: 3.5rem;
+  @apply text-moon-16 py-0 pt-[0.80rem] leading-[3rem] rounded-moon-i-sm;
+}
 /* Colors */
 .s-piccolo:focus,
 .s-piccolo:focus-visible {

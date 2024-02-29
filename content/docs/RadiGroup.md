@@ -1,7 +1,6 @@
 ---
 title: Radio Group
 description: A UI component that allows users to select one option from a set of mutually exclusive choices.
-TODO: add "With label" example after `Label` implemented
 ---
 
 # Radio Group
