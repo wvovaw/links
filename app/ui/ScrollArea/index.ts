@@ -1,1 +1,1 @@
-export { default as UISCrollArea } from "./ScrolArea.vue";
+export { default as UIScrollArea } from "./ScrolArea.vue";
