@@ -17,7 +17,7 @@ import { UISelect } from "~ui/Select";
           3
         </option>
       </UISelect>
-      <UISelect>
+      <UISelect disable>
         <option value="1">
           1
         </option>

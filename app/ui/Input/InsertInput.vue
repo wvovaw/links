@@ -64,11 +64,14 @@ onMounted(() => {
   if (props.error)
     setError();
 });
+const id = useId();
 </script>
 
 <template>
   <div class="relative rounded-moon-i-sm bg-goku" :class="{ 'w-full': fullWidth }">
     <input
+      v-bind="$attrs"
+      :id="id"
       ref="inpEl"
       v-model="modelValue"
       :class="[insertInputVariants({ color, fullWidth, disabled, error }), props.class]"
@@ -76,9 +79,8 @@ onMounted(() => {
       :disabled="disabled"
       :readonly="readOnly"
       :type="type"
-      v-bind="$attrs"
     >
-    <label class="absolute text-moon-12 text-trunks top-3 start-4 z-[1] transition-all">{{ label }}</label>
+    <label :for="id" class="absolute text-moon-12 text-trunks top-3 start-4 z-[1] cursor-inherit transition-all">{{ label }}</label>
   </div>
 </template>
 

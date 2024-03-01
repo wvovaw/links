@@ -16,6 +16,18 @@ const selectVariants = cva("", {
     color: "piccolo",
   },
 });
+const arrowVariants = cva("i-lucide:chevron-down", {
+  variants: {
+    size: {
+      sm: "absolute top-1/2 end-3 -translate-y-1/2 z-5 pointer-events-none text-trunks flex-shrink-0 transition-transform text-moon-16",
+      md: "absolute top-1/2 end-3 -translate-y-1/2 z-5 pointer-events-none text-trunks flex-shrink-0 transition-transform text-moon-16",
+      lg: "absolute top-1/2 end-3 -translate-y-1/2 z-5 pointer-events-none text-trunks flex-shrink-0 transition-transform text-moon-16",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+  },
+});
 type SelectVariants = VariantProps<typeof selectVariants>;
 
 const props = withDefaults(defineProps<{
@@ -61,16 +73,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <select
-    ref="selEl"
-    v-model="modelValue"
-    :class="[selectVariants({ color, size, disabled, error }), props.class]"
-    :disabled="disabled"
-    :multiple="multiple"
-    v-bind="$attrs"
-  >
-    <slot />
-  </select>
+  <span class="block relative h-full w-full max-w-full">
+    <select
+      ref="selEl"
+      v-model="modelValue"
+      :class="[selectVariants({ color, size, disabled, error }), props.class]"
+      :disabled="disabled"
+      :multiple="multiple"
+      v-bind="$attrs"
+    >
+      <slot />
+    </select>
+    <span :class="arrowVariants({ size })" />
+
+  </span>
 </template>
 
 <style scoped>
