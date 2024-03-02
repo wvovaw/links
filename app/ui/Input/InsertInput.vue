@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useId } from "radix-vue";
 import type { HTMLAttributes, InputTypeHTMLAttribute } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
