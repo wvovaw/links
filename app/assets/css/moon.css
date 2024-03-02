@@ -21,6 +21,9 @@
   --heles: rgba(0 0 0 / 0.12); /* #000000 */
   --zeno: rgba(0 0 0 / 0.56); /* #000000 */
 
+  /* special colors */
+  --progress: rgba(89 93 98 / .24); /* #595D62 */
+
   /* support-colors  */
   --krillin: rgba(255 179 25); /* #ff9800 */
   --krillin-60: rgba(255 179 25 / 0.56); /* #ff9800 */
@@ -103,6 +106,9 @@
   --heles: rgba(255 255 255 / 0.13); /* #ffffff */
   --zeno: rgba(0 0 0 / 0.56); /* #000000 */
 
+  /* special colors */
+  --progress: rgba(153 156 160 / .24); /* #999ca0 */
+
   /* support-colors  */
   --krillin: rgba(255 179 25); /* #ff9800 */
   --krillin-60: rgba(255 179 25 / 0.56); /* #ff9800 */
@@ -183,6 +189,9 @@
     --popo: rgba(0 0 0); /* #000000 */
     --heles: rgba(0 0 0 / 0.12); /* #000000 */
     --zeno: rgba(0 0 0 / 0.56); /* #000000 */
+
+    /* special colors */
+    --progress: rgba(89 93 98 / .24); /* #595D62 */
 
     /* support-colors  */
     --krillin: rgba(255 179 25); /* #ff9800 */
@@ -266,6 +275,9 @@
     --popo: rgba(0 0 0); /* #000000 */
     --heles: rgba(255 255 255 / 0.13); /* #ffffff */
     --zeno: rgba(0 0 0 / 0.56); /* #000000 */
+
+    /* special colors */
+    --progress: rgba(153 156 160 / .24); /* #999ca0 */
 
     /* support-colors  */
     --krillin: rgba(255 179 25); /* #ff9800 */

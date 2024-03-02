@@ -46,6 +46,10 @@ export default definePreset((_options?: PresetMoonOptions) => {
         zeno: {
           DEFAULT: "var(--zeno)",
         },
+        // special colors
+        progress: {
+          DEFAULT: "var(--progress)",
+        },
         // support colours
         krillin: {
           DEFAULT: "var(--krillin)",
