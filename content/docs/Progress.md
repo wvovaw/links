@@ -15,6 +15,8 @@ A `Progress` component is a visual representation of a progress.
 
 :ui-docs-progress-colors{title="Colors"}
 
+:ui-docs-progress-indeterminate{title="Indeterminate"}
+
 ___
 
 ## API Reference

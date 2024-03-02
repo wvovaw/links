@@ -5,10 +5,10 @@ import { UIProgressCircular } from "~ui/Progress";
 
 <template>
   <PreviewFrame>
-    <UIProgressCircular size="xs" />
-    <UIProgressCircular size="sm" color="hit" />
-    <UIProgressCircular size="md" color="chichi" />
-    <UIProgressCircular color="krillin" />
-    <UIProgressCircular size="xl" color="roshi" />
+    <UIProgressCircular :model-value="null" size="xs" />
+    <UIProgressCircular :model-value="null" size="sm" color="hit" />
+    <UIProgressCircular :model-value="null" size="md" color="chichi" />
+    <UIProgressCircular :model-value="null" color="krillin" />
+    <UIProgressCircular :model-value="null" size="xl" color="roshi" />
   </PreviewFrame>
 </template>

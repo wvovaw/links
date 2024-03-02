@@ -28,7 +28,6 @@ const props = withDefaults(defineProps<ProgressRootProps & {
   size?: ProgressRootVariants["size"];
   color?: ProgressIndicatorVariants["color"];
 }>(), {
-  modelValue: 0,
   max: 100,
 });
 
@@ -39,7 +38,7 @@ const delegatedProps = computed(() => {
 
 const rad = 46.46;
 const sdo = computed(() => {
-  if (props.modelValue === 0)
+  if (!props.modelValue || props.modelValue === 0)
     return 289.027;
   else
     return ((props.max - props.modelValue!) / 100) * Math.PI * (rad * 2);
@@ -73,10 +72,10 @@ const sdo = computed(() => {
 </template>
 
 <style scoped>
-svg[data-state="indeterminate"] {
+svg[data-state="indeterminate"]:not([data-value="0"]) {
   animation: progress-indeterminate 2s linear infinite;
 }
-path[data-state="indeterminate"] {
+path[data-state="indeterminate"]:not([data-value="0"]) {
   animation: progress-bar-indeterminate 2s ease-in-out infinite;
 }
 @keyframes progress-indeterminate {

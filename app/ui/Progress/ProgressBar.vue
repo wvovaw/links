@@ -45,8 +45,27 @@ const delegatedProps = computed(() => {
     v-bind="delegatedProps"
   >
     <ProgressIndicator
+      class="indicator"
       :class="progressIndicatorVariants({ color })"
       :style="`transform: translateX(-${100 - (props.modelValue ?? 0)}%);`"
     />
   </ProgressRoot>
 </template>
+
+<style scoped>
+.indicator[data-state="indeterminate"]:not([data-value="0"]) {
+  transform-origin: 0% 50%;
+  animation: progress-bar-indeterminate 1s linear infinite;
+}
+@keyframes progress-bar-indeterminate {
+  0% {
+    transform: translateX(0) scaleX(0);
+  }
+  40% {
+      transform: translateX(0) scaleX(0.4);
+  }
+  100% {
+      transform: translateX(100%) scaleX(0.5);
+  }
+}
+</style>
