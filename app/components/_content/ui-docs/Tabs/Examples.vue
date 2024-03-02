@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
 import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
+import { UIScrollArea } from "~ui/ScrollArea";
 </script>
 
 <template>
@@ -18,7 +19,7 @@ import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
             Tab 3
           </UITabsTrigger>
         </UITabsList>
-        <div class="p-4 h-[200px] overflow-y-auto">
+        <UIScrollArea class="p-4 h-[200px]">
           <UITabsContent value="1">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu condimentum nulla. In fringilla sapien vitae nunc feugiat commodo. Duis id vulputate tellus, eu consectetur felis. Praesent sit amet pharetra tellus.
           </UITabsContent>
@@ -29,7 +30,7 @@ import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
             Praesent et libero elementum, pellentesque sapien vitae, venenatis tellus. Vivamus malesuada justo justo, gravida maximus diam varius vel. Nulla pulvinar ornare ligula id vehicula. Ut ultrices feugiat dui sed ultricies. Sed a erat eget diam cursus aliquam sit amet quis felis. Sed mauris velit, aliquet non egestas nec, vehicula a dolor.
             Etiam et commodo neque. Nullam quis auctor massa, et tempus tellus. Cras hendrerit turpis non sapien iaculis faucibus. Sed tincidunt mauris ligula, sit amet mollis mauris ultricies a. Aliquam tristique malesuada tincidunt. Nullam posuere, metus sed vestibulum congue, nisl lectus vehicula mauris, vitae gravida erat orci quis neque.
           </UITabsContent>
-        </div>
+        </UIScrollArea>
       </UITabs>
 
       <UITabs orientation="vertical" default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm max-w-sm grid grid-flow-col">
@@ -44,7 +45,7 @@ import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
             Tab 3
           </UITabsTrigger>
         </UITabsList>
-        <div class="px-4 h-[240px] overflow-y-auto cols-span-2">
+        <UIScrollArea class="h-[240px] cols-span-2 px-4">
           <UITabsContent value="1">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu condimentum nulla. In fringilla sapien vitae nunc feugiat commodo. Duis id vulputate tellus, eu consectetur felis. Praesent sit amet pharetra tellus.
           </UITabsContent>
@@ -55,7 +56,7 @@ import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
             Praesent et libero elementum, pellentesque sapien vitae, venenatis tellus. Vivamus malesuada justo justo, gravida maximus diam varius vel. Nulla pulvinar ornare ligula id vehicula. Ut ultrices feugiat dui sed ultricies. Sed a erat eget diam cursus aliquam sit amet quis felis. Sed mauris velit, aliquet non egestas nec, vehicula a dolor.
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tortor dolor, feugiat quis aliquet ut, interdum a lacus. Etiam nibh velit, mattis et condimentum eget, venenatis nec odio. Curabitur et placerat leo, in vehicula sem. Suspendisse cursus odio eu sapien eleifend tincidunt id vel sem.
           </UITabsContent>
-        </div>
+        </UIScrollArea>
       </UITabs>
     </div>
   </PreviewFrame>

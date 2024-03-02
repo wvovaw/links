@@ -3,7 +3,7 @@ import { type VariantProps, cva } from "cva";
 import type { HTMLAttributes } from "vue";
 
 const badgeVariants = cva(
-  "flex items-center rounded-moon-i-xs gap-1 select-none uppercase font-medium",
+  "flex items-center rounded-moon-i-xs gap-1 select-none uppercase font-medium data-[disabled]:opacity-60",
   {
     variants: {
       variant: {
