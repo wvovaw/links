@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
-import { UIInputHint, UIInputLabel, UIInsertInput } from "~ui/Input";
+import { UIInputHint, UIInsertInput } from "~ui/Input";
 </script>
 
 <template>

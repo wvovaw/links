@@ -87,7 +87,7 @@ ___
 | `as` | `AsTag` \| Component | No | div | Setting a root HTML element. button is default |
 | `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
 | `defaultValue ` | `boolean` | No | - | The pressed state of the toggle when it is initially rendered. Use when you do not need to control its open state |
-| `value` | `string` | No | - | A string value for the toggle group item. Can be bind as `v-model` |
+| `value` | `string` | Yes | - | A string value for the toggle group item. All items within a toggle group should use a unique value. |
 | `pressed ` | `boolean` | No | - | The controlled pressed state of the toggle. Can be bind as `v-model` |
 | `disabeld` | `boolean` | No | - | When `true`, prevents user from interaction |
 | `variant ` | default \| ghost | No | default | Variant of a visual look of a toggle |

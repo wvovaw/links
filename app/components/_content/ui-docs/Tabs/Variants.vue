@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
-import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
+import { UITabs, UITabsList, UITabsTrigger } from "~ui/Tabs";
 </script>
 
 <template>

@@ -41,5 +41,8 @@
     "*.md": "mdc",
     "*.mdc": "mdc"
   },
-  "todo-tree.tree.showBadges": false
+  "todo-tree.tree.showBadges": false,
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  }
 }

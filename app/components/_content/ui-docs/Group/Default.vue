@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
 import { UIInput, UIInsertInput } from "~ui/Input";
-import { UIInsertSelect, UISelect } from "~ui/Select";
+import { UIInsertSelect } from "~ui/Select";
 import { UIGroup } from "~ui/Group";
 </script>
 

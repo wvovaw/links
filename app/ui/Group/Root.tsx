@@ -1,4 +1,4 @@
-import { cloneVNode, defineComponent, onUpdated } from "vue";
+import { cloneVNode, defineComponent } from "vue";
 import { type VariantProps, cva } from "cva";
 import type { HTMLAttributes } from "vue";
 

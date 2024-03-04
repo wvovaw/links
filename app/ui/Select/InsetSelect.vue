@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HTMLAttributes, SelectHTMLAttributes } from "vue";
+import type { HTMLAttributes } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
 

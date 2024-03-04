@@ -9,6 +9,15 @@ description: A UI input component which captures input results and display them 
 These selected text entries are being displayed as `Tag`s. Tags represent a set of interactive keywords that help organize and categorize objects.
 Tags can be added by pressing the Enter key or removed by Backspace key or the mouse click from the input element.
 
+## Anatomy
+
+```vue
+<TagsInput>
+  <TagsInputItem>
+  <TagsInputInput>
+</TagsInput>
+```
+
 ## Examples
 
 :ui-docs-tags-input-default{title="Default"}

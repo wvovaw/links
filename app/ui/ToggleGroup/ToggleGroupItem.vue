@@ -86,7 +86,7 @@ const context = inject<{
 }>("toggleGroup");
 
 const delegatedProps = computed(() => {
-  const { class: _, variant: _v, size: _s, color: _c, withStroke: _ws, ...delegated } = props;
+  const { class: _, variant: _v, size: _s, color: _c, withStroke: _ws, icon: _i, iconPos: _ip, ...delegated } = props;
   return delegated;
 });
 

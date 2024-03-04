@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
-import { UIInsertSelect, UISelectHint, UISelectLabel } from "~ui/Select";
+import { UIInsertSelect, UISelectHint } from "~ui/Select";
 </script>
 
 <template>

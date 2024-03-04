@@ -4,12 +4,12 @@ import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "radix-vue
 import type { CheckboxRootEmits, CheckboxRootProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
 
-const checkboxRootVariants = cva("shrink-0 border shadow-[0_0_0_1px_inset] shadow-trunks ring-offset-2 ring-offset-goku focus:outline-none focus-visible:ring-2 ring-bulma", {
+const checkboxRootVariants = cva("shrink-0 border border-trunks ring-offset-2 ring-offset-goku focus:outline-none focus-visible:ring-2 ring-bulma", {
   variants: {
     color: {
       default: "data-[state=checked]:(shadow-none text-goku bg-bulma border-bulma)",
       piccolo: "data-[state=checked]:(shadow-none text-goku bg-piccolo border-piccolo)",
-      hit: "data-[state=checked]:(shadow-none text-goku bg-hit border-goku)",
+      hit: "data-[state=checked]:(shadow-none text-goku bg-hit border-hit)",
       roshi: "data-[state=checked]:(shadow-none text-goku bg-roshi border-roshi)",
       chichi: "data-[state=checked]:(shadow-none text-goku bg-chichi border-chichi)",
       krillin: "data-[state=checked]:(shadow-none text-goku bg-krillin border-krillin)",
