@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { NavigationBar } from "~components/NavigationBar";
 import ThemeSwitcher from "~components/ThemeSwitcher.vue";
-import { DocsAsideNavigation } from "~components/DocsAsideNavigation";
 
 const { t } = useI18n();
 const head = useLocaleHead({
@@ -32,17 +31,7 @@ const head = useLocaleHead({
           <ThemeSwitcher />
         </template>
       </NavigationBar>
-      <div class="md:grid md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)] lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] gap-8">
-        <DocsAsideNavigation class="hidden md:block " />
-        <main class="p-4 lg:p-0 max-w-screen-lg">
-          <slot />
-        </main>
-        <aside class="hidden lg:block sticky top-0 h-100vh p-6 border-(l-1 beerus) bg-gohan">
-          <div class="w-full text-center">
-            Table of contents
-          </div>
-        </aside>
-      </div>
+      <slot />
     </Body>
   </Html>
 </template>
