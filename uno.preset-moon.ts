@@ -257,6 +257,9 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "explode": "{ 0% { transform: translate(-50%, -50%) scale(0); opacity: 1 } 50% { transform: translate(-50%, -50%) scale(1); opacity: 0.4 } 80%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0 } }",
           "rotation": "{ 0% { transform: rotate(0deg) } 100% { transform: rotate(360deg) } }",
           "pulse2": "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 0% { transform: scale(1) } 70% { transform: scale(1); box-shadow: 0 0 0 30px transparent } 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent } }",
+          // Collapsible
+          "collapsible-down": "{ from { height: 0 } to { height: var(--radix-collapsible-content-height) } }",
+          "collapsible-up": "{ to { height: 0 } from { height: var(--radix-collapsible-content-height) } }",
           // Toast
           "toast-hide": "{ 0% { opacity: 1 } 100% { opacity: 0 } }",
           "toast-slide-in-right": "{ 0% { transform: translateX(calc(100% + 1rem)) } 100% { transform: translateX(0) } }",
@@ -266,8 +269,11 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "toast-swipe-out": "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } }",
         },
         durations: {
-          pulse2: "1.5s",
-          error: ".82s",
+          "pulse2": "1.5s",
+          "error": ".82s",
+          // Collapsible
+          "collapsible-down": "0.2s",
+          "collapsible-up": "0.2s",
         },
         counts: {
           pulse2: "infinite",
@@ -279,6 +285,9 @@ export default definePreset((_options?: PresetMoonOptions) => {
         timingFns: {
           "pulse2": "ease-out",
           "error": "cubic-bezier(.36,.07,.19,.97)",
+          // Collapsible
+          "collapsible-down": "ease-in-out",
+          "collapsible-up": "ease-in-out",
           // Toast
           "toast-hide": "toast-hide 300ms ease-in forwards",
           "toast-slide-in-right": "toast-slide-in-right 300ms cubic-bezier(0.16, 1, 0.3, 1)",
