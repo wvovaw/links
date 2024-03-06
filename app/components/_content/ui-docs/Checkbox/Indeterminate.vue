@@ -2,7 +2,7 @@
 import PreviewFrame from "../PreviewFrame.vue";
 import { UICheckbox } from "~ui/Checkbox";
 
-const { state, next } = useCycleList([false, true, "indeterminate" as const]);
+const { state, next } = useCycleList(["indeterminate", true, false as const]);
 </script>
 
 <template>

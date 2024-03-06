@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NavMenuSection from "./NavMenuSection.vue";
+import { UIScrollArea } from "~ui/ScrollArea";
 
 const { data: rootNav } = await useAsyncData(`root-nav`, () => queryContent("docs").where({ _dir: { $ne: "components" } }).sort({ title: 1 }).find());
 const { data: componentsNav } = await useAsyncData(`components-nav`, () => queryContent("docs", "components").sort({ title: 1 }).find());
@@ -9,10 +10,12 @@ const { data: componentsNav } = await useAsyncData(`components-nav`, () => query
 </script>
 
 <template>
-  <aside class="sticky top-0 py-6 px-4 border-(r-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
-    <nav class="overflow-y-auto">
-      <NavMenuSection :links="rootNav" title="index" />
-      <NavMenuSection :links="componentsNav" title="components" />
-    </nav>
+  <aside class="sticky h-100vh top-0 border-(r-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
+    <UIScrollArea as-child>
+      <nav class="py-6 px-4">
+        <NavMenuSection :links="rootNav" title="index" />
+        <NavMenuSection :links="componentsNav" title="components" />
+      </nav>
+    </UIScrollArea>
   </aside>
 </template>

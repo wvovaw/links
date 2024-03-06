@@ -5,6 +5,6 @@ import { UISwitch } from "~ui/Switch";
 
 <template>
   <PreviewFrame>
-    <UISwitch />
+    <UISwitch default-checked />
   </PreviewFrame>
 </template>

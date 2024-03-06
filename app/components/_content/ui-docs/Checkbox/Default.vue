@@ -5,6 +5,6 @@ import { UICheckbox } from "~ui/Checkbox";
 
 <template>
   <PreviewFrame>
-    <UICheckbox />
+    <UICheckbox default-checked />
   </PreviewFrame>
 </template>
