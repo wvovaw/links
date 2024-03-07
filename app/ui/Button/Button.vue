@@ -153,6 +153,7 @@ const props = withDefaults(defineProps<PrimitiveProps & {
       :class="[icon, buttonIconVariants({ iconPos, fullWidth, loading })]"
     />
     <span
+      v-show="!disabled"
       aria-hidden="true"
       class="z-[-1] block absolute inset-0 pointer-events-none transition-background-color duration-[.2s] ease-in-out"
       :class="{
