@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { UITooltipProvider } from "~ui/Tooltip";
+
 const expireDate = new Date();
 expireDate.setFullYear(expireDate.getFullYear() + 1);
 
@@ -18,9 +20,11 @@ addRouteMiddleware("theme-cookie-update", () => {
 <template>
   <Html :data-theme="cookie.theme">
     <Body class="bg-goku text-bulma font-dm-sans font-regular">
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
+      <UITooltipProvider>
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+      </UITooltipProvider>
     </Body>
   </Html>
 </template>
