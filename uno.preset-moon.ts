@@ -260,6 +260,9 @@ export default definePreset((_options?: PresetMoonOptions) => {
           // Collapsible
           "collapsible-down": "{ from { height: 0 } to { height: var(--radix-collapsible-content-height) } }",
           "collapsible-up": "{ to { height: 0 } from { height: var(--radix-collapsible-content-height) } }",
+          // Accordion
+          "accordion-down": "{ from { height: 0 } to { height: var(--radix-accordion-content-height) } }",
+          "accordion-up": "{ to { height: 0 } from { height: var(--radix-accordion-content-height) } }",
           // Toast
           "toast-hide": "{ 0% { opacity: 1 } 100% { opacity: 0 } }",
           "toast-slide-in-right": "{ 0% { transform: translateX(calc(100% + 1rem)) } 100% { transform: translateX(0) } }",
@@ -274,6 +277,9 @@ export default definePreset((_options?: PresetMoonOptions) => {
           // Collapsible
           "collapsible-down": "0.2s",
           "collapsible-up": "0.2s",
+          // Accordion
+          "accordion-down": "0.2s",
+          "accordion-up": "0.2s",
         },
         counts: {
           pulse2: "infinite",
@@ -288,6 +294,9 @@ export default definePreset((_options?: PresetMoonOptions) => {
           // Collapsible
           "collapsible-down": "ease-in-out",
           "collapsible-up": "ease-in-out",
+          // Accordion
+          "accordion-down": "ease-out",
+          "accordion-up": "ease-out",
           // Toast
           "toast-hide": "toast-hide 300ms ease-in forwards",
           "toast-slide-in-right": "toast-slide-in-right 300ms cubic-bezier(0.16, 1, 0.3, 1)",
