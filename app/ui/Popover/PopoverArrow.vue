@@ -6,5 +6,5 @@ const forwarded = useForwardProps(props);
 </script>
 
 <template>
-  <PopoverArrow v-bind="forwarded" />
+  <PopoverArrow v-bind="forwarded" class="fill-goku" />
 </template>

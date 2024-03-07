@@ -6,6 +6,8 @@ import ScrollBar from "./ScrollBar.vue";
 
 const props = defineProps<ScrollAreaRootProps & {
   class?: HTMLAttributes["class"];
+  barClass?: HTMLAttributes["class"];
+  thumbClass?: HTMLAttributes["class"];
 }>();
 
 const delegatedProps = computed(() => {
@@ -23,8 +25,8 @@ const delegatedProps = computed(() => {
     <ScrollAreaViewport class="h-full w-full rounded-[inherit]">
       <slot />
     </ScrollAreaViewport>
-    <ScrollBar orientation="vertical" />
-    <ScrollBar orientation="horizontal" />
+    <ScrollBar orientation="vertical" :bar-class="barClass" :thumb-class="thumbClass" />
+    <ScrollBar orientation="horizontal" :bar-class="barClass" :thumb-class="thumbClass" />
     <ScrollAreaCorner />
   </ScrollAreaRoot>
 </template>
