@@ -23,3 +23,5 @@ ___
 | `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
 | `type` | always \| hover \| auto \| scroll | No | hover | Describes the nature of scrollbar visibility:<br>`auto` - scrollbars are visible when content is overflowing on the corresponding orientation.<br>`always` - scrollbars are always visible<br>`scroll` - scrolbars are visible when the user is scrolling alog corresponding orientation.<br>`hover` - same as `scroll` but also if user is hovering over the scroll area. |
 | `scrollHideDelay` | `number` | No | 600 | If type is set to either `scroll` of `hover`, this prop determines the length of time, in ms, before the scrollbars are hidden after the user stops interacting with scrollbars. |
+| `barClass` | string | No | - | A string that will be merged to the scroll bar class attribute. |
+| `thumbClass` | string | No | - | A string that will be merged to the scroll thumb class attribute. |

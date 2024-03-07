@@ -5,29 +5,41 @@ description: A UI component ToggleGroup is a container for grouping multiple Tog
 
 # Toggle Group
 
-A `Toggle Group` is basically a [Toggle components](/docs/toggle) grouped by one context. It can provide the common visuals and context to child Toggle components. Here's an example of [single](#singular) and [multiple](#multiple) model values.
+A `Toggle Group` is basically a [Toggle components](/docs/components/toggle) grouped by one context. It can provide the common visuals and context to child Toggle components. Here's an example of [single](#singular) and [multiple](#multiple) model values.
+
+___
 
 ## Anatomy
 
 ```vue
-<ToggleGroup>
-  <ToggleGroupItem />
-</ToggleGroup>
+<template>
+  <ToggleGroup>
+    <ToggleGroupItem />
+  </ToggleGroup>
+</template>
 ```
 
 ## Examples
 
-:ui-docs-toggle-group-singular{title="Singular"}
+### Singular
 
-:ui-docs-toggle-group-multiple{title="Multiple"}
+:ui-docs-toggle-group-singular
 
-:ui-docs-toggle-group-vertical{title="Vertical"}
+### Multiple
+
+:ui-docs-toggle-group-multiple
+
+### Vertical
+
+:ui-docs-toggle-group-vertical
 
 > Notice this has `orientation = vertical` set explicitly. That means that only up/down arrows will cycle through the items.
 
 > It allso has `size = sm` set on a provider element, and colors set explicitly for each element.
 
-:ui-docs-toggle-group-custom-layout{title="Custom items layout"}
+### Custom Items Layout
+
+:ui-docs-toggle-group-custom-layout
 
 > Feel free to override default styles of the root if you need different view.
 
@@ -36,8 +48,6 @@ ___
 ## API Reference
 
 ### Group
-
-`ToggleGroup` component API
 
 #### Props
 
@@ -64,7 +74,9 @@ ___
 |------|---------|
 | `update:modelValue` | `[payload: string]` Event handler called when the value changes |
 
-#### Slots (default)
+#### Slots
+
+default
 
 | Name | Payload |
 |------|---------|
@@ -77,8 +89,6 @@ ___
 | `[data-orientation]` | "vertical" \| "horizontal" |
 
 ### Item
-
-`ToggleGroupItem` component API
 
 #### Props
 

@@ -7,6 +7,8 @@ description: A UI component that allows users to select one option from a set of
 
 A `RadioGroup` is a UI component that allows users to select one option from a set of mutually exclusive choices. It consists of a group of radio items that can have different colors, sizes, and states. It can also be rendered as a different HTML element or a custom component.
 
+___
+
 ## Anatomy
 
 ```vue
@@ -15,11 +17,19 @@ A `RadioGroup` is a UI component that allows users to select one option from a s
 </RadioGroup>
 ```
 
+___
+
 ## Examples
+
+### Default
 
 :ui-docs-radio-group-default{title="Default"}
 
+### Colors
+
 :ui-docs-radio-group-colors{title="Colors"}
+
+### Disabled
 
 :ui-docs-radio-group-disabled{title="Disabled"}
 

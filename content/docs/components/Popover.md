@@ -7,6 +7,8 @@ description: A UI component displaying rich content in a portal.
 
 `Popover` is a UI component displaying rich content in a portal.
 
+___
+
 ## Anatomy
 
 ```vue
@@ -20,19 +22,27 @@ description: A UI component displaying rich content in a portal.
 </template>
 ```
 
+___
+
 ## Examples
 
-:ui-docs-popover-default{title="Default"}
+### Default
 
-:ui-docs-popover-sides{title="Side"}
+:ui-docs-popover-default
 
-:ui-docs-popover-with-scroll{title="With Scroll"}
+### Attachment Sides
+
+:ui-docs-popover-sides
+
+### With Scrollable Content
+
+:ui-docs-popover-with-scroll
 
 ___
 
 ## API Reference
 
-### Popover
+### Root
 
 #### Props
 
@@ -48,7 +58,7 @@ ___
 |------|---------|
 | `update:open` | `[value: boolean]` Event called when the open state of the popover changes. |
 
-### PopoverTrigger
+### Trigger
 
 #### Props
 
@@ -63,7 +73,7 @@ ___
 |------|---------|
 | `[data-state]` | "open" \| "closed" |
 
-### PopoverContent
+### Content
 
 #### Props
 
@@ -122,5 +132,7 @@ Adheres to the [Dialog WAI-ARIA design pattern](https://www.w3.org/WAI/ARIA/apg/
 | `Esc` | Closes the popover and moves focus to `PopoverTrigger`. |
 
 ___
+
+## Other
 
 For more details refer to [Radix-Vue Popover docs](https://www.radix-vue.com/components/popover.html).

@@ -7,15 +7,25 @@ description: A UI component that allows users to switch between two options like
 
 The `Switch` component is a highly versatile and essential element in user interface design. It allows users to toggle between two states, such as on and off, enabling a more interactive user experience. With customizable sizes, colors, and the ability to be used within forms, the `Switch` component is designed for flexibility and ease of use. Its adherence to the roving tabindex accessibility standard ensures it is accessible to all users.
 
+___
+
 ## Examples
 
-:ui-docs-switch-default{title="Default"}
+### Default
 
-:ui-docs-switch-sizes{title="Sizes"}
+:ui-docs-switch-default
 
-:ui-docs-switch-colors{title="Colors"}
+### Sizes
 
-:ui-docs-switch-form-example{title="Using in form"}
+:ui-docs-switch-sizes
+
+### Colors
+
+:ui-docs-switch-colors
+
+### Using Within A Form
+
+:ui-docs-switch-form-example
 
 ___
 

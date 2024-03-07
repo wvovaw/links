@@ -8,6 +8,8 @@ description: A UI component that expands/collapses a panel.
 `Collapsible` is a UI component that is used to build collapsible panels which user can toggle between collapsed and expanded states.
 The `Collapsible` component itself is a headless component. That means that you can build your own visual implemntation. Collapsible response only for collapsed/expanded state and css animation.
 
+___
+
 ## Anatomy
 
 ```vue
@@ -19,11 +21,17 @@ The `Collapsible` component itself is a headless component. That means that you 
 </template>
 ```
 
+___
+
 ## Examples
 
-:ui-docs-collapsible-default{title="Default"}
+### Default
 
-:ui-docs-collapsible-uncontrolled{title="Uncontrolled with scoped slot"}
+:ui-docs-collapsible-default
+
+### Uncontrolled with scoped slot
+
+:ui-docs-collapsible-uncontrolled
 
 > It's not necessary to control the `open` state of the collapsible. You may lay on the default slot scoped `open` value instead.
 
@@ -32,8 +40,6 @@ ___
 ## API Reference
 
 ### Root
-
-`CollapsibleRoot` component API
 
 #### Props
 

@@ -7,23 +7,41 @@ description: A UI component that lets users to choose one of two possible states
 
 A `Toggle` is a UI component that lets users switch between two states. It's a simple and effective way to give users a choice. This `Toggle` component supports different sizes, colors, states and can include icons.
 
+___
+
 ## Examples
 
-:ui-docs-toggle-default{title="Default"}
+### Default
 
-:ui-docs-toggle-variants{title="Variants"}
+:ui-docs-toggle-default
 
-:ui-docs-toggle-sizes{title="Sizes"}
+### Variants
 
-:ui-docs-toggle-stroke{title="Stroke"}
+:ui-docs-toggle-variants
 
-:ui-docs-toggle-icons{title="With icons"}
+### Sizes
 
-:ui-docs-toggle-colors{title="Colors"}
+:ui-docs-toggle-sizes
 
-:ui-docs-toggle-disabled{title="Disabled"}
+### Stroke
 
-:ui-docs-toggle-v-model{title="v-model binding"}
+:ui-docs-toggle-stroke
+
+### With Icons
+
+:ui-docs-toggle-icons
+
+### Colors
+
+:ui-docs-toggle-colors
+
+### Disabled
+
+:ui-docs-toggle-disabled
+
+### V-Model Binding
+
+:ui-docs-toggle-v-model
 
 ___
 

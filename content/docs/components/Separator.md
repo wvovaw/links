@@ -7,9 +7,13 @@ description: A UI component that semantically or visually separates content.
 
 The `Separator` component used to separate page content, menu items etc. It follows the WAI-ARIA separator role requirements.
 
+___
+
 ## Examples
 
-:ui-docs-separator-default{title="Default"}
+### Default
+
+:ui-docs-separator-default
 
 ___
 

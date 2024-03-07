@@ -9,13 +9,21 @@ The `InsertSelect` component is a styled variant of the native browser select el
 
 Learn more about [`option`](https://developer.mozilla.org/ru/docs/Web/HTML/Element/option) and [`optgroup`](https://developer.mozilla.org/ru/docs/Web/HTML/Element/optgroup) elements.
 
+___
+
 ## Examples
 
-:ui-docs-insert-select-default{title="Default"}
+### Default
 
-:ui-docs-insert-select-label-hint{title="With hint messages"}
+:ui-docs-insert-select-default
 
-:ui-docs-insert-select-states{title="Different states"}
+### With Hint Message
+
+:ui-docs-insert-select-label-hint
+
+### Different States
+
+:ui-docs-insert-select-states
 
 ___
 

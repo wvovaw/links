@@ -7,11 +7,35 @@ description: A UI component visually coupling inputs, selects in one coupled gro
 
 The `Group` component wraps all the children inputs within a single block, modifying theirs borders so they look like this. It helps to build compact forms or group context related inputs together.
 
+___
+
+## Anatomy
+
+Group can accept `Input`, `InsertInput`, `Select`, `InsertSelect` and `RichSelect` components.
+
+```vue
+<template>
+  <Group>
+    <Input />
+    <InsertInput />
+    <Select />
+    <InsertSelect />
+    <RichSelect />
+  </Group>
+</template>
+```
+
+___
+
 ## Examples
 
-:ui-docs-group-default{title="Default"}
+### Default
 
-:ui-docs-group-form-example{title="Form example"}
+:ui-docs-group-default
+
+### Using Within A Form
+
+:ui-docs-group-form-example
 
 ___
 

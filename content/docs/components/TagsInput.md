@@ -9,26 +9,37 @@ description: A UI input component which captures input results and display them 
 These selected text entries are being displayed as `Tag`s. Tags represent a set of interactive keywords that help organize and categorize objects.
 Tags can be added by pressing the Enter key or removed by Backspace key or the mouse click from the input element.
 
+___
+
 ## Anatomy
 
 ```vue
-<TagsInput>
-  <TagsInputItem>
-  <TagsInputInput>
-</TagsInput>
+<template>
+  <TagsInput>
+    <TagsInputItem>
+      <TagsInputInput />
+    </tagsinputitem>
+  </TagsInput>
+</template>
 ```
+
+___
 
 ## Examples
 
-:ui-docs-tags-input-default{title="Default"}
+### Default
 
-:ui-docs-tags-input-sizes{title="Sizes"}
+:ui-docs-tags-input-default
+
+### Sizes
+
+:ui-docs-tags-input-sizes
 
 ___
 
 ## API Reference
 
-### TagsInputRoot
+### Root
 
 #### Props
 
@@ -71,9 +82,7 @@ default
 | `[data-focused]` | Present when focus on input |
 | `[data-invalid]` | Present when input value is invalid |
 
-### TagsInputItem
-
-The component representing one Tag item
+### Item
 
 #### Props
 
@@ -95,9 +104,7 @@ The component representing one Tag item
 | `[data-state]` | "active" \| "inactive" |
 | `[data-disabled]` | Present when disabled |
 
-### TagsInputInput
-
-The input field inside of TagsInput component
+### Input
 
 #### Props
 

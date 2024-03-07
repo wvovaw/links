@@ -7,17 +7,29 @@ description: A UI component that allows users to select one or more options from
 
 A `Checkbox` is a user interface component that provides users with a way to select one or more options from a set. It's a simple and effective way to give users choices. This `Checkbox` component supports different sizes, colors, and states, including an indeterminate state. It can also be disabled if needed.
 
+___
+
 ## Examples
 
-:ui-docs-checkbox-default{title="Default"}
+### Default
 
-:ui-docs-checkbox-sizes{title="Sizes"}
+:ui-docs-checkbox-default
 
-:ui-docs-checkbox-colors{title="Colors"}
+### Sizes
 
-:ui-docs-checkbox-indeterminate{title="Indeterminate"}
+:ui-docs-checkbox-sizes
 
-:ui-docs-checkbox-disabled{title="Disabled"}
+### Colors
+
+:ui-docs-checkbox-colors
+
+### Indeterminate
+
+:ui-docs-checkbox-indeterminate
+
+### Disabled
+
+:ui-docs-checkbox-disabled
 
 ___
 

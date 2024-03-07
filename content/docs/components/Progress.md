@@ -7,15 +7,25 @@ description: A UI progress component.
 
 A `Progress` component is a visual representation of a progress.
 
+___
+
 ## Examples
 
-:ui-docs-progress-default{title="Default"}
+### Default
 
-:ui-docs-progress-sizes{title="Sizes"}
+:ui-docs-progress-default
 
-:ui-docs-progress-colors{title="Colors"}
+### Sizes
 
-:ui-docs-progress-indeterminate{title="Indeterminate"}
+:ui-docs-progress-sizes
+
+### Colors
+
+:ui-docs-progress-colors
+
+### Indeterminate
+
+:ui-docs-progress-indeterminate
 
 ___
 

@@ -7,21 +7,36 @@ description: A UI component that allows user to select one ore more numbers from
 
 `Slider` is a component that gives the user the ability to select one or more values from a range of numbers.
 
+___
+
 ## Examples
 
-:ui-docs-slider-default{title="Default"}
+### Default
 
-:ui-docs-slider-sizes{title="Sizes"}
+:ui-docs-slider-default
 
-:ui-docs-slider-colors{title="Colors"}
+### Sizes
 
-:ui-docs-slider-multiple{title="Multiple thumbs"}
+:ui-docs-slider-sizes
 
-:ui-docs-slider-transition{title="Transition"}
+### Colors
+
+:ui-docs-slider-colors
+
+### Multiple Thumbs
+
+:ui-docs-slider-multiple
+
+### Transition
+
+:ui-docs-slider-transition
 
 > Transition fires when a slider value changes from out of it.
 
-:ui-docs-slider-thumb{title="Thumb scoped slot"}
+### Thumb Scoped Slot
+
+:ui-docs-slider-thumb
+
 ___
 
 ## API Reference
@@ -56,13 +71,13 @@ ___
 
 #### Slots
 
-##### Default
+Default
 
 | Name | Payload |
 |------|---------|
 | `modelValue` |  `number[]` Current slider values |
 
-##### Thumb
+Thumb
 
 Depending on the `n-of-thumbs` prop value there will be n slots available named `thumb-i` (where i &isin; 1 - n). They're providing `value` prop - the number value of the thumb it represents.
 

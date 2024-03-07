@@ -7,23 +7,39 @@ description: A compact UI element that usually used to represent attributes of a
 
 `Tag` component is a small UI element that can be used in many different scenarious. Usually it used to represent some kind of list of active attributes of an object in some context. It also can accept user actions via `icon-left-click` and `icon-right-click`.
 
+___
+
 ## Examples
 
-:ui-docs-tag-default{title="Default"}
+### Default
 
-:ui-docs-tag-variants{title="Variants"}
+:ui-docs-tag-default
 
-:ui-docs-tag-sizes{title="Sizes"}
+### Variants
 
-:ui-docs-tag-colors{title="Colors"}
+:ui-docs-tag-variants
 
-:ui-docs-tag-icons{title="Icons"}
+### Sizes
 
-:ui-docs-tag-clickable{title="Clickable icons"}
+:ui-docs-tag-sizes
+
+### Colors
+
+:ui-docs-tag-colors
+
+### Icons
+
+:ui-docs-tag-icons
+
+### Clickable Icons
+
+:ui-docs-tag-clickable
 
 > If `icon-left-click` event handler provided, then the left icon rendered as `button` (`span` otherwise). The same for the right icon.
 
-:ui-docs-tag-customization{title="Customization"}
+### Customization
+
+:ui-docs-tag-customization
 
 ___
 

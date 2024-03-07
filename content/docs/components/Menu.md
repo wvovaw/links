@@ -9,17 +9,19 @@ description: An menu component. Used in vertical menus in Popovers, Sidebars etc
 
 Menu item row heights can vary based on the amount of content in each row. The content in each row is flexible. By default, each menu item row height is Medium(md) 40px for one line of content.
 
+___
+
 ## Anatomy
 
 Default variant
 
 ```vue
 <template>
-  <UIMenu.Item>
-    <UIMenu.Icon />
-    <UIMenu.Title />
-    <UIMenu.Meta />
-  </UIMenu.Item>
+  <Menu.Item>
+    <Menu.Icon />
+    <Menu.Title />
+    <Menu.Meta />
+  </Menu.Item>
 </template>
 ```
 
@@ -27,13 +29,13 @@ Checkbox group
 
 ```vue
 <template>
-  <UIMenu.Group type="multiple">
-    <UIMenu.GroupItem>
-      <UIMenu.Icon />
-      <UIMenu.Title />
-      <UIMenu.Checkbox />
-    </UIMenu.GroupItem>
-  </UIMenu.Group>
+  <Menu.Group type="multiple">
+    <Menu.GroupItem>
+      <Menu.Icon />
+      <Menu.Title />
+      <Menu.Checkbox />
+    </Menu.GroupItem>
+  </Menu.Group>
 </template>
 ```
 
@@ -41,31 +43,40 @@ Radio group
 
 ```vue
 <template>
-  <UIMenu.Group type="single">
-    <UIMenu.GroupItem>
-      <UIMenu.Icon />
-      <UIMenu.Title />
-      <UIMenu.Radio />
-    </UIMenu.GroupItem>
-  </UIMenu.Group>
+  <Menu.Group type="single">
+    <Menu.GroupItem>
+      <Menu.Icon />
+      <Menu.Title />
+      <Menu.Radio />
+    </Menu.GroupItem>
+  </Menu.Group>
 </template>
 ```
+___
 
 ## Examples
 
-:ui-docs-menu-default{title="Default"}
+### Default
 
-:ui-docs-menu-checkbox{title="Checkbox"}
+:ui-docs-menu-default
 
-:ui-docs-menu-radio{title="Radio"}
+### Checkbox
 
-:ui-docs-menu-multiline{title="Multiline"}
+:ui-docs-menu-checkbox
+
+### Radio
+
+:ui-docs-menu-radio
+
+### Multiline
+
+:ui-docs-menu-multiline
 
 ___
 
 ## API Reference
 
-### Menu.Group
+### Group
 
 #### Props
 
@@ -84,13 +95,15 @@ ___
 |------|---------|
 | `update:modelValue` | `[payload: string]` Event handler called when the value changes |
 
-#### Slots (default)
+#### Slots
+
+default
 
 | Name | Payload |
 |------|---------|
 | `modelValue` | `string \| string[] \| undefined` Current toggle values |
 
-### Menu.GroupItem
+### GroupItem
 
 #### Props
 
@@ -113,7 +126,7 @@ ___
 | `[data-orientation]` | "vertical" \| "horizontal" |
 | `[data-menuitem-active]` | `boolean` mirroring `isActive` prop |
 
-### Menu.Icon
+### Icon
 
 #### Props
 
@@ -121,7 +134,7 @@ ___
 |------|------|----------|---------|-------------|
 | `icon` | `string` | Yes | - | Iconify icon string |
 
-### Menu.Multiline
+### Multiline
 
 #### Props
 

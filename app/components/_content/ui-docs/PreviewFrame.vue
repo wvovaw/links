@@ -18,23 +18,13 @@ type PreviewFrameVariants = VariantProps<typeof previewFrameVariants>;
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
-  title?: string;
   variant?: PreviewFrameVariants["variant"];
 }>();
-
-const anchor = `#${props.title ? toKebabCase(props.title) : ""}`;
 </script>
 
 <!-- TODO: add preview/code tabs with code preview -->
 <template>
   <section class="my-5">
-    <header class="w-full text-moon-20 h-16">
-      <h3>
-        <a :href="anchor">
-          {{ title ? title : "Provide a title!" }}
-        </a>
-      </h3>
-    </header>
     <div :class="[previewFrameVariants({ variant }), props.class]">
       <slot />
     </div>

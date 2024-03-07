@@ -7,23 +7,39 @@ description: A UI component that allows users to enter various types of data - t
 
 An `Input` is a UI component that allows users to enter various types of data in a form or a search box. It can have different types, such as datetime, time, date, email, password, search, number, and text. It can also have different sizes, colors, states, and directions. It can be bound with `v-model` for reactive data.
 
+___
+
 ## Examples
 
-Explore the following examples to understand different use cases and visual styles:
+### Default
 
-:ui-docs-input-default{title="Default"}
+:ui-docs-input-default
 
-:ui-docs-input-colors{title="Colors"}
+### Colors
 
-:ui-docs-input-sizes{title="Sizes"}
+:ui-docs-input-colors
 
-:ui-docs-input-labels{title="With labels"}
+### Sizes
 
-:ui-docs-input-hints{title="With hint messages"}
+:ui-docs-input-sizes
 
-:ui-docs-input-states{title="Different states"}
+### With Labels
 
-:ui-docs-input-text-input-types{title="Text input types"}
+:ui-docs-input-labels
+
+### With Hint Messages
+
+:ui-docs-input-hints
+
+### Different States
+
+:ui-docs-input-states
+
+### Input Types
+
+:ui-docs-input-text-input-types
+
+### V-Model Binding
 
 :ui-docs-input-v-model{title="v-model binding"}
 

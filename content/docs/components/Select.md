@@ -9,17 +9,29 @@ The `Select` component is a styled variant of the native browser select element.
 
 Learn more about [`option`](https://developer.mozilla.org/ru/docs/Web/HTML/Element/option) and [`optgroup`](https://developer.mozilla.org/ru/docs/Web/HTML/Element/optgroup) elements.
 
+___
+
 ## Examples
 
-:ui-docs-select-default{title="Default"}
+### Default
 
-:ui-docs-select-sizes{title="Sizes"}
+:ui-docs-select-default
 
-:ui-docs-select-label-hint{title="With labels and hints"}
+### Sizes
 
-:ui-docs-select-optgroup{title="With option groups"}
+:ui-docs-select-sizes
 
-:ui-docs-select-states{title="Different states"}
+### With Labels and Hints
+
+:ui-docs-select-label-hint
+
+### With Option Groups
+
+:ui-docs-select-optgroup
+
+### Different States
+
+:ui-docs-select-states
 
 ___
 

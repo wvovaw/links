@@ -7,31 +7,51 @@ description: A UI component that allows users to perform an action or submit a f
 
 A `Button` is a UI element that allows users to perform a click or tap action. This `Button` component offers various styles, sizes, and states to fit different use cases. It can display as a default button, a link, or even with animations. It also supports full width, disabled state, and loading state.
 
+___
+
 ## Examples
 
-Explore the following examples to understand different use cases and visual styles:
+### Default
 
-:ui-docs-button-default{title="Default"}
+:ui-docs-button-default
 
-:ui-docs-button-as-link{title="As anchor link"}
+### As anchor link
 
-:ui-docs-button-variants{title="Variants"}
+:ui-docs-button-as-link
+
+### Variants
+
+:ui-docs-button-variants
 
 > Notice that buttons have "focus" state styling. Click on a field and tab through them
 
-:ui-docs-button-colors{title="Colors"}
+### Colors
 
-:ui-docs-button-sizes{title="Sizes"}
+:ui-docs-button-colors
 
-:ui-docs-button-full-width{title="Full width"}
+### Sizes
 
-:ui-docs-button-icons-only{title="Icons only"}
+:ui-docs-button-sizes
 
-:ui-docs-button-disabled{title="Disabled"}
+### Full Width
 
-:ui-docs-button-animation{title="Animation"}
+:ui-docs-button-full-width
 
-:ui-docs-button-loading{title="Loading"}
+### Icons only
+
+:ui-docs-button-icons-only
+
+### Disabled
+
+:ui-docs-button-disabled
+
+### Animations
+
+:ui-docs-button-animation
+
+### Loading
+
+:ui-docs-button-loading
 
 ___
 

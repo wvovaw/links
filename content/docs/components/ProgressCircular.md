@@ -7,17 +7,29 @@ description: A circular UI progress component.
 
 A `ProgressCircular` component is a visual representation of a progress in circular form.
 
+___
+
 ## Examples
 
-:ui-docs-progress-circular-default{title="Default"}
+### Default
 
-:ui-docs-progress-circular-sizes{title="Sizes"}
+:ui-docs-progress-circular-default
 
-:ui-docs-progress-circular-colors{title="Colors"}
+### Sizes
 
-:ui-docs-progress-circular-indeterminate{title="Indeterminate"}
+:ui-docs-progress-circular-sizes
 
-:ui-docs-progress-circular-v-model{title="V-Model"}
+### Colors
+
+:ui-docs-progress-circular-colors
+
+### Indeterminate
+
+:ui-docs-progress-circular-indeterminate
+
+### V-Model Binding
+
+:ui-docs-progress-circular-v-model
 
 ___
 

@@ -7,38 +7,58 @@ description: A UI component allowing user to switch between content sections tha
 
 Tabs is a component allowing users to navigate between views within the same context. Only one content associated with the selected tab displayed at a time.
 
+___
+
 ## Anatomy
 
 ```vue
-<Tabs default-value="1">
-  <TabsList>
-    <TabsTrigger value="1">1</TabsTrigger>
-    <TabsTrigger value="2">2</TabsTrigger>
-  </TabsList>
-  <TabsContent value="1">1</TabsContent>
-  <TabsContent value="2">2</TabsContent>
-</Tabs>
+<template>
+  <Tabs>
+    <TabsList>
+      <TabsTrigger value="1">
+        1
+      </TabsTrigger>
+      <TabsTrigger value="2">
+        2
+      </TabsTrigger>
+    </TabsList>
+    <TabsContent value="1">
+      1
+    </TabsContent>
+    <TabsContent value="2">
+      2
+    </TabsContent>
+  </Tabs>
+</template>
 ```
 
 ## Examples
 
-:ui-docs-tabs-default{title="Default"}
+### Default
 
-:ui-docs-tabs-variants{title="Variants"}
+:ui-docs-tabs-default
 
-:ui-docs-tabs-sizes{title="Sizes"}
+### Variants
 
-:ui-docs-tabs-disabled{title="Disabled"}
+:ui-docs-tabs-variants
 
-:ui-docs-tabs-examples{title="Examples"}
+### Sizes
+
+:ui-docs-tabs-sizes
+
+### Disabled
+
+:ui-docs-tabs-disabled
+
+### Examples
+
+:ui-docs-tabs-examples
 
 ___
 
 ## API Reference
 
-### Tabs
-
-`Tabs` component API
+### Root
 
 #### Props
 
@@ -63,9 +83,7 @@ ___
 |------|---------|
 | `[data-orientation]` | "horizontal" \| "vertical" |
 
-### Tab list
-
-`TabsList` component API
+### List
 
 #### Props
 
@@ -83,9 +101,7 @@ ___
 |------|---------|
 | `[data-orientation]` | "horizontal" \| "vertical" |
 
-### Tab trigger
-
-`TabsTrigger` component API
+### Trigger
 
 #### Props
 
@@ -104,9 +120,7 @@ ___
 | `[data-disabled]` | Present when disabled |
 | `[data-orientation]` | "horizontal" \| "vertical" |
 
-### Tab content
-
-`TabsContent` component API
+### Content
 
 #### Props
 

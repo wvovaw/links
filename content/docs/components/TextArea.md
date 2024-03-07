@@ -7,13 +7,21 @@ description: A UI component that allows users to input multiline text.
 
 An `TextArea` is a UI component that allows users to input multiline text. Its behaviour is similar to [Input component](/docs/input). It can be bound with `v-model` for reactive data.
 
+___
+
 ## Examples
 
-:ui-docs-text-area-default{title="Default"}
+### Default
 
-:ui-docs-text-area-resize{title="Resize property"}
+:ui-docs-text-area-default
 
-:ui-docs-text-area-label-hint{title="With label and hint"}
+### Resize Property
+
+:ui-docs-text-area-resize
+
+### With Label and Hint
+
+:ui-docs-text-area-label-hint
 
 ___
 

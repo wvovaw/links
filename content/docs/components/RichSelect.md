@@ -6,12 +6,70 @@ draft: true
 
 # Rich Select
 
+`RichSelect` component is a more user friendly and nice looking alternative to select component.
+
+___
+
+## Anatomy
+
+```vue
+<template>
+  <RichSelect.Root>
+    <RichSelect.Trigger>
+      <RichSelect.Value />
+    </RichSelect.Trigger>
+    <RichSelect.Content>
+      <RichSelect.Item value="item">
+        Item
+      </RichSelect.Item>
+    </RichSelect.Content>
+  </RichSelect.Root>
+</template>
+```
+___
+
 ## Examples
 
-:ui-docs-rich-select-default{title="Default"}
+### Default
 
-:ui-docs-rich-select-sizes{title="Sizes"}
+:ui-docs-rich-select-default
 
-:ui-docs-rich-select-scroll{title="With scroll"}
+### Sizes
 
-:ui-docs-rich-select-groups{title="Grouped items"}
+:ui-docs-rich-select-sizes
+
+### With Scroll
+
+:ui-docs-rich-select-scroll
+
+### Grouped Items
+
+:ui-docs-rich-select-groups
+
+___
+
+## API Reference
+
+### Root
+
+#### Props
+
+| Name | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+
+#### Emits
+
+| Name | Payload |
+|------|---------|
+
+### Trigger
+
+#### Props
+
+| Name | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+
+#### Emits
+
+| Name | Payload |
+|------|---------|

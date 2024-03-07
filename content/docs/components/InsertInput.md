@@ -7,17 +7,29 @@ description: A UI component that allows users to enter various types of data - t
 
 An `InsertInput` is a UI component that allows users to enter various types of data in a form or a search box. It can have different types, such as datetime, time, date, email, password, search, number, and text. It can also have different colors, states, and directions. It can be bound with `v-model` for reactive data.
 
+___
+
 ## Examples
 
-:ui-docs-insert-input-default{title="Default"}
+### Default
 
-:ui-docs-insert-input-colors{title="Colors"}
+:ui-docs-insert-input-default
 
-:ui-docs-insert-input-hints{title="With hint messages"}
+### Colors
 
-:ui-docs-insert-input-states{title="Different states"}
+:ui-docs-insert-input-colors
 
-:ui-docs-insert-input-text-input-types{title="Text input types"}
+### With Hint Messages
+
+:ui-docs-insert-input-hints
+
+### Different States
+
+:ui-docs-insert-input-states
+
+### Input Types
+
+:ui-docs-insert-input-text-input-types
 
 ___
 
