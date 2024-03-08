@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UIMenu } from "~ui/Menu";
+import { UITag } from "~ui/Tag";
 
 defineProps<{
   links: any;
@@ -16,6 +17,12 @@ defineProps<{
       <NuxtLink :to="link._path" class="group" active-class="active">
         <UIMenu.Item class="group-[.active]:bg-heles!">
           <UIMenu.Title>{{ link.title }}</UIMenu.Title>
+          <UITag v-if="link.draft" icon-right="i-lucide:wrench" size="xs" color="krillin">
+            draft
+          </UITag>
+          <UITag v-if="link.new" size="xs" color="roshi">
+            new
+          </UITag>
         </UIMenu.Item>
       </NuxtLink>
     </li>

@@ -1,7 +1,6 @@
 ---
 title: Rich Select
 description: A UI component displaying ilst of options for the user to pick from.
-draft: true
 ---
 
 # Rich Select

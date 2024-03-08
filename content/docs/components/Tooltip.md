@@ -1,7 +1,6 @@
 ---
 title: Tooltip
 description: A popup UI component that displays information related to the item to which the tooltip is attached when the user hovers over it.
-draft: true
 ---
 
 # Tooltip

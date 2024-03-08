@@ -1,6 +1,7 @@
 ---
 title: Pagination
 description: Pagination component provides navigation between paginated data.
+draft: true
 ---
 
 # Pagination
