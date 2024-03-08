@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
 import { UIPagination } from "~ui/Pagination";
-import { UIButton } from "~ui/Button";
 </script>
 
 <template>

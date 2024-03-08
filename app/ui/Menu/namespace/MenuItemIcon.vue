@@ -8,5 +8,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <span class="text-moon-20 mx-1" :class="[icon, props.class]" />
+  <span class="block text-moon-14 mr-1" :class="[icon, props.class]" />
 </template>

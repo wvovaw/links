@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
 import type { HTMLAttributes } from "vue";
-import { toKebabCase } from "~utils/strings";
 
 const previewFrameVariants = cva("flex flex-wrap items-center justify-around p-4 gap-2 w-full text-moon-14 rounded-moon-s-sm not-prose", {
   variants: {

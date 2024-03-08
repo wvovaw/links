@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from "vue";
 import { DropdownMenuItem, type DropdownMenuItemProps, useForwardProps } from "radix-vue";
+import { Item as MenuItem } from "../../Menu/namespace";
 
 const props = defineProps<DropdownMenuItemProps & {
   class?: HTMLAttributes["class"];
@@ -16,12 +17,14 @@ const forwardedProps = useForwardProps(delegatedProps);
 <template>
   <DropdownMenuItem
     v-bind="forwardedProps"
-    class="relative flex cursor-default select-none items-center rounded-moon-s-sm px-2 py-1.5 text-moon-14 outline-none transition-colors focus:bg-heles focus:text-bulma data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
     :class="[
       inset && 'pl-8',
       props.class,
     ]"
+    as-child
   >
-    <slot />
+    <MenuItem>
+      <slot />
+    </MenuItem>
   </DropdownMenuItem>
 </template>

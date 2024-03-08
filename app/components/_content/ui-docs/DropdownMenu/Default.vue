@@ -7,21 +7,25 @@ import { UIButton } from "~ui/Button";
 <template>
   <PreviewFrame>
     <UIDropdownMenu.Root>
-      <UIDropdownMenu.Trigger>
+      <UIDropdownMenu.Trigger as-child>
         <UIButton>Open</UIButton>
       </UIDropdownMenu.Trigger>
       <UIDropdownMenu.Content>
         <UIDropdownMenu.Group>
-          <UIDropdownMenu.Label>First group</UIDropdownMenu.Label>
-          <UIDropdownMenu.Item>Item 1</UIDropdownMenu.Item>
-          <UIDropdownMenu.Item>Item 2</UIDropdownMenu.Item>
-          <UIDropdownMenu.Item>Item 3</UIDropdownMenu.Item>
-        </UIDropdownMenu.Group>
-        <UIDropdownMenu.Separator />
-        <UIDropdownMenu.Group>
-          <UIDropdownMenu.Label>Second group</UIDropdownMenu.Label>
-          <UIDropdownMenu.Item>Item 1</UIDropdownMenu.Item>
-          <UIDropdownMenu.Item>Item 2</UIDropdownMenu.Item>
+          <UIDropdownMenu.Label>
+            <span>Actions</span>
+          </UIDropdownMenu.Label>
+          <UIDropdownMenu.Separator />
+          <UIDropdownMenu.Item>
+            <span class="block i-lucide:file" />
+            <UIDropdownMenu.ItemTitle>New file</UIDropdownMenu.ItemTitle>
+            <UIDropdownMenu.ItemMeta><span class="block i-lucide:command" />+N</UIDropdownMenu.ItemMeta>
+          </UIDropdownMenu.Item>
+          <UIDropdownMenu.Item>
+            <span class="block i-lucide:folder" />
+            <UIDropdownMenu.ItemTitle>New directory</UIDropdownMenu.ItemTitle>
+            <UIDropdownMenu.ItemMeta><span class="block i-lucide:command" />+D</UIDropdownMenu.ItemMeta>
+          </UIDropdownMenu.Item>
         </UIDropdownMenu.Group>
       </UIDropdownMenu.Content>
     </UIDropdownMenu.Root>
