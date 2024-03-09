@@ -2,13 +2,18 @@
 import { type HTMLAttributes, computed } from "vue";
 import type { DropdownMenuCheckboxItemEmits, DropdownMenuCheckboxItemProps } from "radix-vue";
 import { DropdownMenuCheckboxItem, DropdownMenuItemIndicator, useForwardPropsEmits } from "radix-vue";
+import { Item as MenuItem } from "../../Menu/namespace";
+import { UICheckbox } from "../../Checkbox";
 
 const props = defineProps<DropdownMenuCheckboxItemProps & {
   class?: HTMLAttributes["class"];
+  // FIXME: This need to be exported from UICheckbox as UICheckboxProps
+  color?: "default" | "piccolo" | "hit" | "roshi" | "chichi" | "krillin";
+  size?: "sm" | "md";
 }>();
 const emits = defineEmits<DropdownMenuCheckboxItemEmits>();
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, color: _co, size: _si, ...delegated } = props;
   return delegated;
 });
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
@@ -17,16 +22,14 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 <template>
   <DropdownMenuCheckboxItem
     v-bind="forwarded"
-    class="relative flex cursor-default select-none items-center rounded-moon-i-sm py-1.5 pl-8 pr-2 text-moon-14 outline-none transition-colors focus:bg-berus focus:text-bulma data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
     :class="[
       props.class,
     ]"
+    as-child
   >
-    <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <DropdownMenuItemIndicator>
-        <span class="i-lucide:check h-2 w-2" />
-      </DropdownMenuItemIndicator>
-    </span>
-    <slot />
+    <MenuItem class=group>
+      <slot />
+      <UICheckbox :checked="checked" :disabled="disabled" :color="color" :size="size" />
+    </MenuItem>
   </DropdownMenuCheckboxItem>
 </template>

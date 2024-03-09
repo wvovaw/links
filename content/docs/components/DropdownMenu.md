@@ -59,3 +59,11 @@ ___
 ### Submenu
 
 :ui-docs-dropdown-menu-submenu
+
+### Radio Group
+
+:ui-docs-dropdown-menu-radio
+
+### Checkboxes
+
+:ui-docs-dropdown-menu-checkbox

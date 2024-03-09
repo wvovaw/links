@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
+import { type ExtractPropTypes, type HTMLAttributes, computed } from "vue";
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "radix-vue";
 import type { CheckboxRootEmits, CheckboxRootProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
@@ -23,6 +23,8 @@ const checkboxRootVariants = cva("shrink-0 border border-trunks ring-offset-2 ri
   },
 });
 type CheckboxRootVariants = VariantProps<typeof checkboxRootVariants>;
+// TODO: Find out how to export props type
+// export type CheckboxVariants = CheckboxRootVariants;
 
 const props = defineProps<CheckboxRootProps & {
   class?: HTMLAttributes["class"];

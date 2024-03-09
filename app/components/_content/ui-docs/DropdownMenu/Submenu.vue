@@ -29,11 +29,30 @@ import { UIButton } from "~ui/Button";
             </UIDropdownMenu.SubTrigger>
             <UIDropdownMenu.SubContent>
               <UIDropdownMenu.Item>
-                <UIDropdownMenu.ItemTitle>Submenu Item 1</UIDropdownMenu.ItemTitle>
+                <UIDropdownMenu.ItemTitle>Submenu-1 Item 1</UIDropdownMenu.ItemTitle>
               </UIDropdownMenu.Item>
               <UIDropdownMenu.Item>
-                <UIDropdownMenu.ItemTitle>Submenu Item 2</UIDropdownMenu.ItemTitle>
+                <UIDropdownMenu.ItemTitle>Submenu-1 Item 2</UIDropdownMenu.ItemTitle>
               </UIDropdownMenu.Item>
+              <UIDropdownMenu.Separator />
+              <UIDropdownMenu.Sub>
+                <UIDropdownMenu.SubTrigger as-child>
+                  <UIDropdownMenu.Item>
+                    <UIDropdownMenu.ItemTitle>Submenu-2</UIDropdownMenu.ItemTitle>
+                    <UIDropdownMenu.ItemMeta>
+                      <span class="i-lucide:chevron-right" />
+                    </UIDropdownMenu.ItemMeta>
+                  </UIDropdownMenu.Item>
+                </UIDropdownMenu.SubTrigger>
+                <UIDropdownMenu.SubContent>
+                  <UIDropdownMenu.Item>
+                    <UIDropdownMenu.ItemTitle>Submenu-2 Item 1</UIDropdownMenu.ItemTitle>
+                  </UIDropdownMenu.Item>
+                  <UIDropdownMenu.Item>
+                    <UIDropdownMenu.ItemTitle>Submenu-2 Item 2</UIDropdownMenu.ItemTitle>
+                  </UIDropdownMenu.Item>
+                </UIDropdownMenu.SubContent>
+              </UIDropdownMenu.Sub>
             </UIDropdownMenu.SubContent>
           </UIDropdownMenu.Sub>
         </UIDropdownMenu.Group>
