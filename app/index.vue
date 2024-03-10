@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { ConfigProvider } from "radix-vue";
 import { UITooltipProvider } from "~ui/Tooltip";
+
+const useIdFunction = () => useId();
 
 const expireDate = new Date();
 expireDate.setFullYear(expireDate.getFullYear() + 1);
@@ -20,11 +23,13 @@ addRouteMiddleware("theme-cookie-update", () => {
 <template>
   <Html :data-theme="cookie.theme">
     <Body class="bg-goku text-bulma font-dm-sans font-regular">
-      <UITooltipProvider>
-        <NuxtLayout>
-          <NuxtPage />
-        </NuxtLayout>
-      </UITooltipProvider>
+      <ConfigProvider :use-id="useIdFunction">
+        <UITooltipProvider>
+          <NuxtLayout>
+            <NuxtPage />
+          </NuxtLayout>
+        </UITooltipProvider>
+      </ConfigProvider>
     </Body>
   </Html>
 </template>
