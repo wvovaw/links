@@ -23,7 +23,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     ]"
     as-child
   >
-    <MenuItem>
+    <MenuItem class="data-[state=open]:bg-heles data-[disabled]:(hover:bg-transparent cursor-not-allowed)">
       <slot />
     </MenuItem>
   </DropdownMenuItem>

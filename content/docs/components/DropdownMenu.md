@@ -67,3 +67,7 @@ ___
 ### Checkboxes
 
 :ui-docs-dropdown-menu-checkbox
+
+### Complex Example
+
+:ui-docs-dropdown-menu-complex
