@@ -12,19 +12,19 @@ const sel = ref([]);
       <UIMenu.GroupItem value="1">
         <UIMenu.Icon icon="i-lucide:box" />
         <UIMenu.Title>First</UIMenu.Title>
-        <UIMenu.Checkbox />
+        <UIMenu.Checkbox color="piccolo" />
       </UIMenu.GroupItem>
 
       <UIMenu.GroupItem value="2">
         <UIMenu.Icon icon="i-lucide:box" />
         <UIMenu.Title>Second</UIMenu.Title>
-        <UIMenu.Checkbox />
+        <UIMenu.Checkbox color="piccolo" />
       </UIMenu.GroupItem>
 
       <UIMenu.GroupItem value="3">
         <UIMenu.Icon icon="i-lucide:box" />
         <UIMenu.Title>Third</UIMenu.Title>
-        <UIMenu.Checkbox />
+        <UIMenu.Checkbox color="piccolo" />
       </UIMenu.GroupItem>
     </UIMenu.Group>
   </PreviewFrame>

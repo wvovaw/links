@@ -12,12 +12,12 @@ const sel = ref();
       <UIMenu.GroupItem value="d1">
         <UIMenu.Icon icon="i-lucide:box" />
         <UIMenu.Title>One</UIMenu.Title>
-        <UIMenu.Radio />
+        <UIMenu.Radio color="piccolo" />
       </UIMenu.GroupItem>
       <UIMenu.GroupItem value="d2">
         <UIMenu.Icon icon="i-lucide:box" />
         <UIMenu.Title>Two</UIMenu.Title>
-        <UIMenu.Radio />
+        <UIMenu.Radio color="piccolo" />
       </UIMenu.GroupItem>
     </UIMenu.Group>
   </PreviewFrame>

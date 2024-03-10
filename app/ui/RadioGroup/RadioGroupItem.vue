@@ -2,11 +2,13 @@
 import { type HTMLAttributes, computed, inject } from "vue";
 import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps, useForwardProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
+import { UIRadioItem } from "../RadioItem";
 
-const radioGroupItemVariants = cva("relative aspect-square h-4.5 w-4.5 rounded-full border border-trunks ring-offset-2 ring-offset-goku focus:outline-none focus-visible:ring-2 ring-bulma", {
+// FIXME: This is a dup code. It mirrors RadioItem variants. Make the single source of true
+const radioGroupItemVariants = cva("", {
   variants: {
-    color: { default: "data-[state=checked]:(border-bulma text-bulma)", piccolo: "data-[state=checked]:(border-piccolo text-piccolo)", hit: "data-[state=checked]:(border-hit text-hit)", chichi: "data-[state=checked]:(border-chichi text-chichi)", krillin: "data-[state=checked]:(border-krillin text-krillin)", roshi: "data-[state=checked]:(border-roshi text-roshi)" },
-    disabled: { true: "cursor-default opacity-60", false: "cursor-pointer" },
+    color: { default: "", piccolo: "", hit: "", chichi: "", krillin: "", roshi: "" },
+    disabled: { true: "", false: "" },
   },
   defaultVariants: {
     color: "default",
@@ -36,10 +38,12 @@ const forwarded = useForwardProps(delegatedProps);
   <RadioGroupItem
     v-bind="forwarded"
     :disabled="context?.disabled || disabled"
-    :class="radioGroupItemVariants({ color: color || context?.color, disabled: disabled || context?.disabled })"
+    as-child
   >
-    <RadioGroupIndicator
-      class="absolute flex items-center justify-center w-0 h-0 aspect-square rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 data-[state=checked]:(w-2.5 h-2.5) text-current bg-current"
-    />
+    <UIRadioItem.Root :color="color || context?.color">
+      <RadioGroupIndicator as-child>
+        <UIRadioItem.Indicator />
+      </RadioGroupIndicator>
+    </UIRadioItem.Root>
   </RadioGroupItem>
 </template>
