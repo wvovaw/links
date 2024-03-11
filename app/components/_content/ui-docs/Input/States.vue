@@ -18,7 +18,7 @@ import { UIInput, UIInputHint, UIInputLabel } from "~ui/Input";
       <UIInputLabel for="states-02">
         Medium input
       </UIInputLabel>
-      <UIInput id="states-02" model-value="Some error" error error-message="I am an error" placeholder="md (default)" />
+      <UIInput id="states-02" model-value="Some error" error immediate-validation error-message="I am an error" placeholder="md (default)" />
       <UIInputHint error>
         <span class="i-lucide:info" /> An error occured
       </UIInputHint>

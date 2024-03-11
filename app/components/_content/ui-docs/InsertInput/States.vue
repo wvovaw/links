@@ -12,7 +12,7 @@ import { UIInputHint, UIInsertInput } from "~ui/Input";
       </UIInputHint>
     </div>
     <div>
-      <UIInsertInput model-value="Some error" error error-message="I am an error" label="Error" placeholder="Error" />
+      <UIInsertInput model-value="Some error" error immediate-validation error-message="I am an error" label="Error" placeholder="Error" />
       <UIInputHint error>
         <span class="i-lucide:info" /> An error occured
       </UIInputHint>

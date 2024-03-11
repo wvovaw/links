@@ -22,7 +22,7 @@ import { UIInsertSelect, UISelectHint } from "~ui/Select";
       </UISelectHint>
     </div>
     <div class="w-xs">
-      <UIInsertSelect label="Error" model-value="Some error" error error-message="I am an error">
+      <UIInsertSelect label="Error" model-value="Some error" error immediate-validation error-message="I am an error">
         <option value="1">
           Belarus
         </option>

@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<{
   multiple?: boolean;
   color?: InsertSelectVariants["color"];
   error?: boolean;
+  immediateValidation?: boolean;
   errorMessage?: string;
   dir?: "ltr" | "rtl";
 }>(), {
@@ -52,9 +53,15 @@ watch(() => props.error, (err) => {
     setError();
   else cleanError();
 });
-onMounted(() => {
+onUpdated(() => {
   if (props.error)
     setError();
+});
+onMounted(() => {
+  if (props.immediateValidation) {
+    if (props.error)
+      setError();
+  }
 });
 </script>
 

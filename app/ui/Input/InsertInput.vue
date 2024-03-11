@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<{
   fullWidth?: boolean;
   error?: boolean;
   errorMessage?: string;
+  immediateValidation?: boolean;
   dir?: "ltr" | "rtl";
 }>(), {
   errorMessage: "InsertInput error",
@@ -61,9 +62,15 @@ watch(() => props.error, (err) => {
     setError();
   else cleanError();
 });
-onMounted(() => {
+onUpdated(() => {
   if (props.error)
     setError();
+});
+onMounted(() => {
+  if (props.immediateValidation) {
+    if (props.error)
+      setError();
+  }
 });
 const id = useId();
 </script>

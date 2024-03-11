@@ -28,7 +28,7 @@ import { UISelect, UISelectHint, UISelectLabel } from "~ui/Select";
       <UISelectLabel for="states-02">
         Medium select
       </UISelectLabel>
-      <UISelect id="states-02" model-value="Some error" error error-message="I am an error">
+      <UISelect id="states-02" model-value="Some error" error immediate-validation error-message="I am an error">
         <option value="1">
           1
         </option>
