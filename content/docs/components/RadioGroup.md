@@ -12,9 +12,11 @@ ___
 ## Anatomy
 
 ```vue
-<RadioGroup>
-  <RadioGroupItem />
-</RadioGroup>
+<template>
+  <RadioGroup>
+    <RadioGroupItem />
+  </RadioGroup>
+</template>
 ```
 
 ___
@@ -23,23 +25,21 @@ ___
 
 ### Default
 
-:ui-docs-radio-group-default{title="Default"}
+:ui-docs-radio-group-default
 
 ### Colors
 
-:ui-docs-radio-group-colors{title="Colors"}
+:ui-docs-radio-group-colors
 
 ### Disabled
 
-:ui-docs-radio-group-disabled{title="Disabled"}
+:ui-docs-radio-group-disabled
 
 ___
 
 ## API Reference
 
 ### Group
-
-`RadioGroup` component API
 
 #### Props
 
@@ -70,8 +70,6 @@ ___
 | `[data-disabled]` | Present when disabled |
 
 ### Item
-
-`RadioGroupItem` component API
 
 #### Props
 

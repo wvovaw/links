@@ -71,3 +71,11 @@ ___
 ### Complex Example
 
 :ui-docs-dropdown-menu-complex
+
+___
+
+## API Reference
+
+WIP
+
+Refer to [Radix-Vue Dropdown docs](https://www.radix-vue.com/components/dropdown-menu)
