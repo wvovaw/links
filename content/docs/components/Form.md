@@ -14,7 +14,7 @@ ___
 
 ```vue
 <template>
-  <Form.Root>
+  <form>
     <Form.Field v-slot="{ componentField, field, errorMessage }">
       <Form.Item>
         <Form.Label />
@@ -28,7 +28,7 @@ ___
         <Form.ErrorMessage>{{ errorMessage }}</Form.ErrorMessage>
       </Form.Item>
     </Form.Field>
-  </Form.Root>
+  </form>
 </template>
 ```
 
@@ -41,3 +41,7 @@ ___
 This example shows the basic usage of Vee-Validate + Valibot with simple Input and Select components.
 
 :ui-docs-form-default
+
+### Sign Up Form Example
+
+:ui-docs-form-register-form
