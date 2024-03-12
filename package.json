@@ -45,5 +45,8 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
+  },
+  "dependencies": {
+    "vaul-vue": "^0.1.0"
   }
 }
