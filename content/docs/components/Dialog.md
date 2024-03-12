@@ -48,7 +48,6 @@ ___
 
 :ui-docs-dialog-scrollable
 
-
 ## Notes
 
 To activate the `Dialog` component from within a `ContextMenu` or `Dropdown`, you must wrap its root with the `Dialog.Root` component.

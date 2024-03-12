@@ -15,14 +15,17 @@ ___
 ```vue
 <template>
   <Form.Root>
-    <Form.Field v-slot="{ ... }">
+    <Form.Field v-slot="{ componentField, field, errorMessage }">
       <Form.Item>
         <Form.Label />
         <Form.Control>
-          <!-- any Form Input component or native input elements -->
+          <!-- any Form (Input, Select, Radio etc.) component -->
+          <Input v-bind="componentField" />
+          <!-- Or native  -->
+          <input v-bind="field">
         </Form.Control>
         <Form.Description />
-        <Form.ErrorMessage />
+        <Form.ErrorMessage>{{ errorMessage }}</Form.ErrorMessage>
       </Form.Item>
     </Form.Field>
   </Form.Root>

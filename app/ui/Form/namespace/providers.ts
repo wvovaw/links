@@ -1,1 +1,1 @@
-export const FORM_ITEM_INJECTION_KEY = Symbol("FormItemInjectionKey") as InjectionKey<string>
+export const FORM_ITEM_INJECTION_KEY = Symbol("FormItemInjectionKey") as InjectionKey<string>;

@@ -11,7 +11,7 @@ const radioItemVariants = cva("relative aspect-square h-4.5 w-4.5 rounded-full b
       hit: "data-[state=checked]:(border-hit text-hit) group-data-[state=checked]:(border-hit text-hit)",
       chichi: "data-[state=checked]:(border-chichi text-chichi) group-data-[state=checked]:(border-chichi text-chichi)",
       krillin: "data-[state=checked]:(border-krillin text-krillin) group-data-[state=checked]:(border-krillin text-krillin)",
-      roshi: "data-[state=checked]:(border-roshi text-roshi) group-data-[state=checked]:(border-roshi text-roshi)"
+      roshi: "data-[state=checked]:(border-roshi text-roshi) group-data-[state=checked]:(border-roshi text-roshi)",
     },
     disabled: { true: "cursor-default opacity-60", false: "cursor-pointer" },
   },

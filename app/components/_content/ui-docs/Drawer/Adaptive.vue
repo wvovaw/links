@@ -36,7 +36,7 @@ const isOpen = ref(false);
         </UIDialog.Footer>
       </UIDialog.Content>
     </UIDialog.Root>
-    
+
     <UIDrawer.Root v-else v-model:open="isOpen">
       <UIDrawer.Trigger as-child>
         <UIButton>Open</UIButton>
@@ -49,7 +49,6 @@ const isOpen = ref(false);
 
         <ContentComp />
         <UIDrawer.Footer>
-
           <UIDrawer.Close as-child>
             <UIButton>Ok</UIButton>
           </UIDrawer.Close>

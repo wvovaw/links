@@ -5,7 +5,7 @@ description: A Drawer component is a mobile friendly Modal dialog.
 
 # Drawer
 
-`Drawer` is a touch friendly dialog component. It's widely used in mobile apps. It supports a slide gesture to dismiss the dialog. 
+`Drawer` is a touch friendly dialog component. It's widely used in mobile apps. It supports a slide gesture to dismiss the dialog.
 
 ___
 

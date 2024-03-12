@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type ExtractPropTypes, type HTMLAttributes, computed } from "vue";
+import { type HTMLAttributes, computed } from "vue";
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "radix-vue";
 import type { CheckboxRootEmits, CheckboxRootProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
