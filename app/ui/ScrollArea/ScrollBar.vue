@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<ScrollAreaScrollbarProps & {
 });
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { barClass: _bc, thumbClass: _thc, ...delegated } = props;
   return delegated;
 });
 </script>
@@ -18,7 +18,7 @@ const delegatedProps = computed(() => {
 <template>
   <ScrollAreaScrollbar
     v-bind="delegatedProps"
-    class="flex touch-none select-none transition-colors"
+    class="flex touch-none select-none transition-colors rounded-full py-1"
     :class="[
       {
         'h-full w-3 bg-heles px-3px': orientation === 'vertical',
