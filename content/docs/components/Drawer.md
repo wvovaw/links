@@ -1,7 +1,6 @@
 ---
 title: Drawer
 description: A Drawer component is a mobile friendly Modal dialog.
-draft: true
 ---
 
 # Drawer
@@ -44,3 +43,7 @@ ___
 ### Default
 
 :ui-docs-drawer-default
+
+## Adaptive
+
+:ui-docs-drawer-adaptive
