@@ -49,6 +49,9 @@ export default defineNuxtConfig({
       localeDetector: "./server/utils/i18n.localeDetector.ts",
     },
   },
+  routeRules: {
+    "/docs/**": { prerender: true }
+  },
   modules: [
     "@unocss/nuxt",
     "@nuxtjs/i18n",
