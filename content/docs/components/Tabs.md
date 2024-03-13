@@ -16,11 +16,19 @@ ___
 <template>
   <Tabs>
     <TabsList>
-      <TabsTrigger value="1"> 1 </TabsTrigger>
-      <TabsTrigger value="2"> 2 </TabsTrigger>
+      <TabsTrigger value="1">
+        1
+      </TabsTrigger>
+      <TabsTrigger value="2">
+        2
+      </TabsTrigger>
     </TabsList>
-    <TabsContent value="1"> 1 </TabsContent>
-    <TabsContent value="2"> 2 </TabsContent>
+    <TabsContent value="1">
+      1
+    </TabsContent>
+    <TabsContent value="2">
+      2
+    </TabsContent>
   </Tabs>
 </template>
 ```

@@ -20,9 +20,9 @@ export default defineNuxtConfig({
     highlight: {
       theme: {
         default: "light-plus",
-        dark: "dark-plus"
+        dark: "dark-plus",
       },
-      langs: ["vue", "vue-html", "javascript", "typescript", "css"]
+      langs: ["vue", "vue-html", "javascript", "typescript", "css"],
     },
   },
   image: {

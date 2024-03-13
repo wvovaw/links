@@ -13,8 +13,8 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.8.0",
-    "@iconify-json/lucide": "^1.1.172",
+    "@antfu/eslint-config": "^2.8.1",
+    "@iconify-json/lucide": "^1.1.173",
     "@iconify-json/vscode-icons": "^1.1.33",
     "@nuxt/content": "^2.12.1",
     "@nuxt/image": "^1.4.0",
@@ -34,9 +34,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-format": "^0.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "happy-dom": "^13.7.0",
+    "happy-dom": "^13.8.2",
     "nuxt": "^3.10.3",
-    "radix-vue": "^1.5.1",
+    "radix-vue": "^1.5.2",
     "unocss-preset-animations": "^1.0.1",
     "valibot": "^0.30.0",
     "vaul-vue": "^0.1.0",

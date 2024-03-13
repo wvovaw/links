@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Slot } from "radix-vue";
 import { UIButton } from "~ui/Button";
-import { UIScrollArea } from "~ui/ScrollArea";
 
 const icons = {
   ts: "i-vscode-icons:file-type-typescript-official",

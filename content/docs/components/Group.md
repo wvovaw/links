@@ -20,8 +20,8 @@ Group can accept `Input`, `InsertInput`, `Select`, `InsertSelect` and `RichSelec
   <Group>
     <Input />
     <InsertInput />
-    <Select></Select>
-    <InsertSelect></InsertSelect>
+    <Select />
+    <InsertSelect />
     <RichSelect />
   </Group>
 </template>

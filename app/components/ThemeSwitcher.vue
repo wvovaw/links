@@ -13,10 +13,10 @@ const { cycle } = themeStore;
 const icon = computed(() => {
   if (state.value === "dark")
     return "i-lucide:moon";
-  if (state.value === "light")
+  else if (state.value === "light")
     return "i-lucide:sun-medium";
-  if (state.value === "auto")
-    return "i-lucide:monitor";
+  else // (state.value === "auto");
+  return "i-lucide:monitor";
 });
 </script>
 
