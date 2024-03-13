@@ -1,12 +1,9 @@
 <script setup lang="ts">
+import type { UICheckboxVariants } from "../../Checkbox";
 import { UICheckbox } from "../../Checkbox";
 import { menuItemKey, menuItemsGroupKey } from "./providers";
 
-defineProps<{
-  // FIXME: This need to be exported from UICheckbox as UICheckboxProps
-  color?: "default" | "piccolo" | "hit" | "roshi" | "chichi" | "krillin";
-  size?: "sm" | "md";
-}>();
+defineProps<UICheckboxVariants>();
 
 const menuItemCtx = inject(menuItemKey);
 const menuItemsGroupCtx = inject(menuItemsGroupKey);

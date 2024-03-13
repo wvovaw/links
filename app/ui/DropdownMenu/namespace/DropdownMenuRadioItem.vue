@@ -2,12 +2,10 @@
 import { type HTMLAttributes, computed } from "vue";
 import { DropdownMenuItemIndicator, DropdownMenuRadioItem, type DropdownMenuRadioItemEmits, type DropdownMenuRadioItemProps, useForwardPropsEmits } from "radix-vue";
 import { Item as MenuItem } from "../../Menu/namespace";
-import { UIRadioItem } from "../../RadioItem";
+import { UIRadioItem, type UIRadioItemVariants } from "../../RadioItem";
 
-const props = defineProps<DropdownMenuRadioItemProps & {
+const props = defineProps<DropdownMenuRadioItemProps & UIRadioItemVariants & {
   class?: HTMLAttributes["class"];
-  // FIXME: This need to be exported from UIRadioItem as UIRadioItemProps
-  color?: "default" | "piccolo" | "hit" | "roshi" | "chichi" | "krillin";
 }>();
 const emits = defineEmits<DropdownMenuRadioItemEmits>();
 const delegatedProps = computed(() => {

@@ -16,7 +16,7 @@ const icon = computed(() => {
   else if (state.value === "light")
     return "i-lucide:sun-medium";
   else // (state.value === "auto");
-  return "i-lucide:monitor";
+    return "i-lucide:monitor";
 });
 </script>
 

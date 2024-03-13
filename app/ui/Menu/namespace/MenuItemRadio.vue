@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { UIRadioItem } from "../../RadioItem";
+import { UIRadioItem, type UIRadioItemVariants } from "../../RadioItem";
 import { menuItemKey, menuItemsGroupKey } from "./providers";
 
-defineProps<{
-  // FIXME: This need to be exported from UIRadioItem as UIRadioItemProps
-  color?: "default" | "piccolo" | "hit" | "roshi" | "chichi" | "krillin";
-}>();
+defineProps<UIRadioItemVariants>();
 
 const menuItemCtx = inject(menuItemKey);
 const menuItemsGroupCtx = inject(menuItemsGroupKey);

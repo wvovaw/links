@@ -1,42 +1,22 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
 import { ToggleGroupRoot, type ToggleGroupRootEmits, type ToggleGroupRootProps, useForwardPropsEmits } from "radix-vue";
-import { type VariantProps, cva } from "cva";
-
-/*
-* FIXME: Try to fix it after UI moved to separate package of a monorepo
-* This variant partially mirrors ToggleItem.vue variants to make it possible to set variants, size etc in a provider (here).
-* So this should be moved into a separate file and imported from it, but this won't work for now because of Unocss errors when extracting utilities from .ts is on.
-*/
-const toggleVariants = cva("", {
-  variants: {
-    variant: { default: "", ghost: "" },
-    color: { piccolo: "", hit: "", roshi: "", chichi: "", krillin: "" },
-    withStroke: { true: "", false: "" },
-    size: { sm: "", md: "" },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "md",
-    color: "piccolo",
-    withStroke: false,
-  },
-});
-type ToggleGroupVariants = VariantProps<typeof toggleVariants>;
+import type { ToggleVariants } from "../Toggle/private/ToggleItem.vue";
+import { TOGGLE_GROUP_INJECTION_KEY } from "./providers";
 
 const props = withDefaults(defineProps<ToggleGroupRootProps & {
   class?: HTMLAttributes["class"];
-  variant?: ToggleGroupVariants["variant"];
-  color?: ToggleGroupVariants["color"];
-  withStroke?: Extract<ToggleGroupVariants["withStroke"], boolean>;
-  size?: ToggleGroupVariants["size"];
+  variant?: ToggleVariants["variant"];
+  color?: ToggleVariants["color"];
+  withStroke?: boolean;
+  size?: ToggleVariants["size"];
 }>(), {
   type: "single",
 });
 
 const emits = defineEmits<ToggleGroupRootEmits>();
 
-provide("toggleGroup", {
+provide(TOGGLE_GROUP_INJECTION_KEY, {
   variant: props.variant,
   color: props.color,
   withStroke: props.withStroke,

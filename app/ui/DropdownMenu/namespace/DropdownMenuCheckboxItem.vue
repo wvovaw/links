@@ -3,13 +3,10 @@ import { type HTMLAttributes, computed } from "vue";
 import type { DropdownMenuCheckboxItemEmits, DropdownMenuCheckboxItemProps } from "radix-vue";
 import { DropdownMenuCheckboxItem, useForwardPropsEmits } from "radix-vue";
 import { Item as MenuItem } from "../../Menu/namespace";
-import { UICheckbox } from "../../Checkbox";
+import { UICheckbox, type UICheckboxVariants } from "../../Checkbox";
 
-const props = defineProps<DropdownMenuCheckboxItemProps & {
+const props = defineProps<DropdownMenuCheckboxItemProps & UICheckboxVariants & {
   class?: HTMLAttributes["class"];
-  // FIXME: This need to be exported from UICheckbox as UICheckboxProps
-  color?: "default" | "piccolo" | "hit" | "roshi" | "chichi" | "krillin";
-  size?: "sm" | "md";
 }>();
 const emits = defineEmits<DropdownMenuCheckboxItemEmits>();
 const delegatedProps = computed(() => {

@@ -2,6 +2,7 @@
 import { RadioGroupRoot, type RadioGroupRootEmits, type RadioGroupRootProps, useForwardPropsEmits } from "radix-vue";
 import { type HTMLAttributes, computed, provide } from "vue";
 import { type VariantProps, cva } from "cva";
+import { RADIO_GROUP_INJECTION_KEY } from "./providers";
 
 const radioGroupVariants = cva("", {
   variants: {
@@ -27,7 +28,7 @@ const delegatedProps = computed(() => {
 });
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
-provide("radioGroup", {
+provide(RADIO_GROUP_INJECTION_KEY, {
   color: props.color,
   disabled: props.disabled,
 });
