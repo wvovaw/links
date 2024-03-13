@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   unocss: {
     preflight: true,
   },
-  css: ["~assets/css/global.css", "~assets/css/moon.css"],
+  css: ["~assets/css/global.css", "~assets/css/moon.css", "~assets/css/shiki.css"],
   content: {
     markdown: {
       remarkPlugins: {},
@@ -19,7 +19,8 @@ export default defineNuxtConfig({
     },
     highlight: {
       theme: {
-        default: "dark-plus"
+        default: "light-plus",
+        dark: "dark-plus"
       },
       langs: ["vue", "vue-html", "javascript", "typescript", "css"]
     },

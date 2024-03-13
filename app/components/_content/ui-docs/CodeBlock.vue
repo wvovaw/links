@@ -37,7 +37,7 @@ const { copy, copied, isSupported } = useClipboard({ source: code });
         @click="copy"
       />
     </div>
-    <UIScrollArea class="border border-beerus bg-[rgb(31_31_31)] rounded-b-moon-s-xs" bar-class="rounded-none">
+    <UIScrollArea class="border border-beerus rounded-b-moon-s-xs" bar-class="rounded-none">
       <Slot class="my-0 p-4 rounded-t-none">
         <ContentSlot :use="$slots.default" />
       </Slot>
