@@ -1,6 +1,7 @@
 ---
 title: Group
 description: A UI component visually coupling inputs, selects in one coupled group.
+draft: true
 ---
 
 # Group
@@ -13,17 +14,19 @@ ___
 
 Group can accept `Input`, `InsertInput`, `Select`, `InsertSelect` and `RichSelect` components.
 
+::ui-docs-code-block{filename="Group.vue" lang="vue"}
 ```vue
 <template>
   <Group>
     <Input />
     <InsertInput />
-    <Select />
-    <InsertSelect />
+    <Select></Select>
+    <InsertSelect></InsertSelect>
     <RichSelect />
   </Group>
 </template>
 ```
+::
 
 ___
 

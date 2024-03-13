@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Drawer.vue" lang="vue"}
 ```vue
 <template>
   <Drawer.Root>
@@ -36,6 +37,8 @@ ___
   </Drawer.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples
@@ -45,5 +48,7 @@ ___
 :ui-docs-drawer-default
 
 ## Adaptive
+
+You can combine `Drawer` and `Dialog` components together to create a dialog responsive. Here's a handy example with helpfull Vueuse composables.
 
 :ui-docs-drawer-adaptive

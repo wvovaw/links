@@ -15,6 +15,7 @@ ___
 
 Default variant
 
+::ui-docs-code-block{filename="Menu.vue" lang="vue"}
 ```vue
 <template>
   <Menu.Item>
@@ -24,9 +25,11 @@ Default variant
   </Menu.Item>
 </template>
 ```
+::
 
-Checkbox group
+`Menu.Checkbox` allows displaying a checkbox within a menu
 
+::ui-docs-code-block{filename="MenuWithCheckboxes.vue" lang="vue"}
 ```vue
 <template>
   <Menu.Group type="multiple">
@@ -38,9 +41,13 @@ Checkbox group
   </Menu.Group>
 </template>
 ```
+::
 
 Radio group
 
+`Menu.Group` and `Menu.Radio` allows creating a radio group within a menu
+
+::ui-docs-code-block{filename="MenuWithRadio.vue" lang="vue"}
 ```vue
 <template>
   <Menu.Group type="single">
@@ -52,6 +59,8 @@ Radio group
   </Menu.Group>
 </template>
 ```
+::
+
 ___
 
 ## Examples

@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Tooltip.vue" lang="vue"}
 ```vue
 <template>
   <TooltipProvider>
@@ -25,6 +26,7 @@ ___
   </TooltipProvider>
 </template>
 ```
+::
 
 `TooltipProvider` is mandatory. It provides down the common options for all its children tooltips. You can wrap the whole app with this provider and set `delayDuration` and `skipDelayDuration` props. Or you can either wrap the only section to make its tooltips behavior similar.
 

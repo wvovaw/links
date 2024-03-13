@@ -7,7 +7,7 @@ import { UIScrollArea } from "~ui/ScrollArea";
 <template>
   <PreviewFrame variant="outline">
     <div class="w-full flex flex-wrap justify-around gap-4">
-      <UITabs default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm flex flex-col max-w-xs">
+      <UITabs default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm flex flex-col max-w-xs shadow-moon-sm">
         <UITabsList variant="tab" class="border-b-1 px-2 pt-2 border-beerus w-full">
           <UITabsTrigger value="1">
             Tab 1
@@ -33,7 +33,7 @@ import { UIScrollArea } from "~ui/ScrollArea";
         </UIScrollArea>
       </UITabs>
 
-      <UITabs orientation="vertical" default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm max-w-sm grid grid-flow-col">
+      <UITabs orientation="vertical" default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm max-w-sm grid grid-flow-col shadow-moon-sm">
         <UITabsList variant="pill" class="border-r-1 border-beerus rounded-r-none cols-span-1 w-[80px]">
           <UITabsTrigger value="1">
             Tab 1

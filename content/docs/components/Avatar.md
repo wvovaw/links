@@ -11,14 +11,18 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Avatar.vue" lang="vue"}
 ```vue
 <template>
   <Avatar.Root>
     <Avatar.Image />
     <Avatar.Fallback />
+    <Avatar.Indicator />
   </Avatar.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

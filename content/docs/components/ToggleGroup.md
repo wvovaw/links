@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="ToggleGroup.vue" lang="vue"}
 ```vue
 <template>
   <ToggleGroup>
@@ -18,6 +19,7 @@ ___
   </ToggleGroup>
 </template>
 ```
+::
 
 ## Examples
 

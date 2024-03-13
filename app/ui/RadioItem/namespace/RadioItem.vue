@@ -28,9 +28,9 @@ defineProps<{
 </script>
 
 <template>
-  <span :class="radioItemVariants({ color })" class="group">
+  <button :class="radioItemVariants({ color })" class="group">
     <slot>
       <RadioItemIndicator />
     </slot>
-  </span>
+  </button>
 </template>

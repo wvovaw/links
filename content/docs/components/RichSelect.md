@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="RichSelect.vue" lang="vue"}
 ```vue
 <template>
   <RichSelect.Root>
@@ -25,6 +26,8 @@ ___
   </RichSelect.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

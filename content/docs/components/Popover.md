@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Popover.vue" lang="vue"}
 ```vue
 <template>
   <Popover>
@@ -21,6 +22,7 @@ ___
   </Popover>
 </template>
 ```
+::
 
 ___
 

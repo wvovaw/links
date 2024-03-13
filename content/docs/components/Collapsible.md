@@ -12,6 +12,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Collapsible.vue" lang="vue"}
 ```vue
 <template>
   <CollapsibleRoot>
@@ -20,6 +21,7 @@ ___
   </CollapsibleRoot>
 </template>
 ```
+::
 
 ___
 

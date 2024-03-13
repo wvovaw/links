@@ -11,16 +11,19 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Accordion.vue" lang="vue"}
 ```vue
 <template>
   <Accordion.Root>
-    <Accordion.Item value="1">
+    <Accordion.Item>
       <Accordion.Trigger />
       <Accordion.Content />
     </Accordion.Item>
   </Accordion.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

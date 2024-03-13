@@ -30,12 +30,12 @@ const onSubmit = form.handleSubmit((vals) => {
 
 <template>
   <PreviewFrame>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" class="w-full max-w-xs bg-gohan p-4 border border-beerus rounded-moon-s-md shadow-moon-md space-y-4">
       <UIForm.Field v-slot="{ componentField, errorMessage }" name="email">
         <UIForm.Item>
           <UIForm.Label>Email</UIForm.Label>
           <UIForm.Control>
-            <UIInput v-bind="componentField" :error="!!errorMessage" :error-message="errorMessage" />
+            <UIInput v-bind="componentField" :error="!!errorMessage" :error-message="errorMessage" full-width />
           </UIForm.Control>
           <UIForm.ErrorMessage v-if="errorMessage" />
           <UIForm.Description v-else>
@@ -65,7 +65,7 @@ const onSubmit = form.handleSubmit((vals) => {
         </UIForm.Item>
       </UIForm.Field>
 
-      <UIButton type="submit">
+      <UIButton type="submit" full-width>
         Submit
       </UIButton>
     </form>

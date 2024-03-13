@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="RadioGroup.vue" lang="vue"}
 ```vue
 <template>
   <RadioGroup>
@@ -18,6 +19,7 @@ ___
   </RadioGroup>
 </template>
 ```
+::
 
 ___
 

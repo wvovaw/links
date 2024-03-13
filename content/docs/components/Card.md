@@ -13,6 +13,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Card.vue" lang="vue"}
 ```vue
 <template>
   <Card.Root>
@@ -29,6 +30,8 @@ ___
   </Card.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

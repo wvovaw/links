@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Dialog.vue" lang="vue"}
 ```vue
 <template>
   <Dialog.Root>
@@ -36,6 +37,8 @@ ___
   </Dialog.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples
@@ -52,6 +55,7 @@ ___
 
 To activate the `Dialog` component from within a `ContextMenu` or `Dropdown`, you must wrap its root with the `Dialog.Root` component.
 
+::ui-docs-code-block{filename="DialogFromDropdown.vue" lang="vue"}
 ```vue
 <template>
   <Dialog.Root>
@@ -83,6 +87,7 @@ To activate the `Dialog` component from within a `ContextMenu` or `Dropdown`, yo
   </Dialog.Root>
 </template>
 ```
+::
 
 ___
 

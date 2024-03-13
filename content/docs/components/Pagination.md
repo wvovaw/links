@@ -12,6 +12,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Pagination.vue" lang="vue"}
 ```vue
 <template>
   <Pagination.Root>
@@ -30,6 +31,8 @@ ___
   </Pagination.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

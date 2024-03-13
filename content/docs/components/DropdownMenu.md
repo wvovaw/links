@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="DropdownMenu.vue" lang="vue"}
 ```vue
 <template>
   <DropdownMenu.Root>
@@ -47,6 +48,8 @@ ___
   </DropdownMenu.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

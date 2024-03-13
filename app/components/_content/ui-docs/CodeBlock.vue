@@ -25,22 +25,22 @@ const { copy, copied, isSupported } = useClipboard({ source: code });
 
 <template>
   <section class="my-5">
-    <div class="flex items-center gap-1.5 border border-beerus bg-heles border-b-0 rounded-t-moon-s-xs px-4 py-3 not-prose">
+    <div class="flex items-center gap-1.5 border border-beerus bg-heles border-b-0 rounded-t-moon-s-xs px-4 py-3 h-14 not-prose">
       <span :class="icons[lang]" class="w-5 h-5" />
       <span class="text-trunks text-moon-14 grow">{{ filename }}</span>
-      <UIButton
-        v-if="code && isSupported"
-        size="sm"
-        variant="ghost"
-        :icon="copied ? 'i-lucide:copy-check' : 'i-lucide:copy'"
-        class="focus:ring-0!"
-        @click="copy"
-      />
+      <ClientOnly>
+        <UIButton
+          v-if="code && isSupported"
+          size="sm"
+          variant="ghost"
+          :icon="copied ? 'i-lucide:copy-check' : 'i-lucide:copy'"
+          class="focus:ring-0!"
+          @click="copy()"
+        />
+      </ClientOnly>
     </div>
-    <UIScrollArea class="border border-beerus rounded-b-moon-s-xs" bar-class="rounded-none">
-      <Slot class="my-0 p-4 rounded-t-none">
-        <ContentSlot :use="$slots.default" />
-      </Slot>
-    </UIScrollArea>
+    <Slot class="border border-beerus rounded-b-moon-s-xs my-0 p-4 rounded-t-none">
+      <ContentSlot :use="$slots.default" />
+    </Slot>
   </section>
 </template>

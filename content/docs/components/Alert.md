@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Alert.vue" lang="vue"}
 ```vue
 <template>
   <Alert.Root>
@@ -20,6 +21,8 @@ ___
   </Alert.Root>
 </template>
 ```
+::
+
 ___
 
 ## Examples

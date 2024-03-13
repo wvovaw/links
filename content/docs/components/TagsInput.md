@@ -13,6 +13,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="TagsInput.vue" lang="vue"}
 ```vue
 <template>
   <TagsInput>
@@ -22,6 +23,7 @@ ___
   </TagsInput>
 </template>
 ```
+::
 
 ___
 

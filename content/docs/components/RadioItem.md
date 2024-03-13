@@ -11,6 +11,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="RadioItem.vue" lang="vue"}
 ```vue
 <template>
   <RadioItem.Root>
@@ -18,6 +19,7 @@ ___
   </RadioItem.Root>
 </template>
 ```
+::
 
 ## Examples
 

@@ -5,7 +5,7 @@ import { UICollapsible, UICollapsibleContent, UICollapsibleTrigger } from "~ui/C
 
 <template>
   <PreviewFrame>
-    <UICollapsible class="w-xs">
+    <UICollapsible class="w-xs bg-goku p-4 rounded-moon-s-sm">
       <div class="flex flex-row justify-between items-center">
         <span class="text-moon-16 font-bold">Expand this section</span>
         <UICollapsibleTrigger>
