@@ -24,8 +24,16 @@ const props = defineProps<{
 <!-- TODO: add preview/code tabs with code preview -->
 <template>
   <section class="my-5">
-    <div :class="[previewFrameVariants({ variant }), props.class]">
+    <div class="pattern shadow-moon-sm" :class="[previewFrameVariants({ variant }), props.class]">
       <slot />
     </div>
   </section>
 </template>
+
+<style scoped>
+.pattern {
+  background-image: linear-gradient(to top, var(--beerus) 1px, transparent 1px), linear-gradient(to left, var(--beerus) 1px, transparent 1px);
+  background-size: 25px 25px;
+  background-color: var(--gohan);
+}
+</style>

@@ -12,7 +12,12 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetMoonDS(),
-    presetIcons({}),
+    presetIcons({
+      collections: {
+        "lucide": () => import("@iconify-json/lucide/icons.json").then(i => i.default),
+        "vscode-icons": () => import("@iconify-json/vscode-icons/icons.json").then(i => i.default),
+      },
+    }),
     presetWebFonts({
       provider: "google",
       fonts: {

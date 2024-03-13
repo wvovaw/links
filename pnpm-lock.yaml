@@ -14,6 +14,9 @@ importers:
       '@iconify-json/lucide':
         specifier: ^1.1.172
         version: 1.1.172
+      '@iconify-json/vscode-icons':
+        specifier: ^1.1.33
+        version: 1.1.33
       '@nuxt/content':
         specifier: ^2.12.1
         version: 2.12.1(nuxt@3.10.3)(rollup@4.12.1)(vue@3.4.21)
@@ -1135,6 +1138,12 @@ packages:
 
   /@iconify-json/lucide@1.1.172:
     resolution: {integrity: sha512-D7O4Z/Sx9xYVtkx5EcNpe6B5btZwEH9Fxf2KQh9nwFgOGGXdTuOB2Sh0AHfR6K3eCQ63Uhvz/4MzaIyUoixPQw==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/vscode-icons@1.1.33:
+    resolution: {integrity: sha512-Aj1SoViQ5dw9hrYc4PHK8/vHpZREUA158jhnyNsD95uhN40mmeLuq+4o9OxiSakgLlac9R5OKpnp8tHTCgMhCA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

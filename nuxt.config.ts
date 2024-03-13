@@ -18,7 +18,10 @@ export default defineNuxtConfig({
       rehypePlugins: [],
     },
     highlight: {
-      theme: "vitesse-dark",
+      theme: {
+        default: "dark-plus"
+      },
+      langs: ["vue", "vue-html", "javascript", "typescript", "css"]
     },
   },
   image: {

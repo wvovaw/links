@@ -12,6 +12,7 @@ ___
 
 ## Anatomy
 
+::ui-docs-code-block{filename="Form.vue" lang="vue"}
 ```vue
 <template>
   <form>
@@ -31,6 +32,7 @@ ___
   </form>
 </template>
 ```
+::
 
 ___
 
