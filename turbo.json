@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".env"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".output/**", "dist/**"],
+      "dotEnv": [".env.local, .env.test"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dotEnv": [".env.local, .env.test"]
+    },
+    "lint": { "dependsOn": ["^lint"] },
+    "lint:fix": { "dependsOn": ["^lint:fix"] },
+    "prepare": { "cache": false },
+    "test": {},
+    "test:watch": { "cache": false }
+  }
+}

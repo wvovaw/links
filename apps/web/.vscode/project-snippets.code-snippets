@@ -7,12 +7,12 @@
 			"<script setup lang=\"ts\">",
 			"interface I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props} {",
 			"$0",
-			"}"
-			"const props = defineProps<I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props}>();"
+			"}",
+			"const props = defineProps<I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props}>();",
 			"</script>",
 			"",
 			"<template>",
-			"</template>"
+			"</template>",
 			"",
 			"<style scoped>",
 			"</style>"
@@ -25,7 +25,7 @@
 		"body": [
 			"interface I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props} {",
 			"$0",
-			"}"
+			"}",
 			"const props = defineProps<I${1:${TM_FILENAME_BASE/[^0-9^a-z]//gi}Props}>();"
 		],
 	},

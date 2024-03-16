@@ -2,7 +2,7 @@
 
 ## ✔ MVP
 
-- [ ] Implement UI library with chosen UI design system
+- [x] Implement UI library with chosen UI design system
 
 ## ✨ Features
 

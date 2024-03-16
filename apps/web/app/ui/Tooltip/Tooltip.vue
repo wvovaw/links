@@ -32,7 +32,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       :side="props.attachSide"
       :align="props.arrowAlign"
       :side-offset="props.sideOffset"
-      class="z-10 p-3 rounded-moon-s-xs text-moon-12 text-bulma bg-goku shadow-[0_6px_6px_-6px_rgba(0,0,0,0.16)] drop-shadow-[0_0_1px_rgba(0,0,0,0.4)] animate-in fade-in-0 zoom-in-95 data-[state=closed]:(animate-out fade-out-0 zoom-out-95) data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+      class="z-10 animate-in data-[state=closed]:(animate-out fade-out-0 zoom-out-95) rounded-moon-s-xs bg-goku p-3 text-moon-12 text-bulma shadow-[0_6px_6px_-6px_rgba(0,0,0,0.16)] drop-shadow-[0_0_1px_rgba(0,0,0,0.4)] fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
       :class="props.contentClass"
     >
       <slot name="content" />

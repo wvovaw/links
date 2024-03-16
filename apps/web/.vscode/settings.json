@@ -37,12 +37,10 @@
     "yaml",
     "toml"
   ],
-  "files.associations": {
-    "*.md": "mdc",
-    "*.mdc": "mdc"
-  },
-  "todo-tree.tree.showBadges": false,
   "[vue]": {
     "editor.defaultFormatter": "Vue.volar"
+  },
+  "files.exclude": {
+    ".turbo": true
   }
 }
