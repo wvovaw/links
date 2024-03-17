@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ConfigProvider } from "radix-vue";
-import { UITooltipProvider } from "~ui/Tooltip";
+import { UITooltipProvider } from "@links/ui";
 
 const useIdFunction = () => useId();
 
@@ -22,7 +22,7 @@ addRouteMiddleware("theme-cookie-update", () => {
 
 <template>
   <Html :data-theme="cookie.theme">
-    <Body class="bg-goku text-bulma font-dm-sans font-regular">
+    <Body class="bg-goku text-bulma font-regular font-dm-sans">
       <ConfigProvider :use-id="useIdFunction">
         <UITooltipProvider>
           <NuxtLayout>

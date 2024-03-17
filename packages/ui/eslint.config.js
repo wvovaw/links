@@ -1,7 +1,6 @@
-import antfu from '@antfu/eslint-config'
+import antfu from "@antfu/eslint-config";
 
 export default antfu({
-  unocss: true,
   stylistic: {
     indent: 2,
     quotes: "double",
@@ -12,4 +11,4 @@ export default antfu({
       "vue/define-macros-order": "off",
     },
   },
-})
+});

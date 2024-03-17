@@ -29,21 +29,21 @@ const title = computed(() => t(route.meta.title as string));
     <Body>
       <NavigationBar>
         <template #left>
-          <div class="font-averta font-semibold text-2xl text-center flex items-center">
+          <div class="font-averta flex items-center text-center text-2xl font-semibold">
             {{ t("site.sitename") }}
           </div>
         </template>
         <template #right>
-          <div class="flex items-center gap-2">
+          <div class="w-fit flex items-center gap-2">
             <ClientOnly>
-              <LocaleSwitcher />
+              <LocaleSwitcher class="w-[150px]!" />
             </ClientOnly>
             <ThemeSwitcher icon-only />
           </div>
         </template>
       </NavigationBar>
 
-      <div class="grid place-content-center m-4">
+      <div class="grid m-4 place-content-center">
         <div class="container">
           <NavigationMenu />
           <slot />

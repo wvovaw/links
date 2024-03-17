@@ -1,9 +1,9 @@
 <template>
-  <nav class="w-full h-4rem bg-goku text-bulma py-3 px-8 flex-inline flex-content-between border-(b-1 beerus)">
+  <nav class="border-beerus bg-goku text-bulma h-4rem w-full flex-inline flex-content-between border-(b-1) px-8 py-3">
     <div class="w-fit flex justify-between">
       <slot name="left" />
     </div>
-    <div class="w-full flex justify-end">
+    <div class="flex grow justify-end">
       <slot name="right" />
     </div>
   </nav>

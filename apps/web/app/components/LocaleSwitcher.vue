@@ -1,8 +1,15 @@
 <!-- TODO: use browserDetected language on first app load; Set prefered language cookie on change; -->
 <script setup lang="ts">
+import { UIRichSelect } from "@links/ui";
+import type { HTMLAttributes } from "vue";
+
 const { locale, locales, setLocale } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"];
+}>();
 
 function onChangeLocale(newLocale: string) {
   setLocale(newLocale);
@@ -11,9 +18,17 @@ function onChangeLocale(newLocale: string) {
 </script>
 
 <template>
-  <select class="bg-background fg-foreground" :value="locale" @change.prevent="(e: Event) => onChangeLocale((e.target as HTMLSelectElement).value)">
-    <option v-for="l of locales" :key="l.code" :value="l.code">
-      {{ l.name }}
-    </option>
-  </select>
+  <UIRichSelect.Root @update:model-value="onChangeLocale" :model-value="locale">
+    <UIRichSelect.Trigger :class="props.class">
+      <UIRichSelect.Value />
+    </UIRichSelect.Trigger>
+    <UIRichSelect.Content>
+      <UIRichSelect.Item
+        v-for="l of locales" :key="l.code"
+        :value="l.code"
+      >
+        {{ l.name }}
+      </UIRichSelect.Item>
+    </UIRichSelect.Content>
+  </UIRichSelect.Root>
 </template>

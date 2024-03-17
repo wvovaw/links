@@ -4,18 +4,22 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".output/**", "dist/**"],
-      "dotEnv": [".env.local, .env.test"]
+      "outputs": [".output/**", "dist/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dotEnv": [".env.local, .env.test"]
+      "dotEnv": [".env.local"]
     },
     "lint": { "dependsOn": ["^lint"] },
     "lint:fix": { "dependsOn": ["^lint:fix"] },
     "prepare": { "cache": false },
-    "test": {},
-    "test:watch": { "cache": false }
+    "test": {
+      "dotEnv": [".env.test"]
+    },
+    "test:watch": {
+      "cache": false,
+      "dotEnv": [".env.test"]
+     }
   }
 }

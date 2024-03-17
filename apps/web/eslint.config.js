@@ -25,15 +25,14 @@ export default antfu({
                 "@/app/*",
                 "~/app/*",
               ],
-              message: "Don't use @/app or ~/app import alias. Use ~ prefixed predefined aliases instead (~ui, ~components etc.)",
+              message: "Don't use @/app or ~/app import alias. Use ~ prefixed predefined aliases instead (exmple: ~components)",
             },
             {
               group: [
-                "~ui/*/*",
                 "~components/*/*",
                 "~widgets/*/*",
               ],
-              message: "Only imports through the module's public api is allowed. (ex: ~ui/Input) ",
+              message: "Only imports through the module's public api is allowed. (example: ~components/NavBar) ",
             },
           ],
         },

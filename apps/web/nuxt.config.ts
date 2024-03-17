@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   unocss: {
     preflight: true,
   },
-  css: ["~assets/css/global.css", "~assets/css/moon.css", "~assets/css/shiki.css"],
+  css: ["@links/ui/theme.css", "~assets/css/global.css", "~assets/css/shiki.css"],
   content: {
     markdown: {
       remarkPlugins: {},
@@ -70,5 +70,5 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: false },
   extends: ["nuxt.structure.ts"],
-  watch: ["nuxt.structure.ts", "uno.config.ts", "uno.preset-moon.ts"],
+  watch: ["nuxt.structure.ts", "uno.config.ts"],
 });

@@ -3,11 +3,11 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <div class="w-full grid place-content-center mt-2 mb-5">
-    <div class="flex gap-5 justify-between text-fg font-bold">
+  <div class="grid mb-5 mt-2 w-full place-content-center">
+    <div class="text-fg flex justify-between gap-5 font-bold">
       <NuxtLinkLocale
         to="/"
-        class="underline-offset-4 hover:underline cursor-pointer"
+        class="cursor-pointer underline-offset-4 hover:underline"
         active-class="text-primary underline"
       >
         {{ t("site.pages.homepage.linkTitle") }}
@@ -15,7 +15,7 @@ const { t } = useI18n();
       &VerticalLine;
       <NuxtLinkLocale
         to="about"
-        class="underline-offset-4 hover:underline cursor-pointer"
+        class="cursor-pointer underline-offset-4 hover:underline"
         active-class="text-primary underline"
       >
         {{ t("site.pages.about.linkTitle") }}

@@ -1,0 +1,343 @@
+/* Light theme tokens */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --piccolo: rgba(78 70 180); /* #4e46b4 */
+  --jiren: rgba(78 70 180 / 0.32); /* #4e46b4 */
+  --hit: rgba(64 166 159); /* #40a69f */
+  --jira: rgba(64 166 159 / 0.32); /* #40a69f */
+  --beerus: rgba(226 226 226); /* #e2e2e2 */
+  --gohan: rgba(255 255 255); /* #ffffff */
+  --goten: rgba(255 255 255); /* #ffffff */
+  --goku: rgba(245 245 245); /* #f5f5f5 */
+  --bulma: rgba(0 0 0); /* #000000 */
+  --trunks: rgba(89 93 98); /* #595D62 */
+  --popo: rgba(0 0 0); /* #000000 */
+  --heles: rgba(0 0 0 / 0.12); /* #000000 */
+  --zeno: rgba(0 0 0 / 0.56); /* #000000 */
+
+  /* special colors */
+  --progress: rgba(89 93 98 / .24); /* #595D62 */
+
+  /* support-colors  */
+  --krillin: rgba(255 179 25); /* #ff9800 */
+  --krillin-60: rgba(255 179 25 / 0.56); /* #ff9800 */
+  --krillin-10: rgba(255 179 25 / 0.08); /* #ff9800 */
+
+  --chichi: rgba(255 78 100); /* #ff4e64 */
+  --chichi-60: rgba(255 78 100 / 0.56); /* #ff4e64 */
+  --chichi-10: rgba(255 78 100 / 0.08); /* #ff4e64 */
+
+  --roshi: rgba(46 125 50); /* #2e7d32 */
+  --roshi-60: rgba(46 125 50 / 0.56); /* #2e7d32 */
+  --roshi-10: rgba(46 125 50/ 0.08); /* #2e7d32 */
+
+  --dodoria: rgba(211 48 48); /* #d33030 */
+  --dodoria-60: rgba(211 48 48 / 0.56); /* #d33030 */
+  --dodoria-10: rgba(211 48 48 / 0.08); /* #d33030 */
+
+  --cell: rgba(149 241 213); /* #95f1d5 */
+  --cell-60: rgba(149 241 213 / 0.56); /* #95f1d5 */
+  --cell-10: rgba(149 241 213 / 0.08); /* #95f1d5 */
+
+  --raditz: rgba(179 128 74); /* #b3804a */
+  --raditz-60: rgba(179 128 74 / 0.56); /* #b3804a */
+  --raditz-10: rgba(179 128 74 / 0.08); /* #b3804a */
+
+  --whis: rgba(52 72 240); /* #3448f0 */
+  --whis-60: rgba(52 72 240 / 0.56); /* #3448f0 */
+  --whis-10: rgba(52 72 240 / 0.08); /* #3448f0 */
+
+  --frieza: rgba(92 51 207); /* #5c33cf */
+  --frieza-60: rgba(92 51 207 / 0.56); /* #5c33cf */
+  --frieza-10: rgba(92 51 207 / 0.08); /* #5c33cf */
+
+  --nappa: rgba(114 85 80); /* #725550 */
+  --nappa-60: rgba(114 85 80 / 0.56); /* #725550 */
+  --nappa-10: rgba(114 85 80 / 0.08); /* #725550 */
+
+  /* border-radius */
+  --radius-i-xs: 0.25rem; /* 4px */
+  --radius-i-sm: 0.5rem; /* 8px */
+  --radius-i-md: 0.75rem; /* 12px */
+  --radius-s-xs: 0.25rem; /* 4px */
+  --radius-s-sm: 0.5rem; /* 8px */
+  --radius-s-md: 0.75rem; /* 12px */
+  --radius-s-lg: 1rem; /* 16px */
+
+  /* border-width */
+  --border-width: 0.0625rem; /* 1px */
+  --border-i-width: 0.125rem; /* 2px */
+
+  /* opacity */
+  --opacity-moon: 0.6;
+
+  /* fonts */
+  /* --averta: "Averta Bold Italic"; */
+  --averta: "Averta Std";
+  --dm-sans: 'DM Sans';
+
+  /* box-shadow */
+  --shadow-xs: 0 4px 12px -6px rgb(0 0 0 / 0.06);
+  --shadow-sm: 0 6px 6px -6px rgb(0 0 0 / 0.16), 0 0 1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 12px 12px -6px rgb(0 0 0 / 0.16), 0 0 1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 8px 24px -6px rgb(0 0 0 / 0.16), 0 0 1px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 32px 32px -8px rgb(0 0 0 / 0.08), 0 0 32px -8px rgb(0 0 0 / 0.12), 0 0 1px rgb(0 0 0 / 0.2);
+}
+
+/* Dark theme tokens */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --piccolo: rgba(91 80 238); /* #5b50ee */
+  --jiren: rgba(91 80 238 / 0.32); /* #5b50ee */
+  --hit: rgba(64 166 159); /* #40a69f */
+  --jira: rgba(64 166 159 / 0.32); /* #40a69f */
+  --beerus: rgba(68 68 68); /* #444444 */
+  --gohan: rgba(31 31 31); /* #1f1f1f */
+  --goten: rgba(255 255 255); /* #ffffff */
+  --goku: rgba(11 11 11); /* #0b0b0b */
+  --bulma: rgba(255 255 255); /* #ffffff */
+  --trunks: rgba(153 156 160); /* #999ca0 */
+  --popo: rgba(0 0 0); /* #000000 */
+  --heles: rgba(255 255 255 / 0.13); /* #ffffff */
+  --zeno: rgba(0 0 0 / 0.56); /* #000000 */
+
+  /* special colors */
+  --progress: rgba(153 156 160 / .24); /* #999ca0 */
+
+  /* support-colors  */
+  --krillin: rgba(255 179 25); /* #ff9800 */
+  --krillin-60: rgba(255 179 25 / 0.56); /* #ff9800 */
+  --krillin-10: rgba(255 179 25 / 0.08); /* #ff9800 */
+
+  --chichi: rgba(255 78 100); /* #ff4e64 */
+  --chichi-60: rgba(255 78 100 / 0.56); /* #ff4e64 */
+  --chichi-10: rgba(255 78 100 / 0.08); /* #ff4e64 */
+
+  --roshi: rgba(46 125 50); /* #2e7d32 */
+  --roshi-60: rgba(46 125 50 / 0.56); /* #2e7d32 */
+  --roshi-10: rgba(46 125 50 / 0.08); /* #2e7d32 */
+
+  --dodoria: rgba(211 48 48); /* #d33030 */
+  --dodoria-60: rgba(211 48 48 / 0.56); /* #d33030 */
+  --dodoria-10: rgba(211 48 48 / 0.08); /* #d33030 */
+
+  --cell: rgba(149 241 213); /* #95f1d5 */
+  --cell-60: rgba(149 241 213 / 0.56); /* #95f1d5 */
+  --cell-10: rgba(149 241 213 / 0.08); /* #95f1d5 */
+
+  --raditz: rgba(179 128 74); /* #b3804a */
+  --raditz-60: rgba(179 128 74 / 0.56); /* #b3804a */
+  --raditz-10: rgba(179 128 74 / 0.08); /* #b3804a */
+
+  --whis: rgba(52 72 240); /* #3448f0 */
+  --whis-60: rgba(52 72 240 / 0.56); /* #3448f0 */
+  --whis-10: rgba(52 72 240 / 0.08); /* #3448f0 */
+
+  --frieza: rgba(92 51 207); /* #5c33cf */
+  --frieza-60: rgba(92 51 207 / 0.56); /* #5c33cf */
+  --frieza-10: rgba(92 51 207 / 0.08); /* #5c33cf */
+
+  --nappa: rgba(114 85 80); /* #725550 */
+  --nappa-60: rgba(114 85 80 / 0.56); /* #725550 */
+  --nappa-10: rgba(114 85 / 800.08); /* #725550 */
+
+  /* border-radius */
+  --radius-i-xs: 0.25rem; /* 4px */
+  --radius-i-sm: 0.5rem; /* 8px */
+  --radius-i-md: 0.75rem; /* 12px */
+  --radius-s-xs: 0.25rem; /* 4px */
+  --radius-s-sm: 0.5rem; /* 8px */
+  --radius-s-md: 0.75rem; /* 12px */
+  --radius-s-lg: 1rem; /* 16px */
+
+  /* border-width */
+  --border-width: 0.0625rem; /* 1px */
+  --border-i-width: 0.125rem; /* 2px */
+
+  /* opacity */
+  --opacity-moon: 0.6;
+
+  /* fonts */
+  --averta: "Averta Std";
+  --dm-sans: 'DM Sans';
+
+  /* box-shadow */
+  --shadow-xs: 0 4px 12px -6px rgb(0 0 0 / 0.64);
+  --shadow-sm: 0 6px 6px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
+  --shadow-md: 0 12px 12px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
+  --shadow-lg: 0 24px 24px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
+  --shadow-xl: 0 48px 48px -6px rgb(0 0 0 / 0.88), 0 0 1px rgb(0 0 0 / 0.72);
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] {
+    color-scheme: light;
+    --piccolo: rgba(78 70 180); /* #4e46b4 */
+    --jiren: rgba(78 70 180 / 0.32); /* #4e46b4 */
+    --hit: rgba(64 166 159); /* #40a69f */
+    --jira: rgba(64 166 159 / 0.32); /* #40a69f */
+    --beerus: rgba(226 226 226); /* #e2e2e2 */
+    --gohan: rgba(255 255 255); /* #ffffff */
+    --goten: rgba(255 255 255); /* #ffffff */
+    --goku: rgba(245 245 245); /* #f5f5f5 */
+    --bulma: rgba(0 0 0); /* #000000 */
+    --trunks: rgba(89 93 98); /* #595D62 */
+    --popo: rgba(0 0 0); /* #000000 */
+    --heles: rgba(0 0 0 / 0.12); /* #000000 */
+    --zeno: rgba(0 0 0 / 0.56); /* #000000 */
+
+    /* special colors */
+    --progress: rgba(89 93 98 / .24); /* #595D62 */
+
+    /* support-colors  */
+    --krillin: rgba(255 179 25); /* #ff9800 */
+    --krillin-60: rgba(255 179 25 / 0.56); /* #ff9800 */
+    --krillin-10: rgba(255 179 25 / 0.08); /* #ff9800 */
+
+    --chichi: rgba(255 78 100); /* #ff4e64 */
+    --chichi-60: rgba(255 78 100 / 0.56); /* #ff4e64 */
+    --chichi-10: rgba(255 78 100 / 0.08); /* #ff4e64 */
+
+    --roshi: rgba(46 125 50); /* #2e7d32 */
+    --roshi-60: rgba(46 125 50 / 0.56); /* #2e7d32 */
+    --roshi-10: rgba(46 125 50/ 0.08); /* #2e7d32 */
+
+    --dodoria: rgba(211 48 48); /* #d33030 */
+    --dodoria-60: rgba(211 48 48 / 0.56); /* #d33030 */
+    --dodoria-10: rgba(211 48 48 / 0.08); /* #d33030 */
+
+    --cell: rgba(149 241 213); /* #95f1d5 */
+    --cell-60: rgba(149 241 213 / 0.56); /* #95f1d5 */
+    --cell-10: rgba(149 241 213 / 0.08); /* #95f1d5 */
+
+    --raditz: rgba(179 128 74); /* #b3804a */
+    --raditz-60: rgba(179 128 74 / 0.56); /* #b3804a */
+    --raditz-10: rgba(179 128 74 / 0.08); /* #b3804a */
+
+    --whis: rgba(52 72 240); /* #3448f0 */
+    --whis-60: rgba(52 72 240 / 0.56); /* #3448f0 */
+    --whis-10: rgba(52 72 240 / 0.08); /* #3448f0 */
+
+    --frieza: rgba(92 51 207); /* #5c33cf */
+    --frieza-60: rgba(92 51 207 / 0.56); /* #5c33cf */
+    --frieza-10: rgba(92 51 207 / 0.08); /* #5c33cf */
+
+    --nappa: rgba(114 85 80); /* #725550 */
+    --nappa-60: rgba(114 85 80 / 0.56); /* #725550 */
+    --nappa-10: rgba(114 85 80 / 0.08); /* #725550 */
+
+    /* border-radius */
+    --radius-i-xs: 0.25rem; /* 4px */
+    --radius-i-sm: 0.5rem; /* 8px */
+    --radius-i-md: 0.75rem; /* 12px */
+    --radius-s-xs: 0.25rem; /* 4px */
+    --radius-s-sm: 0.5rem; /* 8px */
+    --radius-s-md: 0.75rem; /* 12px */
+    --radius-s-lg: 1rem; /* 16px */
+
+    /* border-width */
+    --border-width: 0.0625rem; /* 1px */
+    --border-i-width: 0.125rem; /* 2px */
+
+    /* opacity */
+    --opacity-moon: 0.6;
+
+    /* fonts */
+    /* --averta: "Averta Bold Italic"; */
+    --averta: "Averta Std";
+    --dm-sans: 'DM Sans';
+
+    /* box-shadow */
+    --shadow-xs: 0 4px 12px -6px rgb(0 0 0 / 0.06);
+    --shadow-sm: 0 6px 6px -6px rgb(0 0 0 / 0.16), 0 0 1px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 12px 12px -6px rgb(0 0 0 / 0.16), 0 0 1px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 8px 24px -6px rgb(0 0 0 / 0.16), 0 0 1px rgb(0 0 0 / 0.4);
+    --shadow-xl: 0 32px 32px -8px rgb(0 0 0 / 0.08), 0 0 32px -8px rgb(0 0 0 / 0.12), 0 0 1px rgb(0 0 0 / 0.2);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    color-scheme: dark;
+    --piccolo: rgba(91 80 238); /* #5b50ee */
+    --jiren: rgba(91 80 238 / 0.32); /* #5b50ee */
+    --hit: rgba(64 166 159); /* #40a69f */
+    --jira: rgba(64 166 159 / 0.32); /* #40a69f */
+    --beerus: rgba(68 68 68); /* #444444 */
+    --gohan: rgba(31 31 31); /* #1f1f1f */
+    --goten: rgba(255 255 255); /* #ffffff */
+    --goku: rgba(11 11 11); /* #0b0b0b */
+    --bulma: rgba(255 255 255); /* #ffffff */
+    --trunks: rgba(153 156 160); /* #999ca0 */
+    --popo: rgba(0 0 0); /* #000000 */
+    --heles: rgba(255 255 255 / 0.13); /* #ffffff */
+    --zeno: rgba(0 0 0 / 0.56); /* #000000 */
+
+    /* special colors */
+    --progress: rgba(153 156 160 / .24); /* #999ca0 */
+
+    /* support-colors  */
+    --krillin: rgba(255 179 25); /* #ff9800 */
+    --krillin-60: rgba(255 179 25 / 0.56); /* #ff9800 */
+    --krillin-10: rgba(255 179 25 / 0.08); /* #ff9800 */
+
+    --chichi: rgba(255 78 100); /* #ff4e64 */
+    --chichi-60: rgba(255 78 100 / 0.56); /* #ff4e64 */
+    --chichi-10: rgba(255 78 100 / 0.08); /* #ff4e64 */
+
+    --roshi: rgba(46 125 50); /* #2e7d32 */
+    --roshi-60: rgba(46 125 50 / 0.56); /* #2e7d32 */
+    --roshi-10: rgba(46 125 50 / 0.08); /* #2e7d32 */
+
+    --dodoria: rgba(211 48 48); /* #d33030 */
+    --dodoria-60: rgba(211 48 48 / 0.56); /* #d33030 */
+    --dodoria-10: rgba(211 48 48 / 0.08); /* #d33030 */
+
+    --cell: rgba(149 241 213); /* #95f1d5 */
+    --cell-60: rgba(149 241 213 / 0.56); /* #95f1d5 */
+    --cell-10: rgba(149 241 213 / 0.08); /* #95f1d5 */
+
+    --raditz: rgba(179 128 74); /* #b3804a */
+    --raditz-60: rgba(179 128 74 / 0.56); /* #b3804a */
+    --raditz-10: rgba(179 128 74 / 0.08); /* #b3804a */
+
+    --whis: rgba(52 72 240); /* #3448f0 */
+    --whis-60: rgba(52 72 240 / 0.56); /* #3448f0 */
+    --whis-10: rgba(52 72 240 / 0.08); /* #3448f0 */
+
+    --frieza: rgba(92 51 207); /* #5c33cf */
+    --frieza-60: rgba(92 51 207 / 0.56); /* #5c33cf */
+    --frieza-10: rgba(92 51 207 / 0.08); /* #5c33cf */
+
+    --nappa: rgba(114 85 80); /* #725550 */
+    --nappa-60: rgba(114 85 80 / 0.56); /* #725550 */
+    --nappa-10: rgba(114 85 / 800.08); /* #725550 */
+
+    /* border-radius */
+    --radius-i-xs: 0.25rem; /* 4px */
+    --radius-i-sm: 0.5rem; /* 8px */
+    --radius-i-md: 0.75rem; /* 12px */
+    --radius-s-xs: 0.25rem; /* 4px */
+    --radius-s-sm: 0.5rem; /* 8px */
+    --radius-s-md: 0.75rem; /* 12px */
+    --radius-s-lg: 1rem; /* 16px */
+
+    /* border-width */
+    --border-width: 0.0625rem; /* 1px */
+    --border-i-width: 0.125rem; /* 2px */
+
+    /* opacity */
+    --opacity-moon: 0.6;
+
+    /* fonts */
+    --averta: "Averta Std";
+    --dm-sans: 'DM Sans';
+
+    /* box-shadow */
+    --shadow-xs: 0 4px 12px -6px rgb(0 0 0 / 0.64);
+    --shadow-sm: 0 6px 6px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
+    --shadow-md: 0 12px 12px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
+    --shadow-lg: 0 24px 24px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
+    --shadow-xl: 0 48px 48px -6px rgb(0 0 0 / 0.88), 0 0 1px rgb(0 0 0 / 0.72);
+  }
+}

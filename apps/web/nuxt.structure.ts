@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
  */
 export default defineNuxtConfig({
   alias: {
-    "~ui": fileURLToPath(new URL("./app/ui", import.meta.url)),
     "~components": fileURLToPath(new URL("./app/components", import.meta.url)),
     "~widgets": fileURLToPath(new URL("./app/widgets", import.meta.url)),
     "~composables": fileURLToPath(new URL("./app/composables", import.meta.url)),
@@ -45,7 +44,7 @@ export default defineNuxtConfig({
     dirs: [
       {
         /* Global Vue components available in nuxt-content MDC */
-        path: "app/components/_content",
+        path: "app/components/global",
         global: true,
       },
     ],

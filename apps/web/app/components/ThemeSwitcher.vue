@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UIButton } from "~ui/Button";
+import { UIButton } from "@links/ui";
 import { useThemeStore } from "~stores/theme.store";
 
 defineProps<{
@@ -21,9 +21,9 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <UIButton class="active:none" :icon="icon" @click="cycle">
+  <UIButton v-if="!!iconOnly" class="active:none" :icon="icon" @click="cycle" />
+  <UIButton v-else class="active:none" :icon="icon" @click="cycle">
     <span
-      v-if="!iconOnly"
       class="ml-2 capitalize"
     >{{ state }}</span>
   </UIButton>

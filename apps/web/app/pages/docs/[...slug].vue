@@ -35,10 +35,10 @@ definePageMeta({ layout: "docs" });
 <template>
   <ContentDoc>
     <template #default="{ doc }">
-      <div class="md:grid md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)] lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] gap-8">
-        <DocsAsideNavigation class="hidden md:block " />
-        <main class="p-4 lg:p-0 max-w-screen-lg">
-          <ContentRenderer v-if="doc" ref="contentRenderer" :value="doc" class="nuxt-content prose w-full max-w-full" />
+      <div class="gap-8 md:grid lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)]">
+        <DocsAsideNavigation class="hidden md:block" />
+        <main class="max-w-screen-lg p-4 lg:p-0">
+          <ContentRenderer v-if="doc" ref="contentRenderer" :value="doc" class="nuxt-content max-w-full w-full prose" />
         </main>
         <DocsTableOfContents :value="doc" :active-toc-id="activeTocId" class="hidden lg:block" />
       </div>

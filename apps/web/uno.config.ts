@@ -2,7 +2,7 @@ import { defineConfig, presetIcons, presetTypography, presetUno, presetWebFonts,
 import presetAnimations from "unocss-preset-animations";
 import transformerDirectives from "@unocss/transformer-directives";
 import extractorMdc from "@unocss/extractor-mdc";
-import presetMoonDS from "./uno.preset-moon";
+import linksUIPreset from "@links/ui/preset";
 
 export default defineConfig({
   theme: {
@@ -11,7 +11,7 @@ export default defineConfig({
   },
   presets: [
     presetUno(),
-    presetMoonDS(),
+    linksUIPreset(),
     presetIcons({
       collections: {
         "lucide": () => import("@iconify-json/lucide/icons.json").then(i => i.default),
