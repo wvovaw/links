@@ -28,7 +28,7 @@ import { UIButton } from "~ui/Button";
       </UIAlert.Actions>
     </UIAlert.Root>
 
-    <UIAlert.Root class="bg-chichi-10! border border-chichi text-chichi">
+    <UIAlert.Root class="border border-chichi text-chichi bg-chichi-10!">
       <UIAlert.Title>
         <span class="i-lucide:alert-octagon text-moon-18" />
         Example 3

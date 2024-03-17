@@ -10,9 +10,9 @@ const { data: componentsNav } = await useAsyncData(`components-nav`, () => query
 </script>
 
 <template>
-  <aside class="sticky h-100vh top-0 border-(r-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
+  <aside class="sticky top-0 h-100vh border-(r-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
     <UIScrollArea as-child bar-class="bg-transparent py-2" thumb-class="bg-heles!" type="auto">
-      <nav class="py-6 px-4">
+      <nav class="px-4 py-6">
         <NavMenuSection :links="rootNav" title="index" />
         <NavMenuSection :links="componentsNav" title="components" />
       </nav>

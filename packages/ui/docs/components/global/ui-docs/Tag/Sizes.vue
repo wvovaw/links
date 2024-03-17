@@ -5,13 +5,13 @@ import { UITag } from "~ui/Tag";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex gap-2 justify-around">
+    <div class="w-full flex justify-around gap-2">
       <UITag size="xs">
         xs size
       </UITag>
       <UITag>sm size</UITag>
     </div>
-    <div class="w-full flex gap-2 justify-around">
+    <div class="w-full flex justify-around gap-2">
       <UITag size="xs" variant="outline">
         xs size
       </UITag>

@@ -20,7 +20,7 @@ import { UIButton } from "~ui/Button";
             as-child
           >
             <UIButton
-              class="w-8 h-8"
+              class="h-8 w-8"
               size="sm"
               :variant="item.value === page ? 'fill' : 'ghost'"
             >

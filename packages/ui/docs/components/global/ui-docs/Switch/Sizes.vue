@@ -5,7 +5,7 @@ import { UISwitch } from "~ui/Switch";
 
 <template>
   <PreviewBox>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UISwitch size="xs" />
       <UISwitch size="sm" />
       <UISwitch />

@@ -5,7 +5,7 @@ import { UIRichSelect } from "~ui/RichSelect";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex flex-row flex-wrap gap-4 justify-around">
+    <div class="w-full flex flex-row flex-wrap justify-around gap-4">
       <UIRichSelect.Root>
         <UIRichSelect.Trigger size="sm" class="max-w-54">
           <UIRichSelect.Value placeholder="Select a fruit" />

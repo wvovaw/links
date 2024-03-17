@@ -5,9 +5,9 @@ import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
 
 <template>
   <PreviewFrame variant="outline">
-    <div class="flex flex-rows flex-wrap justify-around gap-4">
-      <div class="border border-beerus rounded-moon-s-md p-4 w-full sm:w-xs bg-gohan">
-        <h5 class="text-moon-16 mb-2">
+    <div class="flex-rows flex flex-wrap justify-around gap-4">
+      <div class="w-full border border-beerus rounded-moon-s-md bg-gohan p-4 sm:w-xs">
+        <h5 class="mb-2 text-moon-16">
           Define by group
         </h5>
         <UIRadioGroup color="piccolo">
@@ -37,8 +37,8 @@ import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
           </span>
         </UIRadioGroup>
       </div>
-      <div class="border border-beerus rounded-moon-s-md p-4 w-full sm:w-xs bg-gohan">
-        <h5 class="text-moon-16 mb-2">
+      <div class="w-full border border-beerus rounded-moon-s-md bg-gohan p-4 sm:w-xs">
+        <h5 class="mb-2 text-moon-16">
           Override when needed
         </h5>
         <UIRadioGroup color="piccolo">

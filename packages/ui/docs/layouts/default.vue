@@ -11,7 +11,7 @@ const version = pack.version;
     <Body>
       <NavigationBar>
         <template #left>
-          <span class="font-averta font-semibold text-2xl text-center flex items-center flex gap-2 align-end">
+          <span class="flex flex items-center gap-2 text-center align-end text-2xl font-semibold font-averta">
             {{ name }} <UITag size="xs">{{ version }}</UITag>
           </span>
         </template>

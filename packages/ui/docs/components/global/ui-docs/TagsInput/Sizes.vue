@@ -8,7 +8,7 @@ const modelValue3 = ref(["Kari"]);
 </script>
 
 <template>
-  <PreviewFrame class="sm:grid! grid-cols-3">
+  <PreviewFrame class="grid-cols-3 sm:grid!">
     <UITagsInput v-model="modelValue1" size="sm" full-width>
       <UITagsInputItem v-for="item in modelValue1" :key="item" :value="item" />
       <UITagsInputInput placeholder="Fruits..." />

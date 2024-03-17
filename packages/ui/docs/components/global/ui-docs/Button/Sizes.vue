@@ -8,7 +8,7 @@ import { UIButton } from "~ui/Button";
     <h4 class="w-full text-start">
       With no icons
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIButton size="xs">
         XS Button
       </UIButton>
@@ -28,7 +28,7 @@ import { UIButton } from "~ui/Button";
     <h4 class="w-full text-start">
       With icons left
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIButton size="xs" icon="i-lucide:box">
         XS Button
       </UIButton>
@@ -48,7 +48,7 @@ import { UIButton } from "~ui/Button";
     <h4 class="w-full text-start">
       With icons right
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIButton size="xs" icon="i-lucide:box" icon-pos="right">
         XS Button
       </UIButton>

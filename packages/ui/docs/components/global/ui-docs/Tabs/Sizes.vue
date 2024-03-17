@@ -5,7 +5,7 @@ import { UITabs, UITabsList, UITabsTrigger } from "~ui/Tabs";
 
 <template>
   <PreviewFrame variant="outline">
-    <div class="w-full flex flex-wrap gap-4 justify-around sm:grid sm:grid-cols-3 place-items-center">
+    <div class="w-full flex flex-wrap place-items-center justify-around gap-4 sm:grid sm:grid-cols-3">
       <UITabs default-value="1" as-child>
         <UITabsList size="sm">
           <UITabsTrigger value="1">
@@ -39,7 +39,7 @@ import { UITabs, UITabsList, UITabsTrigger } from "~ui/Tabs";
         </UITabsList>
       </UITabs>
     </div>
-    <div class="w-full flex flex-wrap gap-4 justify-around sm:grid sm:grid-cols-3 place-items-center">
+    <div class="w-full flex flex-wrap place-items-center justify-around gap-4 sm:grid sm:grid-cols-3">
       <UITabs default-value="1" as-child>
         <UITabsList size="sm" variant="tab">
           <UITabsTrigger value="1">

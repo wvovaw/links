@@ -29,7 +29,7 @@ const title = computed(() => t(route.meta.title as string));
     <Body>
       <NavigationBar>
         <template #left>
-          <div class="font-averta flex items-center text-center text-2xl font-semibold">
+          <div class="flex items-center text-center text-2xl font-semibold font-averta">
             {{ t("site.sitename") }}
           </div>
         </template>

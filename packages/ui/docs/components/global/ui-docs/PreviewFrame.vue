@@ -2,6 +2,10 @@
 import { type VariantProps, cva } from "cva";
 import type { HTMLAttributes } from "vue";
 
+const props = defineProps<{
+  class?: HTMLAttributes["class"];
+  variant?: PreviewFrameVariants["variant"];
+}>();
 const previewFrameVariants = cva("flex flex-wrap items-center justify-around p-4 gap-2 w-full text-moon-14 rounded-moon-s-sm not-prose", {
   variants: {
     variant: {
@@ -14,11 +18,6 @@ const previewFrameVariants = cva("flex flex-wrap items-center justify-around p-4
   },
 });
 type PreviewFrameVariants = VariantProps<typeof previewFrameVariants>;
-
-const props = defineProps<{
-  class?: HTMLAttributes["class"];
-  variant?: PreviewFrameVariants["variant"];
-}>();
 </script>
 
 <!-- TODO: add preview/code tabs with code preview -->

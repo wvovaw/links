@@ -5,7 +5,7 @@ import { UITag } from "~ui/Tag";
 
 <template>
   <PreviewFrame>
-    <UITag class="rounded-none shadow-sm shadow-bulma text-moon-14 font-bold! bg-frieza-60! text-cell!">
+    <UITag class="rounded-none text-moon-14 shadow-bulma shadow-sm bg-frieza-60! text-cell! font-bold!">
       Customized
     </UITag>
   </PreviewFrame>

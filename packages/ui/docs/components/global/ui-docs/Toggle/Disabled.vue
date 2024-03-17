@@ -8,7 +8,7 @@ import { UIToggle } from "~ui/Toggle";
     <h4 class="w-full text-start">
       Default
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIToggle disabled>
         default
       </UIToggle>
@@ -23,7 +23,7 @@ import { UIToggle } from "~ui/Toggle";
     <h4 class="w-full text-start">
       Ghost
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIToggle variant="ghost" disabled>
         Ghost
       </UIToggle>

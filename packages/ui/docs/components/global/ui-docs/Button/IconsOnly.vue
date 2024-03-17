@@ -9,7 +9,7 @@ import { UIButton } from "~ui/Button";
     <h4 class="w-full text-start">
       Self-closing tag
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIButton size="xs" icon="i-lucide:box" aria-label="icon only element" />
       <UIButton size="sm" icon="i-lucide:box" aria-label="icon only element" />
       <UIButton icon="i-lucide:box" aria-label="icon only element" />
@@ -19,7 +19,7 @@ import { UIButton } from "~ui/Button";
     <h4 class="w-full text-start">
       Tag pair with no slot content
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIButton size="xl" icon="i-lucide:box" aria-label="icon only element"></UIButton>
       <UIButton size="lg" icon="i-lucide:box" aria-label="icon only element"></UIButton>
       <UIButton icon="i-lucide:box" aria-label="icon only element"></UIButton>

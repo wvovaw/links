@@ -32,10 +32,12 @@
     "docs:prepare": "nuxt prepare --cwd docs",
     "docs:lint": "eslint --config docs/eslint.config.js docs",
     "docs:lint:fix": "eslint --fix --config docs/eslint.config.js docs",
-    "build": "unbuild",
-    "lint": "eslint --ignore-pattern \"docs\" .",
-    "lint:fix": "eslint --fix --ignore-pattern \"docs\" .",
-    "prepublishOnly": "pnpm build"
+    "lib:build": "unbuild",
+    "lib:lint": "eslint --ignore-pattern \"docs\" .",
+    "lib:lint:fix": "eslint --fix --ignore-pattern \"docs\" .",
+    "lib:prepublishOnly": "pnpm build",
+    "lint": "pnpm lib:lint && pnpm docs:lint",
+    "lint:fix": "pnpm lib:lint:fix && pnpm docs:lint:fix"
   },
   "peerDependencies": {
     "@iconify-json/lucide": "^1.1.173",

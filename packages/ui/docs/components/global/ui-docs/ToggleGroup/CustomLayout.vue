@@ -7,7 +7,7 @@ const cell = ref();
 
 <template>
   <PreviewFrame>
-    <UIToggleGroup v-model="cell" color="hit" with-stroke class="grid! grid-cols-3 grid-rows-3 gap-3">
+    <UIToggleGroup v-model="cell" color="hit" with-stroke class="grid-cols-3 grid-rows-3 gap-3 grid!">
       <UIToggleGroupItem value="1" icon="i-lucide:move-up-left" />
       <UIToggleGroupItem value="2" icon="i-lucide:move-up" />
       <UIToggleGroupItem value="3" icon="i-lucide:move-up-right" />

@@ -2,6 +2,13 @@
 import { Slot } from "radix-vue";
 import { UIButton } from "~ui/Button";
 
+withDefaults(defineProps<{
+  filename?: string;
+  lang?: keyof (typeof icons);
+}>(), {
+  lang: "text",
+});
+
 const icons = {
   ts: "i-vscode-icons:file-type-typescript-official",
   js: "i-vscode-icons:file-type-js-official",
@@ -12,12 +19,6 @@ const icons = {
   shell: "i-lucide:terminal",
 };
 
-withDefaults(defineProps<{
-  filename?: string;
-  lang?: keyof (typeof icons);
-}>(), {
-  lang: "text",
-});
 const slots = useSlots();
 const code = slots.default ? slots.default()[0].props?.code as string : undefined;
 const { copy, copied, isSupported } = useClipboard({ source: code });
@@ -25,9 +26,9 @@ const { copy, copied, isSupported } = useClipboard({ source: code });
 
 <template>
   <section class="my-5">
-    <div class="flex items-center gap-1.5 border border-beerus bg-heles border-b-0 rounded-t-moon-s-xs px-4 py-3 h-14 not-prose">
-      <span :class="icons[lang]" class="w-5 h-5" />
-      <span class="text-trunks text-moon-14 grow">{{ filename }}</span>
+    <div class="not-prose h-14 flex items-center gap-1.5 border border-b-0 border-beerus rounded-t-moon-s-xs bg-heles px-4 py-3">
+      <span :class="icons[lang]" class="h-5 w-5" />
+      <span class="grow text-moon-14 text-trunks">{{ filename }}</span>
       <ClientOnly>
         <UIButton
           v-if="code && isSupported"
@@ -39,7 +40,7 @@ const { copy, copied, isSupported } = useClipboard({ source: code });
         />
       </ClientOnly>
     </div>
-    <Slot class="border border-beerus rounded-b-moon-s-xs my-0 p-4 rounded-t-none">
+    <Slot class="my-0 border border-beerus rounded-b-moon-s-xs rounded-t-none p-4">
       <ContentSlot :use="$slots.default" />
     </Slot>
   </section>

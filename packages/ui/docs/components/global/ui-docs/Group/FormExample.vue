@@ -15,7 +15,7 @@ function handleSubmit(e: SubmitEvent) {
 
 <template>
   <PreviewFrame>
-    <form class="flex flex-col gap-4 w-sm" @submit.prevent="(e: Event) => handleSubmit(e as SubmitEvent)">
+    <form class="w-sm flex flex-col gap-4" @submit.prevent="(e: Event) => handleSubmit(e as SubmitEvent)">
       <UIGroup>
         <UIInsertInput name="name" label="First Name" placeholder="You name" required />
         <UIInsertInput name="surname" label="Last Name" placeholder="Your surname" required />

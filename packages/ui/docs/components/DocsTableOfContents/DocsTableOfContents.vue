@@ -6,9 +6,9 @@ const tocLinks = computed(() => props.value?.body?.toc?.links ?? []);
 </script>
 
 <template>
-  <aside class="sticky h-100vh top-0 border-(l-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
+  <aside class="sticky top-0 h-100vh border-(l-1 beerus) bg-gohan transition-transform -translate-x-full sm:translate-x-0">
     <UIScrollArea as-child>
-      <nav class="py-6 px-4 text-trunks flex gap-2">
+      <nav class="flex gap-2 px-4 py-6 text-trunks">
         <ul class="toc-h2 space-y-2" data-toc-h2>
           <li
             v-for="{ id, text, children } in tocLinks"

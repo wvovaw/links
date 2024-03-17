@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="ps-2 mt-6 mb-4 text-moon-10-caption font-medium uppercase text-trunks">
+  <div class="mb-4 mt-6 ps-2 text-moon-10-caption text-trunks font-medium uppercase">
     {{ title }}
   </div>
   <ul class="flex flex-col space-y-1">

@@ -7,7 +7,7 @@ const sel = ref();
 
 <template>
   <PreviewFrame>
-    <code class="w-full h-6">value: {{ sel }}</code>
+    <code class="h-6 w-full">value: {{ sel }}</code>
     <UIMenu.Group v-model="sel" type="single" class="w-full">
       <UIMenu.GroupItem value="d1">
         <UIMenu.Icon icon="i-lucide:box" />

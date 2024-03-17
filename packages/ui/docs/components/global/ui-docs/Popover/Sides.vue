@@ -6,7 +6,7 @@ import { UIButton } from "~ui/Button";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex flex-row flex-wrap gap-4 justify-around">
+    <div class="w-full flex flex-row flex-wrap justify-around gap-4">
       <UIPopover>
         <UIPopoverTrigger as-child>
           <UIButton>Left</UIButton>

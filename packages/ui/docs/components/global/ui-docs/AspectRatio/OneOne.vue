@@ -6,7 +6,7 @@ import { UIAspectRatio } from "~ui/AspectRatio";
 <template>
   <PreviewFrame>
     <div class="w-sm">
-      <UIAspectRatio :ratio="1 / 1" class="bg-heles rounded-moon-s-md overflow-hidden">
+      <UIAspectRatio :ratio="1 / 1" class="overflow-hidden rounded-moon-s-md bg-heles">
         <img
           class="h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1709603945846-6901ed447ecd?w=920"

@@ -5,7 +5,7 @@ import { UICheckbox } from "~ui/Checkbox";
 
 <template>
   <PreviewFrame>
-    <div class="w-full grid grid-rows-2 gap-5 place-items-center">
+    <div class="grid grid-rows-2 w-full place-items-center gap-5">
       <div class="flex flex-row gap-5">
         <UICheckbox id="default" default-checked />
         <UICheckbox id="piccolo" default-checked color="piccolo" />

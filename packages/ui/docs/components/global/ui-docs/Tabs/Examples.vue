@@ -7,8 +7,8 @@ import { UIScrollArea } from "~ui/ScrollArea";
 <template>
   <PreviewFrame variant="outline">
     <div class="w-full flex flex-wrap justify-around gap-4">
-      <UITabs default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm flex flex-col max-w-xs shadow-moon-sm">
-        <UITabsList variant="tab" class="border-b-1 px-2 pt-2 border-beerus w-full">
+      <UITabs default-value="2" class="max-w-xs flex flex-col border-(1 beerus) rounded-moon-s-sm bg-gohan shadow-moon-sm">
+        <UITabsList variant="tab" class="w-full border-b-1 border-beerus px-2 pt-2">
           <UITabsTrigger value="1">
             Tab 1
           </UITabsTrigger>
@@ -19,7 +19,7 @@ import { UIScrollArea } from "~ui/ScrollArea";
             Tab 3
           </UITabsTrigger>
         </UITabsList>
-        <UIScrollArea class="p-4 h-[200px]">
+        <UIScrollArea class="h-[200px] p-4">
           <UITabsContent value="1">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu condimentum nulla. In fringilla sapien vitae nunc feugiat commodo. Duis id vulputate tellus, eu consectetur felis. Praesent sit amet pharetra tellus.
           </UITabsContent>
@@ -33,8 +33,8 @@ import { UIScrollArea } from "~ui/ScrollArea";
         </UIScrollArea>
       </UITabs>
 
-      <UITabs orientation="vertical" default-value="2" class="bg-gohan border-(1 beerus) rounded-moon-s-sm max-w-sm grid grid-flow-col shadow-moon-sm">
-        <UITabsList variant="pill" class="border-r-1 border-beerus rounded-r-none cols-span-1 w-[80px]">
+      <UITabs orientation="vertical" default-value="2" class="grid grid-flow-col max-w-sm border-(1 beerus) rounded-moon-s-sm bg-gohan shadow-moon-sm">
+        <UITabsList variant="pill" class="cols-span-1 w-[80px] border-r-1 border-beerus rounded-r-none">
           <UITabsTrigger value="1">
             Tab 1
           </UITabsTrigger>
@@ -45,7 +45,7 @@ import { UIScrollArea } from "~ui/ScrollArea";
             Tab 3
           </UITabsTrigger>
         </UITabsList>
-        <UIScrollArea class="h-[240px] cols-span-2 px-4">
+        <UIScrollArea class="cols-span-2 h-[240px] px-4">
           <UITabsContent value="1">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu condimentum nulla. In fringilla sapien vitae nunc feugiat commodo. Duis id vulputate tellus, eu consectetur felis. Praesent sit amet pharetra tellus.
           </UITabsContent>

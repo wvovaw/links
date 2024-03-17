@@ -8,14 +8,14 @@ import { UIToggle } from "~ui/Toggle";
     <h4 class="w-full text-start">
       With icons only
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIToggle size="sm" icon="i-lucide:italic" />
       <UIToggle icon="i-lucide:italic" />
     </div>
     <h4 class="w-full text-start">
       With icons left
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIToggle size="sm" icon="i-lucide:plus">
         SM toggle
       </UIToggle>
@@ -26,7 +26,7 @@ import { UIToggle } from "~ui/Toggle";
     <h4 class="w-full text-start">
       With icons right
     </h4>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIToggle size="sm" icon="i-lucide:check" icon-pos="right">
         SM toggle
       </UIToggle>

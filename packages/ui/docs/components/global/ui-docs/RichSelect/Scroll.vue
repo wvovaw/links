@@ -5,7 +5,7 @@ import { UIRichSelect } from "~ui/RichSelect";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex flex-row flex-wrap gap-4 justify-around">
+    <div class="w-full flex flex-row flex-wrap justify-around gap-4">
       <div class="w-54">
         <UIRichSelect.Label for="scroll-00">
           Aligned as "popper"

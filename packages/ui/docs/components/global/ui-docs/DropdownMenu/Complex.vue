@@ -20,8 +20,8 @@ import { UIButton } from "~ui/Button";
             <DD.ItemIcon icon="i-lucide:user" />
             <DD.ItemTitle>Profile</DD.ItemTitle>
             <DD.ItemMeta>
-              <span class="block i-lucide:arrow-big-up" />
-              <span class="block i-lucide:command" />
+              <span class="i-lucide:arrow-big-up block" />
+              <span class="i-lucide:command block" />
               &ThinSpace;P
             </DD.ItemMeta>
           </DD.Item>
@@ -29,7 +29,7 @@ import { UIButton } from "~ui/Button";
             <DD.ItemIcon icon="i-lucide:credit-card" />
             <DD.ItemTitle>Billing</DD.ItemTitle>
             <DD.ItemMeta>
-              <span class="block i-lucide:command" />
+              <span class="i-lucide:command block" />
               &ThinSpace;B
             </DD.ItemMeta>
           </DD.Item>
@@ -37,7 +37,7 @@ import { UIButton } from "~ui/Button";
             <DD.ItemIcon icon="i-lucide:settings" />
             <DD.ItemTitle>Settings</DD.ItemTitle>
             <DD.ItemMeta>
-              <span class="block i-lucide:command" />
+              <span class="i-lucide:command block" />
               &ThinSpace;S
             </DD.ItemMeta>
           </DD.Item>
@@ -45,7 +45,7 @@ import { UIButton } from "~ui/Button";
             <DD.ItemIcon icon="i-lucide:keyboard" />
             <DD.ItemTitle>Keyboard shortcuts</DD.ItemTitle>
             <DD.ItemMeta>
-              <span class="block i-lucide:command" />
+              <span class="i-lucide:command block" />
               &ThinSpace;K
             </DD.ItemMeta>
           </DD.Item>
@@ -62,7 +62,7 @@ import { UIButton } from "~ui/Button";
               <DD.Item>
                 <DD.ItemIcon icon="i-lucide:user-plus" />
                 <DD.ItemTitle>Invite users</DD.ItemTitle>
-                <DD.ItemMeta><span class="block i-lucide:chevron-right" /></DD.ItemMeta>
+                <DD.ItemMeta><span class="i-lucide:chevron-right block" /></DD.ItemMeta>
               </DD.Item>
             </DD.SubTrigger>
             <DD.SubContent>
@@ -88,7 +88,7 @@ import { UIButton } from "~ui/Button";
             <DD.ItemIcon icon="i-lucide:plus" />
             <DD.ItemTitle>New team</DD.ItemTitle>
             <DD.ItemMeta>
-              <span class="block i-lucide:command" />
+              <span class="i-lucide:command block" />
               &ThinSpace;T
             </DD.ItemMeta>
           </DD.Item>
@@ -113,8 +113,8 @@ import { UIButton } from "~ui/Button";
           <DD.ItemIcon icon="i-lucide:log-out" />
           <DD.ItemTitle>Log Out</DD.ItemTitle>
           <DD.ItemMeta>
-            <span class="block i-lucide:arrow-big-up" />
-            <span class="block i-lucide:command" />
+            <span class="i-lucide:arrow-big-up block" />
+            <span class="i-lucide:command block" />
             &ThinSpace;Q
           </DD.ItemMeta>
         </DD.Item>

@@ -5,7 +5,7 @@ import { UIInsertInput } from "~ui/Input";
 
 <template>
   <PreviewFrame>
-    <div class="flex flex-col sm:grid grid-cols-3 grid-rows-3 gap-3">
+    <div class="grid-cols-3 grid-rows-3 flex flex-col gap-3 sm:grid">
       <UIInsertInput label="Number" type="number" placeholder="e.g. 12345" />
       <UIInsertInput label="Date" type="date" />
       <UIInsertInput label="Time" type="time" />

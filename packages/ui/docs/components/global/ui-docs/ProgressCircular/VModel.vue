@@ -11,18 +11,18 @@ const { count: progress, inc, dec } = useCounter(10, {
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex flex-row gap-3 justify-center">
+    <div class="w-full flex flex-row justify-center gap-3">
       <UIProgressCircular v-model="progress" size="xs" />
       <UIProgressCircular v-model="progress" size="sm" color="hit" />
       <UIProgressCircular v-model="progress" size="md" color="chichi" />
       <UIProgressCircular v-model="progress" color="krillin" />
       <UIProgressCircular v-model="progress" size="xl" color="roshi" />
     </div>
-    <div class="flex gap-2 flex-row">
+    <div class="flex flex-row gap-2">
       <UIButton size="xs" @click="inc(10)">
         +
       </UIButton>
-      <span class="font-mono w-6 text-center"> {{ progress }} </span>
+      <span class="w-6 text-center font-mono"> {{ progress }} </span>
       <UIButton size="xs" @click="dec(10)">
         -
       </UIButton>

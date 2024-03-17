@@ -10,14 +10,14 @@ const sl = ref([50, 150]);
   <PreviewFrame class="gap-5">
     <UISlider v-model="sl" :step="10" :min="0" :max="200" :n-of-thumbs="2">
       <template #thumb-1="{ value }">
-        <div class="w-12 h-5 absolute -top-28px -left-20px grid place-content-center">
+        <div class="absolute grid h-5 w-12 place-content-center -left-20px -top-28px">
           <UITag size="xs">
             {{ value }}
           </UITag>
         </div>
       </template>
       <template #thumb-2="{ value }">
-        <div class="w-12 h-5 absolute -bottom-28px -left-20px grid place-content-center">
+        <div class="absolute grid h-5 w-12 place-content-center -bottom-28px -left-20px">
           <UITag size="xs" color="hit">
             {{ value }}
           </UITag>

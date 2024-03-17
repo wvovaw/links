@@ -30,7 +30,7 @@ const onSubmit = form.handleSubmit((vals) => {
 
 <template>
   <PreviewFrame>
-    <form class="w-full max-w-xs bg-gohan p-4 border border-beerus rounded-moon-s-md shadow-moon-md space-y-4" @submit.prevent="onSubmit">
+    <form class="max-w-xs w-full border border-beerus rounded-moon-s-md bg-gohan p-4 shadow-moon-md space-y-4" @submit.prevent="onSubmit">
       <UIForm.Field v-slot="{ componentField, errorMessage }" name="email">
         <UIForm.Item>
           <UIForm.Label>Email</UIForm.Label>

@@ -18,7 +18,7 @@ function onChangeLocale(newLocale: string) {
 </script>
 
 <template>
-  <UIRichSelect.Root @update:model-value="onChangeLocale" :model-value="locale">
+  <UIRichSelect.Root :model-value="locale" @update:model-value="onChangeLocale">
     <UIRichSelect.Trigger :class="props.class">
       <UIRichSelect.Value />
     </UIRichSelect.Trigger>

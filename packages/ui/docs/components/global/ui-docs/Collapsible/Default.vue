@@ -5,12 +5,12 @@ import { UICollapsible, UICollapsibleContent, UICollapsibleTrigger } from "~ui/C
 
 <template>
   <PreviewFrame>
-    <UICollapsible class="w-xs bg-goku p-4 rounded-moon-s-sm">
-      <div class="flex flex-row justify-between items-center">
+    <UICollapsible class="w-xs rounded-moon-s-sm bg-goku p-4">
+      <div class="flex flex-row items-center justify-between">
         <span class="text-moon-16 font-bold">Expand this section</span>
         <UICollapsibleTrigger>
-          <div class="w-10 h-10 p-1 rounded-moon-i-sm text-moon-18 grid place-content-center cursor-pointer hover:(bg-jiren text-piccolo) transition-colors">
-            <span class="block i-lucide:chevrons-up-down" />
+          <div class="grid h-10 w-10 cursor-pointer place-content-center rounded-moon-i-sm p-1 text-moon-18 transition-colors hover:(bg-jiren text-piccolo)">
+            <span class="i-lucide:chevrons-up-down block" />
           </div>
         </UICollapsibleTrigger>
       </div>

@@ -16,9 +16,9 @@ watch([inp2], () => {
 
 <template>
   <PreviewFrame>
-    <div class="flex flex-rows flex-wrap justify-around gap-4">
+    <div class="flex-rows flex flex-wrap justify-around gap-4">
       <div
-        class="border-(1 beerus) rounded-moon-s-sm max-w-xs p-4 flex flex-col gap-2"
+        class="max-w-xs flex flex-col gap-2 border-(1 beerus) rounded-moon-s-sm p-4"
       >
         <div class="space-y-2">
           <label class="text-trunks" for="inp-1">Input something</label>
@@ -32,7 +32,7 @@ watch([inp2], () => {
         </div>
       </div>
       <div
-        class="border-(1 beerus) rounded-moon-s-sm max-w-xs p-4 flex flex-col gap-2"
+        class="max-w-xs flex flex-col gap-2 border-(1 beerus) rounded-moon-s-sm p-4"
       >
         <div class="space-y-2">
           <label class="text-trunks" for="inp-2">Input 'Hello World!'</label>

@@ -5,7 +5,7 @@ import { UITabs, UITabsContent, UITabsList, UITabsTrigger } from "~ui/Tabs";
 
 <template>
   <PreviewFrame variant="outline">
-    <div class="w-full flex flex-wrap gap-4 justify-around">
+    <div class="w-full flex flex-wrap justify-around gap-4">
       <UITabs default-value="2">
         <UITabsList variant="tab">
           <UITabsTrigger value="1">

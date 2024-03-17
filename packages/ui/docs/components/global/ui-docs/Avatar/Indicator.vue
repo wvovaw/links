@@ -5,7 +5,7 @@ import { UIAvatar } from "~ui/Avatar";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIAvatar.Root>
         <UIAvatar.Fallback>TL</UIAvatar.Fallback>
         <UIAvatar.Indicator vertical="top" horizontal="start" />
@@ -23,7 +23,7 @@ import { UIAvatar } from "~ui/Avatar";
         <UIAvatar.Indicator vertical="bottom" horizontal="start" />
       </UIAvatar.Root>
     </div>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIAvatar.Root>
         <UIAvatar.Fallback>CH</UIAvatar.Fallback>
         <UIAvatar.Indicator color="chichi" />
@@ -37,7 +37,7 @@ import { UIAvatar } from "~ui/Avatar";
         <UIAvatar.Indicator color="roshi" />
       </UIAvatar.Root>
     </div>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIAvatar.Root>
         <UIAvatar.Fallback>PG</UIAvatar.Fallback>
         <UIAvatar.Indicator color="roshi" :ping="true" />

@@ -5,7 +5,7 @@ import { UITag } from "~ui/Tag";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex gap-2 justify-around">
+    <div class="w-full flex justify-around gap-2">
       <UITag>default</UITag>
       <UITag color="piccolo">
         piccolo
@@ -23,7 +23,7 @@ import { UITag } from "~ui/Tag";
         roshi
       </UITag>
     </div>
-    <div class="w-full flex gap-2 justify-around">
+    <div class="w-full flex justify-around gap-2">
       <UITag variant="outline">
         default
       </UITag>

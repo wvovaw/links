@@ -22,7 +22,7 @@ addRouteMiddleware("theme-cookie-update", () => {
 
 <template>
   <Html :data-theme="cookie.theme" dir="ltr">
-    <Body class="bg-goku text-bulma font-dm-sans font-regular">
+    <Body class="bg-goku text-bulma font-regular font-dm-sans">
       <ConfigProvider :use-id="useIdFunction">
         <UITooltipProvider>
           <NuxtLayout>

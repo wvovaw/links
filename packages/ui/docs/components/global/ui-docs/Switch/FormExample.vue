@@ -12,7 +12,7 @@ function handleSubmit(e: SubmitEvent) {
 <template>
   <PreviewFrame>
     <form
-      class="border-(1 beerus) rounded-moon-s-sm max-w-xs w-full p-4 flex flex-col gap-2"
+      class="max-w-xs w-full flex flex-col gap-2 border-(1 beerus) rounded-moon-s-sm p-4"
       @submit.prevent="(e) => handleSubmit(e as SubmitEvent)"
     >
       <div class="flex items-center space-x-2">

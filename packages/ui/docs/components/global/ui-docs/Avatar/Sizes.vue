@@ -5,7 +5,7 @@ import { UIAvatar } from "~ui/Avatar";
 
 <template>
   <PreviewFrame>
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIAvatar.Root size="xs">
         <UIAvatar.Image
           src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&fit=crop"
@@ -55,40 +55,40 @@ import { UIAvatar } from "~ui/Avatar";
       </UIAvatar.Root>
     </div>
 
-    <div class="w-full flex justify-around items-center">
+    <div class="w-full flex items-center justify-around">
       <UIAvatar.Root size="xs">
         <UIAvatar.Fallback>
-          <span class="block i-lucide:user-2" />
+          <span class="i-lucide:user-2 block" />
         </UIAvatar.Fallback>
       </UIAvatar.Root>
 
       <UIAvatar.Root size="sm">
         <UIAvatar.Fallback>
-          <span class="block i-lucide:user-2" />
+          <span class="i-lucide:user-2 block" />
         </UIAvatar.Fallback>
       </UIAvatar.Root>
 
       <UIAvatar.Root size="md">
         <UIAvatar.Fallback>
-          <span class="block i-lucide:user-2" />
+          <span class="i-lucide:user-2 block" />
         </UIAvatar.Fallback>
       </UIAvatar.Root>
 
       <UIAvatar.Root size="lg">
         <UIAvatar.Fallback>
-          <span class="block i-lucide:user-2" />
+          <span class="i-lucide:user-2 block" />
         </UIAvatar.Fallback>
       </UIAvatar.Root>
 
       <UIAvatar.Root size="xl">
         <UIAvatar.Fallback>
-          <span class="block i-lucide:user-2" />
+          <span class="i-lucide:user-2 block" />
         </UIAvatar.Fallback>
       </UIAvatar.Root>
 
       <UIAvatar.Root size="2xl">
         <UIAvatar.Fallback>
-          <span class="block i-lucide:user-2" />
+          <span class="i-lucide:user-2 block" />
         </UIAvatar.Fallback>
       </UIAvatar.Root>
     </div>
