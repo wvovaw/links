@@ -1,7 +1,7 @@
 {
   "name": "@links/ui",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "sideEffects": false,
   "exports": {
@@ -26,10 +26,10 @@
   ],
   "scripts": {
     "dev": "nuxt dev --cwd docs --port 3002",
+    "prepare": "nuxt prepare --cwd docs",
     "docs:build": "nuxt build --cwd docs",
     "docs:generate": "nuxt generate --cwd docs",
     "docs:preview": "nuxt preview --cwd docs --port 3002",
-    "docs:prepare": "nuxt prepare --cwd docs",
     "docs:lint": "eslint --config docs/eslint.config.js docs",
     "docs:lint:fix": "eslint --fix --config docs/eslint.config.js docs",
     "lib:build": "unbuild",
