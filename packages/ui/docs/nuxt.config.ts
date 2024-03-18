@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 export default defineNuxtConfig({
   modules: [
     "@nuxt/content",
+    "@nuxt/image",
     "@vueuse/nuxt",
     "@unocss/nuxt",
     "@pinia/nuxt",
