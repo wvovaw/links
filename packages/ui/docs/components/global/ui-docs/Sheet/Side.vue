@@ -10,16 +10,24 @@ const side = ref<"right" | "top" | "left" | "bottom">("right");
   <PreviewFrame>
     <UISheet.Root>
       <UISheet.Trigger as-child>
-        <UIButton @click="side = 'top'"> Top </UIButton>
+        <UIButton @click="side = 'top'">
+          Top
+        </UIButton>
       </UISheet.Trigger>
       <UISheet.Trigger as-child>
-        <UIButton @click="side = 'right'"> Right </UIButton>
+        <UIButton @click="side = 'right'">
+          Right
+        </UIButton>
       </UISheet.Trigger>
       <UISheet.Trigger as-child>
-        <UIButton @click="side = 'left'"> Left </UIButton>
+        <UIButton @click="side = 'left'">
+          Left
+        </UIButton>
       </UISheet.Trigger>
       <UISheet.Trigger as-child>
-        <UIButton @click="side = 'bottom'"> Bottom </UIButton>
+        <UIButton @click="side = 'bottom'">
+          Bottom
+        </UIButton>
       </UISheet.Trigger>
       <UISheet.Content :side="side">
         <UISheet.Header>
