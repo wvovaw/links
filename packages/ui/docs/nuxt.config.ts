@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "@lib": fileURLToPath(new URL("../src/lib", import.meta.url)),
     "~ui": fileURLToPath(new URL("../src/lib/components", import.meta.url)),
   },
+  ssr: false,
   content: {
     markdown: {
       remarkPlugins: {},
@@ -26,6 +27,14 @@ export default defineNuxtConfig({
       },
       langs: ["vue", "vue-html", "javascript", "typescript", "css", "sh", "shell"],
     },
+    experimental: {
+      clientDB: true
+    }
+  },
+  nitro: {
+    prerender: {
+      routes: ["/docs"]
+    }
   },
   devtools: { enabled: false },
 });
