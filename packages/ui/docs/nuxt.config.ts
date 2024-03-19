@@ -31,13 +31,16 @@ export default defineNuxtConfig({
       langs: ["vue", "vue-html", "javascript", "typescript", "css", "sh", "shell"],
     },
     experimental: {
-      clientDB: true
-    }
+      clientDB: true,
+    },
   },
   nitro: {
     prerender: {
-      routes: ["/docs"]
-    }
+      routes: ["/docs"],
+    },
+    routeRules: {
+      "/": { redirect: "/docs" },
+    },
   },
   devtools: { enabled: false },
 });
