@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "dev": "nuxt dev --cwd docs --port 3002",
-    "prepare": "nuxt prepare --cwd docs",
+    "prepare": "pnpm run lib:build",
     "docs:build": "nuxt build --cwd docs",
     "docs:generate": "nuxt generate --cwd docs",
     "docs:preview": "nuxt preview --cwd docs --port 3002",

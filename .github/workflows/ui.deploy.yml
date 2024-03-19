@@ -46,9 +46,8 @@ jobs:
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
-        working-directory: ./packages/ui/docs
         with:
-          path: ./.output/public
+          path: ./packages/ui/docs/.output/public
   # Deployment job
   deploy:
     # Add a dependency to the build job
