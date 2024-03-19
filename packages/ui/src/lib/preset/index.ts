@@ -152,7 +152,7 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "0.5625rem",
           {
             "line-height": "1rem",
-            "letterSpacing": "0.0625rem",
+            "letter-spacing": "0.0625rem",
           },
         ],
         "moon-10": [
@@ -165,7 +165,7 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "0.625rem",
           {
             "line-height": "1rem",
-            "letterSpacing": "0.0313rem",
+            "letter-spacing": "0.0313rem",
           },
         ],
         "moon-12": [
@@ -208,42 +208,42 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "2rem",
           {
             "line-height": "2.5rem",
-            "letterSpacing": "-0.03125rem",
+            "letter-spacing": "-0.03125rem",
           },
         ],
         "moon-40": [
           "2.5rem",
           {
             "line-height": "3rem",
-            "letterSpacing": "-0.03125rem",
+            "letter-spacing": "-0.03125rem",
           },
         ],
         "moon-48": [
           "3rem",
           {
             "line-height": "3.5rem",
-            "letterSpacing": "-0.0625rem",
+            "letter-spacing": "-0.0625rem",
           },
         ],
         "moon-56": [
           "3.5rem",
           {
             "line-height": "4rem",
-            "letterSpacing": "-0.09375rem",
+            "letter-spacing": "-0.09375rem",
           },
         ],
         "moon-64": [
           "4rem",
           {
             "line-height": "4.5rem",
-            "letterSpacing": "-0.125rem",
+            "letter-spacing": "-0.125rem",
           },
         ],
         "moon-72": [
           "4.5rem",
           {
             "line-height": "4.75rem",
-            "letterSpacing": "-0.15625rem",
+            "letter-spacing": "-0.15625rem",
           },
         ],
       },
