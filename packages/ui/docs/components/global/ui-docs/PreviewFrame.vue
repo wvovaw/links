@@ -9,7 +9,7 @@ const props = defineProps<{
 const previewFrameVariants = cva("flex flex-wrap items-center justify-around p-4 gap-2 w-full text-moon-14 rounded-moon-s-sm not-prose", {
   variants: {
     variant: {
-      default: "bg-gohan ",
+      default: "bg-gohan pattern shadow-moon-sm",
       outline: "border border-beerus",
     },
   },
@@ -23,7 +23,7 @@ type PreviewFrameVariants = VariantProps<typeof previewFrameVariants>;
 <!-- TODO: add preview/code tabs with code preview -->
 <template>
   <section class="my-5">
-    <div class="pattern shadow-moon-sm" :class="[previewFrameVariants({ variant }), props.class]">
+    <div :class="[previewFrameVariants({ variant }), props.class]">
       <slot />
     </div>
   </section>
