@@ -19,7 +19,18 @@ const version = pack.version;
           <ThemeSwitcher />
         </template>
       </NavigationBar>
-      <slot />
+
+      <ContentDoc>
+        <template #default="{ doc }">
+          <div class="gap-8 md:grid lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)]">
+            <DocsAsideNavigation class="hidden md:block" />
+            <main class="max-w-screen-lg p-4 lg:p-0">
+              <slot />
+            </main>
+            <DocsTableOfContents :value="doc" class="hidden lg:block" />
+          </div>
+        </template>
+      </ContentDoc>
     </Body>
   </Html>
 </template>
