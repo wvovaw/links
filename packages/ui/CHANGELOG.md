@@ -1,5 +1,11 @@
 # @links/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- Add Table component, improve docs.
+
 ## 0.2.0
 
 ### Minor Changes
