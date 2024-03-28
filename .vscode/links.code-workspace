@@ -1,16 +1,16 @@
 {
   "folders": [
     {
-      "name": ".ROOT",
-      "path": "../"
-    },
-    {
       "name": "web",
       "path": "../apps/web",
     },
     {
       "name": "ui",
       "path": "../packages/ui",
+    },
+    {
+      "name": ".ROOT",
+      "path": "../"
     },
   ],
   "settings": {
