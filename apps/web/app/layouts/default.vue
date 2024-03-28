@@ -43,11 +43,8 @@ const title = computed(() => t(route.meta.title as string));
         </template>
       </NavigationBar>
 
-      <div class="grid m-4 place-content-center">
-        <div class="container">
-          <NavigationMenu />
-          <slot />
-        </div>
+      <div class="grid place-content-center">
+        <slot />
       </div>
     </Body>
   </Html>

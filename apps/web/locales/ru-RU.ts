@@ -1,11 +1,8 @@
 export default defineI18nLocale(async (_locale) => {
   return {
-    "site.sitename": "Wuxt",
+    "site.sitename": "Links",
 
-    "site.pages.homepage.linkTitle": "Главная",
-    "site.pages.homepage.title": "Wuxt",
-
-    "site.pages.about.linkTitle": "О темплейте",
-    "site.pages.about.title": "О Wuxt",
+    "site.pages.create.linkTitle": "Новая страница",
+    "site.pages.create.title": "Создать новую страницу",
   };
 });

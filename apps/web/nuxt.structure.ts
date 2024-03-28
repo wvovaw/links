@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "~stores": fileURLToPath(new URL("./app/stores", import.meta.url)),
     "~utils": fileURLToPath(new URL("./app/utils", import.meta.url)),
     "~assets": fileURLToPath(new URL("./app/assets", import.meta.url)),
+    "~core": fileURLToPath(new URL("core", import.meta.url)),
   },
   content: {
     // sources: {
