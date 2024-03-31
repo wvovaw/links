@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { BlockName, IBlock, IPage } from "~core/types";
-import { createBlock } from "~core/block";
+import { createBlock } from "~core/blocks";
 
 export const usePageStore = defineStore("page-store", () => {
   const blocksIds = ref(0);

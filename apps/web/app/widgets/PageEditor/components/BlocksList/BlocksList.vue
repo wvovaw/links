@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UIMenu } from "@links/ui";
 import { usePageStore } from "../../stores/page.store";
-import { blocksList } from "~core/block";
+import { blocksList } from "~core/blocks";
 
 const { addBlock } = usePageStore();
 </script>

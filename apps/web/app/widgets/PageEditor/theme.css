@@ -1,5 +1,22 @@
 :root {
-  /* This values will be used as default values */
+  /*
+    Variables syntax:
+    --links-theme-<blocks-name>-<property>-<variant>
+  */
+
+  /*
+    Button
+  */
   --links-theme-button-bg: hsl(283, 64%, 39%);
   --links-theme-button-fg: hsl(286, 100%, 97%);
+
+  --links-theme-button-font-size-sm: 0.8rem;
+  --links-theme-button-font-size-md: 1rem;
+  --links-theme-button-font-size-lg: 1.2rem;
+
+  /*
+    Paragraph
+  */
+  --links-theme-paragraph-fg: #171515;
+  --links-theme-paragraph-inline-padding: 0px;
 }

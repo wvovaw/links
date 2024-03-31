@@ -22,12 +22,6 @@ function isSelectedBlock(blockId: string) {
   const isit = selectedBlock.value === blockId;
   return isit;
 };
-onBeforeUnmount(() => {
-  console.log("Im unmounted");
-});
-onMounted(() => {
-  console.log("Im mounted");
-});
 </script>
 
 <template>

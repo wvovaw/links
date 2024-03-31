@@ -1,21 +1,37 @@
 <script setup lang="ts">
-import { UIInput, UIInputHint, UIInputLabel, UISwitch, UITextArea } from "@links/ui";
 import { usePageStore } from "../../stores/page.store";
+import TextField from "./fields/TextField.vue";
+import NumberField from "./fields/NumberField.vue";
+import SelectField from "./fields/SelectField.vue";
+import UrlField from "./fields/UrlField.vue";
+import ColorField from "./fields/ColorField.vue";
+import BooleanField from "./fields/BooleanField.vue";
 import { groupBy } from "~utils/object";
-import type { IBlockProperty } from "~core/types";
+
+import type { BlockProperty, BlockPropertyType } from "~core/types";
 
 const pageStore = usePageStore();
 const { selectedBlock } = storeToRefs(pageStore);
 const { getBlock } = pageStore;
 
-const groupByGroupName = groupBy<IBlockProperty>(["group"]);
+const fieldsMap: Record<BlockPropertyType, Component> = {
+  text: TextField,
+  number: NumberField,
+  select: SelectField,
+  url: UrlField,
+  color: ColorField,
+  boolean: BooleanField
+};
+function resolveFieldsComponent(fieldType: BlockPropertyType) {
+  return fieldsMap[fieldType];
+};
+
+const groupByGroupName = groupBy<BlockProperty>(["group"]);
 const groupedProperties = computed(() => {
   const block = selectedBlock.value ? getBlock(selectedBlock.value) : null;
   const gp = groupByGroupName(Object.values(block?.properties ?? {}));
   return gp;
 });
-
-const debounce = useDebounceFn((fn: () => void) => { fn(); }, 200);
 </script>
 
 <template>
@@ -29,7 +45,7 @@ const debounce = useDebounceFn((fn: () => void) => { fn(); }, 200);
         v-for="(group, name) of groupedProperties"
         :key="name"
       >
-        <h3 class="font-semibold">
+        <h3 class="text-trunks font-semibold">
           {{ name ? name : 'Other' }}
         </h3>
         <div
@@ -39,24 +55,11 @@ const debounce = useDebounceFn((fn: () => void) => { fn(); }, 200);
             v-for="(field, key) of group"
             :key="key"
           >
-            <UIInputLabel :for="`${name}-field-${key}`">
-              {{ field.label }}
-            </UIInputLabel>
-            <UIInput
-              v-if="['number', 'string', 'url', 'color'].includes(field.type)"
+            <component
+              :is="resolveFieldsComponent(field.type)"
               :id="`${name}-field-${key}`"
-              :model-value="field.value"
-              full-width
-              :type="field.type"
-              @update:model-value="(v) => debounce(() => field.value = v)"
-            />
-            <UITextArea
-              v-else-if="field.type === 'text'"
-              :id="`${name}-field-${key}`"
-              resize="vertical"
-              :rows="3"
-              :model-value="field.value"
-              @update:model-value="(v) => debounce(() => field.value = v)"
+              v-model="field.value"
+              :field="field"
             />
           </div>
         </div>
