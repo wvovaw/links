@@ -7,8 +7,16 @@ const pageStore = usePageStore();
 const { page, selectedBlock } = storeToRefs(pageStore);
 const { selectBlock } = pageStore;
 
+const blocksMap = new Map();
 function resolveBlockAsyncComponent(blockName: string) {
-  return defineAsyncComponent(() => import(`./blocks/${blockName}Block.vue`));
+  if (blocksMap.has(blockName)) {
+    return blocksMap.get(blockName);
+  }
+  else {
+    const comp = defineAsyncComponent(() => import(`./blocks/${blockName}Block.vue`));
+    blocksMap.set(blockName, comp);
+    return comp;
+  }
 };
 function isSelectedBlock(blockId: string) {
   const isit = selectedBlock.value === blockId;
@@ -16,10 +24,10 @@ function isSelectedBlock(blockId: string) {
 };
 onBeforeUnmount(() => {
   console.log("Im unmounted");
-})
+});
 onMounted(() => {
   console.log("Im mounted");
-})
+});
 </script>
 
 <template>
