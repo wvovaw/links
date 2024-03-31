@@ -1,0 +1,5 @@
+:root {
+  /* This values will be used as default values */
+  --links-theme-button-bg: hsl(283, 64%, 39%);
+  --links-theme-button-fg: hsl(286, 100%, 97%);
+}

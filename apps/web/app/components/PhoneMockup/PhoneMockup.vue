@@ -68,7 +68,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   border-radius: 2.5rem;
   box-shadow: 0 1px 3px #0000001a, 0 1px 2px #0000000f;
 }
