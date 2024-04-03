@@ -2,21 +2,18 @@
 import { UIScrollArea } from "@links/ui";
 import { BlockPropertiesEditor } from "./components/BlockPropertiesEditor";
 import { BlocksList } from "./components/BlocksList";
-import PageRenderer from "./components/PageRenderer.vue";
-import { PhoneMockup } from "~components/PhoneMockup";
+import { Workspace } from "./components/Workspace";
 </script>
 
 <template>
   <div class="grid h-[calc(100vh-var(--navbar-height,64px))] w-100vw lg:grid-cols-[minmax(320px,320px)_minmax(320px,1fr)_minmax(320px,320px)]">
-    <UIScrollArea class="hidden border-r border-beerus lg:block">
+    <UIScrollArea class="hidden lg:block" bar-class="rounded-none" thumb-class="bg-trunks">
       <BlocksList />
     </UIScrollArea>
-    <UIScrollArea class="grid w-full max-w-screen-lg place-content-center py-2">
-      <PhoneMockup>
-        <PageRenderer />
-      </PhoneMockup>
+    <UIScrollArea class="lg:border-(x beerus)" bar-class="rounded-none" thumb-class="bg-trunks">
+      <Workspace />
     </UIScrollArea>
-    <UIScrollArea class="hidden border-l border-beerus lg:block">
+    <UIScrollArea class="hidden lg:block" bar-class="rounded-none" thumb-class="bg-trunks">
       <BlockPropertiesEditor />
     </UIScrollArea>
   </div>

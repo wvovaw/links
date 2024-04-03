@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BlockProperty } from "~core/types";
+import type { BlockProperty, IBlockPropertyText, IBlockPropertyUrl } from "~core/types";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -8,8 +8,8 @@ const props = defineProps<{
 const bp = computed(() => {
   const p = props.properties;
   return {
-    text: p.text.value,
-    link: p.link.value ?? "#",
+    text: (p.text as IBlockPropertyText).value,
+    link: p.link.value ? (p.link as IBlockPropertyUrl).value : "#",
     background: p.background.value ? p.background.value : "var(--links-theme-button-bg)",
     foreground: p.foreground.value ? p.foreground.value : "var(--links-theme-button-fg)",
     fontSize: p["font-size"].value ? p["font-size"].value : "var(--links-theme-button-font-size)",
@@ -19,7 +19,9 @@ const bp = computed(() => {
 </script>
 
 <template>
-  <div
+  <a
+    :href="bp.link"
+    target="_blank"
     class="button-block-root"
   >
     <template v-if="bp.text">
@@ -28,7 +30,7 @@ const bp = computed(() => {
     <template v-else>
       &ThinSpace;
     </template>
-  </div>
+  </a>
 </template>
 
 <style>
