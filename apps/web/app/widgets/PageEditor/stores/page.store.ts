@@ -20,8 +20,10 @@ export const usePageStore = defineStore("page-store", () => {
     selectBlock(id);
   }
   function removeBlock(id: string) {
-    if (selectedBlockId.value === id) selectedBlockId.value = null;
-    page.value.blocks = page.value.blocks.filter(b => b.id !== id);
+    if (selectedBlockId.value === id)
+      selectedBlockId.value = null;
+    const index = page.value.blocks.findIndex(b => b.id === id);
+    page.value.blocks.splice(index, 1);
   }
   function selectBlock(id: string) {
     selectedBlockId.value = id;
@@ -36,6 +38,6 @@ export const usePageStore = defineStore("page-store", () => {
     addBlock,
     removeBlock,
     selectBlock,
-    getBlock
+    getBlock,
   };
 });

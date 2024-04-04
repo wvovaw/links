@@ -28,6 +28,10 @@ importers:
         version: 1.12.5
 
   apps/web:
+    dependencies:
+      '@formkit/drag-and-drop':
+        specifier: ^0.0.38
+        version: 0.0.38
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.8.3
@@ -1627,6 +1631,10 @@ packages:
       - '@vue/composition-api'
       - vue
     dev: true
+
+  /@formkit/drag-and-drop@0.0.38:
+    resolution: {integrity: sha512-3uJFcqz1xL7x/5pClDnyqEDfyFRDFH+75MFpJYXnVF17oekxLrwbUaOBN7ttKGn1jW2MdojRw4WMnSN1iLryvw==}
+    dev: false
 
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -13689,7 +13697,7 @@ packages:
       unocss: '>= 0.56.0 < 1'
     dependencies:
       '@unocss/preset-wind': 0.58.6
-      unocss: 0.58.6(@unocss/webpack@0.58.6)(postcss@8.4.36)(rollup@3.29.4)(vite@5.1.6)
+      unocss: 0.58.6(@unocss/webpack@0.58.6)(postcss@8.4.36)(rollup@4.13.0)(vite@5.1.6)
     dev: true
 
   /unocss@0.58.6(@unocss/webpack@0.58.6)(postcss@8.4.36)(rollup@3.29.4)(vite@5.1.6):
