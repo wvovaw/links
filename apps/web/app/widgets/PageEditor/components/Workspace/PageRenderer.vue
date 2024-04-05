@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { animations } from "@formkit/drag-and-drop";
-import { dragAndDrop, useDragAndDrop } from "@formkit/drag-and-drop/vue";
+import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
 import "../../resources/theme.css";
 import { usePageStore } from "../../stores/page.store";
 import PageBlock from "./PageBlock.vue";
+import PageBackground from "./PageBackground.vue";
 
 const pageStore = usePageStore();
 const { page, selectedBlockId: selectedBlock } = storeToRefs(pageStore);
@@ -27,7 +28,7 @@ function isSelectedBlock(blockId: string) {
 
 const [draggableRoot, draggableBlocks] = useDragAndDrop(page.value.blocks, {
   draggable: el => !el.hasAttribute("data-dnd-no-drag"),
-  plugins: [animations()],
+  plugins: [animations({ duration: 100 })],
 });
 watch(draggableBlocks, (newBlocks) => {
   pageStore.$patch((state) => {
@@ -37,7 +38,7 @@ watch(draggableBlocks, (newBlocks) => {
 </script>
 
 <template>
-  <div class="min-w-full grow from-pink-300 via-purple-300 to-indigo-400 bg-gradient-to-t py-10">
+  <PageBackground>
     <div ref="draggableRoot" class="flex flex-col gap-4 p-2">
       <PageBlock
         v-for="block of draggableBlocks"
@@ -52,5 +53,5 @@ watch(draggableBlocks, (newBlocks) => {
         />
       </PageBlock>
     </div>
-  </div>
+  </PageBackground>
 </template>

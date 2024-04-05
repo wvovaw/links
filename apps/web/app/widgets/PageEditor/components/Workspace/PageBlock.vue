@@ -7,18 +7,18 @@ defineProps<IPageBlockProps>();
 defineEmits<{
   select: [];
 }>();
-
 </script>
 
 <template>
   <div
-    class="relative w-full flex items-center"
+    class="relative flex"
     :data-block-selected="isSelected"
   >
     <div
-      class="absolute h-full w-full"
+      class="absolute box-border h-full w-full outline-(2 dashed) transition-colors duration-200 ease-in"
       :class="{
-        'box-border outline-(2 dashed popo)': isSelected,
+        'outline-popo': isSelected,
+        'outline-transparent': !isSelected,
       }"
       @click.stop="$emit('select')"
     />
