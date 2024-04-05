@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BlockActions from "./BlockActions.vue";
+
 interface IPageBlockProps {
   isSelected: boolean;
 }
@@ -14,6 +16,7 @@ defineEmits<{
     class="relative flex"
     :data-block-selected="isSelected"
   >
+    <BlockActions v-if="isSelected" />
     <div
       class="absolute box-border h-full w-full outline-(2 dashed) transition-colors duration-200 ease-in"
       :class="{

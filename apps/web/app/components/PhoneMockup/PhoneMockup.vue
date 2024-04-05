@@ -18,10 +18,8 @@
   background-color: #000;
   padding: 10px;
   margin: 0 auto;
-  overflow: hidden;
 }
 .mockup-phone .display {
-  overflow: hidden;
   border-radius: 40px;
   margin-top: -25px;
 }

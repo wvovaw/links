@@ -4,9 +4,7 @@
     --links-theme-<blocks-name>-<property>-<variant>
   */
 
-  /*
-    Button
-  */
+  /* Button */
   --links-theme-button-bg: hsl(215, 94%, 45%);
   --links-theme-button-fg: hsl(204, 22%, 95%);
 
@@ -14,9 +12,9 @@
   --links-theme-button-font-size-md: 1rem;
   --links-theme-button-font-size-lg: 1.2rem;
 
-  /*
-    Paragraph
-  */
+  /* Paragraph */
   --links-theme-paragraph-fg: #171515;
   --links-theme-paragraph-inline-padding: 0px;
+
+  /* Avatar */
 }
