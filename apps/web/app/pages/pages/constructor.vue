@@ -2,7 +2,7 @@
 import { PageEditor } from "~widgets/PageEditor";
 
 definePageMeta({
-  title: "site.pages.create.title",
+  title: "site.pages.constructor.title",
 });
 </script>
 

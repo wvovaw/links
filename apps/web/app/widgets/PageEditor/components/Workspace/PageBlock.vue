@@ -24,6 +24,7 @@ defineEmits<{
         'outline-transparent': !isSelected,
       }"
       @click.stop="$emit('select')"
+      data-testid="page-block"
     />
     <slot />
   </div>

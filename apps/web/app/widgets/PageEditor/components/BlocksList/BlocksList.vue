@@ -8,7 +8,7 @@ const { addBlock } = usePageStore();
 
 <template>
   <div class="flex flex-col gap-2 p-2">
-    <UIMenu.Item v-for="block of blocksList" :key="block.name" @click="addBlock(block.name)">
+    <UIMenu.Item v-for="block of blocksList" :key="block.name" @click="addBlock(block.name)" data-testid="blocks-list-item">
       <UIMenu.Icon icon="i-lucide:circle-plus" />
       <UIMenu.Title class="font-semibold">
         {{ block.name }}
