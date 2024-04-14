@@ -5,6 +5,7 @@ import extractorMdc from "@unocss/extractor-mdc";
 import linksUIPreset from "@links/ui/preset";
 
 export default defineConfig({
+  safelist: ["i-lucide:sun-medium", "i-lucide:moon", "i-lucide:monitor"],
   theme: {
   },
   shortcuts: {

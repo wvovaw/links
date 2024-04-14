@@ -6,13 +6,12 @@ import { fileURLToPath } from "node:url";
  */
 export default defineNuxtConfig({
   alias: {
-    "~components": fileURLToPath(new URL("./app/components", import.meta.url)),
-    "~widgets": fileURLToPath(new URL("./app/widgets", import.meta.url)),
-    "~composables": fileURLToPath(new URL("./app/composables", import.meta.url)),
-    "~stores": fileURLToPath(new URL("./app/stores", import.meta.url)),
-    "~utils": fileURLToPath(new URL("./app/utils", import.meta.url)),
-    "~assets": fileURLToPath(new URL("./app/assets", import.meta.url)),
-    "~core": fileURLToPath(new URL("core", import.meta.url)),
+    "~app": fileURLToPath(new URL("./src/app", import.meta.url)),
+    "~pages": fileURLToPath(new URL("./src/pages", import.meta.url)),
+    "~widgets": fileURLToPath(new URL("./src/widgets", import.meta.url)),
+    "~features": fileURLToPath(new URL("./src/features", import.meta.url)),
+    "~entities": fileURLToPath(new URL("./src/entities", import.meta.url)),
+    "~shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
   },
   content: {
     // sources: {
@@ -24,14 +23,15 @@ export default defineNuxtConfig({
     //   },
     // },
   },
+  srcDir: "./src",
   dir: {
     pages: "app/pages",
     layouts: "app/layouts",
-    assets: "app/assets",
     middleware: "app/middleware",
     plugins: "app/plugins",
-    modules: "modules",
-    public: "public",
+    modules: "app/modules",
+    assets: "shared/assets",
+    public: "shared/public",
   },
   pinia: {
     /* auto-imported pinia stores */
@@ -45,7 +45,7 @@ export default defineNuxtConfig({
     dirs: [
       {
         /* Global Vue components available in nuxt-content MDC */
-        path: "app/components/global",
+        path: "shared/ui/global",
         global: true,
       },
     ],

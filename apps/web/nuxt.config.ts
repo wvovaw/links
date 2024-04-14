@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   unocss: {
     preflight: true,
   },
-  css: ["@links/ui/theme.css", "~assets/css/global.css", "~assets/css/shiki.css"],
+  css: ["@links/ui/theme.css", "~app/styles/global.css", "~app/styles/shiki.css"],
   content: {
     markdown: {
       remarkPlugins: {},
@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   },
   i18n: {
     lazy: true,
-    langDir: "locales",
+    langDir: "./src/shared/locales",
     locales: [{
       code: "en",
       iso: "en-US",
@@ -50,7 +50,7 @@ export default defineNuxtConfig({
       redirectOn: "root",
     },
     experimental: {
-      localeDetector: "./server/utils/i18n.localeDetector.ts",
+      localeDetector: "./src/server/utils/i18n.localeDetector.ts",
     },
   },
   routeRules: {
