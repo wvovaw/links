@@ -6,28 +6,33 @@ export function createButton(id: string): IBlock {
     name: "Button",
     properties: {
       "text": {
+        id: 0,
         type: "text",
         label: "Button text",
         required: true,
         group: "Content",
       },
       "link": {
+        id: 1,
         type: "url",
         label: "Link",
         required: true,
         group: "Content",
       },
       "background": {
+        id: 2,
         type: "color",
         label: "Background Color",
         group: "Appearance",
       },
       "foreground": {
+        id: 3,
         type: "color",
         label: "Text Color",
         group: "Appearance",
       },
       "font-size": {
+        id: 4,
         type: "select",
         label: "Font size",
         options: [
@@ -38,6 +43,7 @@ export function createButton(id: string): IBlock {
         group: "Appearance",
       },
       "adult-confirmation": {
+        id: 5,
         type: "boolean",
         variant: "switch",
         label: "Adult confirmation",

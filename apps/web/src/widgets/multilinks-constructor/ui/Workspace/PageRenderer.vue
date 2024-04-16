@@ -2,13 +2,13 @@
 import { animations } from "@formkit/drag-and-drop";
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
 import "../../resources/theme.css";
-import { usePageStore } from "../../model/page.store";
+import { useConstructorStore } from "../../model";
 import PageBlock from "./PageBlock.vue";
 import PageBackground from "./PageBackground.vue";
 
-const pageStore = usePageStore();
-const { page, selectedBlockId: selectedBlock } = storeToRefs(pageStore);
-const { selectBlock } = pageStore;
+const constructorStore = useConstructorStore();
+const { page, selectedBlockId: selectedBlock } = storeToRefs(constructorStore);
+const { selectBlock } = constructorStore;
 
 const blocksMap = new Map();
 function resolveBlockAsyncComponent(blockName: string) {
@@ -31,7 +31,7 @@ const [draggableRoot, draggableBlocks] = useDragAndDrop(page.value.blocks, {
   plugins: [animations({ duration: 100 })],
 });
 watch(draggableBlocks, (newBlocks) => {
-  pageStore.$patch((state) => {
+  constructorStore.$patch((state) => {
     state.page.blocks = newBlocks;
   });
 });

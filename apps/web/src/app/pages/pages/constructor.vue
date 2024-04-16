@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Constructor } from "~pages/constructor";
+import { MultilinksConstructorPage } from "~pages/multilinks-constructor";
 
 definePageMeta({
-  title: "site.pages.constructor.title",
+  title: "pages.constructor.title",
 });
 </script>
 
 <template>
-  <Constructor />
+  <MultilinksConstructorPage />
 </template>

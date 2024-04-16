@@ -5,6 +5,7 @@ export type BlockName = typeof blocksList[number]["name"];
 export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url";
 
 export interface IBlockPropertyCommon<T = any> {
+  id: number;
   type: BlockPropertyType;
   label: string;
   hint?: string;

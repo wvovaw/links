@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { usePageStore } from "../../model";
+import { useConstructorStore } from "../../model";
 
-const pageStore = usePageStore();
-const { selectedBlockId } = storeToRefs(pageStore);
-const { duplicateBlock } = pageStore;
+const constructorStore = useConstructorStore();
+const { selectedBlockId } = storeToRefs(constructorStore);
+const { duplicateBlock } = constructorStore;
 </script>
 
 <template>

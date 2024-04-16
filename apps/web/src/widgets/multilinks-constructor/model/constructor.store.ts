@@ -3,7 +3,7 @@ import { ref } from "vue";
 import type { BlockName, IBlock, IPage } from "../core";
 import { createBlock } from "../core";
 
-export const usePageStore = defineStore("constructor/page", () => {
+export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const blocksIds = ref(0);
   const selectedBlockId = ref<string | null>(null);
   const page = ref<IPage>(

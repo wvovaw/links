@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UISeparator } from "@links/ui";
-import { usePageStore } from "../../model";
+import { useConstructorStore } from "../../model";
 import type { BlockProperty, BlockPropertyType } from "../../core";
 import TextField from "./fields/TextField.vue";
 import NumberField from "./fields/NumberField.vue";
@@ -10,9 +10,9 @@ import ColorField from "./fields/ColorField.vue";
 import BooleanField from "./fields/BooleanField.vue";
 import { groupBy } from "~/shared/lib/utils";
 
-const pageStore = usePageStore();
-const { selectedBlockId } = storeToRefs(pageStore);
-const { getBlock, removeBlock } = pageStore;
+const constructorStore = useConstructorStore();
+const { selectedBlockId } = storeToRefs(constructorStore);
+const { getBlock, removeBlock } = constructorStore;
 
 const fieldsMap: Record<BlockPropertyType, Component> = {
   text: TextField,
@@ -54,12 +54,12 @@ const groupedProperties = computed(() => {
           class="w-full flex flex-col gap-2 py-2"
         >
           <div
-            v-for="(field, key) of group"
-            :key="key"
+            v-for="field of group"
+            :key="field.id"
           >
             <component
               :is="resolveFieldsComponent(field.type)"
-              :id="`${name}-field-${key}`"
+              :id="`${name}-field-${field.id}`"
               v-model="field.value"
               :field="field"
             />
