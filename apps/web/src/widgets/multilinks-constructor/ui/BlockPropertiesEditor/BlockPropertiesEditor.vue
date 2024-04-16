@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UIButton, UISeparator } from "@links/ui";
 import { useConstructorStore } from "../../model";
-import type { BlockProperty, BlockPropertyType } from "../../core";
+import type { BlockProperty, BlockPropertyType } from "~shared/core";
 import TextField from "./fields/TextField.vue";
 import NumberField from "./fields/NumberField.vue";
 import SelectField from "./fields/SelectField.vue";

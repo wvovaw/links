@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BlockProperty, IBlockPropertyText, IBlockPropertyUrl } from "../../core";
+import type { BlockProperty, IBlockPropertyText, IBlockPropertyUrl } from "~shared/core";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;

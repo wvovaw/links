@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UICheckbox, UIInputHint, UIInputLabel, UISwitch } from "@links/ui";
-import type { IBlockPropertyBoolean } from "../../../core";
+import type { IBlockPropertyBoolean } from "~shared/core";
 
 interface ITextFieldProps {
   field: IBlockPropertyBoolean;

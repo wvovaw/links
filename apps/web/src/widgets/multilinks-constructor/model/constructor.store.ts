@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { BlockName, IBlock, IPage } from "../core";
-import { createBlock } from "../core";
+import type { BlockName, IBlock, IPage } from "~shared/core";
+import { createBlock } from "~shared/core";
 
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const blocksIds = ref(0);

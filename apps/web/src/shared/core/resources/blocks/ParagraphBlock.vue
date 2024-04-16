@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BlockProperty } from "../../core";
+import type { BlockProperty } from "~shared/core";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;

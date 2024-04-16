@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import PageEditor from "../MultilinksConstructor.vue";
 import { useConstructorStore } from "../model";
-import { createBlock } from "../core";
+import { createBlock } from "~shared/core";
 
 describe("testing PageEditor widget", () => {
   const pinia = createTestingPinia({ createSpy: vi.fn });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIMenu } from "@links/ui";
-import { type BlockName, blocksList } from "../../core";
+import { type BlockName, blocksList } from "~shared/core";
 
 defineEmits<{
   addBlock: [name: BlockName];

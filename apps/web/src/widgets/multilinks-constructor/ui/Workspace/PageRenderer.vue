@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { animations } from "@formkit/drag-and-drop";
 import { useDragAndDrop } from "@formkit/drag-and-drop/vue";
-import "../../resources/theme.css";
+import "~shared/core/resources/theme.css";
 import { useConstructorStore } from "../../model";
 import PageBlock from "./PageBlock.vue";
 import PageBackground from "./PageBackground.vue";
@@ -16,7 +16,7 @@ function resolveBlockAsyncComponent(blockName: string) {
     return blocksMap.get(blockName);
   }
   else {
-    const comp = defineAsyncComponent(() => import(`../../resources/blocks/${blockName}Block.vue`));
+    const comp = defineAsyncComponent(() => import(`../../../../shared/core/resources/blocks/${blockName}Block.vue`));
     blocksMap.set(blockName, comp);
     return comp;
   }
