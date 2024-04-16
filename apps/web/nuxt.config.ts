@@ -50,7 +50,7 @@ export default defineNuxtConfig({
       redirectOn: "root",
     },
     experimental: {
-      localeDetector: "./src/server/utils/i18n.localeDetector.ts",
+      localeDetector: "./src/app/server/utils/i18n.localeDetector.ts",
     },
   },
   routeRules: {

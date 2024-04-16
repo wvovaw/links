@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 
 /**
  * This config extends nuxt.config.ts
@@ -14,15 +15,22 @@ export default defineNuxtConfig({
     "~shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
   },
   content: {
-    // sources: {
-    //   content: {
-    //     driver: "fs",
-    //     prefix: "/docs",
-    //     base: resolve(__dirname, "content/docs"),
-    //     name: "docs"
-    //   },
-    // },
+    sources: {
+      content: {
+        driver: "fs",
+        prefix: "/docs",
+        base: resolve(__dirname, "src/app/content/docs"),
+        name: "docs",
+      },
+      articles: {
+        driver: "fs",
+        prefix: "/articles",
+        base: resolve(__dirname, "src/app/content/_articles"),
+        name: "articles",
+      },
+    },
   },
+  serverDir: "./src/app/server",
   srcDir: "./src",
   dir: {
     pages: "app/pages",
