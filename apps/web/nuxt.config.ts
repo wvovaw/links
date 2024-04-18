@@ -5,7 +5,8 @@ export default defineNuxtConfig({
     mySecretVar: "",
     public: {
       /* public keys is also client-side */
-      myPublicVar: "",
+      appwriteProjectId: "",
+      appwriteHost: "",
     },
   },
   unocss: {

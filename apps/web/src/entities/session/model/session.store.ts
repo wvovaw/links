@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import type { AppwriteApi } from "~shared/api";
+
+type Session = AppwriteApi.Session;
 
 export const useSessionStore = defineStore("session", () => {
-  const sessionToken = ref<string | null>(null);
+  const session = ref<Session | null>(null);
 
-  const isLogedIn = computed(() => Boolean(sessionToken.value));
+  const isLogedIn = computed(() => Boolean(session.value));
 
-  function login(id: string) {
-    sessionToken.value = id;
+  function login(sessionData: Session) {
+    session.value = sessionData;
   }
 
   return {
     isLogedIn,
-    sessionToken,
-    login
+    session,
+    login,
   };
 });

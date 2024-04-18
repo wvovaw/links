@@ -15,7 +15,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@formkit/drag-and-drop": "^0.0.38"
+    "@formkit/drag-and-drop": "^0.0.38",
+    "appwrite": "^14.0.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.8.3",
