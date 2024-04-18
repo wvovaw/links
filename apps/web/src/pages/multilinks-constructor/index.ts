@@ -1,1 +1,1 @@
-export { MultilinksConstructorPage } from "./ui";
+export { default as MultilinksConstructorPage } from "./ui/MultilinksConstructorPage.vue";
