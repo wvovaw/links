@@ -13,9 +13,10 @@ export const useThemeStore = defineStore("themeStore", () => {
     modes,
     selector: "html",
     attribute: "data-theme",
+    storageKey: "theme",
   });
 
-  const { state, next } = useCycleList([...Object.values(modes)], {
+  const { state, next } = useCycleList(Object.values(modes), {
     initialValue: mode,
   });
 
@@ -24,11 +25,13 @@ export const useThemeStore = defineStore("themeStore", () => {
   });
   if (cookie.value)
     state.value = cookie.value.theme;
+  else
+    state.value = localStorage.getItem("theme") || "auto";
 
   function cycle() {
     next();
-    cookie.value.theme = state.value;
-    state.value = cookie.value.theme;
+    if (cookie.value)
+      cookie.value.theme = state.value;
   }
 
   watchEffect(() => {

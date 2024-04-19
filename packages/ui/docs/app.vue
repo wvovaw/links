@@ -10,10 +10,11 @@ expireDate.setFullYear(expireDate.getFullYear() + 1);
 let cookie = useCookie<{
   theme: string;
 }>("theme", {
-  default: () => ({ theme: "auto" }),
   expires: expireDate,
-  watch: "shallow",
+  watch: true,
 });
+if (!cookie.value)
+  cookie.value = { theme: "auto" };
 
 addRouteMiddleware("theme-cookie-update", () => {
   cookie = useCookie("theme");

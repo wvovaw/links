@@ -39,7 +39,7 @@ export default defineNuxtConfig({
       routes: ["/docs"],
     },
     routeRules: {
-      "/": { redirect: "/docs" },
+      "/": { redirect: "/docs/" },
     },
   },
   devtools: { enabled: false },
