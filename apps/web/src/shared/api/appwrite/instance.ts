@@ -1,15 +1,20 @@
 import { Account, Client } from "appwrite";
 
-export function createAccountApiInstance() {
-  const client = new Client();
-  const config = useRuntimeConfig();
+let client: Client | undefined;
 
-  client
-    .setEndpoint(config.public.appwriteHost)
-    .setProject(config.public.appwriteProjectId);
+function useApiClient() {
+  if (!client) {
+    client = new Client();
+    const config = useRuntimeConfig();
 
-  const account = new Account(client);
+    client
+      .setEndpoint(config.public.appwriteHost)
+      .setProject(config.public.appwriteProjectId);
+  }
+  return client;
+}
 
+export function useAccountApi() {
+  const account = new Account(useApiClient());
   return account;
 }
-export { ID } from "appwrite";

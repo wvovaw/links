@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import type { AppwriteApi } from "~shared/api";
-
-type Session = AppwriteApi.Session;
+import type { Session } from "~shared/api/appwrite";
 
 export const useSessionStore = defineStore("session", () => {
   const session = ref<Session | null>(null);

@@ -9,6 +9,7 @@ const { push } = useRouter();
 const session = SessionModel.useSessionStore();
 
 const { handleSubmit, isSubmitting } = useForm({ validationSchema: toTypedSchema(signUpSchema) });
+const signupError = ref(false);
 const onSubmit = handleSubmit(async (data) => {
   try {
     const email = data.email;
@@ -19,17 +20,27 @@ const onSubmit = handleSubmit(async (data) => {
   }
   catch (e: unknown) {
     if (e instanceof Error)
-    // TODO: Handle errors
-    // TODO: Show alert instead of log
-      console.error(e.message);
+      showError(e.message)
   }
 });
 
 async function createAndSetUser({ email, username, password }: SessionApi.IUserRegisterData) {
   await SessionApi.register({ email, username, password });
   const loginData = await SessionApi.login({ email, password });
-  session.login(loginData);
+  if (loginData)
+    session.login(loginData);
 }
+
+let errorTimerId: NodeJS.Timeout;
+function showError(message: string) {
+  console.error("Error while signing up: ", message);
+  signupError.value = true;
+  errorTimerId = setTimeout(() => signupError.value = false, 3000);
+}
+
+onBeforeUnmount(() => {
+  clearTimeout(errorTimerId);
+});
 </script>
 
 <template>
@@ -78,7 +89,7 @@ async function createAndSetUser({ email, username, password }: SessionApi.IUserR
         <UIForm.ErrorMessage />
       </UIForm.Item>
     </UIForm.Field>
-    <UIButton type="submit" full-width :loading="isSubmitting" :disabled="isSubmitting">
+    <UIButton type="submit" full-width :loading="isSubmitting" :disabled="isSubmitting" :animation="signupError ? 'error' : null">
       Submit
     </UIButton>
   </form>
