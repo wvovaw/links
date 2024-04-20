@@ -280,6 +280,13 @@ export default definePreset((_options?: PresetMoonOptions) => {
           // Accordion
           "accordion-down": "0.2s",
           "accordion-up": "0.2s",
+          // Toast
+          "toast-hide": "250ms",
+          "toast-slide-in-right": "250ms",
+          "toast-slide-in-left": "250ms",
+          "toast-slide-in-down": "250ms",
+          "toast-slide-in-up": "250ms",
+          "toast-swipe-out": "100ms",
         },
         counts: {
           pulse2: "infinite",
@@ -298,12 +305,12 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "accordion-down": "ease-out",
           "accordion-up": "ease-out",
           // Toast
-          "toast-hide": "toast-hide 300ms ease-in forwards",
-          "toast-slide-in-right": "toast-slide-in-right 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-          "toast-slide-in-left": "toast-slide-in-left 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-          "toast-slide-in-down": "toast-slide-in-down 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-          "toast-slide-in-up": "toast-slide-in-up 300ms cubic-bezier(0.16, 1, 0.3, 1)",
-          "toast-swipe-out": "toast-swipe-out 100ms ease-out forwards",
+          "toast-hide": "ease-in forwards",
+          "toast-slide-in-right": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-slide-in-left": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-slide-in-down": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-slide-in-up": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "toast-swipe-out": "ease-out forwards",
         },
       },
     },
