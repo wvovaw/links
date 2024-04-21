@@ -1,5 +1,11 @@
 # @links/ui
 
+## 0.4.0
+
+### Minor Changes
+
+- Implement Toaster component, fix docs theme issues
+
 ## 0.3.0
 
 ### Minor Changes
