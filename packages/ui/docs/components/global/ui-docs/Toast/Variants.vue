@@ -8,12 +8,12 @@ function handleClick() {
   toast({
     title: "Success",
     content: "Success variant",
-    variant: "success"
+    variant: "success",
   });
   toast({
     title: "Warning",
     content: "Warning variant",
-    variant: "warning"
+    variant: "warning",
   });
   toast({
     title: "Error",

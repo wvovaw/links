@@ -1,6 +1,6 @@
 import { computed, ref } from "vue";
-import type { Component, HTMLAttributes, VNode } from "vue";
-import type { ToastRootProps } from "radix-vue";
+import type { Component, VNode } from "vue";
+import type { ToastProps } from "./Toast";
 
 const TOAST_LIMIT = 3;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -10,12 +10,7 @@ export type StringOrVNode =
   | VNode
   | (() => VNode);
 
-type ToastVariants = "default" | "error" | "warning" | "success";
-
-interface ToasterToast extends ToastRootProps {
-  class?: HTMLAttributes["class"];
-  variant?: ToastVariants;
-  onOpenChange?: ((value: boolean) => void) | undefined;
+interface ToasterToast extends ToastProps {
   id: string;
   title?: string;
   content?: StringOrVNode;
@@ -139,7 +134,7 @@ type Toast = Omit<ToasterToast, "id">;
 function toast(props: Toast) {
   const id = genId();
 
-  const update = (props: ToasterToast) =>
+  const update = (props: Partial<ToasterToast>) =>
     dispatch({
       type: actionTypes.UPDATE_TOAST,
       toast: { ...props, id },

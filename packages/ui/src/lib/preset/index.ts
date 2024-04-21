@@ -269,7 +269,7 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "toast-slide-in-left": "{ 0% { transform: translateX(calc(-100% + 1rem)) } 100% { transform: translateX(0) } }",
           "toast-slide-in-down": "{ 0% { transform: translateY(calc(100% + 1rem)) } 100% { transform: translateY(0) } }",
           "toast-slide-in-up": "{ 0% { transform: translateY(calc(-100% + 1rem)) } 100% { transform: translateY(0) } }",
-          "toast-swipe-out": "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } }",
+          "toast-swipe-out": "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } 100% { transform: translateX(100%) } }",
         },
         durations: {
           "pulse2": "1.5s",

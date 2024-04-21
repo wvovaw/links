@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
 import { UIButton } from "~ui/Button";
-import { UIToaster, useToast } from "~ui/Toast";
+import { useToast } from "~ui/Toast";
 
 const { toast } = useToast();
 function handleClick() {
@@ -16,7 +16,6 @@ function handleClick() {
 </script>
 
 <template>
-  <UIToaster />
   <PreviewFrame>
     <UIButton @click="handleClick">
       Show Toast
