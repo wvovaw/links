@@ -18,7 +18,7 @@ You can place the `<Toaster />` component in the entry of your app and then emit
 ::ui-docs-code-block{filename="App.vue" lang="vue"}
 ```vue
 <script setup>
-import { UIToaster } from "@links/ui"
+import { UIToaster } from "@links/ui";
 </script>
 
 <template>
@@ -49,7 +49,6 @@ function deleteLetter() {
     Delete the letter
   </UIButton>
 </template>
-
 ```
 ::
 
@@ -64,11 +63,11 @@ import { UIButton, UIToast, useToast } from "@links/ui";
 const { toast } = useToast();
 
 const UndoAction = defineComponent(() => {
-    function handleAction() {
-      alert("Can't undo this action :o");
-    }
-    // @ts-expect-error jsx click event is onClick, but ts think it is a prop of the component which is undefined
-    return () => <UIToast.Action altText="Undo" onClick={ handleAction }>Undo</UIToast.Action>; 
+  function handleAction() {
+    alert("Can't undo this action :o");
+  }
+  // @ts-expect-error jsx click event is onClick, but ts think it is a prop of the component which is undefined
+  return () => <UIToast.Action altText="Undo" onClick={handleAction}>Undo</UIToast.Action>;
 });
 
 function deleteLetter() {
@@ -85,7 +84,6 @@ function deleteLetter() {
     Delete the letter
   </UIButton>
 </template>
-
 ```
 ::
 
@@ -129,7 +127,6 @@ Wrapper component for the radix-vue `ToastProvider` and `ToastViewport`. Place i
 | `open` | `boolean` | No | - | The controlled open state of the toast. Can be bound as `v-model:open`. |
 | `type` | foreground \| background | No | foreground | Control the sensitivity of the toast for accessibility purposes. For toasts that are the result of a user action, use `foreground`. Toasts generated from background tasks should be `background`. |
 | `variant ` | default \| success \| warning \| error | No | default | Variant of a visual look of a toast |
-
 
 ### Action
 

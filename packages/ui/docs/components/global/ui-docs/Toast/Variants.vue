@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PreviewFrame from "../PreviewFrame.vue";
 import { UIButton } from "~ui/Button";
-import { UIToaster, useToast } from "~ui/Toast";
+import { useToast } from "~ui/Toast";
 
 const { toast } = useToast();
 function handleClick() {
@@ -18,7 +18,7 @@ function handleClick() {
   toast({
     title: "Error",
     content: "Error variant",
-    variant: "error"
+    variant: "error",
   });
 }
 </script>
