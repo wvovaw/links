@@ -29,6 +29,7 @@ export * from "./Table";
 export * from "./Tabs";
 export * from "./Tag";
 export * from "./TagsInput";
+export * from "./Toast";
 export * from "./Toggle";
 export * from "./ToggleGroup";
 export * from "./Tooltip";
