@@ -4,17 +4,17 @@ import { SignInForm } from "~features/auth";
 </script>
 
 <template>
-  <section class="">
-    <div class="mx-auto flex flex-wrap items-center px-5 py-24 container">
-      <div class="pr-0 lg:w-3/5 md:w-1/2 lg:pr-0 md:pr-16">
-        <h1 class="text-3xl font-medium">
-          Morbi in sem quis dui placerat ornare. Pellentesque odio nisi euismod in pharetra a ultricies in diam. Sed arcu.
-        </h1>
-        <p class="mt-4 leading-relaxed">
-          Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam gravida non commodo a sodales sit amet nisi.
-        </p>
-      </div>
-      <UICard.Root class="mt-10 w-full md:ml-auto md:mt-0 lg:w-2/6 md:w-1/2">
+  <div class="w-100vw flex flex-col items-center gap-10 px-4 py-6 container md:flex-row">
+    <div class="flex-auto max-md:text-center">
+      <h2 class="text-moon-32 font-bold lg:text-moon-48">
+        This is the <span class="from-hit to-piccolo bg-gradient-to-r bg-clip-text text-transparent font-extrabold">Links</span>
+      </h2>
+      <p class="mt-6 text-moon-16">
+        Login to your account to get access to all your multilinks pages.
+      </p>
+    </div>
+    <div class="lg:min-w-md sm:min-w-sm">
+      <UICard.Root>
         <UICard.Header>
           <UICard.Title>Sign In</UICard.Title>
         </UICard.Header>
@@ -30,5 +30,5 @@ import { SignInForm } from "~features/auth";
         </UICard.Footer>
       </UICard.Root>
     </div>
-  </section>
+  </div>
 </template>

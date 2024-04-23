@@ -4,17 +4,17 @@ import { SignUpForm } from "~features/auth";
 </script>
 
 <template>
-  <section class="">
-    <div class="mx-auto flex flex-wrap items-center px-5 py-24 container">
-      <div class="pr-0 lg:w-3/5 md:w-1/2 lg:pr-0 md:pr-16">
-        <h1 class="text-3xl font-medium">
-          Slow-carb next level shoindcgoitch ethical authentic, poko scenester
-        </h1>
-        <p class="mt-4 leading-relaxed">
-          Poke slow-carb mixtape knausgaard, typewriter street art gentrify hammock starladder roathse. Craies vegan tousled etsy austin.
-        </p>
-      </div>
-      <UICard.Root class="mt-10 w-full md:ml-auto md:mt-0 lg:w-2/6 md:w-1/2">
+  <div class="w-100vw flex flex-col items-center gap-10 px-4 py-6 container md:flex-row">
+    <div class="flex-auto max-md:text-center">
+      <h2 class="text-moon-32 font-bold lg:text-moon-48">
+        This is the <span class="from-hit to-piccolo bg-gradient-to-r bg-clip-text text-transparent font-extrabold">Links</span>
+      </h2>
+      <p class="mt-6 text-moon-16">
+        Create a personal account to get a full access.
+      </p>
+    </div>
+    <div class="lg:min-w-md sm:min-w-sm">
+      <UICard.Root>
         <UICard.Header>
           <UICard.Title>Sign Up</UICard.Title>
         </UICard.Header>
@@ -30,5 +30,5 @@ import { SignUpForm } from "~features/auth";
         </UICard.Footer>
       </UICard.Root>
     </div>
-  </section>
+  </div>
 </template>

@@ -42,7 +42,7 @@ const title = computed(() => t(route.meta.title as string));
         </template>
       </TopNavbar>
 
-      <div class="grid place-content-center">
+      <div class="grid min-h-[calc(100vh-var(--navbar-height))] place-content-center">
         <slot />
       </div>
     </Body>

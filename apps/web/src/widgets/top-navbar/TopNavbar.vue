@@ -8,3 +8,9 @@
     </div>
   </nav>
 </template>
+
+<style>
+:root {
+  --navbar-height: 64px;
+}
+</style>
