@@ -2,12 +2,11 @@
 import { UIButton, UIForm, UIInput, useToast } from "@links/ui";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { useForm } from "vee-validate";
-import { signUpSchema } from "../../model/schema";
-import { SessionApi, SessionModel } from "~entities/session";
+import { signUpSchema, useAuth } from "../../model";
 
 const { push } = useRouter();
 const { toast } = useToast();
-const session = SessionModel.useSessionStore();
+const { login, register } = useAuth();
 
 const { handleSubmit, isSubmitting } = useForm({ validationSchema: toTypedSchema(signUpSchema) });
 const onSubmit = handleSubmit(async (data) => {
@@ -15,7 +14,10 @@ const onSubmit = handleSubmit(async (data) => {
     const email = data.email;
     const username = data.username;
     const password = data.password;
-    await registerAndLogin({ email, username, password });
+
+    await register({ email, username, password });
+    await login({ email, password });
+
     push("/pages/constructor");
   }
   catch (e: unknown) {
@@ -23,13 +25,6 @@ const onSubmit = handleSubmit(async (data) => {
       showError(e.message);
   }
 });
-
-async function registerAndLogin({ email, username, password }: SessionApi.IUserRegisterData) {
-  await SessionApi.register({ email, username, password });
-  const loginData = await SessionApi.login({ email, password });
-  if (loginData)
-    session.login(loginData);
-}
 
 const signUpError = ref(false);
 const { start: setSignUpError } = useTimeoutFn(() => {
