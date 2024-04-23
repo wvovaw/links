@@ -8,15 +8,11 @@ export const useSessionStore = defineStore("session", () => {
 
   const isLogedIn = computed(() => Boolean(session.value));
 
-  function login(sessionData: Session) {
+  function setSession(sessionData: Session | null) {
     session.value = sessionData;
   }
 
-  function logout() {
-    session.value = null;
-  }
-
-  function setUser(userData: User) {
+  function setUser(userData: User | null) {
     user.value = userData;
   }
 
@@ -24,8 +20,7 @@ export const useSessionStore = defineStore("session", () => {
     isLogedIn,
     session,
     user,
-    login,
-    logout,
+    setSession,
     setUser,
   };
 });

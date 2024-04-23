@@ -2,7 +2,8 @@
 import { UIButton, UIForm, UIInput, useToast } from "@links/ui";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { useForm } from "vee-validate";
-import { signUpSchema, useAuth } from "../../model";
+import { signUpSchema } from "../../model/schema";
+import { useAuth } from "../../model";
 
 const { push } = useRouter();
 const { toast } = useToast();

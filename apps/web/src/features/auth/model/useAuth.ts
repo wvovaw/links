@@ -10,25 +10,34 @@ export function useAuth() {
   async function login({ email, password }: SessionApi.IUserLoginData) {
     const session = await SessionApi.login({ email, password });
     if (session) {
-      sessionStore.login(session);
+      sessionStore.setSession(session);
       await loadSessionUser();
     }
   }
 
   function logout() {
     SessionApi.logout();
-    sessionStore.logout();
+    sessionStore.setUser(null);
+    sessionStore.setSession(null);
   }
 
   async function loadSessionUser() {
-    const data = await SessionApi.getCurrentUser();
-    if (data)
-      sessionStore.setUser(data);
+    const user = await SessionApi.getCurrentUser();
+    if (user)
+      sessionStore.setUser(user);
+  }
+
+  async function loadCurrentSession() {
+    const session = await SessionApi.getCurrentSession();
+    if (session)
+      sessionStore.setSession(session);
   }
 
   return {
     register,
     login,
     logout,
+    loadSessionUser,
+    loadCurrentSession
   };
 }
