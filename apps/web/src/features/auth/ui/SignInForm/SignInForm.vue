@@ -2,20 +2,20 @@
 import { UIButton, UIForm, UIInput, useToast } from "@links/ui";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { useForm } from "vee-validate";
-import { signUpSchema } from "../../model/schema";
+import { signInSchema } from "../../model/schema";
 import { SessionApi, SessionModel } from "~entities/session";
 
 const { push } = useRouter();
 const { toast } = useToast();
 const session = SessionModel.useSessionStore();
 
-const { handleSubmit, isSubmitting } = useForm({ validationSchema: toTypedSchema(signUpSchema) });
+const { handleSubmit, isSubmitting } = useForm({ validationSchema: toTypedSchema(signInSchema) });
+
 const onSubmit = handleSubmit(async (data) => {
   try {
     const email = data.email;
-    const username = data.username;
     const password = data.password;
-    await registerAndLogin({ email, username, password });
+    await login({ email, password });
     push("/pages/constructor");
   }
   catch (e: unknown) {
@@ -24,25 +24,25 @@ const onSubmit = handleSubmit(async (data) => {
   }
 });
 
-async function registerAndLogin({ email, username, password }: SessionApi.IUserRegisterData) {
-  await SessionApi.register({ email, username, password });
+async function login({ email, password }: SessionApi.IUserLoginData) {
   const loginData = await SessionApi.login({ email, password });
   if (loginData)
     session.login(loginData);
 }
 
-const signUpError = ref(false);
-const { start: setSignUpError } = useTimeoutFn(() => {
-  signUpError.value = false;
+const signInError = ref(false);
+const { start: setSignInError } = useTimeoutFn(() => {
+  signInError.value = false;
 }, 3000);
 
 function showError(message: string) {
   toast({
-    title: "Sign Up Error",
+    title: "Sign In Error",
     content: message,
     variant: "error",
   });
-  setSignUpError();
+  signInError.value = true;
+  setSignInError();
 }
 </script>
 
@@ -57,15 +57,6 @@ function showError(message: string) {
         <UIForm.ErrorMessage />
       </UIForm.Item>
     </UIForm.Field>
-    <UIForm.Field v-slot="{ componentField, errorMessage }" name="username">
-      <UIForm.Item>
-        <UIForm.Label>Username</UIForm.Label>
-        <UIForm.Control>
-          <UIInput type="text" v-bind="componentField" :error="!!errorMessage" :error-message="errorMessage" full-width />
-        </UIForm.Control>
-        <UIForm.ErrorMessage />
-      </UIForm.Item>
-    </UIForm.Field>
     <UIForm.Field v-slot="{ componentField, errorMessage }" name="password">
       <UIForm.Item>
         <UIForm.Label>Password</UIForm.Label>
@@ -75,17 +66,8 @@ function showError(message: string) {
         <UIForm.ErrorMessage />
       </UIForm.Item>
     </UIForm.Field>
-    <UIForm.Field v-slot="{ componentField, errorMessage }" name="confirmPassword">
-      <UIForm.Item>
-        <UIForm.Label>Repeat password</UIForm.Label>
-        <UIForm.Control>
-          <UIInput type="password" v-bind="componentField" :error="!!errorMessage" :error-message="errorMessage" full-width />
-        </UIForm.Control>
-        <UIForm.ErrorMessage />
-      </UIForm.Item>
-    </UIForm.Field>
-    <UIButton type="submit" full-width :loading="isSubmitting" :disabled="isSubmitting" :animation="signUpError ? 'error' : null">
-      Submit
+    <UIButton type="submit" full-width :loading="isSubmitting" :disabled="isSubmitting" :animation="signInError ? 'error' : null">
+      Sign In
     </UIButton>
   </form>
 </template>

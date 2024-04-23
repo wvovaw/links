@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ConfigProvider } from "radix-vue";
-import { UITooltipProvider } from "@links/ui";
+import { UIToaster, UITooltipProvider } from "@links/ui";
 import { type ITheme, THEME_CONFIG } from "~entities/ui-theme";
 
 const useIdFunction = () => useId();
@@ -27,6 +27,7 @@ addRouteMiddleware("theme-cookie-update", () => {
           <NuxtLayout>
             <NuxtPage />
           </NuxtLayout>
+          <UIToaster />
         </UITooltipProvider>
       </ConfigProvider>
     </Body>

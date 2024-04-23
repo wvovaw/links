@@ -4,5 +4,6 @@ export default defineI18nLocale(async (_locale) => {
 
     "pages.constructor.title": "Конструктор страницы",
     "pages.sign-up.title": "Регистрация",
+    "pages.sign-in.title": "Авторизация",
   };
 });
