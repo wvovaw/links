@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { UIButton } from "@links/ui";
 import { TopNavbar } from "~widgets/top-navbar";
+import { UserDropdownMenu } from "~/widgets/user-dropdown-menu";
 import { ToggleTheme } from "~features/ui-theme";
-import { ChangeLanguage } from "~features/localization";
+import { SessionModel, UserDropdown } from "~entities/session";
 
 const route = useRoute();
 const { t } = useI18n();
@@ -12,6 +14,9 @@ const head = useLocaleHead({
 });
 
 const title = computed(() => t(route.meta.title as string));
+
+const sessionStore = SessionModel.useSessionStore();
+const { isLogedIn } = storeToRefs(sessionStore);
 </script>
 
 <template>
@@ -33,11 +38,15 @@ const title = computed(() => t(route.meta.title as string));
           </div>
         </template>
         <template #right>
-          <div class="w-fit flex items-center gap-2">
-            <ClientOnly>
-              <ChangeLanguage class="w-[150px]!" />
-            </ClientOnly>
-            <ToggleTheme icon-only />
+          <UserDropdown v-if="isLogedIn">
+            <UserDropdownMenu class="my-2"/>
+          </UserDropdown>
+          <div v-else class="w-fit flex items-center gap-2">
+            <NuxtLinkLocale to="sign-in" aria-label="sign in">
+              <UIButton variant="ghost" size="sm" icon="i-lucide:user" class="rounded-full!" />
+              <span class="sr-only">Sign In</span>
+            </NuxtLinkLocale>
+            <ToggleTheme size="sm" icon-only />
           </div>
         </template>
       </TopNavbar>

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { getCurrentSession, getCurrentUser } from "../api";
 import type { Session, User } from "~shared/api/appwrite";
 
 export const useSessionStore = defineStore("session", () => {
@@ -14,6 +15,11 @@ export const useSessionStore = defineStore("session", () => {
 
   function setUser(userData: User | null) {
     user.value = userData;
+  }
+
+  if (import.meta.client) {
+    getCurrentSession().then(val => val && setSession(val));
+    getCurrentUser().then(val => val && setUser(val));
   }
 
   return {
