@@ -24,8 +24,8 @@ const debounce = useDebounceFn((f: () => void) => f(), 200);
     >
     <UIInput
       :id="id"
-      type="text"
       v-model="model"
+      type="text"
       full-width
     />
   </div>

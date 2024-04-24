@@ -38,6 +38,6 @@ export function useAuth() {
     login,
     logout,
     loadSessionUser,
-    loadCurrentSession
+    loadCurrentSession,
   };
 }

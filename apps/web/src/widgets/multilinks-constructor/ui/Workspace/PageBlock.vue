@@ -23,8 +23,8 @@ defineEmits<{
         'outline-popo': isSelected,
         'outline-transparent': !isSelected,
       }"
-      @click.stop="$emit('select')"
       data-testid="page-block"
+      @click.stop="$emit('select')"
     />
     <slot />
   </div>

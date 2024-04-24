@@ -47,7 +47,7 @@ export function createButton(id: string): IBlock {
         type: "boolean",
         variant: "switch",
         label: "Adult confirmation",
-        hint: "Asks the user to confirm his action"
+        hint: "Asks the user to confirm his action",
       },
     },
   };

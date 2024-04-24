@@ -39,7 +39,7 @@ const { isLogedIn } = storeToRefs(sessionStore);
         </template>
         <template #right>
           <UserDropdown v-if="isLogedIn">
-            <UserDropdownMenu class="my-2"/>
+            <UserDropdownMenu class="my-2" />
           </UserDropdown>
           <div v-else class="w-fit flex items-center gap-2">
             <NuxtLinkLocale to="sign-in" aria-label="sign in">

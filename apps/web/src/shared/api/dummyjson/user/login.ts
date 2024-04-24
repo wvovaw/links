@@ -11,14 +11,14 @@ export interface IUserLoginResponse {
   token: string;
 }
 
-export async function login({ username, password }: IUserLoginRequest ) : Promise<IUserLoginResponse> {
+export async function login({ username, password }: IUserLoginRequest): Promise<IUserLoginResponse> {
   const data = instance<IUserLoginResponse>("/auth/login", {
     method: "POST",
     body: {
       username,
       password,
-      expiresInMins: 30
-    }
+      expiresInMins: 30,
+    },
   });
   return data;
 }

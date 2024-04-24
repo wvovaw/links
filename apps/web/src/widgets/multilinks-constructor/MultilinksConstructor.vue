@@ -7,7 +7,6 @@ import { useConstructorStore } from "./model";
 
 const store = useConstructorStore();
 const { addBlock } = store;
-
 </script>
 
 <template>

@@ -28,8 +28,8 @@ export function createParagraph(id: string): IBlock {
         type: "boolean",
         variant: "checkbox",
         label: "Just a checkbox",
-        hint: "This is just a checkbox"
-      }
+        hint: "This is just a checkbox",
+      },
     },
   };
 }

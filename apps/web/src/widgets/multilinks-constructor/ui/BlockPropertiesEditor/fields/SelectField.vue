@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UIRichSelect, UISelectHint, UISelectLabel, UITextArea } from "@links/ui";
+import { UIRichSelect, UISelectHint, UISelectLabel } from "@links/ui";
 import type { IBlockPropertySelect } from "~shared/core";
 
 interface ITextFieldProps {

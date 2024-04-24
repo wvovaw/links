@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UICheckbox, UIInputHint, UIInputLabel, UISwitch } from "@links/ui";
+import { UICheckbox, UIInputHint, UISwitch } from "@links/ui";
 import type { IBlockPropertyBoolean } from "~shared/core";
 
 interface ITextFieldProps {
@@ -25,8 +25,8 @@ const model = defineModel<IBlockPropertyBoolean["value"]>();
       v-else-if="field.variant === 'switch'"
       :id="id"
       :checked="model"
-      @update:checked="v => model = v"
       size="sm"
+      @update:checked="v => model = v"
     />
   </div>
   <UIInputHint v-if="field.hint">
