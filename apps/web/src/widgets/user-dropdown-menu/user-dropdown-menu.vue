@@ -5,13 +5,14 @@ import { ToggleTheme } from "~features/ui-theme";
 </script>
 
 <template>
-  <UIDropdownMenu.Item disabled>
-    <UIDropdownMenu.ItemTitle>Profile</UIDropdownMenu.ItemTitle>
-  </UIDropdownMenu.Item>
-
-  <UIDropdownMenu.Item disabled>
-    <UIDropdownMenu.ItemTitle>Settings</UIDropdownMenu.ItemTitle>
-  </UIDropdownMenu.Item>
+  <NuxtLinkLocale to="/account">
+    <UIDropdownMenu.Item>
+      <UIDropdownMenu.ItemTitle>
+        Account
+      </UIDropdownMenu.ItemTitle>
+      <UIDropdownMenu.ItemIcon icon="i-lucide:user" />
+    </UIDropdownMenu.Item>
+  </NuxtLinkLocale>
 
   <UIDropdownMenu.Separator />
 

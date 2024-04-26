@@ -56,6 +56,10 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/docs/**": { prerender: true },
+    "/pages/**": { ssr: false },
+    "/sign-in": { ssr: false },
+    "/sign-up": { ssr: false },
+    "/account/**": { ssr: false }
   },
   modules: [
     "@unocss/nuxt",

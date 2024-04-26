@@ -39,7 +39,7 @@ const { isLogedIn } = storeToRefs(sessionStore);
         </template>
         <template #right>
           <UserDropdown v-if="isLogedIn">
-            <UserDropdownMenu class="my-2" />
+            <UserDropdownMenu />
           </UserDropdown>
           <div v-else class="w-fit flex items-center gap-2">
             <NuxtLinkLocale to="sign-in" aria-label="sign in">
@@ -51,7 +51,7 @@ const { isLogedIn } = storeToRefs(sessionStore);
         </template>
       </TopNavbar>
 
-      <div class="grid min-h-[calc(100vh-var(--navbar-height))] place-content-center">
+      <div class="grid min-h-[calc(100vh-var(--navbar-height))]">
         <slot />
       </div>
     </Body>

@@ -4,7 +4,7 @@ import { SignInForm } from "~features/auth";
 </script>
 
 <template>
-  <div class="w-100vw flex flex-col items-center gap-10 px-4 py-6 container md:flex-row">
+  <div class="w-100vw flex flex-col place-self-center items-center gap-10 px-4 py-6 container md:flex-row">
     <div class="flex-auto max-md:text-center">
       <h2 class="text-moon-32 font-bold lg:text-moon-48">
         This is the <span class="from-hit to-piccolo bg-gradient-to-r bg-clip-text text-transparent font-extrabold">Links</span>
