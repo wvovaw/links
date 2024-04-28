@@ -1,0 +1,109 @@
+<script setup lang="ts">
+import { UIButton, UICard, UIForm, UIInput, UITag, useToast } from "@links/ui";
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/valibot";
+import { profileSettingsSchema } from "../model/schema";
+import { SessionApi, SessionModel } from "~entities/session";
+
+const { toast } = useToast();
+
+const sessionStore = SessionModel.useSessionStore();
+const { user } = storeToRefs(sessionStore);
+const { setUser } = sessionStore;
+
+const { handleSubmit, handleReset, isSubmitting } = useForm({
+  validationSchema: toTypedSchema(profileSettingsSchema),
+  initialValues: {
+    email: user.value?.email,
+    username: user.value?.name,
+  },
+});
+
+const resetForm = handleReset;
+const submitForm = handleSubmit(async (values) => {
+  try {
+    if (values.username) {
+      const newUserData = await SessionApi.updateName({ name: values.username });
+      if (newUserData) {
+        setUser(newUserData);
+        toast({
+          title: "Success",
+          content: "You've successfully updated your user name",
+          variant: "success",
+        });
+      }
+    }
+  }
+  catch (e: unknown) {
+    if (e instanceof Error)
+      showError(e.message);
+  }
+});
+
+function showError(message: string) {
+  toast({
+    title: "Error updating profile settings",
+    content: message,
+    variant: "error",
+  });
+}
+</script>
+
+<template>
+  <UICard.Root>
+    <UICard.Header>
+      <UICard.Title>Profile settings</UICard.Title>
+    </UICard.Header>
+    <UICard.Body>
+      <form>
+        <section class="flex flex-col-reverse gap-4 sm:flex-row sm:gap-8">
+          <div class="flex-1">
+            <UIForm.Field v-slot="{ componentField }" name="username">
+              <UIForm.Item>
+                <UIForm.Label>Username</UIForm.Label>
+                <UIForm.Control>
+                  <UIInput v-bind="componentField" full-width />
+                </UIForm.Control>
+                <UIForm.ErrorMessage />
+              </UIForm.Item>
+            </UIForm.Field>
+            <UIForm.Field v-slot="{ componentField }" name="email">
+              <UIForm.Item>
+                <UIForm.Label class="flex items-center gap-2">
+                  Email <UITag v-if="!user?.emailVerification" variant="outline" color="krillin" size="xs">
+                    Unconfirmed
+                  </UITag>
+                </UIForm.Label>
+                <UIForm.Control>
+                  <UIInput type="email" v-bind="componentField" disabled full-width />
+                </UIForm.Control>
+                <UIForm.ErrorMessage />
+              </UIForm.Item>
+            </UIForm.Field>
+          </div>
+          <div class="flex place-content-center sm:min-w-48">
+            <UIForm.Field v-slot="{ field }" name="avatar">
+              <UIForm.Item>
+                <UIForm.Label>Avatar image</UIForm.Label>
+                <div class="relative h-32 w-32 flex place-items-center justify-center border border-trunks rounded-full bg-beerus text-trunks">
+                  <span class="i-lucide:image block h-10 w-10" />
+                  <UIForm.Control>
+                    <input v-bind="field" type="file" accept=".jpg, .jpeg, .png" class="absolute hidden">
+                  </UIForm.Control>
+                </div>
+              </UIForm.Item>
+            </UIForm.Field>
+          </div>
+        </section>
+      </form>
+    </UICard.Body>
+    <UICard.Footer class="flex gap-2">
+      <UIButton :disabled="isSubmitting" :loading="isSubmitting" @click="submitForm">
+        Save
+      </UIButton>
+      <UIButton variant="ghost" @click="resetForm">
+        Reset
+      </UIButton>
+    </UICard.Footer>
+  </UICard.Root>
+</template>

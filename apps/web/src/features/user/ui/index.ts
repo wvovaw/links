@@ -1,0 +1,1 @@
+export { default as ProfileSettingsForm } from "./profile-settings-form.vue";
