@@ -3,6 +3,8 @@ import { UIButton, UICard, UIForm, UIInput, UITag, useToast } from "@links/ui";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { profileSettingsSchema } from "../model/schema";
+import { urlToFile } from "~shared/lib/utils";
+import { ImageUploader } from "~shared/ui/image-uploader";
 import { SessionApi, SessionModel } from "~entities/session";
 
 const { toast } = useToast();
@@ -11,12 +13,17 @@ const sessionStore = SessionModel.useSessionStore();
 const { user } = storeToRefs(sessionStore);
 const { setUser } = sessionStore;
 
-const { handleSubmit, handleReset, isSubmitting } = useForm({
+async function initForm() {
+  return {
+    email: (() => user.value?.email)(),
+    username: (() => user.value?.name)(),
+    avatar: await (async () => await urlToFile("https://avatars.githubusercontent.com/u/42155444?v=4"))(),
+  };
+}
+
+const { handleSubmit, handleReset, resetForm: reinitForm, isSubmitting } = useForm({
   validationSchema: toTypedSchema(profileSettingsSchema),
-  initialValues: {
-    email: user.value?.email,
-    username: user.value?.name,
-  },
+  initialValues: await initForm(),
 });
 
 const resetForm = handleReset;
@@ -38,6 +45,13 @@ const submitForm = handleSubmit(async (values) => {
     if (e instanceof Error)
       showError(e.message);
   }
+});
+
+// Set initial values after store finished the api calls
+sessionStore.$subscribe(async () => {
+  reinitForm({
+    values: await initForm(),
+  });
 });
 
 function showError(message: string) {
@@ -81,17 +95,24 @@ function showError(message: string) {
               </UIForm.Item>
             </UIForm.Field>
           </div>
-          <div class="flex place-content-center sm:min-w-48">
-            <UIForm.Field v-slot="{ field }" name="avatar">
+          <div class="flex flex-col place-content-center items-center sm:min-w-48">
+            <UIForm.Field v-slot="{ componentField, handleChange }" name="avatar">
               <UIForm.Item>
-                <UIForm.Label>Avatar image</UIForm.Label>
-                <div class="relative h-32 w-32 flex place-items-center justify-center border border-trunks rounded-full bg-beerus text-trunks">
-                  <span class="i-lucide:image block h-10 w-10" />
-                  <UIForm.Control>
-                    <input v-bind="field" type="file" accept=".jpg, .jpeg, .png" class="absolute hidden">
-                  </UIForm.Control>
-                </div>
+                <UIForm.Label>
+                  Avatar image
+                </UIForm.Label>
+                <UIForm.Control>
+                  <ImageUploader v-bind="componentField" />
+                </UIForm.Control>
               </UIForm.Item>
+              <UIButton
+                variant="link"
+                class="color-trunks"
+                size="lg"
+                @click.prevent="handleChange(undefined)"
+              >
+                Unset avatar
+              </UIButton>
             </UIForm.Field>
           </div>
         </section>

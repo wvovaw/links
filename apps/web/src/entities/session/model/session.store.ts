@@ -17,10 +17,18 @@ export const useSessionStore = defineStore("session", () => {
     user.value = userData;
   }
 
-  if (import.meta.client) {
-    getCurrentSession().then(val => val && setSession(val));
-    getCurrentUser().then(val => val && setUser(val));
+  async function populate() {
+    const session = await getCurrentSession();
+    const user = await getCurrentUser();
+    if (session)
+      setSession(session);
+    if (user)
+      setUser(user);
   }
+  if (import.meta.client)
+    populate();
+    // getCurrentSession().then(val => val && setSession(val));
+    // getCurrentUser().then(val => val && setUser(val));
 
   return {
     isLogedIn,
