@@ -1,4 +1,4 @@
-import { Account, Client } from "appwrite";
+import { Account, Client, Storage } from "appwrite";
 
 let client: Client | undefined;
 
@@ -17,4 +17,9 @@ function useApiClient() {
 export function useAccountApi() {
   const account = new Account(useApiClient());
   return account;
+}
+
+export function useStorageApi() {
+  const storage = new Storage(useApiClient());
+  return storage;
 }

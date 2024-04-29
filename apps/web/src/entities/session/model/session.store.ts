@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { getCurrentSession, getCurrentUser } from "../api";
+import { AccountApi } from "~shared/api/appwrite";
 import type { Session, User } from "~shared/api/appwrite";
 
 export const useSessionStore = defineStore("session", () => {
@@ -18,8 +18,8 @@ export const useSessionStore = defineStore("session", () => {
   }
 
   async function populate() {
-    const session = await getCurrentSession();
-    const user = await getCurrentUser();
+    const session = await AccountApi.getCurrentSession();
+    const user = await AccountApi.getCurrentUser();
     if (session)
       setSession(session);
     if (user)
@@ -27,8 +27,6 @@ export const useSessionStore = defineStore("session", () => {
   }
   if (import.meta.client)
     populate();
-    // getCurrentSession().then(val => val && setSession(val));
-    // getCurrentUser().then(val => val && setUser(val));
 
   return {
     isLogedIn,

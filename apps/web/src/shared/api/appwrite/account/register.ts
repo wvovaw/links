@@ -1,9 +1,7 @@
-import { getErrorMessage } from "./errors";
-import {
-  ApiException,
-  ID,
-  useAccountApi,
-} from "~shared/api/appwrite";
+import { ID } from "appwrite";
+import { getErrorMessage } from "../errors";
+import { useAccountApi } from "../instance";
+import { ApiException } from "../types";
 
 export interface IUserRegisterData {
   email: string;

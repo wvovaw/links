@@ -5,7 +5,8 @@ import { toTypedSchema } from "@vee-validate/valibot";
 import { profileSettingsSchema } from "../model/schema";
 import { urlToFile } from "~shared/lib/utils";
 import { ImageUploader } from "~shared/ui/image-uploader";
-import { SessionApi, SessionModel } from "~entities/session";
+import { SessionModel } from "~entities/session";
+import { AccountApi } from "~shared/api/appwrite";
 
 const { toast } = useToast();
 
@@ -30,7 +31,7 @@ const resetForm = handleReset;
 const submitForm = handleSubmit(async (values) => {
   try {
     if (values.username) {
-      const newUserData = await SessionApi.updateName({ name: values.username });
+      const newUserData = await AccountApi.updateName({ name: values.username });
       if (newUserData) {
         setUser(newUserData);
         toast({

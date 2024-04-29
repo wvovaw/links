@@ -1,9 +1,6 @@
-import { getErrorMessage } from "./errors";
-import {
-  ApiException,
-  type Session,
-  useAccountApi,
-} from "~shared/api/appwrite";
+import { getErrorMessage } from "../errors";
+import { useAccountApi } from "../instance";
+import { ApiException, type Session } from "../types";
 
 export interface IUserLoginData {
   email: string;

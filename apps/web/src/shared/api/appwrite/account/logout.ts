@@ -1,8 +1,6 @@
-import { getErrorMessage } from "./errors";
-import {
-  ApiException,
-  useAccountApi,
-} from "~shared/api/appwrite";
+import { getErrorMessage } from "../errors";
+import { useAccountApi } from "../instance";
+import { ApiException } from "../types";
 
 export async function logout() {
   try {

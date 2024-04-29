@@ -1,9 +1,6 @@
-import { getErrorMessage } from "./errors";
-import {
-  ApiException,
-  type User,
-  useAccountApi,
-} from "~shared/api/appwrite";
+import { getErrorMessage } from "../errors";
+import { useAccountApi } from "../instance";
+import { ApiException, type User } from "../types";
 
 export interface IUserUpdateNameData {
   name: string;
