@@ -12,35 +12,41 @@ const { toast } = useToast();
 
 const sessionStore = SessionModel.useSessionStore();
 const { user } = storeToRefs(sessionStore);
-const { setUser } = sessionStore;
+const { refreshUserData } = sessionStore;
 
 async function initForm() {
   return {
     email: (() => user.value?.email)(),
     username: (() => user.value?.name)(),
-    avatar: await (async () => await urlToFile("https://avatars.githubusercontent.com/u/42155444?v=4"))(),
+    avatar: await (async () => user.value?.avatarUrl ? await urlToFile(user.value?.avatarUrl) : undefined)(),
   };
 }
 
-const { handleSubmit, handleReset, resetForm: reinitForm, isSubmitting } = useForm({
+const { handleSubmit, handleReset, resetForm: reinitForm, isSubmitting, isFieldDirty, meta } = useForm({
   validationSchema: toTypedSchema(profileSettingsSchema),
   initialValues: await initForm(),
 });
+const isFormValidAndDirty = computed(() => meta.value.valid && meta.value.dirty);
 
 const resetForm = handleReset;
 const submitForm = handleSubmit(async (values) => {
   try {
-    if (values.username) {
-      const newUserData = await AccountApi.updateName({ name: values.username });
-      if (newUserData) {
-        setUser(newUserData);
-        toast({
-          title: "Success",
-          content: "You've successfully updated your user name",
-          variant: "success",
-        });
-      }
+    if (isFieldDirty("username") && values.username)
+      await AccountApi.updateName({ name: values.username });
+
+    if (isFieldDirty("avatar")) {
+      if (values.avatar)
+        await AccountApi.updateAvatar({ file: values.avatar });
+      else
+        await AccountApi.removeAvatar();
     }
+
+    toast({
+      title: "Success",
+      content: "Profile settings updated successfully",
+      variant: "success",
+    });
+    await refreshUserData();
   }
   catch (e: unknown) {
     if (e instanceof Error)
@@ -105,6 +111,7 @@ function showError(message: string) {
                 <UIForm.Control>
                   <ImageUploader v-bind="componentField" />
                 </UIForm.Control>
+                <UIForm.ErrorMessage />
               </UIForm.Item>
               <UIButton
                 variant="link"
@@ -120,7 +127,11 @@ function showError(message: string) {
       </form>
     </UICard.Body>
     <UICard.Footer class="flex gap-2">
-      <UIButton :disabled="isSubmitting" :loading="isSubmitting" @click="submitForm">
+      <UIButton
+        :disabled="!isFormValidAndDirty || isSubmitting"
+        :loading="isSubmitting"
+        @click="submitForm"
+      >
         Save
       </UIButton>
       <UIButton variant="ghost" @click="resetForm">

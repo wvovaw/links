@@ -7,6 +7,7 @@ export default defineNuxtConfig({
       /* public keys is also client-side */
       appwriteProjectId: "",
       appwriteHost: "",
+      appwriteUserPicturesBucketId: ""
     },
   },
   unocss: {

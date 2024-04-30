@@ -13,6 +13,7 @@ const [isOpen, toggle] = useToggle(false);
     <UIDropdownMenu.Trigger @click="toggle">
       <div class="flex gap-2">
         <UIAvatar.Root class="border border-beerus" shape="circle">
+          <UIAvatar.Image v-if="user?.avatarUrl" :src="user?.avatarUrl" />
           <UIAvatar.Fallback>{{ user?.name.substring(0, 2) }}</UIAvatar.Fallback>
         </UIAvatar.Root>
         <span class="place-self-center">{{ user?.name }}</span>
