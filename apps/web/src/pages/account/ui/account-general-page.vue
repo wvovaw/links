@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { UIProgressCircular } from "@links/ui";
-import { ProfileSettingsForm } from "~features/user";
+import { ProfileSettingsForm, ProfileSettingsFormSkeleton } from "~features/user";
 </script>
 
 <template>
   <Suspense>
     <ProfileSettingsForm />
     <template #fallback>
-      <UIProgressCircular size="xl" :model-value="null" />
+      <ProfileSettingsFormSkeleton />
     </template>
   </Suspense>
 </template>

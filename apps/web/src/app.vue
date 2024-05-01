@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ConfigProvider } from "radix-vue";
 import { UIToaster, UITooltipProvider } from "@links/ui";
+import { ConfirmationDialog } from "~shared/ui/confirmation-dialog";
 import { type ITheme, THEME_CONFIG } from "~entities/ui-theme";
 
 const useIdFunction = () => useId();
@@ -28,6 +29,7 @@ addRouteMiddleware("theme-cookie-update", () => {
             <NuxtPage />
           </NuxtLayout>
           <UIToaster />
+          <ConfirmationDialog />
         </UITooltipProvider>
       </ConfigProvider>
     </Body>

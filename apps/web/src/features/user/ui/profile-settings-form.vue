@@ -7,6 +7,7 @@ import { urlToFile } from "~shared/lib/utils";
 import { ImageUploader } from "~shared/ui/image-uploader";
 import { SessionModel } from "~entities/session";
 import { AccountApi } from "~shared/api/appwrite";
+import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 const { toast } = useToast();
 
@@ -68,6 +69,31 @@ function showError(message: string) {
     variant: "error",
   });
 }
+
+onBeforeRouteLeave(async () => {
+  if (isFormValidAndDirty.value) {
+    const { createConfirmation } = useConfirmation();
+
+    const confirmation = createConfirmation({
+      title: "Progress will be lost",
+      subtitle: "You have unsaved data",
+      content: "Do you want to leave this page? Your unsaved data will be lost!",
+      onConfirm() {
+        console.log("Confirmed");
+      },
+      onCancel() {
+        console.log("Canceled");
+      },
+    });
+
+    const { isCanceled } = await confirmation();
+
+    if (isCanceled)
+      return false;
+    else return true;
+  }
+  return true;
+});
 </script>
 
 <template>
