@@ -75,15 +75,9 @@ onBeforeRouteLeave(async () => {
     const { createConfirmation } = useConfirmation();
 
     const confirmation = createConfirmation({
-      title: "Progress will be lost",
-      subtitle: "You have unsaved data",
-      content: "Do you want to leave this page? Your unsaved data will be lost!",
-      onConfirm() {
-        console.log("Confirmed");
-      },
-      onCancel() {
-        console.log("Canceled");
-      },
+      title: "Changes will be lost",
+      subtitle: "You have unsaved changes",
+      content: "Do you want to leave this page? Unsaved changes won't be saved!",
     });
 
     const { isCanceled } = await confirmation();

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { UIButton, UIDialog } from "@links/ui";
+import { isVNode } from "vue";
 import { useConfirmation } from "./use-confirmation";
 
 const { config, show } = useConfirmation();
 </script>
 
 <template>
-  <UIDialog.Root v-model:open="show" :modal="true">
+  <UIDialog.Root :open="show" :modal="true" @update:open="show && config.onCancel()">
     <UIDialog.Content>
       <UIDialog.Header>
         <UIDialog.Title>{{ config.title }}</UIDialog.Title>
@@ -14,15 +15,18 @@ const { config, show } = useConfirmation();
           {{ config.subtitle }}
         </UIDialog.Subtitle>
       </UIDialog.Header>
-      <slot>
+      <template v-if="isVNode(config.content)">
+        <component :is="config.content" />
+      </template>
+      <template v-else>
         {{ config.content }}
-      </slot>
+      </template>
       <UIDialog.Footer>
-        <UIButton @click="config.onConfirm">
-          Confirm
-        </UIButton>
         <UIButton variant="ghost" @click="config.onCancel">
           Cancel
+        </UIButton>
+        <UIButton @click="config.onConfirm">
+          Confirm
         </UIButton>
       </UIDialog.Footer>
     </UIDialog.Content>

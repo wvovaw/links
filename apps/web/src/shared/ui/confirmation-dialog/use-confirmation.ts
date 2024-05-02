@@ -1,9 +1,10 @@
-import { ref } from "vue";
+import { type VNode, ref } from "vue";
 
 export interface IConfirmationDialog {
   title: string;
   subtitle: string;
-  content?: string; // TODO: string | VNode
+  /** The body of the confirmation dialog window. Can be a string or a vue virtual dom */
+  content?: string | VNode;
   /** Called on 'confirm' button push */
   onConfirm: Function;
   /** Called on 'cancel' button push */
@@ -47,3 +48,29 @@ export function useConfirmation() {
     config,
   };
 }
+
+/**
+ * Example of use:
+ *
+ * import { useConfirmation } from "~shared/ui/confirmation-dialog";
+ *
+ *  const { createConfirmation } = useConfirmation();
+ *
+ *  const confirmation = createConfirmation({
+ *    title: "Changes will be lost",
+ *    subtitle: "You have unsaved changes",
+ *    content: "Do you want to leave this page? Your unsaved changes won't be saved!",
+ *    onConfirm() {
+ *      return "confirm";
+ *    },
+ *    onCancel() {
+ *      return "cancel";
+ *    },
+ *  });
+ *
+ *  const { isCanceled, data } = await confirmation();
+ *  console.log("data passed: ", data) // outputs 'confirm' or 'cancel' depending on what callback was called
+ *  if (isCanceled)
+ *    return false;
+ *  else return true;
+ */
