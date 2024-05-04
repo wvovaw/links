@@ -19,7 +19,7 @@ const onSubmit = handleSubmit(async (data) => {
     await register({ email, username, password });
     await login({ email, password });
 
-    push("/pages/constructor");
+    push("/links");
   }
   catch (e: unknown) {
     if (e instanceof Error)

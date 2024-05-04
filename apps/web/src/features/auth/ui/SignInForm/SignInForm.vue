@@ -18,7 +18,7 @@ const onSubmit = handleSubmit(async (data) => {
 
     await login({ email, password });
 
-    push("/pages/constructor");
+    push("/links");
   }
   catch (e: unknown) {
     if (e instanceof Error)
