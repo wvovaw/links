@@ -7,7 +7,7 @@ import PageBlock from "./PageBlock.vue";
 import PageBackground from "./PageBackground.vue";
 
 const constructorStore = useConstructorStore();
-const { page, selectedBlockId: selectedBlock } = storeToRefs(constructorStore);
+const { selectedBlockId: selectedBlock, blocks } = storeToRefs(constructorStore);
 const { selectBlock } = constructorStore;
 
 const blocksMap = new Map();
@@ -26,13 +26,13 @@ function isSelectedBlock(blockId: string) {
   return isit;
 };
 
-const [draggableRoot, draggableBlocks] = useDragAndDrop(page.value.blocks, {
+const [draggableRoot, draggableBlocks] = useDragAndDrop(blocks.value, {
   draggable: el => !el.hasAttribute("data-dnd-no-drag"),
   plugins: [animations({ duration: 100 })],
 });
 watch(draggableBlocks, (newBlocks) => {
   constructorStore.$patch((state) => {
-    state.page.blocks = newBlocks;
+    state.blocks = newBlocks;
   });
 });
 </script>

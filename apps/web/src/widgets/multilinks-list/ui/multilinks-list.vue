@@ -45,7 +45,7 @@ const { links } = storeToRefs(linksStore);
             </UITag>
           </UITable.Cell>
           <UITable.Cell>
-            <LinkActions />
+            <LinkActions :link-id="link.$id" />
           </UITable.Cell>
         </UITable.Row>
       </UITable.Body>

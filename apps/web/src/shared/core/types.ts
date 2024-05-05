@@ -54,9 +54,3 @@ export interface IBlock {
   name: BlockName;
   properties?: Record<string, BlockProperty>;
 }
-
-export interface IPage {
-  id: string;
-  title: string;
-  blocks: IBlock[];
-}

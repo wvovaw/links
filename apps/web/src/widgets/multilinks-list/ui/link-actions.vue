@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { UIButton, UIDropdownMenu } from "@links/ui";
+
+defineProps<{
+  linkId: string;
+}>();
 </script>
 
 <template>
   <div class="hidden flex-row gap-2 sm:flex">
-    <UIButton size="xs" icon="i-lucide:hammer">
-      Edit
-    </UIButton>
+    <NuxtLinkLocale :to="`/links/constructor/${linkId}`">
+      <UIButton size="xs" icon="i-lucide:hammer" as="span">
+        Edit
+      </UIButton>
+    </NuxtLinkLocale>
     <UIButton size="xs" icon="i-lucide:eye">
       Preview
     </UIButton>
@@ -20,10 +26,12 @@ import { UIButton, UIDropdownMenu } from "@links/ui";
         <span class="i-lucide:ellipsis m-auto inline-block" />
       </UIDropdownMenu.Trigger>
       <UIDropdownMenu.Content align="center">
-        <UIDropdownMenu.Item>
-          <UIDropdownMenu.ItemTitle>Edit</UIDropdownMenu.ItemTitle>
-          <UIDropdownMenu.ItemIcon icon="i-lucide:hammer" />
-        </UIDropdownMenu.Item>
+        <NuxtLinkLocale :to="`/links/constructor/${linkId}`">
+          <UIDropdownMenu.Item>
+            <UIDropdownMenu.ItemTitle>Edit</UIDropdownMenu.ItemTitle>
+            <UIDropdownMenu.ItemIcon icon="i-lucide:hammer" />
+          </UIDropdownMenu.Item>
+        </NuxtLinkLocale>
         <UIDropdownMenu.Item>
           <UIDropdownMenu.ItemTitle>Open preview</UIDropdownMenu.ItemTitle>
           <UIDropdownMenu.ItemIcon icon="i-lucide:eye" />
