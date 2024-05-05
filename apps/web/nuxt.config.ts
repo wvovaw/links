@@ -7,7 +7,8 @@ export default defineNuxtConfig({
       /* public keys is also client-side */
       appwriteProjectId: "",
       appwriteHost: "",
-      appwriteUserPicturesBucketId: ""
+      appwriteUserPicturesBucketId: "",
+      appwriteDatabaseId: "",
     },
   },
   unocss: {
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/docs/**": { prerender: true },
-    "/pages/**": { ssr: false },
+    "/links/**": { ssr: false },
     "/sign-in": { ssr: false },
     "/sign-up": { ssr: false },
     "/account/**": { ssr: false }

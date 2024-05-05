@@ -1,4 +1,4 @@
-import { Account, Client, Storage } from "appwrite";
+import { Account, Client, Databases, Storage } from "appwrite";
 
 let client: Client | undefined;
 
@@ -22,4 +22,9 @@ export function useAccountApi() {
 export function useStorageApi() {
   const storage = new Storage(useApiClient());
   return storage;
+}
+
+export function useDatabaseApi() {
+  const db = new Databases(useApiClient());
+  return db;
 }
