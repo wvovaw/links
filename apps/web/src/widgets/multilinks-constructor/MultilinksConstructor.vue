@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UIScrollArea, useToast } from "@links/ui";
+import { UIScrollArea } from "@links/ui";
 import { BlockPropertiesEditor } from "./ui/BlockPropertiesEditor";
 import { BlocksList } from "./ui/BlocksList";
 import { Workspace } from "./ui/Workspace";
@@ -12,7 +12,6 @@ const props = defineProps<{
 
 const constructorStore = useConstructorStore();
 const { addBlock, setBlocks, setTitle } = constructorStore;
-const { toast } = useToast();
 
 try {
   const data = await LinksApi.getLink(props.linkId);
@@ -23,10 +22,9 @@ try {
 }
 catch (e: unknown) {
   if (e instanceof Error) {
-    toast({
-      title: "Request error",
-      content: e.message,
-      variant: "error",
+    throw createError({
+      statusCode: 404,
+      statusMessage: e.message,
     });
   }
 }
