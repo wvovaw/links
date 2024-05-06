@@ -116,7 +116,7 @@ onBeforeRouteLeave(async () => {
                   </UITag>
                 </UIForm.Label>
                 <UIForm.Control>
-                  <UIInput type="email" v-bind="componentField" disabled full-width />
+                  <UIInput type="email" v-bind="componentField" full-width disabled />
                 </UIForm.Control>
                 <UIForm.ErrorMessage />
               </UIForm.Item>

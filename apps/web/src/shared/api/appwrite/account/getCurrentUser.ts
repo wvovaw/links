@@ -16,7 +16,8 @@ export async function getCurrentUser(): Promise<User | undefined> {
     try {
       if (avatarID)
         avatar = storageAip.getFileView(bucketId, avatarID).toString();
-    } catch (e) {
+    }
+    catch (e) {
       if (e instanceof ApiException)
         throw new Error(getErrorMessage(e.type));
     }

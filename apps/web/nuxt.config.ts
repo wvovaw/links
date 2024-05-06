@@ -61,7 +61,7 @@ export default defineNuxtConfig({
     "/links/**": { ssr: false },
     "/sign-in": { ssr: false },
     "/sign-up": { ssr: false },
-    "/account/**": { ssr: false }
+    "/account/**": { ssr: false },
   },
   modules: [
     "@unocss/nuxt",

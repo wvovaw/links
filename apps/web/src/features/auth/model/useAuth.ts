@@ -1,5 +1,5 @@
 import { SessionModel } from "~entities/session";
-import { AccountApi  } from "~shared/api/appwrite";
+import { AccountApi } from "~shared/api/appwrite";
 
 export function useAuth() {
   const sessionStore = SessionModel.useSessionStore();

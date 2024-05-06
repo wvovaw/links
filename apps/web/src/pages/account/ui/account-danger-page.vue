@@ -1,1 +1,3 @@
-<template>/account/danger</template>
+<template>
+  /account/danger
+</template>

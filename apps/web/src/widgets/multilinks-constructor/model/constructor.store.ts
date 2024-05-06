@@ -21,7 +21,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const title = ref(defaultPageTitle);
 
   /* Actions */
-  function setTitle(newTitle: string) { title.value = newTitle; }
+  function setTitle(newTitle: string) {
+    title.value = newTitle;
+  }
   function setBlocks(newBlocks: IBlock[]) {
     blocks.value.length = 0;
     blocks.value.push(...newBlocks);
