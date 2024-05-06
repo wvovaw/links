@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { UIButton, UIDropdownMenu } from "@links/ui";
+import { useLinksStore } from "../../../entities/links";
 
 defineProps<{
   linkId: string;
 }>();
+const { deleteLink } = useLinksStore();
 </script>
 
 <template>
@@ -16,7 +18,7 @@ defineProps<{
     <UIButton size="xs" icon="i-lucide:eye">
       Preview
     </UIButton>
-    <UIButton size="xs" icon="i-lucide:trash" color="chichi" variant="outline">
+    <UIButton size="xs" icon="i-lucide:trash" color="chichi" variant="outline" @click="deleteLink(linkId)">
       Delete
     </UIButton>
   </div>
@@ -37,7 +39,7 @@ defineProps<{
           <UIDropdownMenu.ItemIcon icon="i-lucide:eye" />
         </UIDropdownMenu.Item>
         <UIDropdownMenu.Separator />
-        <UIDropdownMenu.Item class="color-chichi">
+        <UIDropdownMenu.Item class="color-chichi" @click="deleteLink(linkId)">
           <UIDropdownMenu.ItemTitle>Delete</UIDropdownMenu.ItemTitle>
           <UIDropdownMenu.ItemIcon icon="i-lucide:trash" />
         </UIDropdownMenu.Item>
