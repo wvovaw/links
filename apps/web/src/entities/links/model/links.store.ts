@@ -13,6 +13,37 @@ export const useLinksStore = defineStore("links", () => {
   const links = computed(() => _links.value);
 
   /* Actions */
+  async function updateLink(params: LinksApi.IUpdateLinkData) {
+    const { toast } = useToast();
+    const { createConfirmation } = useConfirmation();
+    const confirm = createConfirmation({
+      title: "Delete link",
+      content: "Are you sure to delete selected link?",
+      onConfirm: () => true,
+      onCancel: () => false,
+    });
+
+    const { data } = await confirm();
+    if (data) {
+      try {
+        await LinksApi.updateLink(params);
+        toast({
+          title: "Succes",
+          content: "The link is successfully saved",
+          variant: "success",
+        });
+      }
+      catch (e: unknown) {
+        if (e instanceof Error) {
+          toast({
+            title: "Saving error",
+            content: e.message,
+            variant: "error",
+          });
+        }
+      }
+    }
+  }
   async function deleteLink(id: string) {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
@@ -57,5 +88,6 @@ export const useLinksStore = defineStore("links", () => {
   return {
     links,
     deleteLink,
+    updateLink,
   };
 });
