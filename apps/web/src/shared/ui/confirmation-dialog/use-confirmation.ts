@@ -5,19 +5,20 @@ export interface IConfirmationDialog {
   subtitle: string;
   /** The body of the confirmation dialog window. Can be a string or a vue virtual dom */
   content?: string | VNode;
-  /** Called on 'confirm' button push */
-  onConfirm: Function;
-  /** Called on 'cancel' button push */
-  onCancel: Function;
+  /** Called on 'confirm' button push. Default is () => true */
+  onConfirm?: Function;
+  /** Called on 'cancel' button push. Default is () => false */
+  onCancel?: Function;
 }
 
 const defaultConfirmationDialog = {
   title: "Confirmation",
   subtitle: "Additional confirmation needed",
   content: "Please, confirm your intent",
-  onConfirm: () => { return true; },
-  onCancel: () => { return false; },
 };
+const defaultOnConfirm = () => true;
+const defaultOnCancel = () => false;
+
 const config = ref<IConfirmationDialog>(defaultConfirmationDialog);
 const { isRevealed, reveal, confirm, cancel } = useConfirmDialog();
 
@@ -28,14 +29,14 @@ export function useConfirmation() {
     config.value.onConfirm = () => {
       if (params.onConfirm)
         confirm(params.onConfirm());
-      else confirm();
+      else confirm(defaultOnConfirm());
       config.value = defaultConfirmationDialog;
     };
 
     config.value.onCancel = () => {
       if (params.onCancel)
         cancel(params.onCancel());
-      else cancel();
+      else cancel(defaultOnCancel());
       config.value = defaultConfirmationDialog;
     };
 
