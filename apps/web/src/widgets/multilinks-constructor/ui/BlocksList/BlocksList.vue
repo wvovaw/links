@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { UIMenu } from "@links/ui";
-import { type BlockName, blocksList } from "~shared/core";
+import { useConstructorStore } from "../../model";
+import { blocksList } from "~shared/core";
 
-defineEmits<{
-  addBlock: [name: BlockName];
-}>();
+const { addBlock } = useConstructorStore();
 </script>
 
 <template>
@@ -13,7 +12,7 @@ defineEmits<{
       v-for="block of blocksList"
       :key="block.name"
       data-testid="blocks-list-item"
-      @click="$emit('addBlock', block.name)"
+      @click="addBlock(block.name)"
     >
       <UIMenu.Icon icon="i-lucide:circle-plus" />
       <UIMenu.Title class="font-semibold">

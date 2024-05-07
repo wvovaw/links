@@ -3,6 +3,7 @@ import { ref } from "vue";
 import type { BlockName, IBlock } from "~shared/core";
 import { createBlock } from "~shared/core";
 import { randomString } from "~shared/lib/utils";
+import { useLinksStore } from "~entities/links";
 
 const defaultPageTitle = "New multilinks page";
 const defaultBlocksState: IBlock[] = [];
@@ -13,14 +14,20 @@ const generateBlockId = () => randomString(8);
  * Make sure _page.blocks array is not changed during page manipulations.
  * To empty the blocks array use _page.value.blocks.length = 0 :nd so on.
  */
+// TODO: Implement Undo / Redo feature
 
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   /* State */
   const selectedBlockId = ref<string | null>(null);
-  const blocks = ref<IBlock[]>(defaultBlocksState);
+  const linkId = ref<string | null>(null);
   const title = ref(defaultPageTitle);
+  const blocks = ref<IBlock[]>(defaultBlocksState);
+  const seo = ref<Record<string, any>>({});
 
   /* Actions */
+  function setId(id: string) {
+    linkId.value = id;
+  }
   function setTitle(newTitle: string) {
     title.value = newTitle;
   }
@@ -53,11 +60,23 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks.value.splice(index, 0, { ...structuredClone(toRaw(block)), id: newBlockId });
     }
   }
+  async function saveCurrentState() {
+    const { updateLink } = useLinksStore();
+    if (linkId.value) {
+      await updateLink({
+        id: linkId.value,
+        title: title.value,
+        blocks: blocks.value,
+        seo: seo.value,
+      });
+    }
+  }
 
   return {
     selectedBlockId,
     blocks,
     title,
+    setId,
     setBlocks,
     setTitle,
     getBlock,
@@ -65,5 +84,6 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     addBlock,
     removeBlock,
     duplicateBlock,
+    saveCurrentState,
   };
 });

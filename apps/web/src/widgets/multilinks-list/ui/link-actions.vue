@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UIDropdownMenu } from "@links/ui";
-import { useLinksStore } from "../../../entities/links";
+import { useLinksStore } from "~entities/links";
 
 defineProps<{
   linkId: string;

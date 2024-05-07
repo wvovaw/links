@@ -17,10 +17,8 @@ export const useLinksStore = defineStore("links", () => {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
     const confirm = createConfirmation({
-      title: "Delete link",
-      content: "Are you sure to delete selected link?",
-      onConfirm: () => true,
-      onCancel: () => false,
+      title: "Update link",
+      content: "Are you sure you want to update the link?",
     });
 
     const { data } = await confirm();
@@ -29,7 +27,7 @@ export const useLinksStore = defineStore("links", () => {
         await LinksApi.updateLink(params);
         toast({
           title: "Succes",
-          content: "The link is successfully saved",
+          content: "The link is successfully updated",
           variant: "success",
         });
       }
@@ -50,8 +48,6 @@ export const useLinksStore = defineStore("links", () => {
     const confirm = createConfirmation({
       title: "Delete link",
       content: "Are you sure to delete selected link?",
-      onConfirm: () => true,
-      onCancel: () => false,
     });
 
     const { data } = await confirm();

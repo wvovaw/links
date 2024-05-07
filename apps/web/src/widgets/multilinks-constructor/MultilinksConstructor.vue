@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { UIScrollArea } from "@links/ui";
 import { BlockPropertiesEditor } from "./ui/BlockPropertiesEditor";
-import { BlocksList } from "./ui/BlocksList";
+import { Toolbar } from "./ui/toolbar";
 import { Workspace } from "./ui/Workspace";
 import { useConstructorStore } from "./model";
 import { LinksApi } from "~shared/api/appwrite";
@@ -11,11 +10,12 @@ const props = defineProps<{
 }>();
 
 const constructorStore = useConstructorStore();
-const { addBlock, setBlocks, setTitle } = constructorStore;
+const { setBlocks, setTitle, setId } = constructorStore;
 
 try {
   const data = await LinksApi.getLink(props.linkId);
   if (data) {
+    setId(data.$id);
     setBlocks(JSON.parse(data.blocks));
     setTitle(data.title);
   }
@@ -31,17 +31,9 @@ catch (e: unknown) {
 </script>
 
 <template>
-  <div class="grid h-[calc(100vh-var(--navbar-height,64px))] w-100vw lg:grid-cols-[minmax(320px,320px)_minmax(320px,1fr)_minmax(320px,320px)]">
-    <UIScrollArea class="hidden lg:block" bar-class="rounded-none" thumb-class="bg-trunks">
-      <BlocksList
-        @add-block="(name) => addBlock(name)"
-      />
-    </UIScrollArea>
-    <UIScrollArea class="lg:border-(x beerus)" bar-class="rounded-none" thumb-class="bg-trunks">
-      <Workspace />
-    </UIScrollArea>
-    <UIScrollArea class="hidden lg:block" bar-class="rounded-none" thumb-class="bg-trunks">
-      <BlockPropertiesEditor />
-    </UIScrollArea>
+  <div class="h-[calc(100vh-var(--navbar-height,64px))] w-100vw flex flex-col-reverse md:flex-row">
+    <Toolbar class="size-16 min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit" />
+    <BlockPropertiesEditor class="hidden border-(x beerus) bg-gohan md:block lg:max-w-sm lg:min-w-sm" />
+    <Workspace class="flex-auto" />
   </div>
 </template>
