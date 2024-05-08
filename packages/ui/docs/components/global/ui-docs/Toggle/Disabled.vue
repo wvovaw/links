@@ -15,7 +15,7 @@ import { UIToggle } from "~ui/Toggle";
       <UIToggle :pressed="true" disabled>
         Pressed
       </UIToggle>
-      <UIToggle :pressed="true" with-stroke disabled>
+      <UIToggle :pressed="true" disabled with-stroke>
         Pressed with stroke
       </UIToggle>
     </div>

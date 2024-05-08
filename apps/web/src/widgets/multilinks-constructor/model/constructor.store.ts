@@ -15,6 +15,7 @@ const generateBlockId = () => randomString(8);
  * To empty the blocks array use _page.value.blocks.length = 0 :nd so on.
  */
 // TODO: Implement Undo / Redo feature
+// TODO: Add navigation guard protecting from leaving the page with unsaved content
 
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   /* State */

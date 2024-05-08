@@ -32,7 +32,7 @@ catch (e: unknown) {
 
 <template>
   <div class="h-[calc(100vh-var(--navbar-height,64px))] w-100vw flex flex-col-reverse md:flex-row">
-    <Toolbar class="size-16 min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit" />
+    <Toolbar class="min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit" />
     <BlockPropertiesEditor class="hidden border-(x beerus) bg-gohan md:block lg:max-w-sm lg:min-w-sm" />
     <Workspace class="flex-auto" />
   </div>
