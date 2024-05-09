@@ -1,5 +1,11 @@
 # @links/ui
 
+## 0.4.1
+
+### Patch Changes
+
+- Add "utilities" section in docs. Add "Credits" page
+
 ## 0.4.0
 
 ### Minor Changes
