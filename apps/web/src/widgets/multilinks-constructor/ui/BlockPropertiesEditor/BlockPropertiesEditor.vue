@@ -84,10 +84,10 @@ const groupedProperties = computed(() => {
       </div>
     </template>
     <div v-else class="w-full flex flex-col items-center p-3">
-      <p class="my-6 text-moon-18 font-light">
+      <p class="my-6 text-moon-20 text-beerus font-semibold font-averta">
         Select a block to edit
       </p>
-      <SpiralArrow class="w-50% text-hit" />
+      <SpiralArrow class="w-50% text-beerus" />
     </div>
   </UIScrollArea>
 </template>

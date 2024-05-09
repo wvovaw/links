@@ -4,26 +4,43 @@ import type { BlockName, IBlock } from "~shared/core";
 import { createBlock } from "~shared/core";
 import { randomString } from "~shared/lib/utils";
 import { useLinksStore } from "~entities/links";
+import { LinksApi } from "~shared/api/appwrite";
 
 const defaultPageTitle = "New multilinks page";
 const defaultBlocksState: IBlock[] = [];
 
 const generateBlockId = () => randomString(8);
+function computeHash(obj: any) {
+  return JSON.stringify(obj);
+}
 
 /**
  * Make sure _page.blocks array is not changed during page manipulations.
  * To empty the blocks array use _page.value.blocks.length = 0 :nd so on.
  */
-// TODO: Implement Undo / Redo feature
 // TODO: Add navigation guard protecting from leaving the page with unsaved content
 
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   /* State */
-  const selectedBlockId = ref<string | null>(null);
   const linkId = ref<string | null>(null);
   const title = ref(defaultPageTitle);
   const blocks = ref<IBlock[]>(defaultBlocksState);
   const seo = ref<Record<string, any>>({});
+  const selectedBlockId = ref<string | null>(null);
+  const savedDataHash = ref<string | null>(null);
+
+  const {
+    undo: blocksUndo,
+    redo: blocksRedo,
+    clear: clearBlocksHistory,
+    canRedo: blocksCanRedo,
+    canUndo: blocksCanUndo,
+    history: blocksHistory,
+  } = useDebouncedRefHistory(blocks, { deep: true, dump: JSON.stringify, parse: JSON.parse, debounce: 500 });
+
+  /* Getters */
+  const canRedo = computed(() => blocksCanRedo.value);
+  const canUndo = computed(() => blocksCanUndo.value);
 
   /* Actions */
   function setId(id: string) {
@@ -70,13 +87,73 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         blocks: blocks.value,
         seo: seo.value,
       });
+      savedDataHash.value = computeStoreHash();
     }
   }
+  function undo() {
+    blocksUndo();
+  }
+  function redo() {
+    blocksRedo();
+  }
+  function clearHistory() {
+    clearBlocksHistory();
+  }
+  function computeStoreHash() {
+    return computeHash({
+      blocks: toRaw(blocks.value),
+      title: toRaw(title.value),
+      seo: toRaw(seo.value),
+    });
+  }
+  function hasUnsavedChanges() {
+    return savedDataHash.value !== computeStoreHash();
+  }
+
+  /* Setup */
+  function $reset() {
+    linkId.value = null;
+    title.value = defaultPageTitle;
+    blocks.value = defaultBlocksState;
+    seo.value = {};
+    selectedBlockId.value = null;
+    savedDataHash.value = null;
+  }
+
+  async function setupStore(linkId: string) {
+    try {
+      const data = await LinksApi.getLink(linkId);
+      if (data) {
+        setId(data.$id);
+        setBlocks(JSON.parse(data.blocks));
+        setTitle(data.title);
+        savedDataHash.value = computeStoreHash();
+        clearHistory();
+      }
+    }
+    catch (e: unknown) {
+      if (e instanceof Error) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: e.message,
+        });
+      }
+    }
+  }
+  onUnmounted(() => {
+    $reset();
+  });
 
   return {
     selectedBlockId,
-    blocks,
     title,
+    blocks,
+    canUndo,
+    canRedo,
+    blocksHistory,
+    undo,
+    redo,
+    clearHistory,
     setId,
     setBlocks,
     setTitle,
@@ -86,5 +163,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     removeBlock,
     duplicateBlock,
     saveCurrentState,
+    hasUnsavedChanges,
+    setupStore,
+    $reset,
   };
 });

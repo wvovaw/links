@@ -3,31 +3,31 @@ import { BlockPropertiesEditor } from "./ui/BlockPropertiesEditor";
 import { Toolbar } from "./ui/toolbar";
 import { Workspace } from "./ui/Workspace";
 import { useConstructorStore } from "./model";
-import { LinksApi } from "~shared/api/appwrite";
+import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 const props = defineProps<{
   linkId: string;
 }>();
 
+const { createConfirmation } = useConfirmation();
 const constructorStore = useConstructorStore();
-const { setBlocks, setTitle, setId } = constructorStore;
+const { setupStore, hasUnsavedChanges } = constructorStore;
 
-try {
-  const data = await LinksApi.getLink(props.linkId);
-  if (data) {
-    setId(data.$id);
-    setBlocks(JSON.parse(data.blocks));
-    setTitle(data.title);
-  }
-}
-catch (e: unknown) {
-  if (e instanceof Error) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: e.message,
+await setupStore(props.linkId);
+
+onBeforeRouteLeave(async () => {
+  if (hasUnsavedChanges()) {
+    const confirm = createConfirmation({
+      title: "Changes will be lost",
+      subtitle: "You have unsaved changes",
+      content: "Do you want to leave the page without save?",
     });
+    const { isCanceled } = await confirm();
+    if (isCanceled)
+      return false;
   }
-}
+  return true;
+});
 </script>
 
 <template>
