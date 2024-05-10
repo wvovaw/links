@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIButton } from "@links/ui";
-import { TopNavbar } from "~widgets/top-navbar";
+import { NavigationMenu, TopNavbar } from "~widgets/top-navbar";
 import { UserDropdownMenu } from "~/widgets/user-dropdown-menu";
 import { ToggleTheme } from "~features/ui-theme";
 import { SessionModel, UserDropdown } from "~entities/session";
@@ -33,9 +33,7 @@ const { isLogedIn } = storeToRefs(sessionStore);
     <Body>
       <TopNavbar>
         <template #left>
-          <div class="flex items-center text-center text-2xl font-semibold font-averta">
-            {{ t("site.sitename") }}
-          </div>
+          <NavigationMenu />
         </template>
         <template #right>
           <UserDropdown v-if="isLogedIn">
