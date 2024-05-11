@@ -4,6 +4,6 @@ export default defineVitestConfig({
   plugins: [],
   test: {
     environment: "happy-dom",
-    setupFiles: ["vitest.setup.ts"],
+    setupFiles: ["../vitest.setup.ts"],
   },
 });

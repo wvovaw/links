@@ -18,7 +18,6 @@ function computeHash(obj: any) {
  * Make sure _page.blocks array is not changed during page manipulations.
  * To empty the blocks array use _page.value.blocks.length = 0 :nd so on.
  */
-// TODO: Add navigation guard protecting from leaving the page with unsaved content
 
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   /* State */
@@ -36,7 +35,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     canRedo: blocksCanRedo,
     canUndo: blocksCanUndo,
     history: blocksHistory,
-  } = useDebouncedRefHistory(blocks, { deep: true, dump: JSON.stringify, parse: JSON.parse, debounce: 500 });
+  } = useDebouncedRefHistory(blocks, { deep: true, dump: JSON.stringify, parse: JSON.parse, debounce: 350 });
 
   /* Getters */
   const canRedo = computed(() => blocksCanRedo.value);
@@ -118,6 +117,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     seo.value = {};
     selectedBlockId.value = null;
     savedDataHash.value = null;
+    clearHistory();
   }
 
   async function setupStore(linkId: string) {
@@ -128,7 +128,6 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         setBlocks(JSON.parse(data.blocks));
         setTitle(data.title);
         savedDataHash.value = computeStoreHash();
-        clearHistory();
       }
     }
     catch (e: unknown) {
