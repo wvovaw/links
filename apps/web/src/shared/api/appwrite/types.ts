@@ -1,5 +1,4 @@
 import type { Models } from "appwrite";
-import { string } from "valibot";
 
 export type Session = Models.Session;
 export type User = Models.User<Models.Preferences> & { avatarUrl?: string };

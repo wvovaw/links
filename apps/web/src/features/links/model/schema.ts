@@ -2,7 +2,6 @@ import { maxLength, minLength, object, regex, string } from "valibot";
 
 /**
 Regex checking if the string is a valid slug
- 
 Examples: example-one, my-awesome-link, hello-world-2024
  */
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

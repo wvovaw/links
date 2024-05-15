@@ -6,6 +6,9 @@ export default antfu({
     indent: 2,
     quotes: "double",
     semi: true,
+    overrides: {
+      "style/max-statements-per-line": ["off"],
+    },
   },
   vue: {
     overrides: {

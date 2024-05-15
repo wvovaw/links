@@ -23,16 +23,18 @@ export default function (options: IKeyboardShortcutOptions) {
     const comb = options.combination;
 
     // handle modifiers
-    const modifiersOk = comb.modifiers ? comb.modifiers.every((k) => {
-      if (k === "Control")
-        return ctrlKey;
-      if (k === "Shift")
-        return shiftKey;
-      if (k === "Alt")
-        return altKey;
+    const modifiersOk = comb.modifiers
+      ? comb.modifiers.every((k) => {
+        if (k === "Control")
+          return ctrlKey;
+        if (k === "Shift")
+          return shiftKey;
+        if (k === "Alt")
+          return altKey;
 
-      return false;
-    }) : true;
+        return false;
+      })
+      : true;
     // Handle digits and keys (KeyA..KeyZ, Digit0..Digit9)
     const keyOk
     = code.startsWith("Digit")

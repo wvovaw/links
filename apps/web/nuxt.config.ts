@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       appwriteHost: "",
       appwriteUserPicturesBucketId: "",
       appwriteDatabaseId: "",
-      domain: ""
+      domain: "",
     },
   },
   unocss: {
