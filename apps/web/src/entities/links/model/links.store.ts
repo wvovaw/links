@@ -59,7 +59,7 @@ export const useLinksStore = defineStore("links", () => {
           content: "The link deleted successfully",
           variant: "success",
         });
-        await getLinksList();
+        await refreshLinksList();
       }
       catch (e: unknown) {
         if (e instanceof Error) {
@@ -72,17 +72,14 @@ export const useLinksStore = defineStore("links", () => {
       }
     }
   }
-  async function getLinksList() {
+  async function refreshLinksList() {
     const data = await LinksApi.listLinks();
     _links.value = data.documents;
   }
 
-  /* Setup */
-  if (import.meta.client)
-    getLinksList();
-
   return {
     links,
+    refreshLinksList,
     deleteLink,
     updateLink,
   };

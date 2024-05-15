@@ -1,21 +1,22 @@
 import { ID } from "appwrite";
 import { useDatabaseApi } from "../instance";
 import { getErrorMessage } from "../errors";
-import { ApiException } from "../types";
+import { ApiException, type ILinkNameDocument, type ILinkPageDocument } from "../types";
 import { LINKS_COLLECTION_ID } from "../constants";
 
 export interface ICreateLinkData {
   title: string;
-  blocks: Record<string, any>[];
-  seo: Record<string, any>;
+  name_document_id: ILinkNameDocument["$id"];
+  blocks?: Record<string, any>[];
+  seo?: Record<string, any>;
 };
 
-export async function createLink({ title, blocks, seo }: ICreateLinkData) {
+export async function createLink({ title, blocks = [], seo = {}, name_document_id }: ICreateLinkData): Promise<ILinkPageDocument | undefined> {
   try {
     const db = useDatabaseApi();
     const config = useRuntimeConfig();
 
-    await db.createDocument(
+    const res = await db.createDocument<ILinkPageDocument>(
       config.public.appwriteDatabaseId,
       LINKS_COLLECTION_ID,
       ID.unique(),
@@ -23,8 +24,10 @@ export async function createLink({ title, blocks, seo }: ICreateLinkData) {
         title,
         blocks: JSON.stringify(blocks),
         seo: JSON.stringify(seo),
+        name: name_document_id,
       },
     );
+    return res;
   }
   catch (e: unknown) {
     if (e instanceof ApiException)

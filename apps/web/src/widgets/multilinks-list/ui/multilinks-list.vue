@@ -6,7 +6,12 @@ import { CreateNewLinkDialog, useLinksStore } from "~entities/links";
 import { CreateNewLinkForm } from "~features/links";
 
 const linksStore = useLinksStore();
+const { refreshLinksList } = linksStore;
 const { links } = storeToRefs(linksStore);
+
+onMounted(() => {
+  refreshLinksList();
+});
 </script>
 
 <template>

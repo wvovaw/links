@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { UIButton, UIForm, UIInsertInput } from "@links/ui";
+import { UIButton, UIForm, UIInsertInput, useToast } from "@links/ui";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { useForm } from "vee-validate";
 import { createLinkSchema } from "../../model/schema";
 import isLinkNameAvailable from "../../api/is-link-name-available";
+import createNewLinkAndName from "../../api/create-new-link-and-name";
 
-const { handleSubmit, setFieldError } = useForm({ validationSchema: toTypedSchema(createLinkSchema) });
+const { push } = useRouter();
+const toast = useToast();
+
+const { handleSubmit, setFieldError, isSubmitting } = useForm({ validationSchema: toTypedSchema(createLinkSchema) });
 
 // Use memoized version of the request
 const isLinkAvailableMem = useMemoize(isLinkNameAvailable);
@@ -18,8 +22,20 @@ const onSubmit = handleSubmit(async (data) => {
     return;
   }
 
-  // TODO: Implement api call creating new link and redirect
-  console.log("Submited with: ", data);
+  try {
+    const link = await createNewLinkAndName({ link_name: data.link_name, title: data.title });
+    if (link)
+      push(`/links/constructor/${link.$id}`);
+  }
+  catch (e: unknown) {
+    if (e instanceof Error) {
+      toast({
+        title: "Create link error",
+        content: e.message,
+        variant: "error",
+      });
+    }
+  }
 });
 </script>
 
@@ -34,6 +50,7 @@ const onSubmit = handleSubmit(async (data) => {
             v-bind="componentField"
             :error="!!errorMessage"
             :error-message="errorMessage"
+            :disabled="isSubmitting"
           />
         </UIForm.Control>
         <UIForm.ErrorMessage v-show="errorMessage" />
@@ -51,6 +68,7 @@ const onSubmit = handleSubmit(async (data) => {
             v-bind="componentField"
             :error="!!errorMessage"
             :error-message="errorMessage"
+            :disabled="isSubmitting"
           />
         </UIForm.Control>
         <UIForm.ErrorMessage v-show="errorMessage" />
@@ -59,9 +77,16 @@ const onSubmit = handleSubmit(async (data) => {
         </UIForm.Description>
       </UIForm.Item>
     </UIForm.Field>
-    <UIButton type="submit">
+    <UIButton
+      type="submit"
+      :loading="isSubmitting"
+      icon-pos="right"
+      :disabled="isSubmitting"
+    >
       Continue
     </UIButton>
-    <span class="text-center text-moon-10-caption text-trunks">All the settings above can be changed after</span>
+    <span class="text-center text-moon-10-caption text-trunks">
+      All the settings above can be changed later
+    </span>
   </form>
 </template>
