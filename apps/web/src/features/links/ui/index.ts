@@ -1,1 +1,1 @@
-export * from "./create-new-link-button";
+export * from "./create-new-link-form";

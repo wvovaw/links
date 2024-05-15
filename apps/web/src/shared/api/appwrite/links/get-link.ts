@@ -1,7 +1,7 @@
 import { useDatabaseApi } from "../instance";
 import { getErrorMessage } from "../errors";
 import { ApiException, type ILinkPageDocument } from "../types";
-import { LINKS_COLLECTION_ID } from "./constants";
+import { LINKS_COLLECTION_ID } from "../constants";
 
 export async function getLink(id: ILinkPageDocument["$id"]): Promise<ILinkPageDocument | undefined> {
   try {

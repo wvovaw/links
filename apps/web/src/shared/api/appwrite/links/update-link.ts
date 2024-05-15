@@ -1,7 +1,7 @@
 import { useDatabaseApi } from "../instance";
 import { getErrorMessage } from "../errors";
 import { ApiException } from "../types";
-import { LINKS_COLLECTION_ID } from "./constants";
+import { LINKS_COLLECTION_ID } from "../constants";
 
 export interface IUpdateLinkData {
   id: string;

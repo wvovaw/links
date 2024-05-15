@@ -2,8 +2,8 @@
 import { UITable, UITag } from "@links/ui";
 import LinkActions from "./link-actions.vue";
 import EmptyState from "./empty-state.vue";
-import { CreateNewLinkCta } from "~features/links";
-import { useLinksStore } from "~entities/links";
+import { CreateNewLinkDialog, useLinksStore } from "~entities/links";
+import { CreateNewLinkForm } from "~features/links";
 
 const linksStore = useLinksStore();
 const { links } = storeToRefs(linksStore);
@@ -24,7 +24,12 @@ const { links } = storeToRefs(linksStore);
         <UITable.Row v-if="links.length < 1" class="hover:bg-transparent">
           <UITable.Cell colspan="100%">
             <EmptyState>
-              <CreateNewLinkCta />
+              <div class="mt-6">
+                <CreateNewLinkDialog>
+                  <!-- TODO: Make the form KeepAlive within dialog between it's open/close states -->
+                  <CreateNewLinkForm />
+                </CreateNewLinkDialog>
+              </div>
             </EmptyState>
           </UITable.Cell>
         </UITable.Row>
@@ -50,5 +55,11 @@ const { links } = storeToRefs(linksStore);
         </UITable.Row>
       </UITable.Body>
     </UITable.Root>
+    <div v-if="links.length > 0" class="flex justify-center">
+      <CreateNewLinkDialog>
+        <!-- TODO: Make the form KeepAlive within dialog between it's open/close states -->
+        <CreateNewLinkForm />
+      </CreateNewLinkDialog>
+    </div>
   </div>
 </template>

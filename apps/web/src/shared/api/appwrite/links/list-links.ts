@@ -1,6 +1,6 @@
 import { useDatabaseApi } from "../instance";
 import type { ILinkPageDocument } from "../types";
-import { LINKS_COLLECTION_ID } from "./constants";
+import { LINKS_COLLECTION_ID } from "../constants";
 
 export async function listLinks() {
   const db = useDatabaseApi();
