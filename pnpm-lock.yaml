@@ -108,12 +108,18 @@ importers:
       eslint-plugin-import:
         specifier: ^2.29.1
         version: 2.29.1(@typescript-eslint/parser@7.7.0)(eslint@9.1.0)
+      eslint-plugin-oxlint:
+        specifier: ^0.2.9
+        version: 0.2.9
       happy-dom:
         specifier: ^14.7.1
         version: 14.7.1
       nuxt:
         specifier: 3.11.1
         version: 3.11.1(@types/node@20.12.7)(@unocss/reset@0.59.4)(eslint@9.1.0)(floating-vue@5.2.2)(rollup@4.16.0)(typescript@5.4.5)(unocss@0.59.4)(vite@5.2.10)
+      oxlint:
+        specifier: ^0.3.5
+        version: 0.3.5
       radix-vue:
         specifier: ^1.7.1
         version: 1.7.1(vue@3.4.23)
@@ -3327,6 +3333,70 @@ packages:
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
     dev: true
 
+  /@oxlint/darwin-arm64@0.3.5:
+    resolution: {integrity: sha512-5sAjGQh7EDQbKODNqL9ZEWtxx2y1px7rMwrUvglQZasP4LdLLCrnDx5OjQEtVnrdG0TQTjLyjLbt7p3bI3Mu2Q==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/darwin-x64@0.3.5:
+    resolution: {integrity: sha512-IDLCsoOoWFGSY4LzwOXPB7yp23F/FGKo1iMFBX7gb7hLsmsHH3HmAoO8jFNL+jc3M0fEgHyWYYQFbEyCQg38hQ==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/linux-arm64-gnu@0.3.5:
+    resolution: {integrity: sha512-HcFEOon8Y8+rDRkLKTnDlTMD20Rn4ECCalUR2kRZeflb0cJJdZ3C2BpzUVZ83W5dWk8QTg4y47xu6Xw+GLjh2w==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/linux-arm64-musl@0.3.5:
+    resolution: {integrity: sha512-xO9IiN2iHXKFoFvqu1n+PQYkJeHptq+ZiDGnbMTzrr0EGBO89wofpFrUk6DpSBeEfQ9dogm4SzmZijl9as7QLw==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/linux-x64-gnu@0.3.5:
+    resolution: {integrity: sha512-FHSSDAZb5Awl/xmLJwr1jhdM51gWlW2cEpsex94EhULVpzce082wwa5m7gmbWkqlcjOHHcvXgOz0kNqKV1zBxw==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/linux-x64-musl@0.3.5:
+    resolution: {integrity: sha512-tmqpSZiAVchteLjpWLFtrISp0RvkcAnmVB+b7p/pplnab793OEfAXq3y+u/qLhy+XxnCzVsPOUxc56isYYTp3g==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/win32-arm64@0.3.5:
+    resolution: {integrity: sha512-uyPvaqLO7c2pe+taSWhB9p9noxV9tawaW7gWoSI7yb7gt965PQWJv1AHStqpNBWXOoDCgKqB/vAogPtWECYaLQ==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/win32-x64@0.3.5:
+    resolution: {integrity: sha512-KV1KkFsqz+y6mKqoF180eKSxG5mdDtSUOlGsODQYaIi13JoC/BhTkE/u/cUNpyE9ZF0+PhQiOlo1dtN3OQmFkA==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@parcel/watcher-android-arm64@2.4.1:
     resolution: {integrity: sha512-LOi/WTbbh3aTn2RYddrO8pnapixAziFl6SMxHM69r3tvdSm94JtCenaKgk1GRg5FJ5wpMCpHeW+7yqPlvZv7kg==}
     engines: {node: '>= 10.0.0'}
@@ -3580,7 +3650,7 @@ packages:
       estree-walker: 2.0.2
       glob: 8.1.0
       is-reference: 1.2.1
-      magic-string: 0.30.10
+      magic-string: 0.30.8
       rollup: 4.16.0
     dev: true
 
@@ -7975,6 +8045,10 @@ packages:
     engines: {node: '>=5.0.0'}
     dev: true
 
+  /eslint-plugin-oxlint@0.2.9:
+    resolution: {integrity: sha512-K3aILcHVSSbjJ5W7YxdbMLmoB9G4GHdbDXl9qlPwuWF69BVV2e7/Bpy9osLT+bylv8Y+J6WltsqwXL/Z7sxMgA==}
+    dev: true
+
   /eslint-plugin-perfectionist@2.9.0(eslint@9.1.0)(typescript@5.4.5)(vue-eslint-parser@9.4.2):
     resolution: {integrity: sha512-ipFtDrqtF99qVVo+FE1fo6aHyLLp7hg6PNGfzY5KxQjcl0XCbyEFvjtR1NfkHDTN9rdFeEDxg59LLOv3VOAHAw==}
     peerDependencies:
@@ -11693,6 +11767,21 @@ packages:
 
   /outdent@0.5.0:
     resolution: {integrity: sha512-/jHxFIzoMXdqPzTaCpFzAAWhpkSjZPF4Vsn6jAfNpmbH/ymsmd7Qc6VE9BGn0L6YMj6uwpQLxCECpus4ukKS9Q==}
+    dev: true
+
+  /oxlint@0.3.5:
+    resolution: {integrity: sha512-FXTLyoech+kMuKSmoltdx6s6TCCDqa7k3O4uONPuEkVswIL6X0RrSA/b+p6w+ppuUmpQviw/iiCbOOMPcVS9cA==}
+    engines: {node: '>=14.*'}
+    hasBin: true
+    optionalDependencies:
+      '@oxlint/darwin-arm64': 0.3.5
+      '@oxlint/darwin-x64': 0.3.5
+      '@oxlint/linux-arm64-gnu': 0.3.5
+      '@oxlint/linux-arm64-musl': 0.3.5
+      '@oxlint/linux-x64-gnu': 0.3.5
+      '@oxlint/linux-x64-musl': 0.3.5
+      '@oxlint/win32-arm64': 0.3.5
+      '@oxlint/win32-x64': 0.3.5
     dev: true
 
   /p-filter@2.1.0:
