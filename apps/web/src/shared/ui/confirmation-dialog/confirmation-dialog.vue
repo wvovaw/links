@@ -8,7 +8,7 @@ const isDesktop = useMediaQuery("(min-width: 640px)");
 const [UseTemplate, ContentComp] = createReusableTemplate();
 
 function closeIfOpen() {
-  if (show.value)
+  if (show.value && config.value.onCancel)
     config.value.onCancel();
 }
 </script>
