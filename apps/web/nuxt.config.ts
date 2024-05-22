@@ -63,6 +63,7 @@ export default defineNuxtConfig({
     "/sign-in": { ssr: false },
     "/sign-up": { ssr: false },
     "/account/**": { ssr: false },
+    "/preview/**": { ssr: false },
   },
   modules: [
     "@unocss/nuxt",

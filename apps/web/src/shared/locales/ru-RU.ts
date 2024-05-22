@@ -9,5 +9,6 @@ export default defineI18nLocale(async (_locale) => {
     "pages.account-danger.title": "Аккаунт: Опасная зона",
     "pages.links.index.title": "Мои страницы",
     "pages.links.constructor.title": "Конструктор страницы",
+    "pages.preview.title": "Предосмотр страницы",
   };
 });

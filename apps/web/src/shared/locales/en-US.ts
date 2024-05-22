@@ -9,5 +9,6 @@ export default defineI18nLocale(async (_locale) => {
     "pages.account-danger.title": "Account: Danger zone",
     "pages.links.index.title": "My pages",
     "pages.links.constructor.title": "Page Constructor",
+    "pages.preview.title": "Preview page",
   };
 });
