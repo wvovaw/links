@@ -18,3 +18,20 @@
 
   /* Avatar */
 }
+
+.link {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.link__container {
+  margin-inline: auto;
+  max-width: 640px;
+  padding: 2em 1em;
+}
+
+.link__blocks-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}

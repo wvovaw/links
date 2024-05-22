@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { UIButton } from "@links/ui";
+import { LoadingSpinner } from "~shared/ui/loading-spinner";
 import { MultilinksConstructor } from "~widgets/multilinks-constructor";
 
-const { params } = useRoute("links-constructor-id___en___default");
+defineProps<{
+  linkId: string;
+}>();
 </script>
 
 <template>
   <NuxtErrorBoundary>
     <Suspense>
-      <MultilinksConstructor :link-id="params.id" />
+      <MultilinksConstructor :link-id="linkId" />
 
       <template #fallback>
-        <span class="i-lucide:loader-circle mx-auto my-auto h-32 w-32 animate-spin text-trunks" />
+        <LoadingSpinner class="mx-auto my-auto h-28 w-28 text-trunks" />
       </template>
     </Suspense>
     <template #error="{ error }">

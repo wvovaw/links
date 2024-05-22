@@ -16,26 +16,4 @@ describe("testing PageEditor widget", () => {
   it("can mount", () => {
     expect(wrapper.vm).toBeTruthy();
   });
-
-  // it("can add a block on a page", async () => {
-  //   const addBlockBtn = wrapper.find("[data-testid='blocks-list-item']");
-  //   await addBlockBtn.trigger("click");
-  //   expect(constructorStore.addBlock).toHaveBeenCalledTimes(1);
-  // });
-
-  // it("can render block from the store", async () => {
-  //   const buttonBlock = createBlock("Button", "1");
-  //   constructorStore.$patch({
-  //     page: {
-  //       id: "0",
-  //       title: "title",
-  //       blocks: [buttonBlock],
-  //     },
-  //   });
-
-  //   // await flushPromises();
-  //   const pageBlock = wrapper.find("[data-testid='page-block']");
-  //   console.log(wrapper.html());
-  //   await pageBlock.trigger("click");
-  // });
 });

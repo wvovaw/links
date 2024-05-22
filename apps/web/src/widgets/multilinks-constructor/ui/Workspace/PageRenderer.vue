@@ -3,13 +3,12 @@ import { animations, dragAndDrop } from "@formkit/drag-and-drop";
 import "~shared/core/resources/theme.css";
 import { useConstructorStore } from "../../model";
 import PageBlock from "./PageBlock.vue";
-import PageBackground from "./PageBackground.vue";
 import { useBlocksResolver } from "~shared/core";
 
 const { resolve } = useBlocksResolver();
 
 const constructorStore = useConstructorStore();
-const { selectedBlockId: selectedBlock, blocks } = storeToRefs(constructorStore);
+const { selectedBlockId: selectedBlock, blocks, background } = storeToRefs(constructorStore);
 const { selectBlock, setBlocks, clearHistory } = constructorStore;
 
 function isSelectedBlock(blockId: string) {
@@ -32,20 +31,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <PageBackground>
-    <div ref="draggableRoot" class="flex flex-col gap-4 p-2">
-      <PageBlock
-        v-for="block of blocks"
-        :key="block.id"
-        :is-selected="isSelectedBlock(block.id)"
-        @select="selectBlock(block.id)"
-      >
-        <component
-          :is="resolve(block.name)"
-          :id="`block-${block.id}`"
-          :properties="block.properties"
-        />
-      </PageBlock>
+  <div class="link rounded-40px" :style="background">
+    <div class="link__container">
+      <div ref="draggableRoot" class="link__blocks-root">
+        <PageBlock
+          v-for="block of blocks"
+          :key="block.id"
+          :is-selected="isSelectedBlock(block.id)"
+          @select="selectBlock(block.id)"
+        >
+          <component
+            :is="resolve(block.name)"
+            :id="`block-${block.id}`"
+            :properties="block.properties"
+          />
+        </PageBlock>
+      </div>
     </div>
-  </PageBackground>
+  </div>
 </template>
