@@ -8,9 +8,10 @@ export interface IUpdateLinkData {
   title: string;
   blocks: Record<string, any>[];
   seo: Record<string, any>;
+  background: string;
 };
 
-export async function updateLink({ id, title, blocks, seo }: IUpdateLinkData) {
+export async function updateLink({ id, title, blocks, seo, background }: IUpdateLinkData) {
   try {
     const db = useDatabaseApi();
     const config = useRuntimeConfig();
@@ -23,6 +24,7 @@ export async function updateLink({ id, title, blocks, seo }: IUpdateLinkData) {
         title,
         blocks: JSON.stringify(blocks),
         seo: JSON.stringify(seo),
+        background,
       },
     );
   }

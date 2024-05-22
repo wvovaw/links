@@ -19,6 +19,8 @@ export interface ILinkPageDocument extends Models.Document {
   blocks: string;
   /** Serialized JSON object */
   seo: string;
+  /** Background CSS string */
+  background: string;
   status: LinkPublishStatus;
   /**
    * Relation with links_names collection record.

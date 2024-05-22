@@ -8,6 +8,7 @@ import { LinksApi } from "~shared/api/appwrite";
 
 const defaultPageTitle = "New multilinks page";
 const defaultBlocksState: IBlock[] = [];
+const defaultBackground = "background-image: linear-gradient(to top, #13b7c6, #00a1da, #0085e4, #635cd2, #a3009c);";
 
 const generateBlockId = () => randomString(8);
 function computeHash(obj: any) {
@@ -22,8 +23,8 @@ function computeHash(obj: any) {
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   /* State */
   const linkId = ref<string | null>(null);
-  const title = ref(defaultPageTitle);
-  const blocks = ref<IBlock[]>(defaultBlocksState);
+  const title = ref(defaultPageTitle); const blocks = ref<IBlock[]>(defaultBlocksState);
+  const background = ref<string>(defaultBackground);
   const seo = ref<Record<string, any>>({});
   const selectedBlockId = ref<string | null>(null);
   const savedDataHash = ref<string | null>(null);
@@ -85,6 +86,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         title: title.value,
         blocks: blocks.value,
         seo: seo.value,
+        background: background.value,
       });
       savedDataHash.value = computeStoreHash();
     }
@@ -114,6 +116,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     linkId.value = null;
     title.value = defaultPageTitle;
     blocks.value = defaultBlocksState;
+    background.value = defaultBackground;
     seo.value = {};
     selectedBlockId.value = null;
     savedDataHash.value = null;
@@ -127,6 +130,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         setId(data.$id);
         setBlocks(JSON.parse(data.blocks));
         setTitle(data.title);
+        background.value = data.background;
         savedDataHash.value = computeStoreHash();
       }
     }
@@ -147,6 +151,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     selectedBlockId,
     title,
     blocks,
+    background,
     canUndo,
     canRedo,
     blocksHistory,

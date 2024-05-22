@@ -9,9 +9,10 @@ export interface ICreateLinkData {
   name_document_id: ILinkNameDocument["$id"];
   blocks?: Record<string, any>[];
   seo?: Record<string, any>;
+  background?: string;
 };
 
-export async function createLink({ title, blocks = [], seo = {}, name_document_id }: ICreateLinkData): Promise<ILinkPageDocument | undefined> {
+export async function createLink({ title, background, blocks = [], seo = {}, name_document_id }: ICreateLinkData): Promise<ILinkPageDocument | undefined> {
   try {
     const db = useDatabaseApi();
     const config = useRuntimeConfig();
@@ -24,6 +25,7 @@ export async function createLink({ title, blocks = [], seo = {}, name_document_i
         title,
         blocks: JSON.stringify(blocks),
         seo: JSON.stringify(seo),
+        background,
         name: name_document_id,
       },
     );
