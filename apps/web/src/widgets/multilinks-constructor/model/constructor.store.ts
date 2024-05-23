@@ -53,6 +53,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     blocks.value.length = 0;
     blocks.value.push(...newBlocks);
   }
+  function setBackground(newBackground: string) {
+    background.value = newBackground;
+  }
   function selectBlock(id: string) {
     selectedBlockId.value = id;
   }
@@ -130,7 +133,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         setId(data.$id);
         setBlocks(JSON.parse(data.blocks));
         setTitle(data.title);
-        background.value = data.background;
+        setBackground(data.background)
         savedDataHash.value = computeStoreHash();
       }
     }
@@ -161,6 +164,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     setId,
     setBlocks,
     setTitle,
+    setBackground,
     getBlock,
     selectBlock,
     addBlock,

@@ -12,7 +12,6 @@ defineProps<{
   <NuxtErrorBoundary>
     <Suspense>
       <MultilinksConstructor :link-id="linkId" />
-
       <template #fallback>
         <LoadingSpinner class="mx-auto my-auto h-28 w-28 text-trunks" />
       </template>

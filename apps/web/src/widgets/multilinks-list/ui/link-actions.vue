@@ -15,9 +15,11 @@ const { deleteLink } = useLinksStore();
         Edit
       </UIButton>
     </NuxtLinkLocale>
-    <UIButton size="xs" icon="i-lucide:eye">
-      Preview
-    </UIButton>
+    <NuxtLinkLocale :to="`/links/preview/${linkId}`">
+      <UIButton size="xs" icon="i-lucide:eye" as="span">
+        Preview
+      </UIButton>
+    </NuxtLinkLocale>
     <UIButton size="xs" icon="i-lucide:trash" color="chichi" variant="outline" @click="deleteLink(linkId)">
       Delete
     </UIButton>
@@ -34,10 +36,12 @@ const { deleteLink } = useLinksStore();
             <UIDropdownMenu.ItemIcon icon="i-lucide:hammer" />
           </UIDropdownMenu.Item>
         </NuxtLinkLocale>
-        <UIDropdownMenu.Item>
-          <UIDropdownMenu.ItemTitle>Open preview</UIDropdownMenu.ItemTitle>
-          <UIDropdownMenu.ItemIcon icon="i-lucide:eye" />
-        </UIDropdownMenu.Item>
+        <NuxtLinkLocale :to="`/links/preview/${linkId}`">
+          <UIDropdownMenu.Item>
+            <UIDropdownMenu.ItemTitle>Open preview</UIDropdownMenu.ItemTitle>
+            <UIDropdownMenu.ItemIcon icon="i-lucide:eye" />
+          </UIDropdownMenu.Item>
+        </NuxtLinkLocale>
         <UIDropdownMenu.Separator />
         <UIDropdownMenu.Item class="color-chichi" @click="deleteLink(linkId)">
           <UIDropdownMenu.ItemTitle>Delete</UIDropdownMenu.ItemTitle>
