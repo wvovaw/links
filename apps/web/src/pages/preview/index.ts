@@ -1,1 +1,1 @@
-export { default as PreviewPage } from "./ui/preview-page.vue";
+export { default as PreviewPage } from "./ui/preview-page";
