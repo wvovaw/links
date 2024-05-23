@@ -14,10 +14,17 @@ const background = ref<string>();
 
 const { data, error } = await useAsyncData("preview-link-data", () => LinksApi.getLink(props.linkId));
 
-if (data?.value?.blocks)
+if (data?.value) {
   blocks.value = JSON.parse(data.value.blocks);
-if (data.value?.background)
   background.value = data.value.background;
+
+  const title = data.value.title;
+  if (title) {
+    useSeoMeta({
+      title: () => `${title} | Preview`,
+    });
+  }
+}
 </script>
 
 <template>
