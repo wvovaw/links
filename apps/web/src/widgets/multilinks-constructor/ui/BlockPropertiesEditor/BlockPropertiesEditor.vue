@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UIButton, UIScrollArea, UISeparator } from "@links/ui";
+import { UIButton, UISeparator } from "@links/ui";
 import { useConstructorStore } from "../../model";
 import TextField from "./fields/TextField.vue";
 import NumberField from "./fields/NumberField.vue";
@@ -36,58 +36,52 @@ const groupedProperties = computed(() => {
 </script>
 
 <template>
-  <UIScrollArea bar-class="rounded-none" thumb-class="bg-trunks">
-    <h3 class="ml-3 mt-3 text-moon-18 font-semibold">
-      Block Properties
-    </h3>
-
-    <template v-if="selectedBlockId">
-      <template
-        v-for="(group, name) of groupedProperties"
-        :key="name"
+  <template v-if="selectedBlockId">
+    <template
+      v-for="(group, name) of groupedProperties"
+      :key="name"
+    >
+      <section
+        class="p-3"
       >
-        <section
-          class="p-3"
+        <h3 class="text-trunks font-semibold">
+          {{ name ? name : 'Other' }}
+        </h3>
+        <div
+          class="w-full flex flex-col gap-2 py-2"
         >
-          <h3 class="text-trunks font-semibold">
-            {{ name ? name : 'Other' }}
-          </h3>
           <div
-            class="w-full flex flex-col gap-2 py-2"
+            v-for="field of group"
+            :key="field.id"
           >
-            <div
-              v-for="field of group"
-              :key="field.id"
-            >
-              <component
-                :is="resolveFieldsComponent(field.type)"
-                :id="`${name}-field-${field.id}`"
-                v-model="field.value"
-                :field="field"
-              />
-            </div>
+            <component
+              :is="resolveFieldsComponent(field.type)"
+              :id="`${name}-field-${field.id}`"
+              v-model="field.value"
+              :field="field"
+            />
           </div>
-        </section>
-        <UISeparator />
-      </template>
-      <div class="p-3">
-        <UIButton
-          full-width
-          variant="outline"
-          color="chichi"
-          icon="i-lucide:trash-2"
-          icon-pos="left"
-          @click="removeBlock(selectedBlockId)"
-        >
-          Delete
-        </UIButton>
-      </div>
+        </div>
+      </section>
+      <UISeparator />
     </template>
-    <div v-else class="w-full flex flex-col items-center p-3">
-      <p class="my-6 text-moon-20 text-beerus font-semibold font-averta">
-        Select a block to edit
-      </p>
-      <SpiralArrow class="w-50% text-beerus" />
+    <div class="p-3">
+      <UIButton
+        full-width
+        variant="outline"
+        color="chichi"
+        icon="i-lucide:trash-2"
+        icon-pos="left"
+        @click="removeBlock(selectedBlockId)"
+      >
+        Delete
+      </UIButton>
     </div>
-  </UIScrollArea>
+  </template>
+  <div v-else class="w-full flex flex-col items-center p-3">
+    <p class="my-6 text-moon-20 text-beerus font-semibold font-averta">
+      Select a block to edit
+    </p>
+    <SpiralArrow class="w-50% text-beerus" />
+  </div>
 </template>

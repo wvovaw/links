@@ -3,6 +3,8 @@ import { BlockPropertiesEditor } from "./ui/BlockPropertiesEditor";
 import { Toolbar } from "./ui/toolbar";
 import { Workspace } from "./ui/Workspace";
 import { useConstructorStore } from "./model";
+import { CONSTRUCTOR_INJECTION_KEY } from "./model/provider";
+import { OptionsSection } from "./ui/options-section";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 const props = defineProps<{
@@ -28,12 +30,22 @@ onBeforeRouteLeave(async () => {
   }
   return true;
 });
+
+const isMobile = useMediaQuery("(max-width: 767px)");
+provide(CONSTRUCTOR_INJECTION_KEY, {
+  isMobile,
+});
 </script>
 
 <template>
   <div class="h-[calc(100vh-var(--navbar-height,64px))] w-100vw flex flex-col-reverse md:flex-row">
     <Toolbar class="min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit" />
-    <BlockPropertiesEditor class="hidden border-(x beerus) bg-gohan md:block lg:max-w-sm lg:min-w-sm" />
+    <OptionsSection v-if="!isMobile" class="border-(x beerus) bg-gohan lg:max-w-sm lg:min-w-sm">
+      <template #title>
+        Block Properties
+      </template>
+      <BlockPropertiesEditor />
+    </OptionsSection>
     <Workspace class="flex-auto" />
   </div>
 </template>

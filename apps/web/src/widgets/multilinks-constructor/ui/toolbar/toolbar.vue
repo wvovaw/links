@@ -18,7 +18,7 @@ const Separator = defineComponent(() => {
 
 <template>
   <div class="w-16 flex justify-between md:flex-col">
-    <div class="flex flex-col items-center justify-center gap-2">
+    <div class="flex items-center justify-center gap-2 md:flex-col">
       <AddBlock />
       <SetBackground />
     </div>

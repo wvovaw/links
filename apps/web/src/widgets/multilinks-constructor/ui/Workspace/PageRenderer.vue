@@ -18,6 +18,7 @@ function isSelectedBlock(blockId: string) {
 
 const draggableRoot = ref<HTMLElement>();
 onMounted(() => {
+  // TODO: Make this work on mobile on long hold
   dragAndDrop({
     parent: draggableRoot.value!,
     getValues: () => blocks.value,
@@ -31,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="link rounded-40px" :style="background">
+  <div class="link" :style="background">
     <div class="link__container">
       <div ref="draggableRoot" class="link__blocks-root">
         <PageBlock
