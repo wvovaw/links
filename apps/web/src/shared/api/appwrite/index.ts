@@ -1,3 +1,4 @@
 export * from "./types";
-export * as AccountApi from "./account";
+export * as SessionApi from "./session";
+export * as ProfileApi from "./profile";
 export * as LinksApi from "./links";

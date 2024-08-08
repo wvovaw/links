@@ -1,15 +1,15 @@
 import { SessionModel } from "~entities/session";
-import { AccountApi } from "~shared/api/appwrite";
+import { SessionApi } from "~shared/api/appwrite";
 
 export function useAuth() {
   const sessionStore = SessionModel.useSessionStore();
 
-  async function register({ email, username, password }: AccountApi.IUserRegisterData) {
-    await AccountApi.register({ email, username, password });
+  async function register({ email, username, password }: SessionApi.IUserRegisterData) {
+    await SessionApi.register({ email, username, password });
   }
 
-  async function login({ email, password }: AccountApi.IUserLoginData) {
-    const session = await AccountApi.login({ email, password });
+  async function login({ email, password }: SessionApi.IUserLoginData) {
+    const session = await SessionApi.login({ email, password });
     if (session) {
       sessionStore.setSession(session);
       await loadSessionUser();
@@ -17,19 +17,19 @@ export function useAuth() {
   }
 
   function logout() {
-    AccountApi.logout();
+    SessionApi.logout();
     sessionStore.setUser(null);
     sessionStore.setSession(null);
   }
 
   async function loadSessionUser() {
-    const user = await AccountApi.getCurrentUser();
+    const user = await SessionApi.getCurrentUser();
     if (user)
       sessionStore.setUser(user);
   }
 
   async function loadCurrentSession() {
-    const session = await AccountApi.getCurrentSession();
+    const session = await SessionApi.getCurrentSession();
     if (session)
       sessionStore.setSession(session);
   }

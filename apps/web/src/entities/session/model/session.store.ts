@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { AccountApi } from "~shared/api/appwrite";
+import { SessionApi } from "~shared/api/appwrite";
 import type { Session, User } from "~shared/api/appwrite";
 
 export const useSessionStore = defineStore("session", () => {
@@ -19,12 +19,12 @@ export const useSessionStore = defineStore("session", () => {
     user.value = userData;
   }
   async function refreshUserData() {
-    const userData = await AccountApi.getCurrentUser();
+    const userData = await SessionApi.getCurrentUser();
     if (userData)
       setUser(userData);
   }
   async function refreshSessionData() {
-    const session = await AccountApi.getCurrentSession();
+    const session = await SessionApi.getCurrentSession();
     if (session)
       setSession(session);
   }

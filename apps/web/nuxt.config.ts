@@ -2,14 +2,14 @@ export default defineNuxtConfig({
   /* Please, read .env.example to learn how to work with environment variables */
   runtimeConfig: {
     /* server-side only keys goes here */
-    mySecretVar: "",
+    appwriteApiKey: "",
     public: {
       /* public keys is also client-side */
       appwriteProjectId: "",
       appwriteHost: "",
       appwriteUserPicturesBucketId: "",
       appwriteDatabaseId: "",
-      domain: "",
+      baseUrl: "",
     },
   },
   unocss: {
@@ -64,6 +64,7 @@ export default defineNuxtConfig({
     "/sign-up": { ssr: false },
     "/account/**": { ssr: false },
     "/preview/**": { ssr: false },
+    "/*": { ssr: true },
   },
   modules: [
     "@unocss/nuxt",
