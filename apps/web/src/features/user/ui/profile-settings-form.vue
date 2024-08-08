@@ -6,7 +6,7 @@ import { profileSettingsSchema } from "../model/schema";
 import { urlToFile } from "~shared/lib/utils";
 import { ImageUploader } from "~shared/ui/image-uploader";
 import { SessionModel } from "~entities/session";
-import { AccountApi } from "~shared/api/appwrite";
+import { ProfileApi } from "~shared/api/appwrite";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 const { toast } = useToast();
@@ -33,13 +33,13 @@ const resetForm = handleReset;
 const submitForm = handleSubmit(async (values) => {
   try {
     if (isFieldDirty("username") && values.username)
-      await AccountApi.updateName({ name: values.username });
+      await ProfileApi.updateName({ name: values.username });
 
     if (isFieldDirty("avatar")) {
       if (values.avatar)
-        await AccountApi.updateAvatar({ file: values.avatar });
+        await ProfileApi.updateAvatar({ file: values.avatar });
       else
-        await AccountApi.removeAvatar();
+        await ProfileApi.removeAvatar();
     }
 
     toast({
