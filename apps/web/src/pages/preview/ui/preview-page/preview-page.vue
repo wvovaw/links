@@ -11,12 +11,14 @@ const props = defineProps<{
 
 const blocks = ref<IBlock[]>();
 const background = ref<string>();
+const linkName = ref<string>("");
 
 const { data, error } = await useAsyncData("preview-link-data", () => LinksApi.getLink(props.linkId));
 
 if (data?.value) {
   blocks.value = JSON.parse(data.value.blocks);
   background.value = data.value.background;
+  linkName.value = data.value.name.$id;
 
   const title = data.value.title;
   if (title) {
@@ -37,7 +39,7 @@ if (data?.value) {
         :blocks="blocks"
         :background-css="background"
       />
-      <OverlayHud :link-id="linkId" />
+      <OverlayHud :link-id="linkId" :link-name="linkName" />
     </div>
   </template>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PreviewPage } from "~pages/preview";
 
-const { params } = useRoute("preview-id___en___default");
+const { params } = useRoute("links-preview-id___en___default");
 
 definePageMeta({
   title: "pages.preview.title",
