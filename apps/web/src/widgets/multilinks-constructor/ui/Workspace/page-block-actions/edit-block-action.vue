@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VisuallyHidden } from "radix-vue";
 import { UIDrawer } from "@links/ui";
-import { BlockPropertiesEditor } from "../../BlockPropertiesEditor";
+import { BlockPropertiesEditor } from "../../block-properties-editor";
 import ActionButton from "./action-button.vue";
 
 defineProps<{

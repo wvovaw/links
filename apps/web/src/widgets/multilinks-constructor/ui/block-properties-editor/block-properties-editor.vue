@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { UIButton, UISeparator } from "@links/ui";
 import { useConstructorStore } from "../../model";
-import TextField from "./fields/TextField.vue";
-import NumberField from "./fields/NumberField.vue";
-import SelectField from "./fields/SelectField.vue";
-import UrlField from "./fields/UrlField.vue";
-import ColorField from "./fields/ColorField.vue";
-import BooleanField from "./fields/BooleanField.vue";
+import { OptionsSection } from "../options-section";
+import TextField from "./fields/text-field.vue";
+import NumberField from "./fields/number-field.vue";
+import SelectField from "./fields/select-field.vue";
+import UrlField from "./fields/url-field.vue";
+import ColorField from "./fields/color-field.vue";
+import BooleanField from "./fields/boolean-field.vue";
 import type { BlockProperty, BlockPropertyType } from "~shared/core";
 import { groupBy } from "~/shared/lib/utils";
 import { SpiralArrow } from "~shared/ui/doodles";
@@ -41,28 +42,19 @@ const groupedProperties = computed(() => {
       v-for="(group, name) of groupedProperties"
       :key="name"
     >
-      <section
-        class="p-3"
-      >
-        <h3 class="text-trunks font-semibold">
-          {{ name ? name : 'Other' }}
-        </h3>
+      <OptionsSection :title="name ? name : 'Other'">
         <div
-          class="w-full flex flex-col gap-2 py-2"
+          v-for="field of group"
+          :key="field.id"
         >
-          <div
-            v-for="field of group"
-            :key="field.id"
-          >
-            <component
-              :is="resolveFieldsComponent(field.type)"
-              :id="`${name}-field-${field.id}`"
-              v-model="field.value"
-              :field="field"
-            />
-          </div>
+          <component
+            :is="resolveFieldsComponent(field.type)"
+            :id="`${name}-field-${field.id}`"
+            v-model="field.value"
+            :field="field"
+          />
         </div>
-      </section>
+      </OptionsSection>
       <UISeparator />
     </template>
     <div class="p-3">
