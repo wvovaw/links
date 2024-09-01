@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { UIScrollArea } from "@links/ui";
+defineProps<{
+  title: string;
+}>();
 </script>
 
 <template>
-  <UIScrollArea bar-class="rounded-none" thumb-class="bg-trunks">
-    <h3 class="ml-3 mt-3 text-moon-18 font-semibold">
-      <slot name="title" />
+  <section
+    class="p-3"
+  >
+    <h3 class="text-trunks font-semibold">
+      {{ title }}
     </h3>
-    <slot />
-  </UIScrollArea>
+    <div
+      class="w-full flex flex-col gap-2 py-2"
+    >
+      <slot />
+    </div>
+  </section>
 </template>
