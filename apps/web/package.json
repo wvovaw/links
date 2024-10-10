@@ -22,6 +22,7 @@
     "@antfu/eslint-config": "^2.15.0",
     "@iconify-json/lucide": "^1.1.184",
     "@iconify-json/vscode-icons": "^1.1.33",
+    "@links/blocks": "workspace:*",
     "@links/ui": "workspace:*",
     "@nuxt/content": "^2.12.1",
     "@nuxt/image": "^1.5.0",

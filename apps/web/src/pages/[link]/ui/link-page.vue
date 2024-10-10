@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IBlock } from "~shared/core";
+import type { IBlock } from "@links/blocks";
 import type { ILinkPageDocument } from "~shared/api/appwrite";
 import { LinkPageRenderer } from "~features/links";
 import { LinkFooter } from "~widgets/link-footer";

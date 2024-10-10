@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIRichSelect, UISelectHint, UISelectLabel } from "@links/ui";
-import type { IBlockPropertySelect } from "~shared/core";
+import type { IBlockPropertySelect } from "@links/blocks";
 
 interface ITextFieldProps {
   field: IBlockPropertySelect;

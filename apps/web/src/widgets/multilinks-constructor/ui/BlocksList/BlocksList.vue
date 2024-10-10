@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UIMenu } from "@links/ui";
+import { blocksList } from "@links/blocks";
 import { useConstructorStore } from "../../model";
-import { blocksList } from "~shared/core";
 
 const { addBlock } = useConstructorStore();
 </script>

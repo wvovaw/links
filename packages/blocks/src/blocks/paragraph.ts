@@ -20,7 +20,7 @@ export function createParagraph(id: string): IBlock {
         label: "Inline padding",
         min: 0,
         max: 125,
-        step: 0.1,
+        step: 1,
         group: "Appearance",
       },
       "flag": {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIInput, UIInputHint, UIInputLabel } from "@links/ui";
-import type { IBlockPropertyColor } from "~shared/core";
+import type { IBlockPropertyColor } from "@links/blocks";
 
 interface IColorFieldProps {
   field: IBlockPropertyColor;

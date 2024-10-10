@@ -1,6 +1,6 @@
 import type { Component } from "vue";
 
-export default function () {
+export function useBlocksResolver() {
   const blocksMap = new Map();
 
   /**
@@ -13,7 +13,7 @@ export default function () {
       return blocksMap.get(blockName);
     }
     else {
-      const comp = defineAsyncComponent(() => import(`./${blockName}Block.vue`));
+      const comp = defineAsyncComponent(() => import(`./components/${blockName}Block.vue`));
       blocksMap.set(blockName, comp);
       return comp;
     }
