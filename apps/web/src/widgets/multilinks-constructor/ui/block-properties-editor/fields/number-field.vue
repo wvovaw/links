@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UIInput, UIInputHint, UIInputLabel } from "@links/ui";
-import type { IBlockPropertyNumber } from "~shared/core";
+import type { IBlockPropertyNumber } from "@links/blocks";
 
 interface ITextFieldProps {
   field: IBlockPropertyNumber;

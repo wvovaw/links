@@ -9,6 +9,10 @@
       "path": "../packages/ui",
     },
     {
+      "name": "blocks",
+      "path": "../packages/blocks",
+    },
+    {
       "name": ".ROOT",
       "path": "../"
     },

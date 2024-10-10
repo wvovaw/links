@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { animations, dragAndDrop } from "@formkit/drag-and-drop";
-import "~shared/core/resources/theme.css";
+import "~shared/blocks/theme.css";
 import { useConstructorStore } from "../../model";
 import PageBlock from "./PageBlock.vue";
-import { useBlocksResolver } from "~shared/core";
+import { useBlocksResolver } from "~shared/blocks";
 
 const { resolve } = useBlocksResolver();
 

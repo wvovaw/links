@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { IBlock } from "@links/blocks";
 import PageNotFound from "./private/page-not-found.vue";
 import OverlayHud from "./private/overlay-hud.vue";
 import { LinksApi } from "~shared/api/appwrite";
 import { LinkPageRenderer } from "~features/links";
-import type { IBlock } from "~shared/core";
 
 const props = defineProps<{
   linkId: string;

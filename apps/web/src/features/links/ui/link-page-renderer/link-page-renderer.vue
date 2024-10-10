@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IBlock } from "~shared/core";
-import { useBlocksResolver } from "~shared/core";
-import "~shared/core/resources/theme.css";
+import type { IBlock } from "@links/blocks";
+import { useBlocksResolver } from "~shared/blocks";
+import "~shared/blocks/theme.css";
 
 defineProps<{
   blocks: IBlock[];
