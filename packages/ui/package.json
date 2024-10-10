@@ -30,14 +30,11 @@
     "docs:build": "nuxt build --cwd docs",
     "docs:generate": "nuxt generate --cwd docs",
     "docs:preview": "nuxt preview --cwd docs --port 3002",
-    "docs:lint": "eslint --config docs/eslint.config.js docs",
-    "docs:lint:fix": "eslint --fix --config docs/eslint.config.js docs",
+    "docs:lint": "eslint --fix --config docs/eslint.config.js docs",
     "lib:build": "unbuild",
-    "lib:lint": "eslint --ignore-pattern \"docs\" .",
-    "lib:lint:fix": "eslint --fix --ignore-pattern \"docs\" .",
+    "lib:lint": "eslint --fix --ignore-pattern \"docs\" .",
     "lib:prepublishOnly": "pnpm build",
-    "lint": "pnpm lib:lint && pnpm docs:lint",
-    "lint:fix": "pnpm lib:lint:fix && pnpm docs:lint:fix"
+    "lint": "pnpm lib:lint && pnpm docs:lint"
   },
   "peerDependencies": {
     "@iconify-json/lucide": "^1.1.173",

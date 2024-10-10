@@ -22,7 +22,7 @@ import { SignUpForm } from "~features/auth";
           <SignUpForm />
         </UICard.Body>
         <UICard.Footer>
-          <UIButton variant="link" as-child class="text-trunks" full-width>
+          <UIButton variant="link" class="text-trunks" full-width as-child>
             <NuxtLinkLocale to="/sign-in">
               Already have an account? Sign In
             </NuxtLinkLocale>

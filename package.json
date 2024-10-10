@@ -7,7 +7,6 @@
 		"build": "turbo run build",
 		"dev": "turbo run dev",
 		"lint": "turbo run lint",
-		"lint:fix": "turbo run lint:fix",
 		"test": "turbo run test",
 		"upg": "taze -r",
 		"changeset": "changeset",

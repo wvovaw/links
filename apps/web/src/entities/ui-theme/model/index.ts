@@ -12,7 +12,7 @@ export const useThemeStore = defineStore("ui-theme", () => {
     attribute: "data-theme",
   });
 
-  const { state, next } = useCycleList([...Object.values(modes)], {
+  const { state, next } = useCycleList(Object.values(modes), {
     initialValue: mode,
   });
 
