@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UISheet, UITooltip } from "@links/ui";
-import { BlocksList } from "../../BlocksList";
+import { BlocksList } from "../../blocks-list";
 
 const [show, setShow] = useToggle();
 </script>
