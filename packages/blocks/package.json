@@ -7,32 +7,26 @@
   "exports": {
     ".": {
       "types": "./dist/main.d.ts",
-      "import": "./dist/main.mjs",
-      "require": "./dist/main.js"
+      "import": "./dist/main.js"
     }
   },
-  "main": "./dist/main.js",
-  "module": "./dist/main.mjs",
+  "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "prepare": "pnpm run build",
-    "build": "unbuild",
+    "dev": "tsup --watch",
+    "build": "tsup",
     "lint": "eslint --fix .",
     "prepublishOnly": "pnpm build"
   },
-  "peerDependencies": {
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.15.0",
-    "defu": "^6.1.4",
     "eslint": "^9.1.0",
     "eslint-plugin-format": "^0.1.1",
     "eslint-plugin-import": "^2.29.1",
-    "mkdist": "^1.4.0",
-    "typescript": "^5.4.5",
-    "unbuild": "^2.0.0"
+    "typescript": "^5.5.3"
   }
 }
