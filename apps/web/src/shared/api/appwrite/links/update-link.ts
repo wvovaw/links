@@ -1,5 +1,6 @@
 import { useDatabaseApi } from "../instance";
 import { getErrorMessage } from "../errors";
+import type { LinkPublishStatus } from "../types";
 import { ApiException } from "../types";
 import { LINKS_COLLECTION_ID } from "../constants";
 
@@ -9,9 +10,10 @@ export interface IUpdateLinkData {
   blocks: Record<string, any>[];
   seo: Record<string, any>;
   background: string;
+  status: LinkPublishStatus;
 };
 
-export async function updateLink({ id, title, blocks, seo, background }: IUpdateLinkData) {
+export async function updateLink({ id, title, blocks, seo, background, status }: IUpdateLinkData) {
   try {
     const db = useDatabaseApi();
     const config = useRuntimeConfig();
@@ -25,6 +27,7 @@ export async function updateLink({ id, title, blocks, seo, background }: IUpdate
         blocks: JSON.stringify(blocks),
         seo: JSON.stringify(seo),
         background,
+        status,
       },
     );
   }

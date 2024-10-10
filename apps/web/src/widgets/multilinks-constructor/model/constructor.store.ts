@@ -4,7 +4,7 @@ import type { BlockName, IBlock } from "~shared/core";
 import { createBlock } from "~shared/core";
 import { randomString } from "~shared/lib/utils";
 import { useLinksStore } from "~entities/links";
-import { LinksApi } from "~shared/api/appwrite";
+import { LinkPublishStatus, LinksApi } from "~shared/api/appwrite";
 
 const defaultPageTitle = "New multilinks page";
 const defaultBlocksState: IBlock[] = [];
@@ -23,7 +23,10 @@ function computeHash(obj: any) {
 export const useConstructorStore = defineStore("multilinks-constructor", () => {
   /* State */
   const linkId = ref<string | null>(null);
-  const title = ref(defaultPageTitle); const blocks = ref<IBlock[]>(defaultBlocksState);
+  const title = ref(defaultPageTitle);
+  const linkName = ref<string | null>(null);
+  const publishStatus = ref<LinkPublishStatus>(LinkPublishStatus.DRAFT);
+  const blocks = ref<IBlock[]>(defaultBlocksState);
   const background = ref<string>(defaultBackground);
   const seo = ref<Record<string, any>>({});
   const selectedBlockId = ref<string | null>(null);
@@ -43,11 +46,11 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const canUndo = computed(() => blocksCanUndo.value);
 
   /* Actions */
-  function setId(id: string) {
-    linkId.value = id;
-  }
   function setTitle(newTitle: string) {
     title.value = newTitle;
+  }
+  function setPublishStatus(status: LinkPublishStatus) {
+    publishStatus.value = status;
   }
   function setBlocks(newBlocks: IBlock[]) {
     blocks.value.length = 0;
@@ -90,6 +93,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         blocks: blocks.value,
         seo: seo.value,
         background: background.value,
+        status: publishStatus.value,
       });
       savedDataHash.value = computeStoreHash();
     }
@@ -118,6 +122,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   function $reset() {
     linkId.value = null;
     title.value = defaultPageTitle;
+    linkName.value = null;
+    publishStatus.value = LinkPublishStatus.DRAFT;
     blocks.value = defaultBlocksState;
     background.value = defaultBackground;
     seo.value = {};
@@ -126,14 +132,17 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     clearHistory();
   }
 
-  async function setupStore(linkId: string) {
+  async function setupStore(id: string) {
     try {
-      const data = await LinksApi.getLink(linkId);
+      const data = await LinksApi.getLink(id);
       if (data) {
-        setId(data.$id);
-        setBlocks(JSON.parse(data.blocks));
+        publishStatus.value = data.status;
+        linkId.value = data.$id;
+        linkName.value = data.name.$id;
         setTitle(data.title);
-        setBackground(data.background)
+        setPublishStatus(data.status);
+        setBlocks(JSON.parse(data.blocks));
+        setBackground(data.background);
         savedDataHash.value = computeStoreHash();
       }
     }
@@ -151,7 +160,10 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   });
 
   return {
+    linkId,
+    linkName,
     selectedBlockId,
+    publishStatus,
     title,
     blocks,
     background,
@@ -161,10 +173,10 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     undo,
     redo,
     clearHistory,
-    setId,
     setBlocks,
     setTitle,
     setBackground,
+    setPublishStatus,
     getBlock,
     selectBlock,
     addBlock,
