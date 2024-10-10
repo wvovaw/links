@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { BlockName, IBlock } from "~shared/core";
-import { createBlock } from "~shared/core";
+import type { BlockName, IBlock } from "@links/blocks";
+import { createBlock } from "@links/blocks";
 import { randomString } from "~shared/lib/utils";
 import { useLinksStore } from "~entities/links";
 import { LinkPublishStatus, LinksApi } from "~shared/api/appwrite";
