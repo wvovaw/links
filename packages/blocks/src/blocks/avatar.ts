@@ -1,8 +1,11 @@
 import type { IBlock } from "../types";
 
-export function createAvatar(id: string): IBlock {
+const BLOCK_VERSION = 0;
+
+function createBlock(id: string): IBlock {
   return {
     id,
+    version: BLOCK_VERSION,
     name: "Avatar",
     properties: {
       image: {
@@ -10,6 +13,7 @@ export function createAvatar(id: string): IBlock {
         type: "url",
         label: "Image url",
         group: "Content",
+        defaultValue: null,
       },
       text: {
         id: 1,
@@ -17,7 +21,18 @@ export function createAvatar(id: string): IBlock {
         label: "Heading",
         hint: "Text under avatar",
         group: "Content",
+        defaultValue: null,
       },
     },
   };
 }
+
+function migrateBlock(block: IBlock): IBlock {
+  return block;
+}
+
+export default {
+  BLOCK_VERSION,
+  createBlock,
+  migrateBlock,
+};

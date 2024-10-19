@@ -1,8 +1,11 @@
 import type { IBlock } from "../types";
 
-export function createParagraph(id: string): IBlock {
+const BLOCK_VERSION = 0;
+
+function createBlock(id: string): IBlock {
   return {
     id,
+    version: BLOCK_VERSION,
     name: "Paragraph",
     properties: {
       "text": {
@@ -13,6 +16,7 @@ export function createParagraph(id: string): IBlock {
         maxLength: 200,
         required: true,
         group: "Content",
+        defaultValue: null,
       },
       "inline-padding": {
         id: 1,
@@ -22,6 +26,7 @@ export function createParagraph(id: string): IBlock {
         max: 125,
         step: 1,
         group: "Appearance",
+        defaultValue: 0,
       },
       "flag": {
         id: 2,
@@ -29,7 +34,18 @@ export function createParagraph(id: string): IBlock {
         variant: "checkbox",
         label: "Just a checkbox",
         hint: "This is just a checkbox",
+        defaultValue: true,
       },
     },
   };
 }
+
+function migrateBlock(block: IBlock): IBlock {
+  return block;
+}
+
+export default {
+  BLOCK_VERSION,
+  createBlock,
+  migrateBlock,
+};

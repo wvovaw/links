@@ -10,7 +10,7 @@ export interface IBlockPropertyCommon<T = any> {
   label: string;
   hint?: string;
   value?: T;
-  defaultValue?: T;
+  defaultValue: T | null;
   required?: boolean;
   group?: string;
 }
@@ -52,5 +52,6 @@ export type BlockProperty =
 export interface IBlock {
   id: string;
   name: BlockName;
-  properties?: Record<string, BlockProperty>;
+  properties: Record<string, BlockProperty>;
+  version: number;
 }
