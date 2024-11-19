@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { BlockName, IBlock } from "@links/blocks";
-import { createBlock } from "@links/blocks";
+import { checkBlockUpToDate, createBlock, migrateBlock } from "@links/blocks";
 import { randomString } from "~shared/lib/utils";
 import { useLinksStore } from "~entities/links";
 import { LinkPublishStatus, LinksApi } from "~shared/api/appwrite";
@@ -141,8 +141,18 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         linkName.value = data.name.$id;
         setTitle(data.title);
         setPublishStatus(data.status);
-        setBlocks(JSON.parse(data.blocks));
         setBackground(data.background);
+
+        // Parse blocks and upgrade outdated ones
+        const blocks: IBlock[] = JSON.parse(data.blocks);
+        blocks.forEach((block) => {
+          const info = checkBlockUpToDate(block);
+          if (!info.upToDate)
+            block = migrateBlock(block);
+        });
+        console.log(blocks);
+        setBlocks(blocks);
+
         savedDataHash.value = computeStoreHash();
       }
     }

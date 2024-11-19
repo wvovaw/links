@@ -28,6 +28,8 @@ function createBlock(id: string): IBlock {
 }
 
 function migrateBlock(block: IBlock): IBlock {
+  if (!block.version)
+    block.version = 0;
   return block;
 }
 

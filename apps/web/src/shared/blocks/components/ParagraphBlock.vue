@@ -10,7 +10,6 @@ const bp = computed(() => {
   return {
     text: p.text.value,
     marginX: p["inline-padding"].value ? `${p["inline-padding"].value}px` : "var(--links-theme-paragraph-inline-padding)",
-    flag: p.flag.value ? p.flag.value : false,
   };
 });
 </script>

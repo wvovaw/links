@@ -1,6 +1,6 @@
-import type { IBlock } from "../types";
+import type { IBlock, IBlockPropertyNumber } from "../types";
 
-const BLOCK_VERSION = 0;
+const BLOCK_VERSION = 2;
 
 function createBlock(id: string): IBlock {
   return {
@@ -28,19 +28,23 @@ function createBlock(id: string): IBlock {
         group: "Appearance",
         defaultValue: 0,
       },
-      "flag": {
-        id: 2,
-        type: "boolean",
-        variant: "checkbox",
-        label: "Just a checkbox",
-        hint: "This is just a checkbox",
-        defaultValue: true,
-      },
     },
   };
 }
 
 function migrateBlock(block: IBlock): IBlock {
+  if (!block.version)
+    block.version = 0;
+
+  if (block.version === 0) {
+    (block.properties["inline-padding"] as unknown as IBlockPropertyNumber).step = 1;
+    block.version = 1;
+  }
+  if (block.version === 1) {
+    delete block.properties.flag;
+    block.version = 2;
+  }
+
   return block;
 }
 

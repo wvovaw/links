@@ -13,7 +13,7 @@ const bp = computed(() => {
     background: p.background.value ? p.background.value : "var(--links-theme-button-bg)",
     foreground: p.foreground.value ? p.foreground.value : "var(--links-theme-button-fg)",
     fontSize: p["font-size"].value ? p["font-size"].value : "var(--links-theme-button-font-size)",
-    adultConfirmation: p["adult-confirmation"].value ? p["adult-confirmation"].value : false,
+    border: p.border.value ? p.border.value : "#eee",
   };
 });
 </script>
@@ -40,6 +40,7 @@ const bp = computed(() => {
   color: v-bind('bp.foreground');
   background: v-bind('bp.background');
   font-size: v-bind('bp.fontSize');
+  border-color: v-bind('bp.border');
   font-weight: 600;
   width: 100%;
   height: 3.5rem;

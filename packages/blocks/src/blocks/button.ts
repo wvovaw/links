@@ -1,6 +1,6 @@
-import type { IBlock } from "../types";
+import type { IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
 
-const BLOCK_VERSION = 0;
+const BLOCK_VERSION = 1;
 
 function createBlock(id: string): IBlock {
   return {
@@ -38,8 +38,15 @@ function createBlock(id: string): IBlock {
         group: "Appearance",
         defaultValue: null,
       },
-      "font-size": {
+      "border": {
         id: 4,
+        type: "color",
+        label: "Border Color",
+        group: "Border",
+        defaultValue: null,
+      },
+      "font-size": {
+        id: 5,
         type: "select",
         label: "Font size",
         options: [
@@ -50,19 +57,25 @@ function createBlock(id: string): IBlock {
         group: "Appearance",
         defaultValue: "var(--links-theme-button-font-size-sm)",
       },
-      "adult-confirmation": {
-        id: 5,
-        type: "boolean",
-        variant: "switch",
-        label: "Adult confirmation",
-        hint: "Asks the user to confirm his action",
-        defaultValue: false,
-      },
     },
   };
 }
 
 function migrateBlock(block: IBlock): IBlock {
+  if (!block.version)
+    block.version = 0;
+  if (block.version === 0) {
+    (block.properties.border as unknown as IBlockPropertyColor) = {
+      id: block.properties["font-size"].id,
+      type: "color",
+      label: "Border Color",
+      group: "Border",
+      defaultValue: null,
+    };
+    (block.properties["font-size"] as unknown as IBlockPropertySelect).id = Object.keys(block.properties).length;
+    block.version = 1;
+  }
+
   return block;
 }
 
