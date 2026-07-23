@@ -1,0 +1,60 @@
+meta {
+  name: Update Link Slug
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/slug
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+body:json {
+  {
+    "slug": "new-slug-name"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 200) {
+    const body = res.getBody();
+    bru.setVar("link_slug", body.slug);
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return link with new slug", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.slug).to.equal("new-slug-name");
+  });
+}
+
+docs {
+  Change the slug of an existing link.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required) — link ID
+
+  **Request body:**
+  - `slug` (string, required) — min 3 chars, lowercase alphanumeric with hyphens
+
+  **Response:** 200 — Updated `LinkDto`
+
+  **Post-response script:** Updates stored slug variable.
+}

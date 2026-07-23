@@ -1,0 +1,61 @@
+meta {
+  name: Update Link Metadata
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/metadata
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+body:json {
+  {
+    "title": "My Updated Link Title",
+    "seo": {
+      "description": "A great link page",
+      "ogImage": "https://example.com/og.png"
+    },
+    "status": "PUBLISHED"
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return link with updated metadata", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.title).to.equal("My Updated Link Title");
+    expect(body.seo).to.be.an("object");
+    expect(body.seo.description).to.equal("A great link page");
+    expect(body.status).to.equal("PUBLISHED");
+  });
+}
+
+docs {
+  Update title, SEO metadata, and status of a link.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required) — link ID
+
+  **Request body (all optional):**
+  - `title` (string) — min 12, max 60 characters
+  - `seo` (object) — arbitrary SEO metadata
+  - `status` (string) — `FRESH`, `DRAFT`, or `PUBLISHED`
+
+  **Response:** 200 — Updated `LinkDto`
+}

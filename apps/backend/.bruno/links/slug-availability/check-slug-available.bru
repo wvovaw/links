@@ -1,0 +1,31 @@
+meta {
+  name: Check Slug Available
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/links/slug/:slug/availability
+}
+
+params:path {
+  slug: "totally-free-slug-xyz"
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should report slug as available", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("available");
+    expect(body.available).to.equal(true);
+  });
+}
+
+docs {
+  Check availability of a slug that is not reserved.
+
+  **Response:** 200 — `{ available: true }`
+}

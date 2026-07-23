@@ -1,0 +1,45 @@
+meta {
+  name: Update Current User
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/users/me
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "name": "newname"
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return updated user", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("name");
+    expect(body.name).to.equal("newname");
+  });
+}
+
+docs {
+  Update the current user's profile.
+  
+  **Auth:** Bearer token (required)
+  
+  **Request body:**
+  - `name` (string, optional) — min 3 characters
+  
+  **Response:** 200 — Updated `UserDto`
+}

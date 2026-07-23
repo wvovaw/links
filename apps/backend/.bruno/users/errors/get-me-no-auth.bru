@@ -1,0 +1,26 @@
+meta {
+  name: Get User No Auth
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/users/me
+}
+
+tests {
+  test("should return 401 Unauthorized", function () {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to get user profile without authentication.
+
+  **Response:** 401 — Unauthorized
+}

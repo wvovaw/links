@@ -1,0 +1,60 @@
+meta {
+  name: Upload Avatar
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/users/me/avatar
+  body: multipart-form
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:multipart-form {
+  avatar: @file(test-avatar.jpg) @contentType(image/jpeg)
+}
+
+script:pre-request {
+  const FormData = require('form-data');
+  const fs = require('fs');
+  
+  const form = new FormData();
+  form.append('avatar', fs.createReadStream('/home/wvovaw/Dev/my/links/apps/backend/.bruno/test-avatar.jpg'), {
+    filename: 'test-avatar.jpg',
+    contentType: 'image/jpeg'
+  });
+  
+  req.setBody(form);
+  req.setHeader('content-type', 'multipart/form-data; boundary=' + form.getBoundary());
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return user with avatarUrl", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("avatarUrl");
+    expect(body.avatarUrl).to.be.a("string");
+    expect(body.avatarUrl).to.contain("/storage/avatars/");
+  });
+}
+
+docs {
+  Upload or replace the current user's avatar.
+  
+  **Auth:** Bearer token (required)
+  
+  **Request body:** `multipart/form-data`
+  - `avatar` (file, required) — JPEG or PNG, max 5MB
+  
+  **Response:** 200 — Updated `UserDto` with `avatarUrl`
+  
+  **Note:** Uses a pre-request script with `form-data` package because bru CLI's built-in `@file()` doesn't work for multipart uploads.
+}

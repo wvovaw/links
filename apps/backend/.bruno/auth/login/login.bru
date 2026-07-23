@@ -1,0 +1,68 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "newuser@example.com",
+    "password": "securepassword123"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 200) {
+    const body = res.getBody();
+    bru.setEnvVar("refresh_token", body.refreshToken);
+  
+    const setCookie = res.getHeader("set-cookie");
+    const cookieStr = Array.isArray(setCookie) ? setCookie[0] : setCookie;
+    if (cookieStr) {
+      const match = cookieStr.match(/access_token=([^;]+)/);
+      if (match) {
+        bru.setEnvVar("access_token", match[1]);
+      }
+    }
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should return user and refreshToken", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("user");
+    expect(body).to.have.property("refreshToken");
+    expect(body.user).to.have.property("id");
+    expect(body.user).to.have.property("email");
+    expect(body.refreshToken).to.be.a("string").and.to.not.be.empty;
+  });
+  
+  test("should set access_token cookie", function () {
+    const setCookie = res.getHeader("set-cookie");
+    const cookieStr = Array.isArray(setCookie) ? setCookie.join("; ") : setCookie;
+    expect(cookieStr).to.contain("access_token=");
+  });
+}
+
+docs {
+  Log in with email and password.
+  
+  **Request body:**
+  - `email` (string, required)
+  - `password` (string, required)
+  
+  **Response:** 200 — `{ user: UserDto, refreshToken: string }`
+  Sets `access_token` HTTP-only cookie automatically.
+  
+  **Post-response script:** Extracts `refreshToken` and access token cookie for use by other requests.
+}

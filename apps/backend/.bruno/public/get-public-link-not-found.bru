@@ -1,0 +1,30 @@
+meta {
+  name: Get Public Link Not Found
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/public/links/:slug
+}
+
+params:path {
+  slug: "non-existent-slug-12345"
+}
+
+tests {
+  test("should return 404 Not Found", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to get a public link with a non-existent slug.
+
+  **Response:** 404 — Public link not found
+}

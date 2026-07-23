@@ -1,0 +1,35 @@
+meta {
+  name: Register Short Username
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: json
+}
+
+body:json {
+  {
+    "email": "shortuser@example.com",
+    "username": "ab",
+    "password": "securepassword123"
+  }
+}
+
+tests {
+  test("should return 400 Bad Request", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("should return validation error", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to register with a username shorter than 3 characters.
+
+  **Response:** 400 — Validation error
+}

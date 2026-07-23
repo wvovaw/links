@@ -1,0 +1,31 @@
+meta {
+  name: Check Slug Unavailable
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/links/slug/:slug/availability
+}
+
+params:path {
+  slug: my-new-link
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should report slug as unavailable", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("available");
+    expect(body.available).to.equal(false);
+  });
+}
+
+docs {
+  Check availability of a slug that is already reserved.
+
+  **Response:** 200 — `{ available: false }`
+}

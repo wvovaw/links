@@ -1,0 +1,30 @@
+meta {
+  name: Get Public Link Not Published
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/public/links/:slug
+}
+
+params:path {
+  slug: my-new-link
+}
+
+tests {
+  test("should return 404 Not Found", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to get a public link that is not in PUBLISHED status.
+
+  **Response:** 404 — Public link not found (link exists but is not published)
+}

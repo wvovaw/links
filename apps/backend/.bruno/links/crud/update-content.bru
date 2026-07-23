@@ -1,0 +1,63 @@
+meta {
+  name: Update Link Content
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/content
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+body:json {
+  {
+    "blocks": [
+      {
+        "type": "heading",
+        "content": "Hello World"
+      }
+    ],
+    "background": "#ffffff",
+    "status": "DRAFT"
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return updated link", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.blocks).to.be.an("array");
+    expect(body.blocks[0].type).to.equal("heading");
+    expect(body.background).to.equal("#ffffff");
+    expect(body.status).to.equal("DRAFT");
+  });
+}
+
+docs {
+  Update the content blocks, background, and status of a link.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required) — link ID
+
+  **Request body (all optional):**
+  - `blocks` (array) — content blocks
+  - `background` (string) — background color/image
+  - `status` (string) — `FRESH`, `DRAFT`, or `PUBLISHED`
+
+  **Response:** 200 — Updated `LinkDto`
+}

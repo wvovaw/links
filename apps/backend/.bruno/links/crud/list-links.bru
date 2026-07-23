@@ -1,0 +1,49 @@
+meta {
+  name: List Links
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/links
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return array of links", function () {
+    const body = res.getBody();
+    expect(body).to.be.an("array");
+    expect(body.length).to.be.greaterThan(0);
+  });
+
+  test("each link should have required fields", function () {
+    const body = res.getBody();
+    body.forEach(function (link) {
+      expect(link).to.have.property("id");
+      expect(link).to.have.property("slug");
+      expect(link).to.have.property("title");
+      expect(link).to.have.property("blocks");
+      expect(link).to.have.property("seo");
+      expect(link).to.have.property("background");
+      expect(link).to.have.property("status");
+    });
+  });
+}
+
+docs {
+  List all links for the authenticated user.
+
+  **Auth:** Bearer token (required)
+
+  **Response:** 200 — Array of `LinkDto` objects
+
+  Each link contains: `id`, `slug`, `title`, `blocks`, `seo`, `background`, `status`
+}

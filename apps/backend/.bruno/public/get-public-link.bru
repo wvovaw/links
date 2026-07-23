@@ -1,0 +1,45 @@
+meta {
+  name: Get Public Link
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/public/links/:slug
+}
+
+params:path {
+  slug: {{link_slug}}
+}
+
+tests {
+  test("should return 200 or 404 (link may be deleted by then)", function () {
+    expect(res.getStatus()).to.be.oneOf([200, 404]);
+  });
+
+  test("if 200, should return public link data without private fields", function () {
+    if (res.getStatus() === 200) {
+      const body = res.getBody();
+      expect(body).to.have.property("title");
+      expect(body).to.have.property("slug");
+      expect(body).to.have.property("blocks");
+      expect(body).to.have.property("seo");
+      expect(body).to.have.property("background");
+      expect(body).to.not.have.property("id");
+      expect(body).to.not.have.property("status");
+      expect(body).to.not.have.property("owner");
+    }
+  });
+}
+
+docs {
+  Get a published link by slug. Public endpoint — no auth required.
+
+  **Path params:**
+  - `slug` (string, required) — the link's slug
+
+  **Response:** 200 — `{ title, slug, blocks, seo, background }`
+  **Response:** 404 — link not found or not published
+
+  **Use case:** Preview or render a public link page.
+}

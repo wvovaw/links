@@ -1,0 +1,57 @@
+meta {
+  name: Register User
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: json
+}
+
+body:json {
+  {
+    "email": "newuser@example.com",
+    "username": "newuser",
+    "password": "securepassword123"
+  }
+}
+
+tests {
+  test("should return 200 or 409 (user may already exist)", function () {
+    expect(res.getStatus()).to.be.oneOf([200, 409]);
+  });
+
+  test("should return user data if 200", function () {
+    if (res.getStatus() === 200) {
+      const body = res.getBody();
+      expect(body).to.have.property("id");
+      expect(body).to.have.property("email");
+      expect(body).to.have.property("name");
+      expect(body).to.have.property("emailVerification");
+      expect(body.email).to.equal("newuser@example.com");
+      expect(body.name).to.equal("newuser");
+      expect(body.emailVerification).to.equal(false);
+    }
+  });
+
+  test("should not return password or hash", function () {
+    const body = res.getBody();
+    expect(body).to.not.have.property("password");
+    expect(body).to.not.have.property("passwordHash");
+  });
+}
+
+docs {
+  Register a new user account.
+
+  **Request body:**
+  - `email` (string, required) — valid email address
+  - `username` (string, required) — min 3 characters
+  - `password` (string, required) — min 8 characters
+
+  **Response:** 200 — `UserDto` object with `id`, `email`, `name`, `avatarUrl`
+  **Response:** 409 — Conflict (email already exists)
+
+  **Note:** Does not return tokens. Use login to get access/refresh tokens.
+}

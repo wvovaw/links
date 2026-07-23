@@ -1,0 +1,36 @@
+meta {
+  name: Check Slug Availability
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/links/slug/:slug/availability
+}
+
+params:path {
+  slug: my-new-link
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return availability object", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("available");
+    expect(body.available).to.be.a("boolean");
+  });
+}
+
+docs {
+  Check if a slug is available for use. Public endpoint — no auth required.
+
+  **Path params:**
+  - `slug` (string, required) — slug to check
+
+  **Response:** 200 — `{ available: boolean }`
+
+  **Use case:** Validate slug uniqueness before creating a link.
+}

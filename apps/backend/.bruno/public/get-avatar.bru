@@ -1,0 +1,36 @@
+meta {
+  name: Get Avatar
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/storage/avatars/:fileId
+}
+
+params:path {
+  fileId: avatar-file-id
+}
+
+tests {
+  test("should return 200 or 404", function () {
+    const status = res.getStatus();
+    expect(status).to.be.oneOf([200, 404]);
+  });
+
+  test("if found, should return image content", function () {
+    if (res.getStatus() === 200) {
+      const contentType = res.getHeader("content-type");
+      expect(contentType).to.match(/image\/(jpeg|png)/);
+    }
+  });
+}
+
+docs {
+  Retrieve an avatar image by file ID. Public endpoint — no auth required.
+
+  **Path params:**
+  - `fileId` (string, required) — avatar file ID
+
+  **Response:** 200 — Binary image file (JPEG/PNG) or 404 if not found
+}

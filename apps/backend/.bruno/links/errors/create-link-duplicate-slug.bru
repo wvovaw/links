@@ -1,0 +1,39 @@
+meta {
+  name: Create Link Duplicate Slug
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/links
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "slug": "my-new-link",
+    "title": "Duplicate Slug Test Title"
+  }
+}
+
+tests {
+  test("should return 409 Conflict", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to create a link with an already reserved slug.
+
+  **Response:** 409 — Conflict (slug already reserved)
+}

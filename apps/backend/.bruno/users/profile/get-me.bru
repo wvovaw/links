@@ -1,0 +1,43 @@
+meta {
+  name: Get Current User
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/users/me
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return user profile", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("email");
+    expect(body).to.have.property("name");
+    expect(body).to.have.property("emailVerification");
+    expect(body.emailVerification).to.equal(false);
+  });
+
+  test("should not expose password hash", function () {
+    const body = res.getBody();
+    expect(body).to.not.have.property("password");
+    expect(body).to.not.have.property("passwordHash");
+  });
+}
+
+docs {
+  Get the current authenticated user's profile.
+
+  **Auth:** Bearer token (required)
+
+  **Response:** 200 — `UserDto` with `id`, `email`, `name`, `emailVerification`, `avatarUrl`
+}

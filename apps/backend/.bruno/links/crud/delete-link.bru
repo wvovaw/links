@@ -1,0 +1,35 @@
+meta {
+  name: Delete Link
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/links/:id
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+tests {
+  test("should return 204 No Content", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Delete a link by ID.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required) — link ID
+
+  **Response:** 204 No Content
+}

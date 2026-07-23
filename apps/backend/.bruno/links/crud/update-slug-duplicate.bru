@@ -1,0 +1,42 @@
+meta {
+  name: Update Link Slug Duplicate
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/slug
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+body:json {
+  {
+    "slug": "my-new-link"
+  }
+}
+
+tests {
+  test("should return 409 Conflict", function () {
+    expect(res.getStatus()).to.equal(409);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to change a link's slug to one that is already reserved.
+
+  **Response:** 409 — Conflict (slug already reserved)
+}

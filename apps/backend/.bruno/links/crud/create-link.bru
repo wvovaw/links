@@ -1,0 +1,69 @@
+meta {
+  name: Create Link
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/links
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "slug": "test-link-{{$timestamp}}",
+    "title": "My New Link Page Title"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status === 201 || status === 409) {
+    const body = res.getBody();
+    if (body.id) {
+      bru.setVar("link_id", body.id);
+      bru.setVar("link_slug", body.slug);
+    }
+  }
+}
+
+tests {
+  test("should return 201 Created", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should return link with correct fields", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("slug");
+    expect(body).to.have.property("title");
+    expect(body).to.have.property("blocks");
+    expect(body).to.have.property("seo");
+    expect(body).to.have.property("background");
+    expect(body).to.have.property("status");
+    expect(body.slug).to.match(/^test-link-\d+$/);
+    expect(body.title).to.equal("My New Link Page Title");
+    expect(body.status).to.equal("FRESH");
+    expect(body.blocks).to.be.an("array");
+    expect(body.seo).to.be.an("object");
+  });
+}
+
+docs {
+  Create a new link.
+
+  **Auth:** Bearer token (required)
+
+  **Request body:**
+  - `slug` (string, required) — min 3 chars, lowercase alphanumeric with hyphens (`/^[a-z0-9]+(?:-[a-z0-9]+)*$/`)
+  - `title` (string, optional) — min 12, max 60 characters
+
+  **Response:** 200 — `LinkDto`
+
+  **Post-response script:** Stores `id` and `slug` in variables for subsequent requests.
+}

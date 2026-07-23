@@ -1,0 +1,43 @@
+meta {
+  name: Get Link by ID
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/links/:id
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return link with correct id", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.id).to.equal(bru.getVar("link_id"));
+    expect(body).to.have.property("slug");
+    expect(body).to.have.property("title");
+  });
+}
+
+docs {
+  Get a single link by its ID.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required) — link ID
+
+  **Response:** 200 — `LinkDto`
+}

@@ -1,0 +1,38 @@
+meta {
+  name: Get Session
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/auth/session
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return current user", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("email");
+    expect(body).to.have.property("name");
+    expect(body.email).to.equal("newuser@example.com");
+  });
+}
+
+docs {
+  Get the current authenticated user from the JWT session.
+
+  **Auth:** Bearer token (set via cookie or Authorization header)
+
+  **Response:** 200 — `UserDto` object
+
+  **Use case:** Verify the current session is valid and get user info.
+}

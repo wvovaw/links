@@ -1,0 +1,38 @@
+meta {
+  name: Logout
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/auth/logout
+  body: json
+}
+
+body:json {
+  {
+    "refreshToken": "{{refresh_token}}"
+  }
+}
+
+script:post-response {
+  bru.deleteVar("access_token");
+  bru.deleteVar("refresh_token");
+}
+
+tests {
+  test("should return 204 No Content", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Log out by invalidating the refresh token and clearing the access cookie.
+
+  **Request body:**
+  - `refreshToken` (string, required)
+
+  **Response:** 204 No Content
+
+  **Post-response script:** Clears stored token variables.
+}

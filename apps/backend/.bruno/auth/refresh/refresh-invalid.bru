@@ -1,0 +1,33 @@
+meta {
+  name: Refresh Invalid Token
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/refresh
+  body: json
+}
+
+body:json {
+  {
+    "refreshToken": "invalid-token-that-does-not-exist"
+  }
+}
+
+tests {
+  test("should return 401 Unauthorized", function () {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Attempt to refresh with an invalid or expired refresh token.
+
+  **Response:** 401 — Unauthorized
+}
