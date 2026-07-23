@@ -1,7 +1,11 @@
 {
   "folders": [
     {
-      "name": "web",
+      "name": "backend",
+      "path": "../apps/backend",
+    },
+    {
+      "name": "frontend",
       "path": "../apps/web",
     },
     {
