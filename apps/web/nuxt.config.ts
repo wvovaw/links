@@ -73,7 +73,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/image",
     "@pinia/nuxt",
-    "@nuxt/test-utils/module",
+
   ],
   experimental: {
     typedPages: true,

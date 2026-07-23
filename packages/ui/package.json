@@ -80,7 +80,7 @@
     "unbuild": "^2.0.0",
     "unocss": "^0.59.4",
     "unocss-preset-animations": "^1.0.2",
-    "valibot": "^0.30.0",
+    "valibot": "^1.0.0",
     "vaul-vue": "^0.1.0",
     "vee-validate": "^4.12.6",
     "vue": "^3.4.23",
