@@ -7,7 +7,7 @@ const constructorStore = useConstructorStore();
 const { linkName, publishStatus } = storeToRefs(constructorStore);
 const { setPublishStatus } = constructorStore;
 
-const baseUrl = useRuntimeConfig().public.baseUrl;
+const baseUrl = useRuntimeConfig().public.baseUrl || useRequestURL().origin;
 const url = computed(() => {
   if (linkName.value) {
     const url = new URL(linkName.value, baseUrl);
