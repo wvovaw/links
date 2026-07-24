@@ -5,6 +5,7 @@ const { params } = useRoute("links-constructor-id___en___default");
 
 definePageMeta({
   title: "pages.links.constructor.title",
+  middleware: "auth",
 });
 </script>
 

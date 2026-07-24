@@ -3,6 +3,7 @@ import { AccountDangerPage } from "~pages/account";
 
 definePageMeta({
   title: "pages.account-danger.title",
+  middleware: "auth",
 });
 </script>
 

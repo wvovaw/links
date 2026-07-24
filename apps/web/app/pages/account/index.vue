@@ -3,6 +3,7 @@ import { AccountGeneralPage } from "~pages/account";
 
 definePageMeta({
   title: "pages.account-general.title",
+  middleware: "auth",
 });
 </script>
 
