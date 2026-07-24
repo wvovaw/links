@@ -13,7 +13,7 @@ export async function register({ email, username, password }: IUserRegisterData)
     const api = useApiClient();
     const data = await api<{ user: User; refreshToken: string }>("/auth/register", {
       method: "POST",
-      body: { email, name: username, password },
+      body: { email, username, password },
     });
     setRefreshToken(data.refreshToken);
     return data.user;
