@@ -2,7 +2,7 @@
 import type { IBlock } from "@links/blocks";
 import PageNotFound from "./private/page-not-found.vue";
 import OverlayHud from "./private/overlay-hud.vue";
-import { LinksApi } from "~shared/api/appwrite";
+import { LinksApi } from "~shared/api/backend";
 import { LinkPageRenderer } from "~features/links";
 
 const props = defineProps<{
@@ -16,9 +16,9 @@ const linkName = ref<string>("");
 const { data, error } = await useAsyncData("preview-link-data", () => LinksApi.getLink(props.linkId));
 
 if (data?.value) {
-  blocks.value = JSON.parse(data.value.blocks);
+  blocks.value = data.value.blocks as IBlock[];
   background.value = data.value.background;
-  linkName.value = data.value.name.$id;
+  linkName.value = data.value.slug;
 
   const title = data.value.title;
   if (title) {

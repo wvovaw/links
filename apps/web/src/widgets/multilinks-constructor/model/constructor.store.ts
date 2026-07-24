@@ -4,7 +4,7 @@ import type { BlockName, IBlock } from "@links/blocks";
 import { checkBlockUpToDate, createBlock, migrateBlock } from "@links/blocks";
 import { randomString } from "~shared/lib/utils";
 import { useLinksStore } from "~entities/links";
-import { LinkPublishStatus, LinksApi } from "~shared/api/appwrite";
+import { LinkStatus, LinksApi } from "~shared/api/backend";
 
 const defaultPageTitle = "New multilinks page";
 const defaultBlocksState: IBlock[] = [];
@@ -25,7 +25,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const linkId = ref<string | null>(null);
   const title = ref(defaultPageTitle);
   const linkName = ref<string | null>(null);
-  const publishStatus = ref<LinkPublishStatus>(LinkPublishStatus.DRAFT);
+  const publishStatus = ref<LinkStatus>(LinkStatus.DRAFT);
   const blocks = ref<IBlock[]>(defaultBlocksState);
   const background = ref<string>(defaultBackground);
   const seo = ref<Record<string, any>>({});
@@ -49,7 +49,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   function setTitle(newTitle: string) {
     title.value = newTitle;
   }
-  function setPublishStatus(status: LinkPublishStatus) {
+  function setPublishStatus(status: LinkStatus) {
     publishStatus.value = status;
   }
   function setBlocks(newBlocks: IBlock[]) {
@@ -123,7 +123,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     linkId.value = null;
     title.value = defaultPageTitle;
     linkName.value = null;
-    publishStatus.value = LinkPublishStatus.DRAFT;
+    publishStatus.value = LinkStatus.DRAFT;
     blocks.value = defaultBlocksState;
     background.value = defaultBackground;
     seo.value = {};
@@ -137,14 +137,14 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       const data = await LinksApi.getLink(id);
       if (data) {
         publishStatus.value = data.status;
-        linkId.value = data.$id;
-        linkName.value = data.name.$id;
+        linkId.value = data.id;
+        linkName.value = data.slug;
         setTitle(data.title);
         setPublishStatus(data.status);
         setBackground(data.background);
 
-        // Parse blocks and upgrade outdated ones
-        const blocks: IBlock[] = JSON.parse(data.blocks);
+        // Blocks are already parsed from the backend
+        const blocks: IBlock[] = data.blocks as IBlock[];
         blocks.forEach((block) => {
           const info = checkBlockUpToDate(block);
           if (!info.upToDate)

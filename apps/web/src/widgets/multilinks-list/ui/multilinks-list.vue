@@ -7,8 +7,8 @@ import { CreateNewLinkForm } from "~features/links";
 import { LoadingSpinner } from "~shared/ui/loading-spinner";
 
 const linksStore = useLinksStore();
-const { refreshLinksList } = linksStore;
 const { links } = storeToRefs(linksStore);
+const { refreshLinksList } = linksStore;
 
 const [isLoading, setLoading] = useToggle(false);
 
@@ -57,7 +57,7 @@ onMounted(() => {
               {{ link.title }}
             </UITable.Cell>
             <UITable.Cell class="w-50%">
-              {{ link.name.$id }}
+              {{ link.slug }}
             </UITable.Cell>
             <UITable.Cell>
               <UITag
@@ -68,7 +68,7 @@ onMounted(() => {
               </UITag>
             </UITable.Cell>
             <UITable.Cell>
-              <LinkActions :link-id="link.$id" />
+              <LinkActions :link-id="link.id" />
             </UITable.Cell>
           </UITable.Row>
         </UITable.Body>

@@ -8,8 +8,8 @@ const props = defineProps<{
 const bp = computed(() => {
   const p = props.properties;
   return {
-    text: (p.text as IBlockPropertyText).value,
-    image: p.image.value ? (p.image as IBlockPropertyUrl).value : "",
+    text: (p.text! as IBlockPropertyText).value,
+    image: p.image!.value ? (p.image as IBlockPropertyUrl).value : "",
   };
 });
 </script>

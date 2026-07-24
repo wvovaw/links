@@ -5,7 +5,7 @@ import { UIButton, UITooltip } from "@links/ui";
 <template>
   <UITooltip attach-side="right">
     <template #trigger>
-      <NuxtLinkLocale to="/links">
+      <NuxtLinkLocale to="links">
         <UIButton icon="i-lucide:log-out rotate-y-180" variant="ghost" color="chichi" as="span" />
       </NuxtLinkLocale>
     </template>

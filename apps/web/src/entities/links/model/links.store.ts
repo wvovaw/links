@@ -1,19 +1,19 @@
 import { useToast } from "@links/ui";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { ILinkPageDocument } from "~shared/api/appwrite";
-import { LinksApi } from "~shared/api/appwrite";
+import type { Link } from "~shared/api/backend";
+import { LinksApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 export const useLinksStore = defineStore("links", () => {
   /* State */
-  const _links = ref<ILinkPageDocument[]>([]);
+  const _links = ref<Link[]>([]);
 
   /* Getters */
   const links = computed(() => _links.value);
 
   /* Actions */
-  async function updateLink(params: LinksApi.IUpdateLinkData) {
+  async function updateLink(params: { id: string; title: string; blocks: unknown[]; seo: Record<string, unknown>; background: string; status: any }) {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
     const confirm = createConfirmation({
@@ -24,7 +24,18 @@ export const useLinksStore = defineStore("links", () => {
     const { data } = await confirm();
     if (data) {
       try {
-        await LinksApi.updateLink(params);
+        await LinksApi.updateContent({
+          id: params.id,
+          blocks: params.blocks,
+          background: params.background,
+          status: params.status,
+        });
+        await LinksApi.updateMetadata({
+          id: params.id,
+          title: params.title,
+          seo: params.seo,
+          status: params.status,
+        });
         toast({
           title: "Succes",
           content: "The link is successfully updated",
@@ -74,7 +85,7 @@ export const useLinksStore = defineStore("links", () => {
   }
   async function refreshLinksList() {
     const data = await LinksApi.listLinks();
-    _links.value = data.documents;
+    _links.value = data;
   }
 
   return {

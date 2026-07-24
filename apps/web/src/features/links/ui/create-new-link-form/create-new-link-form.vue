@@ -16,16 +16,16 @@ const isLinkAvailableMem = useMemoize(isLinkNameAvailable);
 onUnmounted(() => { isLinkAvailableMem.clear(); });
 
 const onSubmit = handleSubmit(async (data) => {
-  const available = await isLinkAvailableMem(data.link_name);
+  const available = await isLinkAvailableMem(data.slug);
   if (!available) {
-    setFieldError("link_name", "This link name is taken or unavailable");
+    setFieldError("slug", "This link name is taken or unavailable");
     return;
   }
 
   try {
-    const link = await createNewLinkAndName({ link_name: data.link_name, title: data.title });
+    const link = await createNewLinkAndName({ slug: data.slug, title: data.title });
     if (link)
-      push(`/links/constructor/${link.$id}`);
+      push(`/links/constructor/${link.id}`);
   }
   catch (e: unknown) {
     if (e instanceof Error) {
@@ -41,7 +41,7 @@ const onSubmit = handleSubmit(async (data) => {
 
 <template>
   <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
-    <UIForm.Field v-slot="{ componentField, errorMessage }" name="link_name">
+    <UIForm.Field v-slot="{ componentField, errorMessage }" name="slug">
       <UIForm.Item>
         <UIForm.Control>
           <UIInsertInput

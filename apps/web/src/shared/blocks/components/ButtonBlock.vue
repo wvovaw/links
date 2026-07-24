@@ -8,12 +8,12 @@ const props = defineProps<{
 const bp = computed(() => {
   const p = props.properties;
   return {
-    text: (p.text as IBlockPropertyText).value,
-    link: p.link.value ? (p.link as IBlockPropertyUrl).value : "#",
-    background: p.background.value ? p.background.value : "var(--links-theme-button-bg)",
-    foreground: p.foreground.value ? p.foreground.value : "var(--links-theme-button-fg)",
-    fontSize: p["font-size"].value ? p["font-size"].value : "var(--links-theme-button-font-size)",
-    border: p.border.value ? p.border.value : "#eee",
+    text: (p.text! as IBlockPropertyText).value,
+    link: p.link!.value ? (p.link as IBlockPropertyUrl).value : "#",
+    background: p.background!.value ? p.background!.value : "var(--links-theme-button-bg)",
+    foreground: p.foreground!.value ? p.foreground!.value : "var(--links-theme-button-fg)",
+    fontSize: p["font-size"]!.value ? p["font-size"]!.value : "var(--links-theme-button-font-size)",
+    border: p.border!.value ? p.border!.value : "#eee",
   };
 });
 </script>

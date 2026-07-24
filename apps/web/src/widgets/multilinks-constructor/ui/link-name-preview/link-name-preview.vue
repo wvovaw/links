@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UISwitch } from "@links/ui";
 import { useConstructorStore } from "../../model";
-import { LinkPublishStatus } from "~shared/api/appwrite";
+import { LinkStatus } from "~shared/api/backend";
 
 const constructorStore = useConstructorStore();
 const { linkName, publishStatus } = storeToRefs(constructorStore);
@@ -17,13 +17,13 @@ const url = computed(() => {
 });
 
 const [publishStatusToggle, togglePublishStatus] = useToggle(publishStatus.value, {
-  falsyValue: LinkPublishStatus.DRAFT,
-  truthyValue: LinkPublishStatus.PUBLISHED,
+  falsyValue: LinkStatus.DRAFT,
+  truthyValue: LinkStatus.PUBLISHED,
 });
 watch(publishStatusToggle, (newStatus) => {
   setPublishStatus(newStatus);
 });
-const published = computed(() => publishStatusToggle.value === LinkPublishStatus.PUBLISHED);
+const published = computed(() => publishStatusToggle.value === LinkStatus.PUBLISHED);
 </script>
 
 <template>

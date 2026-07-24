@@ -1,5 +1,5 @@
 import { SessionModel } from "~entities/session";
-import { SessionApi } from "~shared/api/appwrite";
+import { SessionApi } from "~shared/api/backend";
 
 export function useAuth() {
   const sessionStore = SessionModel.useSessionStore();
@@ -9,36 +9,26 @@ export function useAuth() {
   }
 
   async function login({ email, password }: SessionApi.IUserLoginData) {
-    const session = await SessionApi.login({ email, password });
-    if (session) {
-      sessionStore.setSession(session);
-      await loadSessionUser();
+    const user = await SessionApi.login({ email, password });
+    if (user) {
+      sessionStore.setUser(user);
     }
   }
 
-  function logout() {
-    SessionApi.logout();
+  async function logout() {
+    await SessionApi.logout();
     sessionStore.setUser(null);
-    sessionStore.setSession(null);
-  }
-
-  async function loadSessionUser() {
-    const user = await SessionApi.getCurrentUser();
-    if (user)
-      sessionStore.setUser(user);
   }
 
   async function loadCurrentSession() {
-    const session = await SessionApi.getCurrentSession();
-    if (session)
-      sessionStore.setSession(session);
+    const user = await SessionApi.getCurrentSession();
+    sessionStore.setUser(user);
   }
 
   return {
     register,
     login,
     logout,
-    loadSessionUser,
     loadCurrentSession,
   };
 }

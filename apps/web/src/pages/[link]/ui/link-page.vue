@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IBlock } from "@links/blocks";
-import type { ILinkPageDocument } from "~shared/api/appwrite";
+import type { PublicLink } from "~shared/api/backend";
 import { LinkPageRenderer } from "~features/links";
 import { LinkFooter } from "~widgets/link-footer";
 
@@ -11,7 +11,7 @@ const props = defineProps<{
 const { locale } = useI18n();
 const config = useRuntimeConfig();
 
-const { data: pageData } = await useFetch<ILinkPageDocument>(`/api/${props.link}`);
+const { data: pageData } = await useFetch<PublicLink>(`/api/${props.link}`);
 
 const blocks = ref<IBlock[]>([]);
 const seo = ref<Record<string, any>>({});
@@ -20,18 +20,14 @@ const bg = ref<string>();
 const defaultDescription = "Welcome to my link";
 
 if (pageData.value) {
-  blocks.value = JSON.parse(pageData.value.blocks);
-  seo.value = JSON.parse(pageData.value.seo);
+  blocks.value = pageData.value.blocks as IBlock[];
+  seo.value = pageData.value.seo;
   bg.value = pageData.value.background;
-
-  // console.log(pageData.value.$nitroCachedAt)
 
   const title = pageData.value.title;
   const description = seo.value.description ? seo.value.description : defaultDescription;
   const url = `${config.public.baseUrl}/${props.link}`;
 
-  // TODO: get the seo data from backend
-  // TODO: need more work on seo
   useSeoMeta({
     title,
     description,

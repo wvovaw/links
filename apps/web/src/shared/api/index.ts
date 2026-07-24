@@ -1,3 +1,2 @@
-export * as DummyJsonApi from "./dummyjson";
-export * as AppwriteApi from "./appwrite";
+export * as BackendApi from "./backend";
 export * as PlaceholdJpApi from "./placeholdjp";

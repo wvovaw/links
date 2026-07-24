@@ -8,11 +8,11 @@ import { useBlocksResolver } from "~shared/blocks";
 const { resolve } = useBlocksResolver();
 
 const constructorStore = useConstructorStore();
-const { selectedBlockId: selectedBlock, blocks, background } = storeToRefs(constructorStore);
+const { selectedBlockId, blocks, background } = storeToRefs(constructorStore);
 const { selectBlock, setBlocks, clearHistory } = constructorStore;
 
 function isSelectedBlock(blockId: string) {
-  const isit = selectedBlock.value === blockId;
+  const isit = selectedBlockId.value === blockId;
   return isit;
 };
 

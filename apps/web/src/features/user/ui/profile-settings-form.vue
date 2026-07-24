@@ -6,7 +6,7 @@ import { profileSettingsSchema } from "../model/schema";
 import { urlToFile } from "~shared/lib/utils";
 import { ImageUploader } from "~shared/ui/image-uploader";
 import { SessionModel } from "~entities/session";
-import { ProfileApi } from "~shared/api/appwrite";
+import { ProfileApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 const { toast } = useToast();

@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 function onChangeLocale(newLocale: string) {
-  setLocale(newLocale);
+  setLocale(newLocale as "en" | "ru");
   router.replace(switchLocalePath(locale.value));
 }
 </script>

@@ -3,7 +3,7 @@ import oxlintPlugin from "eslint-plugin-oxlint";
 
 export default antfu({
   plugins: [oxlintPlugin.configs["flat/recommended"]],
-  ignores: ["**/eslint.config.js", "src/shared/public/**/*"],
+  ignores: ["**/eslint.config.js", "shared/public/**/*"],
   unocss: true,
   stylistic: {
     indent: 2,

@@ -6,9 +6,9 @@ export interface IConfirmationDialog {
   /** The body of the confirmation dialog window. Can be a string or a vue virtual dom */
   content?: string | VNode;
   /** Called on 'confirm' button push. Default is () => true */
-  onConfirm?: Function;
+  onConfirm?: (...args: any[]) => any;
   /** Called on 'cancel' button push. Default is () => false */
-  onCancel?: Function;
+  onCancel?: (...args: any[]) => any;
 }
 
 const defaultConfirmationDialog = {

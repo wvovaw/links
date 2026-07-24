@@ -11,11 +11,11 @@ import { UISeparator } from "@links/ui";
     </div>
     <div class="grid mx-auto max-w-6xl w-full items-start gap-6 lg:grid-cols-[250px_1fr] md:grid-cols-[180px_1fr]">
       <nav class="grid gap-4 text-moon-14 text-trunks">
-        <NuxtLinkLocale to="/account" class="text-bulma" exact-active-class="font-semibold">
+        <NuxtLinkLocale to="account" class="text-bulma" exact-active-class="font-semibold">
           General
         </NuxtLinkLocale>
         <UISeparator />
-        <NuxtLinkLocale to="/account/danger" class="text-chichi" exact-active-class="font-semibold">
+        <NuxtLinkLocale to="account-danger" class="text-chichi" exact-active-class="font-semibold">
           Danger
         </NuxtLinkLocale>
       </nav>

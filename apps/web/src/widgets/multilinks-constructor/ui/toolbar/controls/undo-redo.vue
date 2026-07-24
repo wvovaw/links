@@ -4,7 +4,7 @@ import { useConstructorStore } from "../../../model";
 import { useKeyboardShortcut } from "~shared/lib/composables";
 
 const constructorStore = useConstructorStore();
-const { canUndo, canRedo } = storeToRefs(constructorStore);
+const { canRedo, canUndo } = storeToRefs(constructorStore);
 const { undo, redo } = constructorStore;
 
 useKeyboardShortcut({ combination: { key: "Z", modifiers: ["Control"] }, handler: undo });

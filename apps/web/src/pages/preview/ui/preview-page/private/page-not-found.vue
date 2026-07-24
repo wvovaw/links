@@ -10,7 +10,7 @@ import { UIButton } from "@links/ui";
       </div>
       <div class="flex justify-center gap-4">
         <UIButton as-child variant="link">
-          <NuxtLinkLocale to="/links">
+          <NuxtLinkLocale to="links">
             <span class="i-lucide:arrow-left" /> &ThickSpace; Back to links list
           </NuxtLinkLocale>
         </UIButton>

@@ -21,7 +21,7 @@ defineProps<{
         <p class="text-moon-16 sm:text-moon-24">
           {{ error }}
         </p>
-        <NuxtLinkLocale to="/links">
+        <NuxtLinkLocale to="links">
           <UIButton icon="i-lucide:corner-up-left" as="span">
             Go To My Links
           </UIButton>

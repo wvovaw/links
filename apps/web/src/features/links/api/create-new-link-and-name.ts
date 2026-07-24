@@ -1,19 +1,13 @@
-import { ApiException, type ILinkPageDocument, LinksApi } from "~shared/api/appwrite";
-import { getErrorMessage } from "~shared/api/appwrite/errors";
+import { LinksApi } from "~shared/api/backend";
+import type { Link } from "~shared/api/backend";
 
-export default async function ({ link_name, title }: { link_name: string; title: string }): Promise<ILinkPageDocument | undefined> {
+export default async function ({ slug, title }: { slug: string; title: string }): Promise<Link | undefined> {
   try {
-    const name = await LinksApi.createLinkName({ link_name });
-
-    if (name) {
-      const newLink = await LinksApi.createLink({ title, name_document_id: name.$id });
-      return newLink;
-    }
-
-    return undefined;
+    const newLink = await LinksApi.createLink({ slug, title });
+    return newLink;
   }
   catch (e: unknown) {
-    if (e instanceof ApiException)
-      throw new Error(getErrorMessage(e.type));
+    if (e instanceof Error)
+      throw e;
   }
 }

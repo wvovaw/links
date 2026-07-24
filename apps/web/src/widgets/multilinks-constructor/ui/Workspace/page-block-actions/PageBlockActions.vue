@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { useConstructorStore } from "../../../model";
 import { useConstructorData } from "../../../model/provider";
 import EditBlock from "./edit-block-action.vue";

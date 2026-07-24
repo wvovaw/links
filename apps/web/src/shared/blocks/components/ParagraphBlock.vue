@@ -8,8 +8,8 @@ const props = defineProps<{
 const bp = computed(() => {
   const p = props.properties;
   return {
-    text: p.text.value,
-    marginX: p["inline-padding"].value ? `${p["inline-padding"].value}px` : "var(--links-theme-paragraph-inline-padding)",
+    text: p.text!.value,
+    marginX: p["inline-padding"]!.value ? `${p["inline-padding"]!.value}px` : "var(--links-theme-paragraph-inline-padding)",
   };
 });
 </script>

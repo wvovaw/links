@@ -1,48 +1,44 @@
+import { fileURLToPath } from "node:url";
+
+/* Please, read .env.example to learn how to work with environment variables */
 export default defineNuxtConfig({
-  /* Please, read .env.example to learn how to work with environment variables */
   runtimeConfig: {
-    /* server-side only keys goes here */
-    appwriteApiKey: "",
     public: {
-      /* public keys is also client-side */
-      appwriteProjectId: "",
-      appwriteHost: "",
-      appwriteUserPicturesBucketId: "",
-      appwriteDatabaseId: "",
+      backendUrl: "",
       baseUrl: "",
     },
   },
   unocss: {
     preflight: true,
   },
-  css: ["@links/ui/theme.css", "~app/styles/global.css", "~app/styles/shiki.css"],
+  css: ["@links/ui/theme.css", "~/styles/global.css", "~/styles/shiki.css"],
   content: {
-    markdown: {
-      remarkPlugins: {},
-      rehypePlugins: [],
-    },
-    highlight: {
-      theme: {
-        default: "light-plus",
-        dark: "dark-plus",
+    build: {
+      markdown: {
+        remarkPlugins: {},
+        highlight: {
+          theme: {
+            default: "light-plus",
+            dark: "dark-plus",
+          },
+          langs: ["vue", "vue-html", "javascript", "typescript", "css"],
+        },
       },
-      langs: ["vue", "vue-html", "javascript", "typescript", "css"],
     },
   },
-  image: {
-  },
+  image: {},
   i18n: {
-    lazy: true,
-    langDir: "./src/shared/locales",
+    baseUrl: "http://localhost:3000",
+    langDir: "../src/shared/locales",
     locales: [{
       code: "en",
-      iso: "en-US",
+      language: "en-US",
       name: "English",
       file: "en-US.ts",
       isCatchallLocale: true,
     }, {
       code: "ru",
-      iso: "ru-RU",
+      language: "ru-RU",
       name: "Русский",
       file: "ru-RU.ts",
     }],
@@ -54,7 +50,7 @@ export default defineNuxtConfig({
       redirectOn: "root",
     },
     experimental: {
-      localeDetector: "./src/app/server/utils/i18n.localeDetector.ts",
+      localeDetector: "../server/utils/i18n.localeDetector.ts",
     },
   },
   routeRules: {
@@ -73,12 +69,48 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/image",
     "@pinia/nuxt",
-
   ],
   experimental: {
     typedPages: true,
   },
   devtools: { enabled: false },
-  extends: ["nuxt.structure.ts"],
-  watch: ["nuxt.structure.ts", "uno.config.ts"],
+  telemetry: false,
+  typescript: {
+    tsConfig: {
+      include: ["../src/**/*"],
+    },
+    sharedTsConfig: {
+      include: ["../src/**/*"],
+    },
+    nodeTsConfig: {
+      include: ["../src/**/*"],
+    },
+  },
+  dir: {
+    assets: "../src/shared/assets",
+    public: "../src/shared/public",
+  },
+  pinia: {
+    storesDirs: [],
+  },
+  components: {
+    dirs: [
+      {
+        path: "../src/shared/ui/global",
+        global: true,
+      },
+    ],
+  },
+  imports: {
+    dirs: [],
+  },
+  alias: {
+    "~pages": fileURLToPath(new URL("./src/pages", import.meta.url)),
+    "~widgets": fileURLToPath(new URL("./src/widgets", import.meta.url)),
+    "~features": fileURLToPath(new URL("./src/features", import.meta.url)),
+    "~entities": fileURLToPath(new URL("./src/entities", import.meta.url)),
+    "~shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
+  },
+  watch: ["uno.config.ts"],
+  compatibilityDate: "2026-07-24",
 });

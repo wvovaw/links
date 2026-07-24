@@ -1,15 +1,10 @@
-import { LinksApi } from "~shared/api/appwrite";
+import { LinksApi } from "~shared/api/backend";
 
-// TODO: replace this by Appwrite lambda function
-export default async function (link_name: string): Promise<boolean> {
+export default async function (slug: string): Promise<boolean> {
   try {
-    const data = await LinksApi.getLinkName(link_name);
-
-    if (data)
-      return false;
-    else return true;
+    return await LinksApi.isSlugAvailable(slug);
   }
-  catch (e: unknown) {
+  catch {
     return false;
   }
 }
