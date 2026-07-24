@@ -55,11 +55,11 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/docs/**": { prerender: true },
-    "/links/**": { ssr: false },
-    "/sign-in": { ssr: false },
-    "/sign-up": { ssr: false },
-    "/account/**": { ssr: false },
-    "/preview/**": { ssr: false },
+    // "/links/**": { ssr: false },
+    // "/sign-in": { ssr: false },
+    // "/sign-up": { ssr: false },
+    // "/account/**": { ssr: false },
+    // "/preview/**": { ssr: false },
     "/*": { ssr: true },
   },
   modules: [

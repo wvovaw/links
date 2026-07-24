@@ -9,19 +9,19 @@ const useIdFunction = () => useId();
 const expireDate = new Date();
 expireDate.setFullYear(expireDate.getFullYear() + 1);
 
-let cookie = useCookie<ITheme>(THEME_CONFIG.cookieKey, {
+const cookie = useCookie<ITheme>(THEME_CONFIG.cookieKey, {
   default: THEME_CONFIG.defaultValue,
   expires: expireDate,
   watch: "shallow",
 });
 
-addRouteMiddleware("theme-cookie-update", () => {
-  cookie = useCookie(THEME_CONFIG.cookieKey);
-}, { global: true });
+useHead({
+  htmlAttrs: { "data-theme": cookie.value.theme },
+});
 </script>
 
 <template>
-  <Html :data-theme="cookie.theme">
+  <Html>
     <Body class="bg-goku text-bulma font-regular font-dm-sans">
       <ConfigProvider :use-id="useIdFunction">
         <UITooltipProvider>
