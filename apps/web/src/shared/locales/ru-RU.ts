@@ -10,5 +10,6 @@ export default defineI18nLocale(async (_locale) => {
     "pages.links.index.title": "Мои страницы",
     "pages.links.constructor.title": "Конструктор страницы",
     "pages.preview.title": "Предосмотр страницы",
+    "pages.link.404": "Этой ссылки не существует",
   };
 });
