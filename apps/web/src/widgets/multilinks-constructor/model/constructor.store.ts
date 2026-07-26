@@ -150,7 +150,6 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
           if (!info.upToDate)
             block = migrateBlock(block);
         });
-        console.log(blocks);
         setBlocks(blocks);
 
         savedDataHash.value = computeStoreHash();
