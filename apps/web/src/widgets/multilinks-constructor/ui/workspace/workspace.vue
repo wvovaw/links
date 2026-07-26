@@ -2,8 +2,8 @@
 import { UIScrollArea } from "@links/ui";
 import { useConstructorData } from "../../model/provider";
 import { LinkNamePreview } from "../link-name-preview";
-import PageRenderer from "./PageRenderer.vue";
-import { PhoneMockup } from "~shared/ui/PhoneMockup";
+import PageRenderer from "./page-renderer.vue";
+import { PhoneMockup } from "~shared/ui/phone-mockup";
 
 const { isMobile } = useConstructorData();
 </script>

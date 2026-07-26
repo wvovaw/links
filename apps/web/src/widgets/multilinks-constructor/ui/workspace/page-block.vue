@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageBlockActions from "./page-block-actions/PageBlockActions.vue";
+import PageBlockActions from "./page-block-actions/page-block-actions.vue";
 
 interface IPageBlockProps {
   isSelected: boolean;

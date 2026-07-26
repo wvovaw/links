@@ -1,1 +1,1 @@
-export { default as SignInPage } from "./ui/SignInPage.vue";
+export { default as SignInPage } from "./ui/sign-in-page.vue";

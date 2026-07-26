@@ -1,3 +1,3 @@
-export * from "./updateName";
-export * from "./updateAvatar";
-export * from "./removeAvatar";
+export * from "./update-name";
+export * from "./update-avatar";
+export * from "./remove-avatar";

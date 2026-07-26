@@ -3,7 +3,7 @@ import { UIScrollArea, UITabs, UITabsContent, UITabsList, UITabsTrigger } from "
 import { BlockPropertiesEditor } from "./ui/block-properties-editor";
 import { PagePropertiesEditor } from "./ui/page-properties-editor";
 import { Toolbar } from "./ui/toolbar";
-import { Workspace } from "./ui/Workspace";
+import { Workspace } from "./ui/workspace";
 import { useConstructorStore } from "./model";
 import { CONSTRUCTOR_INJECTION_KEY } from "./model/provider";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";

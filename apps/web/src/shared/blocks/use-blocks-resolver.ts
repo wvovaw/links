@@ -13,7 +13,7 @@ export function useBlocksResolver() {
       return blocksMap.get(blockName);
     }
     else {
-      const comp = defineAsyncComponent(() => import(`./components/${blockName}Block.vue`));
+      const comp = defineAsyncComponent(() => import(`./components/${blockName.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}-block.vue`));
       blocksMap.set(blockName, comp);
       return comp;
     }

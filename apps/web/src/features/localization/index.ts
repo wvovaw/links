@@ -1,1 +1,1 @@
-export { default as ChangeLanguage } from "./ui/ChangeLanguage.vue";
+export { default as ChangeLanguage } from "./ui/change-language.vue";

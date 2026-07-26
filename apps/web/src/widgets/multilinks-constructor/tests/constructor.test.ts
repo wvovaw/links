@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
-import PageEditor from "../MultilinksConstructor.vue";
+import PageEditor from "../multilinks-constructor.vue";
 
 describe("testing PageEditor widget", () => {
   const pinia = createTestingPinia({ createSpy: vi.fn });

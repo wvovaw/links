@@ -2,7 +2,7 @@
 import { animations, dragAndDrop } from "@formkit/drag-and-drop";
 import "~shared/blocks/theme.css";
 import { useConstructorStore } from "../../model";
-import PageBlock from "./PageBlock.vue";
+import PageBlock from "./page-block.vue";
 import { useBlocksResolver } from "~shared/blocks";
 
 const { resolve } = useBlocksResolver();
