@@ -1,6 +1,8 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
+import { BlockImage } from "../storage/block-image.entity";
+import { LocalStorageService } from "../storage/local-storage.service";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, defaultBackground, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
 import { Link } from "./link.entity";
@@ -8,7 +10,11 @@ import { LinkStatus } from "./link-status";
 
 @Injectable()
 export class LinksService {
-  constructor(@InjectRepository(Link) private readonly links: Repository<Link>) {}
+  constructor(
+    @InjectRepository(Link) private readonly links: Repository<Link>,
+    @InjectRepository(BlockImage) private readonly blockImages: Repository<BlockImage>,
+    private readonly storage: LocalStorageService,
+  ) {}
 
   async create(owner: User, body: CreateLinkDto) {
     await this.assertSlugAvailable(body.slug);
@@ -54,7 +60,13 @@ export class LinksService {
       link.background = body.background;
 
     this.applyStatus(link, body.status);
-    return this.links.save(link);
+
+    const saved = await this.links.save(link);
+
+    if (body.imageFileIds !== undefined)
+      await this.syncImages(link, body.imageFileIds);
+
+    return saved;
   }
 
   async updateMetadata(owner: User, id: string, body: UpdateMetadataDto) {
@@ -82,6 +94,10 @@ export class LinksService {
 
   async remove(owner: User, id: string) {
     const link = await this.getOwned(owner, id);
+    const images = await this.blockImages.find({ where: { link: { id: link.id } } });
+    for (const image of images) {
+      await this.storage.removeImage(image.fileId).catch(() => {});
+    }
     await this.links.remove(link);
   }
 
@@ -95,6 +111,25 @@ export class LinksService {
       throw new NotFoundException("Public link not found.");
 
     return link;
+  }
+
+  private async syncImages(link: Link, imageFileIds: string[]) {
+    const existing = await this.blockImages.find({ where: { link: { id: link.id } } });
+    const existingFileIds = new Set(existing.map(i => i.fileId));
+    const requestedFileIds = new Set(imageFileIds);
+
+    for (const image of existing) {
+      if (!requestedFileIds.has(image.fileId)) {
+        await this.storage.removeImage(image.fileId).catch(() => {});
+        await this.blockImages.remove(image);
+      }
+    }
+
+    const toAdd = imageFileIds.filter(fid => !existingFileIds.has(fid));
+    for (const fileId of toAdd) {
+      const image = this.blockImages.create({ fileId, link });
+      await this.blockImages.save(image);
+    }
   }
 
   private applyStatus(link: Link, requestedStatus?: LinkStatus) {

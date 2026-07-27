@@ -1,6 +1,10 @@
-import { Controller, Get, NotFoundException, Param, Res } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import { access } from "node:fs/promises";
+import { CurrentUser } from "../common/current-user.decorator";
+import { AuthGuard } from "../common/auth.guard";
+import { User } from "../users/user.entity";
 import { LocalStorageService } from "./local-storage.service";
 
 @Controller("storage")
@@ -19,5 +23,43 @@ export class StorageController {
     }
 
     response.sendFile(path, { root: process.cwd() });
+  }
+
+  @Post("images")
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor("file"))
+  async uploadImage(@CurrentUser() _user: User, @UploadedFile() file: Express.Multer.File) {
+    const fileId = await this.storage.saveImage(file);
+    return { fileId };
+  }
+
+  @Get("images/:fileId")
+  async getImage(@Param("fileId") fileId: string, @Res() response: Response) {
+    const path = this.storage.imagePath(fileId);
+
+    try {
+      await access(path);
+    }
+    catch {
+      throw new NotFoundException("Image not found.");
+    }
+
+    response.sendFile(path, { root: process.cwd() });
+  }
+
+  @Delete("images/:fileId")
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  async deleteImage(@CurrentUser() _user: User, @Param("fileId") fileId: string) {
+    const path = this.storage.imagePath(fileId);
+
+    try {
+      await access(path);
+    }
+    catch {
+      throw new NotFoundException("Image not found.");
+    }
+
+    await this.storage.removeImage(fileId);
   }
 }

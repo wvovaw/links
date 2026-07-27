@@ -29,6 +29,11 @@ export class UpdateContentDto {
   @IsOptional()
   @IsEnum(LinkStatus)
   status?: LinkStatus;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  imageFileIds?: string[];
 }
 
 export class UpdateMetadataDto {
