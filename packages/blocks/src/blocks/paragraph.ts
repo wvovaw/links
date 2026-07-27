@@ -1,8 +1,8 @@
-import type { IBlock, IBlockPropertyNumber } from "../types";
+import type { BlockModuleSchema, IBlock, IBlockPropertyNumber } from "../types";
 
 const BLOCK_VERSION = 2;
 
-function createBlock(id: string): IBlock {
+function createBlock(id: string): IBlock<"Paragraph"> {
   return {
     id,
     version: BLOCK_VERSION,
@@ -49,7 +49,8 @@ function migrateBlock(block: IBlock): IBlock {
 }
 
 export default {
+  name: "Paragraph" as const,
   BLOCK_VERSION,
   createBlock,
   migrateBlock,
-};
+} satisfies BlockModuleSchema;

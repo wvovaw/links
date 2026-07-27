@@ -1,6 +1,7 @@
-import type { blocksList } from "./blocks";
+export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph"] as const;
+export type BlockName = typeof BLOCK_NAMES[number];
 
-export type BlockName = typeof blocksList[number]["name"];
+export const blocksList = BLOCK_NAMES.map(name => ({ name }));
 
 export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url";
 
@@ -49,9 +50,16 @@ export type BlockProperty =
   | IBlockPropertyUrl
   | IBlockPropertyColor;
 
-export interface IBlock {
+export interface IBlock<K extends BlockName = BlockName> {
   id: string;
-  name: BlockName;
+  name: K;
   properties: Record<string, BlockProperty>;
   version: number;
+}
+
+export interface BlockModuleSchema {
+  readonly name: BlockName;
+  readonly createBlock: (id: string) => IBlock;
+  readonly migrateBlock: (block: IBlock) => IBlock;
+  readonly BLOCK_VERSION: number;
 }

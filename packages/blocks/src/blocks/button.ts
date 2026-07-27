@@ -1,8 +1,8 @@
-import type { IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
+import type { BlockModuleSchema, IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
 
 const BLOCK_VERSION = 1;
 
-function createBlock(id: string): IBlock {
+function createBlock(id: string): IBlock<"Button"> {
   return {
     id,
     version: BLOCK_VERSION,
@@ -80,7 +80,8 @@ function migrateBlock(block: IBlock): IBlock {
 }
 
 export default {
+  name: "Button" as const,
   BLOCK_VERSION,
   createBlock,
   migrateBlock,
-};
+} satisfies BlockModuleSchema;
