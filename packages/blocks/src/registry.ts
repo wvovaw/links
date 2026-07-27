@@ -3,15 +3,17 @@ import type { BlockModuleSchema, BlockName, IBlock } from "./types";
 import AvatarModule from "./blocks/avatar";
 import ButtonModule from "./blocks/button";
 import ParagraphModule from "./blocks/paragraph";
+import PictureModule from "./blocks/picture";
 
 type Registry = {
-  readonly [K in BlockName]: BlockModuleSchema & { readonly name: K };
+  readonly [K in BlockName]: BlockModuleSchema;
 };
 
 export const registry: Registry = {
   Avatar: AvatarModule,
   Button: ButtonModule,
   Paragraph: ParagraphModule,
+  Picture: PictureModule,
 };
 
 export function getBlockModule(name: BlockName): Registry[BlockName] {

@@ -1,9 +1,9 @@
-export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph"] as const;
+export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph", "Picture"] as const;
 export type BlockName = typeof BLOCK_NAMES[number];
 
 export const blocksList = BLOCK_NAMES.map(name => ({ name }));
 
-export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url";
+export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image";
 
 export interface IBlockPropertyCommon<T = any> {
   id: number;
@@ -42,13 +42,18 @@ export interface IBlockPropertySelect<T = string> extends IBlockPropertyCommon<T
   options: { value: T; label: string }[];
   isMultiple?: boolean;
 }
+export interface IBlockPropertyImage<T = string> extends IBlockPropertyCommon<T> {
+  type: "image";
+  accept?: string;
+}
 export type BlockProperty =
   | IBlockPropertyText
   | IBlockPropertyNumber
   | IBlockPropertyBoolean
   | IBlockPropertySelect
   | IBlockPropertyUrl
-  | IBlockPropertyColor;
+  | IBlockPropertyColor
+  | IBlockPropertyImage;
 
 export interface IBlock<K extends BlockName = BlockName> {
   id: string;
