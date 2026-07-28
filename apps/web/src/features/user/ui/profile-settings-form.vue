@@ -3,8 +3,8 @@ import { UIButton, UICard, UIForm, UIInput, UITag, useToast } from "@links/ui";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { profileSettingsSchema } from "../model/schema";
+import AvatarUpload from "./avatar-upload.vue";
 import { urlToFile } from "~shared/lib/utils";
-import { ImageUploader } from "~shared/ui/image-uploader";
 import { SessionModel } from "~entities/session";
 import { ProfileApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
@@ -56,9 +56,14 @@ const submitForm = handleSubmit(async (values) => {
 });
 
 // Set initial values after store finished the api calls
-sessionStore.$subscribe(async () => {
-  reinitForm({
-    values: await initForm(),
+const isFormInitialized = ref(false);
+
+sessionStore.$subscribe(() => {
+  if (isFormInitialized.value)
+    return;
+  isFormInitialized.value = true;
+  initForm().then((values) => {
+    reinitForm({ values });
   });
 });
 
@@ -123,24 +128,16 @@ onBeforeRouteLeave(async () => {
             </UIForm.Field>
           </div>
           <div class="flex flex-col place-content-center items-center sm:min-w-48">
-            <UIForm.Field v-slot="{ componentField, handleChange }" name="avatar">
+            <UIForm.Field v-slot="{ componentField }" name="avatar">
               <UIForm.Item>
                 <UIForm.Label>
                   Avatar image
                 </UIForm.Label>
                 <UIForm.Control>
-                  <ImageUploader v-bind="componentField" />
+                  <AvatarUpload v-bind="componentField" />
                 </UIForm.Control>
                 <UIForm.ErrorMessage />
               </UIForm.Item>
-              <UIButton
-                variant="link"
-                class="color-trunks"
-                size="lg"
-                @click.prevent="handleChange(undefined)"
-              >
-                Unset avatar
-              </UIButton>
             </UIForm.Field>
           </div>
         </section>
