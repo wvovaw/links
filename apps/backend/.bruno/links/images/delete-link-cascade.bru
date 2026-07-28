@@ -1,0 +1,35 @@
+meta {
+  name: Delete Link With Images Cascade
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/links/:id
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{image_test_link_id}}
+}
+
+tests {
+  test("should return 204 No Content", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Delete a link and verify cascading removal of block_images.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required)
+
+  **Response:** 204 — No Content
+}

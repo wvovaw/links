@@ -1,0 +1,28 @@
+meta {
+  name: Delete Image Not Found
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/storage/images/nonexistent-file-id.png
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+tests {
+  test("should return 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+}
+
+docs {
+  Delete a non-existent image.
+
+  **Auth:** Bearer token (required)
+
+  **Response:** 404 — Not Found
+}

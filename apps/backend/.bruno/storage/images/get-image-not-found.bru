@@ -1,0 +1,27 @@
+meta {
+  name: Get Image Not Found
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/storage/images/nonexistent-file-id.png
+  auth: none
+}
+
+tests {
+  test("should return 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("should return error message", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+  });
+}
+
+docs {
+  Retrieve a non-existent image.
+
+  **Response:** 404 — Not Found
+}

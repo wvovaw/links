@@ -1,0 +1,49 @@
+meta {
+  name: Remove Images On Save
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/content
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{image_test_link_id}}
+}
+
+body:json {
+  {
+    "blocks": [],
+    "imageFileIds": []
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should succeed without images", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+  });
+}
+
+docs {
+  Remove all image associations from a link on save.
+
+  **Auth:** Bearer token (required)
+
+  **Request body:**
+  - `blocks` (array) — empty or without image values
+  - `imageFileIds` (string[]) — empty array to unlink all images
+
+  **Response:** 200 — Updated `LinkDto`
+}

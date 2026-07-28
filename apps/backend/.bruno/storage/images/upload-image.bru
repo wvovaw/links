@@ -1,0 +1,52 @@
+meta {
+  name: Upload Image
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/storage/images
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:multipart-form {
+  file: @file(test-image.jpg) @contentType(image/jpeg)
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status === 200 || status === 201) {
+    const body = res.getBody();
+    if (body.fileId) {
+      bru.setVar("image_file_id", body.fileId);
+    }
+  }
+}
+
+tests {
+  test("should return 200 or 201", function () {
+    expect(res.getStatus()).to.be.oneOf([200, 201]);
+  });
+  
+  test("should return fileId", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("fileId");
+    expect(body.fileId).to.be.a("string").and.to.not.be.empty;
+  });
+}
+
+docs {
+  Upload an image file via multipart form.
+  
+  **Auth:** Bearer token (required)
+  
+  **Request body:**
+  - `file` — image file (JPEG)
+  
+  **Response:** 200 — `{ fileId: string }`
+}

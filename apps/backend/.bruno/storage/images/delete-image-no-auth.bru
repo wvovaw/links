@@ -1,0 +1,25 @@
+meta {
+  name: Delete Image No Auth
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/storage/images/{{image_file_id}}
+  auth: none
+}
+
+tests {
+  test("should return 401 Unauthorized", function () {
+    expect(res.getStatus()).to.equal(401);
+  });
+}
+
+docs {
+  Delete an image without authentication.
+
+  **Path params:**
+  - `fileId` (string, required)
+
+  **Response:** 401 — Unauthorized
+}

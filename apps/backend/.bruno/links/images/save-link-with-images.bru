@@ -1,0 +1,51 @@
+meta {
+  name: Save Link With Images
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/links
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "slug": "image-test-link-{{$timestamp}}",
+    "title": "Image Test Link Page"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status === 201 || status === 200) {
+    const body = res.getBody();
+    if (body.id) {
+      bru.setVar("image_test_link_id", body.id);
+    }
+  }
+}
+
+tests {
+  test("should create link", function () {
+    expect(res.getStatus()).to.be.oneOf([200, 201]);
+  });
+
+  test("should return link id", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+  });
+}
+
+docs {
+  Create a link for image association tests.
+
+  **Auth:** Bearer token (required)
+
+  **Response:** 201 — `LinkDto`
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Delete Image
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/storage/images/{{image_file_id}}
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+tests {
+  test("should return 204 No Content", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Delete an image by file ID.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `fileId` (string, required)
+
+  **Response:** 204 — No Content
+}

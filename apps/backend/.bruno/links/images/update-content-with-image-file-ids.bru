@@ -1,0 +1,67 @@
+meta {
+  name: Update Content With Image File IDs
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/content
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{image_test_link_id}}
+}
+
+body:json {
+  {
+    "blocks": [
+      {
+        "id": "block1",
+        "name": "Avatar",
+        "version": 1,
+        "properties": {
+          "avatar": {
+            "id": 1,
+            "type": "image",
+            "label": "Avatar Image",
+            "value": "{{image_file_id}}"
+          }
+        }
+      }
+    ],
+    "imageFileIds": ["{{image_file_id}}"]
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return updated link", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.blocks).to.be.an("array");
+  });
+}
+
+docs {
+  Save a link with image references using imageFileIds.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required)
+
+  **Request body:**
+  - `blocks` (array) — content blocks with image property values
+  - `imageFileIds` (string[]) — list of image file IDs to associate
+
+  **Response:** 200 — Updated `LinkDto`
+}
