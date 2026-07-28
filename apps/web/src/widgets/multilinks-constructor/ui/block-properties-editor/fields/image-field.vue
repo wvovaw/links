@@ -10,13 +10,10 @@ interface IImageFieldProps {
 defineProps<IImageFieldProps>();
 const model = defineModel<IBlockPropertyImage["value"]>();
 
+const config = useRuntimeConfig();
 const isUploading = ref(false);
-const previewUrl = computed(() => {
-  if (!model.value)
-    return null;
-  const config = useRuntimeConfig();
-  return `${config.public.backendUrl}/storage/images/${model.value}`;
-});
+const previewUrl = computed(() =>
+  StorageApi.resolveImageUrl(model.value, { origin: config.public.backendUrl }));
 
 async function handleUpload(event: Event) {
   const input = event.target as HTMLInputElement;

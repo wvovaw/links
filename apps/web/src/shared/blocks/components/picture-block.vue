@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { BlockProperty, IBlockPropertyImage, IBlockPropertyUrl } from "@links/blocks";
+import type { BlockProperty, IBlockPropertyImage } from "@links/blocks";
+import { StorageApi } from "~shared/api/backend";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -10,7 +11,7 @@ const config = useRuntimeConfig();
 const bp = computed(() => {
   const p = props.properties;
   return {
-    image: p.image!.value ? `${config.public.backendUrl}/storage/images/${(p.image as IBlockPropertyImage).value}` : "",
+    image: StorageApi.resolveImageUrl((p.image as IBlockPropertyImage).value, { origin: config.public.backendUrl }) ?? "",
     imageBorderRadius: "var(--links-theme-picture-radius)",
   };
 });

@@ -1,5 +1,6 @@
 import { getErrorMessage } from "../errors";
 import { setRefreshToken, useApiClient } from "../client";
+import { normalizeUser } from "../mappers";
 import type { User } from "../types";
 
 export interface IUserRegisterData {
@@ -9,6 +10,7 @@ export interface IUserRegisterData {
 }
 
 export async function register({ email, username, password }: IUserRegisterData): Promise<User | undefined> {
+  const config = useRuntimeConfig();
   try {
     const api = useApiClient();
     const data = await api<{ user: User; refreshToken: string }>("/auth/register", {
@@ -16,7 +18,7 @@ export async function register({ email, username, password }: IUserRegisterData)
       body: { email, username, password },
     });
     setRefreshToken(data.refreshToken);
-    return data.user;
+    return normalizeUser(data.user, { origin: config.public.backendUrl });
   }
   catch {
     throw new Error(getErrorMessage("user_already_exists"));

@@ -1,5 +1,6 @@
 import { getErrorMessage } from "../errors";
 import { useApiClient } from "../client";
+import { normalizeUser } from "../mappers";
 import type { User } from "../types";
 
 export interface IUserUpdateAvatarData {
@@ -7,6 +8,7 @@ export interface IUserUpdateAvatarData {
 }
 
 export async function updateAvatar({ file }: IUserUpdateAvatarData): Promise<User | undefined> {
+  const config = useRuntimeConfig();
   try {
     const api = useApiClient();
     const formData = new FormData();
@@ -16,7 +18,7 @@ export async function updateAvatar({ file }: IUserUpdateAvatarData): Promise<Use
       method: "PUT",
       body: formData,
     });
-    return data;
+    return normalizeUser(data, { origin: config.public.backendUrl });
   }
   catch {
     throw new Error(getErrorMessage("unknown"));

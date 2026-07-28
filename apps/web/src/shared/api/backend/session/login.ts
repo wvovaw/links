@@ -1,5 +1,6 @@
 import { getErrorMessage } from "../errors";
 import { setRefreshToken, useApiClient } from "../client";
+import { normalizeUser } from "../mappers";
 import type { User } from "../types";
 
 export interface IUserLoginData {
@@ -8,6 +9,7 @@ export interface IUserLoginData {
 }
 
 export async function login({ email, password }: IUserLoginData): Promise<User | undefined> {
+  const config = useRuntimeConfig();
   try {
     const api = useApiClient();
     const data = await api<{ user: User; refreshToken: string }>("/auth/login", {
@@ -15,7 +17,7 @@ export async function login({ email, password }: IUserLoginData): Promise<User |
       body: { email, password },
     });
     setRefreshToken(data.refreshToken);
-    return data.user;
+    return normalizeUser(data.user, { origin: config.public.backendUrl });
   }
   catch {
     throw new Error(getErrorMessage("user_invalid_credentials"));

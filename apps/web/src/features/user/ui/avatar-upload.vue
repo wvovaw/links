@@ -1,14 +1,40 @@
 <script setup lang="ts">
 import { UIFileUpload } from "@links/ui";
 
+const props = defineProps<{
+  /** absolute avatar url. Need for SSR */
+  src?: string;
+}>();
 const avatar = defineModel<File | null>();
 
 defineOptions({ inheritAttrs: false });
 
-const previewUrl = computed(() => {
-  if (avatar.value)
-    return URL.createObjectURL(avatar.value);
-  return "";
+const previewUrl = ref("");
+
+function cleanup() {
+  if (previewUrl.value)
+    URL.revokeObjectURL(previewUrl.value);
+}
+
+function setPreview(file: File | null | undefined) {
+  cleanup();
+  previewUrl.value = file instanceof File ? URL.createObjectURL(file) : "";
+}
+
+if (import.meta.client) {
+  watch(avatar, setPreview);
+  onBeforeUnmount(() => {
+    cleanup();
+  });
+}
+
+// SSR friendly avatar src property
+const avatarSrc = computed(() => {
+  if (previewUrl.value)
+    return previewUrl.value;
+  if (avatar.value === null)
+    return "";
+  return props.src ?? "";
 });
 </script>
 
@@ -22,13 +48,12 @@ const previewUrl = computed(() => {
         <div
           class="grid h-36 w-36 cursor-pointer place-content-center overflow-hidden border-2 rounded-full border-dashed md:h-48 md:w-48"
           :class="[
-            isOver ? 'border-piccolo' : avatar ? 'border-transparent' : 'border-beerus',
+            isOver ? 'border-piccolo' : avatarSrc ? 'border-transparent' : 'border-beerus',
           ]"
         >
           <img
-            v-if="avatar"
-            data-allow-mismatch
-            :src="previewUrl"
+            v-if="avatarSrc"
+            :src="avatarSrc"
             class="h-full w-full object-cover"
             alt="avatar"
           >
@@ -36,7 +61,7 @@ const previewUrl = computed(() => {
         </div>
       </UIFileUpload.Dropzone>
       <UIFileUpload.Clear
-        v-if="avatar"
+        v-if="avatarSrc"
         class="cursor-pointer text-sm text-trunks underline hover:text-chichi"
       >
         Remove avatar

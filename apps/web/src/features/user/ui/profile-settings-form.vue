@@ -4,7 +4,6 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { profileSettingsSchema } from "../model/schema";
 import AvatarUpload from "./avatar-upload.vue";
-import { urlToFile } from "~shared/lib/utils";
 import { SessionModel } from "~entities/session";
 import { ProfileApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
@@ -15,17 +14,19 @@ const sessionStore = SessionModel.useSessionStore();
 const { user } = storeToRefs(sessionStore);
 const { refreshUserData } = sessionStore;
 
-async function initForm() {
+const remoteAvatarUrl = computed(() => user.value?.avatarUrl ?? "");
+
+function initForm() {
   return {
-    email: (() => user.value?.email)(),
-    username: (() => user.value?.name)(),
-    avatar: await (async () => user.value?.avatarUrl ? await urlToFile(user.value?.avatarUrl) : undefined)(),
+    email: user.value?.email,
+    username: user.value?.name,
+    avatar: undefined,
   };
 }
 
 const { handleSubmit, handleReset, resetForm: reinitForm, isSubmitting, isFieldDirty, meta } = useForm({
   validationSchema: toTypedSchema(profileSettingsSchema),
-  initialValues: await initForm(),
+  initialValues: initForm(),
 });
 const isFormValidAndDirty = computed(() => meta.value.valid && meta.value.dirty);
 
@@ -62,9 +63,7 @@ sessionStore.$subscribe(() => {
   if (isFormInitialized.value)
     return;
   isFormInitialized.value = true;
-  initForm().then((values) => {
-    reinitForm({ values });
-  });
+  reinitForm({ values: initForm() });
 });
 
 function showError(message: string) {
@@ -134,7 +133,7 @@ onBeforeRouteLeave(async () => {
                   Avatar image
                 </UIForm.Label>
                 <UIForm.Control>
-                  <AvatarUpload v-bind="componentField" />
+                  <AvatarUpload v-bind="componentField" :src="remoteAvatarUrl" />
                 </UIForm.Control>
                 <UIForm.ErrorMessage />
               </UIForm.Item>
