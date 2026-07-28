@@ -8,6 +8,7 @@ export * from "./Checkbox";
 export * from "./Collapsible";
 export * from "./Dialog";
 export * from "./Drawer";
+export * from "./FileUpload";
 export * from "./DropdownMenu";
 export * from "./Form";
 export * from "./Group";
