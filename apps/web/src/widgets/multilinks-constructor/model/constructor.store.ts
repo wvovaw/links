@@ -84,9 +84,22 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks.value.splice(index, 0, { ...structuredClone(toRaw(block)), id: newBlockId });
     }
   }
+  function collectImageFileIds(blocks: IBlock[]): string[] {
+    const ids: string[] = [];
+    for (const block of blocks) {
+      for (const prop of Object.values(block.properties)) {
+        if (prop.type === "image" && prop.value) {
+          ids.push(prop.value);
+        }
+      }
+    }
+    return ids;
+  }
+
   async function saveCurrentState() {
     const { updateLink } = useLinksStore();
     if (linkId.value) {
+      const imageFileIds = collectImageFileIds(blocks.value);
       await updateLink({
         id: linkId.value,
         title: title.value,
@@ -94,6 +107,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         seo: seo.value,
         background: background.value,
         status: publishStatus.value,
+        imageFileIds,
       });
       savedDataHash.value = computeStoreHash();
     }

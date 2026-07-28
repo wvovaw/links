@@ -9,6 +9,7 @@ import SelectField from "./fields/select-field.vue";
 import UrlField from "./fields/url-field.vue";
 import ColorField from "./fields/color-field.vue";
 import BooleanField from "./fields/boolean-field.vue";
+import ImageField from "./fields/image-field.vue";
 import { groupBy } from "~shared/lib/utils";
 import { SpiralArrow } from "~shared/ui/doodles";
 
@@ -23,6 +24,7 @@ const fieldsMap: Record<BlockPropertyType, Component> = {
   url: UrlField,
   color: ColorField,
   boolean: BooleanField,
+  image: ImageField,
 };
 function resolveFieldsComponent(fieldType: BlockPropertyType) {
   return fieldsMap[fieldType];

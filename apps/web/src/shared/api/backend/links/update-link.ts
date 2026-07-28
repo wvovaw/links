@@ -7,6 +7,7 @@ export interface IUpdateContentData {
   blocks?: unknown[];
   background?: string;
   status?: LinkStatus;
+  imageFileIds?: string[];
 }
 
 export interface IUpdateMetadataData {
@@ -21,12 +22,12 @@ export interface IUpdateSlugData {
   slug: string;
 }
 
-export async function updateContent({ id, blocks, background, status }: IUpdateContentData): Promise<Link | undefined> {
+export async function updateContent({ id, blocks, background, status, imageFileIds }: IUpdateContentData): Promise<Link | undefined> {
   try {
     const api = useApiClient();
     const data = await api<Link>(`/links/${id}/content`, {
       method: "PATCH",
-      body: { blocks, background, status },
+      body: { blocks, background, status, imageFileIds },
     });
     return data;
   }

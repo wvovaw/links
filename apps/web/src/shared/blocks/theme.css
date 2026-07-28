@@ -17,6 +17,9 @@
   --links-theme-paragraph-inline-padding: 0px;
 
   /* Avatar */
+
+  /* Picture */
+  --links-theme-picture-radius: 10px;
 }
 
 .link {

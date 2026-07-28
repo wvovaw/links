@@ -13,7 +13,7 @@ export const useLinksStore = defineStore("links", () => {
   const links = computed(() => _links.value);
 
   /* Actions */
-  async function updateLink(params: { id: string; title: string; blocks: unknown[]; seo: Record<string, unknown>; background: string; status: any }) {
+  async function updateLink(params: { id: string; title: string; blocks: unknown[]; seo: Record<string, unknown>; background: string; status: any; imageFileIds?: string[] }) {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
     const confirm = createConfirmation({
@@ -29,6 +29,7 @@ export const useLinksStore = defineStore("links", () => {
           blocks: params.blocks,
           background: params.background,
           status: params.status,
+          imageFileIds: params.imageFileIds,
         });
         await LinksApi.updateMetadata({
           id: params.id,
