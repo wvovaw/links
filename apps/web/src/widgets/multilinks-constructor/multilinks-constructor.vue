@@ -43,6 +43,7 @@ provide(CONSTRUCTOR_INJECTION_KEY, {
     <Toolbar class="min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit" />
     <UIScrollArea
       v-if="!isMobile"
+      orientation="vertical"
       class="border-(x beerus) bg-gohan p-2 lg:max-w-sm lg:min-w-sm"
       bar-class="rounded-none" thumb-class="bg-trunks"
     >
