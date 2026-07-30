@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Slot } from "radix-vue";
 import { UIButton } from "~ui/Button";
 
 withDefaults(defineProps<{
@@ -40,8 +39,8 @@ const { copy, copied, isSupported } = useClipboard({ source: code });
         />
       </ClientOnly>
     </div>
-    <Slot class="my-0 border border-beerus rounded-b-moon-s-xs rounded-t-none p-4">
-      <ContentSlot :use="$slots.default" />
-    </Slot>
+    <div class="my-0 border border-beerus rounded-b-moon-s-xs rounded-t-none p-4">
+      <slot />
+    </div>
   </section>
 </template>

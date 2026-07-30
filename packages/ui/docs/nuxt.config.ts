@@ -19,19 +19,16 @@ export default defineNuxtConfig({
   },
   ssr: false,
   content: {
-    markdown: {
-      remarkPlugins: {},
-      rehypePlugins: [],
-    },
-    highlight: {
-      theme: {
-        default: "light-plus",
-        dark: "dark-plus",
+    build: {
+      markdown: {
+        highlight: {
+          theme: {
+            default: "light-plus",
+            dark: "dark-plus",
+          },
+          langs: ["vue", "vue-html", "javascript", "typescript", "css", "sh", "shell"],
+        },
       },
-      langs: ["vue", "vue-html", "javascript", "typescript", "css", "sh", "shell"],
-    },
-    experimental: {
-      clientDB: true,
     },
   },
   nitro: {

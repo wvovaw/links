@@ -287,7 +287,7 @@
 
     --roshi: rgba(46 125 50); /* #2e7d32 */
     --roshi-60: rgba(46 125 50 / 0.56); /* #2e7d32 */
-    --roshi-10: rgba(46 125 50 / 0.08); /* #2e7d32 */
+    --roshi-10: rgba(46 125 50/ 0.08); /* #2e7d32 */
 
     --dodoria: rgba(211 48 48); /* #d33030 */
     --dodoria-60: rgba(211 48 48 / 0.56); /* #d33030 */
@@ -311,7 +311,7 @@
 
     --nappa: rgba(114 85 80); /* #725550 */
     --nappa-60: rgba(114 85 80 / 0.56); /* #725550 */
-    --nappa-10: rgba(114 85 / 800.08); /* #725550 */
+    --nappa-10: rgba(114 85 80 / 0.08); /* #725550 */
 
     /* border-radius */
     --radius-i-xs: 0.25rem; /* 4px */
@@ -340,4 +340,36 @@
     --shadow-lg: 0 24px 24px -6px rgb(0 0 0 / 0.64), 0 0 1px rgb(0 0 0 / 0.56);
     --shadow-xl: 0 48px 48px -6px rgb(0 0 0 / 0.88), 0 0 1px rgb(0 0 0 / 0.72);
   }
+}
+
+:root[data-theme="light"] .prose,
+:root[data-theme="dark"] .prose {
+  --un-prose-body: var(--trunks);
+  --un-prose-headings: var(--bulma);
+  --un-prose-links: var(--piccolo);
+  --un-prose-bold: var(--bulma);
+  --un-prose-counters: var(--trunks);
+  --un-prose-bullets: var(--trunks);
+  --un-prose-hr: var(--beerus);
+  --un-prose-quotes: var(--bulma);
+  --un-prose-quote-borders: var(--piccolo);
+  --un-prose-captions: var(--trunks);
+  --un-prose-code: var(--bulma);
+  --un-prose-code-bg: var(--heles);
+  --un-prose-th-borders: var(--beerus);
+  --un-prose-td-borders: var(--beerus);
+}
+
+:root[data-theme="light"] .prose :is(h1, h2, h3, h4, h5, h6) a,
+:root[data-theme="dark"] .prose :is(h1, h2, h3, h4, h5, h6) a {
+  color: inherit;
+}
+
+.prose pre.shiki {
+  background-color: initial;
+}
+
+.prose pre {
+  margin-top: 0;
+  margin-bottom: 0;
 }

@@ -2,9 +2,25 @@
 import NavMenuSection from "./NavMenuSection.vue";
 import { UIScrollArea } from "~ui/ScrollArea";
 
-const { data: rootNav } = await useAsyncData(`root-nav`, () => queryContent("docs").where({ _dir: { $not: { $in: ["utilities", "components"] } } }).find());
-const { data: componentsNav } = await useAsyncData(`components-nav`, () => queryContent("docs", "components").sort({ title: 1 }).find());
-const { data: utilitiesNav } = await useAsyncData(`utilities-nav`, () => queryContent("docs", "utilities").find());
+const { data: rootNav } = await useAsyncData(`root-nav`, () =>
+  queryCollection("content")
+    .where("path", "NOT LIKE", "/docs/utilities/%")
+    .where("path", "NOT LIKE", "/docs/components/%")
+    .order("title", "ASC")
+    .all()
+);
+const { data: componentsNav } = await useAsyncData(`components-nav`, () =>
+  queryCollection("content")
+    .where("path", "LIKE", "/docs/components/%")
+    .order("title", "ASC")
+    .all()
+);
+const { data: utilitiesNav } = await useAsyncData(`utilities-nav`, () =>
+  queryCollection("content")
+    .where("path", "LIKE", "/docs/utilities/%")
+    .order("title", "ASC")
+    .all()
+);
 </script>
 
 <template>
