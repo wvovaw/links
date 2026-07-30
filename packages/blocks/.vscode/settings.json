@@ -40,7 +40,5 @@
   "[vue]": {
     "editor.defaultFormatter": "Vue.volar"
   },
-  "files.exclude": {
-    ".turbo": true
-  }
+  "files.exclude": {}
 }
