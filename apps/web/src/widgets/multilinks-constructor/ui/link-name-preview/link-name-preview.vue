@@ -11,8 +11,8 @@ const { setPublishStatus } = constructorStore;
 const baseUrl = useRuntimeConfig().public.baseUrl || useRequestURL().origin;
 const url = computed(() => {
   if (linkName.value) {
-    const url = new URL(linkName.value, baseUrl);
-    return url;
+    const linkUrl = new URL(linkName.value, baseUrl);
+    return linkUrl;
   } else {
     return null;
   }

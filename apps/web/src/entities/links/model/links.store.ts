@@ -3,15 +3,15 @@ import type { Link } from "~shared/api/backend";
 import { useToast } from "@links/ui";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { LinksApi } from "~shared/api/backend";
+import { LinkStatus, LinksApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 export const useLinksStore = defineStore("links", () => {
   /* State */
-  const _links = ref<Link[]>([]);
+  const linksList = ref<Link[]>([]);
 
   /* Getters */
-  const links = computed(() => _links.value);
+  const links = computed(() => linksList.value);
 
   /* Actions */
   async function updateLink(params: {
@@ -20,7 +20,7 @@ export const useLinksStore = defineStore("links", () => {
     blocks: unknown[];
     seo: Record<string, unknown>;
     background: string;
-    status: any;
+    status: LinkStatus;
     imageFileIds?: string[];
   }) {
     const { toast } = useToast();
@@ -93,7 +93,7 @@ export const useLinksStore = defineStore("links", () => {
   }
   async function refreshLinksList() {
     const data = await LinksApi.listLinks();
-    _links.value = data;
+    linksList.value = data;
   }
 
   return {

@@ -12,7 +12,7 @@ export const signUpSchema = pipe(
     confirmPassword: string("Confirm password is required"),
   }),
   forward(
-    check(({ password, confirmPassword }) => password === confirmPassword, "Passwords don't match."),
+    check(({ password: pwd, confirmPassword }) => pwd === confirmPassword, "Passwords don't match."),
     ["confirmPassword"],
   ),
 );

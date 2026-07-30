@@ -12,7 +12,7 @@ const defaultBlocksState: IBlock[] = [];
 const defaultBackground = "background-image: linear-gradient(to top, #13b7c6, #00a1da, #0085e4, #635cd2, #a3009c);";
 
 const generateBlockId = () => randomString(8);
-function computeHash(obj: any) {
+function computeHash(obj: unknown) {
   return JSON.stringify(obj);
 }
 
@@ -29,7 +29,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const publishStatus = ref<LinkStatus>(LinkStatus.DRAFT);
   const blocks = ref<IBlock[]>(defaultBlocksState);
   const background = ref<string>(defaultBackground);
-  const seo = ref<Record<string, any>>({});
+  const seo = ref<Record<string, unknown>>({});
   const selectedBlockId = ref<string | null>(null);
   const savedDataHash = ref<string | null>(null);
 
@@ -84,9 +84,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks.value.splice(index, 0, { ...structuredClone(toRaw(block)), id: newBlockId });
     }
   }
-  function collectImageFileIds(blocks: IBlock[]): string[] {
+  function collectImageFileIds(blocksList: IBlock[]): string[] {
     const ids: string[] = [];
-    for (const block of blocks) {
+    for (const block of blocksList) {
       for (const prop of Object.values(block.properties)) {
         if (prop.type === "image" && prop.value) {
           ids.push(prop.value);
@@ -158,12 +158,12 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         setBackground(data.background);
 
         // Blocks are already parsed from the backend
-        const blocks: IBlock[] = data.blocks as IBlock[];
-        blocks.forEach((block) => {
+        const blocksList: IBlock[] = data.blocks as IBlock[];
+        blocksList.forEach((block) => {
           const info = checkBlockUpToDate(block);
           if (!info.upToDate) block = migrateBlock(block);
         });
-        setBlocks(blocks);
+        setBlocks(blocksList);
 
         savedDataHash.value = computeStoreHash();
       }

@@ -1,7 +1,7 @@
 import { useColorMode, useCycleList } from "@vueuse/core";
 import { defineStore } from "pinia";
 
-import { type ITheme, THEME_CONFIG, themeVariants } from "../lib/config";
+import { type ITheme, type ThemeVariant, THEME_CONFIG, themeVariants } from "../lib/config";
 
 export const useThemeStore = defineStore("ui-theme", () => {
   const modes = { ...themeVariants };
@@ -29,7 +29,7 @@ export const useThemeStore = defineStore("ui-theme", () => {
   }
 
   watchEffect(() => {
-    mode.value = state.value as any;
+    mode.value = state.value as ThemeVariant;
   });
 
   return {

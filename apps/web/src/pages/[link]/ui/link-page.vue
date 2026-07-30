@@ -20,7 +20,7 @@ const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${
 );
 
 const blocks = ref<IBlock[]>([]);
-const seo = ref<Record<string, any>>({});
+const seo = ref<Record<string, unknown>>({});
 const bg = ref<string>();
 
 const defaultDescription = "Welcome to my link";

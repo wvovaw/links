@@ -2,6 +2,7 @@
 import type { IBlock } from "@links/blocks";
 
 import { useBlocksResolver } from "~shared/blocks";
+// oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 
 defineProps<{
