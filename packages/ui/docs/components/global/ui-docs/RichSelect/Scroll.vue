@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIRichSelect } from "~ui/RichSelect";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
   <PreviewFrame>
     <div class="w-full flex flex-row flex-wrap justify-around gap-4">
       <div class="w-54">
-        <UIRichSelect.Label for="scroll-00">
-          Aligned as "popper"
-        </UIRichSelect.Label>
+        <UIRichSelect.Label for="scroll-00"> Aligned as "popper" </UIRichSelect.Label>
         <UIRichSelect.Root id="scroll-00">
           <UIRichSelect.Trigger>
             <UIRichSelect.Value placeholder="Choose a number" />
@@ -30,9 +29,7 @@ import { UIRichSelect } from "~ui/RichSelect";
       </div>
 
       <div class="w-54">
-        <UIRichSelect.Label for="scroll-01">
-          Aligned as "item-aligned"
-        </UIRichSelect.Label>
+        <UIRichSelect.Label for="scroll-01"> Aligned as "item-aligned" </UIRichSelect.Label>
         <UIRichSelect.Root id="scroll-01">
           <UIRichSelect.Trigger>
             <UIRichSelect.Value placeholder="Choose a number" />

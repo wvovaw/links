@@ -7,8 +7,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    :class="props.class"
-    class="animate-pulse rounded-md bg-heles"
-  />
+  <div :class="props.class" class="animate-pulse rounded-md bg-heles" />
 </template>

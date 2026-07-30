@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UISlider } from "~ui/Slider";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const sl = ref([50]);
 </script>

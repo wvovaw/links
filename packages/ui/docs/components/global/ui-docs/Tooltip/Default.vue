@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIButton } from "~ui/Button";
 import { UITooltip } from "~ui/Tooltip";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
@@ -10,9 +11,7 @@ import { UITooltip } from "~ui/Tooltip";
       <template #trigger>
         <UIButton>Hover me</UIButton>
       </template>
-      <template #content>
-        I am a tooltip
-      </template>
+      <template #content> I am a tooltip </template>
     </UITooltip>
   </PreviewFrame>
 </template>

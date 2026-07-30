@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { type HTMLAttributes, type LabelHTMLAttributes, computed } from "vue";
-
-import { Label, type LabelProps } from "radix-vue";
 import { type VariantProps, cva } from "cva";
+import { Label, type LabelProps } from "radix-vue";
+import { type HTMLAttributes, type LabelHTMLAttributes, computed } from "vue";
 
 const labelVariants = cva("w-full block text-bulma pb-2", {
   variants: {
@@ -20,12 +19,14 @@ const labelVariants = cva("w-full block text-bulma pb-2", {
 });
 type LabelVariants = VariantProps<typeof labelVariants>;
 
-const props = defineProps<LabelProps & {
-  class?: HTMLAttributes["class"];
-  for?: LabelHTMLAttributes["for"];
-  size?: LabelVariants["size"];
-  disabled?: boolean;
-}>();
+const props = defineProps<
+  LabelProps & {
+    class?: HTMLAttributes["class"];
+    for?: LabelHTMLAttributes["for"];
+    size?: LabelVariants["size"];
+    disabled?: boolean;
+  }
+>();
 
 const delegatedProps = computed(() => {
   const { class: _, disabled: _d, size: _s, ...delegated } = props;
@@ -35,10 +36,7 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <Label
-    v-bind="delegatedProps"
-    :class="[labelVariants({ size, disabled }), props.class]"
-  >
+  <Label v-bind="delegatedProps" :class="[labelVariants({ size, disabled }), props.class]">
     <slot />
   </Label>
 </template>

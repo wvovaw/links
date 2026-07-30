@@ -47,30 +47,29 @@ const iconVariants = cva("", {
 });
 type BadgeVariants = VariantProps<typeof badgeVariants>;
 
-const props = withDefaults(defineProps<{
-  class?: HTMLAttributes["class"];
-  variant?: BadgeVariants["variant"];
-  size?: BadgeVariants["size"];
-  color?: BadgeVariants["color"];
-  iconLeft?: string;
-  iconRight?: string;
-}>(), {
-  size: "sm",
-  variant: "fill",
-  color: "default",
-});
+const props = withDefaults(
+  defineProps<{
+    class?: HTMLAttributes["class"];
+    variant?: BadgeVariants["variant"];
+    size?: BadgeVariants["size"];
+    color?: BadgeVariants["color"];
+    iconLeft?: string;
+    iconRight?: string;
+  }>(),
+  {
+    size: "sm",
+    variant: "fill",
+    color: "default",
+  },
+);
 
 const emit = defineEmits<{
   iconLeftClick: [];
   iconRightClick: [];
 }>();
 
-const hasLeftIconClickEventListener = computed(() =>
-  !!getCurrentInstance()?.vnode.props?.onIconLeftClick,
-);
-const hasRightIconClickEventListener = computed(() =>
-  !!getCurrentInstance()?.vnode.props?.onIconRightClick,
-);
+const hasLeftIconClickEventListener = computed(() => !!getCurrentInstance()?.vnode.props?.onIconLeftClick);
+const hasRightIconClickEventListener = computed(() => !!getCurrentInstance()?.vnode.props?.onIconRightClick);
 </script>
 
 <template>

@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { UIButton } from "~ui/Button";
 
-withDefaults(defineProps<{
-  filename?: string;
-  lang?: keyof (typeof icons);
-}>(), {
-  lang: "text",
-});
+withDefaults(
+  defineProps<{
+    filename?: string;
+    lang?: keyof typeof icons;
+  }>(),
+  {
+    lang: "text",
+  },
+);
 
 const icons = {
   ts: "i-vscode-icons:file-type-typescript-official",
@@ -19,13 +22,15 @@ const icons = {
 };
 
 const slots = useSlots();
-const code = slots.default ? slots.default()[0].props?.code as string : undefined;
+const code = slots.default ? (slots.default()[0].props?.code as string) : undefined;
 const { copy, copied, isSupported } = useClipboard({ source: code });
 </script>
 
 <template>
   <section class="my-5">
-    <div class="not-prose h-14 flex items-center gap-1.5 border border-b-0 border-beerus rounded-t-moon-s-xs bg-heles px-4 py-3">
+    <div
+      class="not-prose h-14 flex items-center gap-1.5 border border-b-0 border-beerus rounded-t-moon-s-xs bg-heles px-4 py-3"
+    >
       <span :class="icons[lang]" class="h-5 w-5" />
       <span class="grow text-moon-14 text-trunks">{{ filename }}</span>
       <ClientOnly>

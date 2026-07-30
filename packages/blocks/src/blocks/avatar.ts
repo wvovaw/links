@@ -28,8 +28,7 @@ function createBlock(id: string): IBlock<"Avatar"> {
 }
 
 function migrateBlock(block: IBlock): IBlock {
-  if (!block.version)
-    block.version = 0;
+  if (!block.version) block.version = 0;
   return block;
 }
 

@@ -1,5 +1,5 @@
-import type { InjectionKey, Ref } from "vue";
 import type { ToggleGroupRootProps } from "radix-vue";
+import type { InjectionKey, Ref } from "vue";
 
 type ModelValue = ToggleGroupRootProps["modelValue"];
 

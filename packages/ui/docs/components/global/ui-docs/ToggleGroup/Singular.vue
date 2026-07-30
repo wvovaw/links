@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIToggleGroup, UIToggleGroupItem } from "~ui/ToggleGroup";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const chosenPet = ref<"cat" | "dog" | undefined>();
 
-const msg = computed(() => chosenPet.value ? `You like ${chosenPet.value}s` : "You don't like animals :(");
+const msg = computed(() => (chosenPet.value ? `You like ${chosenPet.value}s` : "You don't like animals :("));
 </script>
 
 <template>

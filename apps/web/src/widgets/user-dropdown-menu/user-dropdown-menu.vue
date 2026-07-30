@@ -7,9 +7,7 @@ import { ToggleTheme } from "~features/ui-theme";
 <template>
   <NuxtLinkLocale to="/account">
     <UIDropdownMenu.Item>
-      <UIDropdownMenu.ItemTitle>
-        Account
-      </UIDropdownMenu.ItemTitle>
+      <UIDropdownMenu.ItemTitle> Account </UIDropdownMenu.ItemTitle>
       <UIDropdownMenu.ItemIcon icon="i-lucide:user" />
     </UIDropdownMenu.Item>
   </NuxtLinkLocale>

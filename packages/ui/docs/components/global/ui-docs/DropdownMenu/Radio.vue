@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDropdownMenu } from "~ui/DropdownMenu";
 import { UIButton } from "~ui/Button";
+import { UIDropdownMenu } from "~ui/DropdownMenu";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const radios = [
   { value: "left", icon: "i-lucide:arrow-big-left" },
@@ -25,12 +26,7 @@ const val = ref(radios[0].value);
             <span>Choose Direction</span>
           </UIDropdownMenu.Label>
           <UIDropdownMenu.Separator />
-          <UIDropdownMenu.RadioItem
-            v-for="item of radios"
-            :key="item.value"
-            :value="item.value"
-            color="piccolo"
-          >
+          <UIDropdownMenu.RadioItem v-for="item of radios" :key="item.value" :value="item.value" color="piccolo">
             <span :class="item.icon" class="block" />
             <UIDropdownMenu.ItemTitle class="capitalize">
               {{ item.value }}

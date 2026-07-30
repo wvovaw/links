@@ -1,4 +1,5 @@
 import type { BlockName, IBlock } from "./types";
+
 import { getBlockModule } from "./registry";
 
 type CheckBlockVersion =
@@ -19,8 +20,7 @@ export function checkBlockUpToDate(block: IBlock): CheckBlockVersion {
       blockName: block.name,
       upToDate: true,
     };
-  }
-  else {
+  } else {
     return {
       blockId: block.id,
       blockName: block.name,

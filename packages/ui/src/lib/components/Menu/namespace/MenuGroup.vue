@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed, provide, toRefs } from "vue";
 import { ToggleGroupRoot, type ToggleGroupRootEmits, type ToggleGroupRootProps, useForwardPropsEmits } from "radix-vue";
+import { type HTMLAttributes, computed, provide, toRefs } from "vue";
+
 import { menuItemsGroupKey } from "./providers";
 
-const props = withDefaults(defineProps<ToggleGroupRootProps & {
-  class?: HTMLAttributes["class"];
-}>(), {
-  type: "single",
-});
+const props = withDefaults(
+  defineProps<
+    ToggleGroupRootProps & {
+      class?: HTMLAttributes["class"];
+    }
+  >(),
+  {
+    type: "single",
+  },
+);
 
 const emits = defineEmits<ToggleGroupRootEmits>();
 

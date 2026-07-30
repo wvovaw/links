@@ -1,5 +1,5 @@
-import { getErrorMessage } from "../errors";
 import { useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
 
 export async function deleteLink(id: string) {
   try {
@@ -7,8 +7,7 @@ export async function deleteLink(id: string) {
     await api(`/links/${id}`, {
       method: "DELETE",
     });
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }

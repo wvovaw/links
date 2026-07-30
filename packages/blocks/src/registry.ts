@@ -18,8 +18,7 @@ export const registry: Registry = {
 
 export function getBlockModule(name: BlockName): Registry[BlockName] {
   const module = registry[name];
-  if (!module)
-    throw new Error(`Unknown block name: "${name}"`);
+  if (!module) throw new Error(`Unknown block name: "${name}"`);
   return module;
 }
 

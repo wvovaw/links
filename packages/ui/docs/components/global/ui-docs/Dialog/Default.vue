@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDialog } from "~ui/Dialog";
 import { UIButton } from "~ui/Button";
+import { UIDialog } from "~ui/Dialog";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

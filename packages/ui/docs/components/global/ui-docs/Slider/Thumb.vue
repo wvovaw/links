@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UISlider } from "~ui/Slider";
 import { UITag } from "~ui/Tag";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const sl = ref([50, 150]);
 </script>

@@ -17,6 +17,10 @@
       "path": "../packages/blocks",
     },
     {
+      "name": "codestyle",
+      "path": "../packages/codestyle",
+    },
+    {
       "name": ".ROOT",
       "path": "../"
     },
@@ -27,5 +31,7 @@
       "*.mdc": "mdc"
     },
     "todo-tree.tree.showBadges": false,
+    "prettier.enable": false,
+    "eslint.enable": false
   }
 }

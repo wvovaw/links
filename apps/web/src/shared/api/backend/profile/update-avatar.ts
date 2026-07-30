@@ -1,7 +1,8 @@
-import { getErrorMessage } from "../errors";
-import { useApiClient } from "../client";
-import { normalizeUser } from "../mappers";
 import type { User } from "../types";
+
+import { useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
+import { normalizeUser } from "../mappers";
 
 export interface IUserUpdateAvatarData {
   file: File;
@@ -19,8 +20,7 @@ export async function updateAvatar({ file }: IUserUpdateAvatarData): Promise<Use
       body: formData,
     });
     return normalizeUser(data, { origin: config.public.backendUrl });
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }

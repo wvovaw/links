@@ -1,9 +1,22 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import {
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  Post,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import { access } from "node:fs/promises";
-import { CurrentUser } from "../common/current-user.decorator";
+
 import { AuthGuard } from "../common/auth.guard";
+import { CurrentUser } from "../common/current-user.decorator";
 import { User } from "../users/user.entity";
 import { LocalStorageService } from "./local-storage.service";
 
@@ -17,8 +30,7 @@ export class StorageController {
 
     try {
       await access(path);
-    }
-    catch {
+    } catch {
       throw new NotFoundException("Avatar not found.");
     }
 
@@ -39,8 +51,7 @@ export class StorageController {
 
     try {
       await access(path);
-    }
-    catch {
+    } catch {
       throw new NotFoundException("Image not found.");
     }
 
@@ -55,8 +66,7 @@ export class StorageController {
 
     try {
       await access(path);
-    }
-    catch {
+    } catch {
       throw new NotFoundException("Image not found.");
     }
 

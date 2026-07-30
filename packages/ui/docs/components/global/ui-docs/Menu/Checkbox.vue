@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIMenu } from "~ui/Menu";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const sel = ref([]);
 </script>

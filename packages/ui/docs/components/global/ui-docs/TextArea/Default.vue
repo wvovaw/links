@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UITextArea } from "~ui/Input";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

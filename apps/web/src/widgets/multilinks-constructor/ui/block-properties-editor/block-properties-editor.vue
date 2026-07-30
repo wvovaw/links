@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { UIButton, UISeparator } from "@links/ui";
 import type { BlockProperty, BlockPropertyType } from "@links/blocks";
-import { useConstructorStore } from "../../model";
-import { OptionsSection } from "../options-section";
-import TextField from "./fields/text-field.vue";
-import NumberField from "./fields/number-field.vue";
-import SelectField from "./fields/select-field.vue";
-import UrlField from "./fields/url-field.vue";
-import ColorField from "./fields/color-field.vue";
-import BooleanField from "./fields/boolean-field.vue";
-import ImageField from "./fields/image-field.vue";
+
+import { UIButton, UISeparator } from "@links/ui";
 import { groupBy } from "~shared/lib/utils";
 import { SpiralArrow } from "~shared/ui/doodles";
+
+import { useConstructorStore } from "../../model";
+import { OptionsSection } from "../options-section";
+import BooleanField from "./fields/boolean-field.vue";
+import ColorField from "./fields/color-field.vue";
+import ImageField from "./fields/image-field.vue";
+import NumberField from "./fields/number-field.vue";
+import SelectField from "./fields/select-field.vue";
+import TextField from "./fields/text-field.vue";
+import UrlField from "./fields/url-field.vue";
 
 const constructorStore = useConstructorStore();
 const { selectedBlockId } = storeToRefs(constructorStore);
@@ -28,7 +30,7 @@ const fieldsMap: Record<BlockPropertyType, Component> = {
 };
 function resolveFieldsComponent(fieldType: BlockPropertyType) {
   return fieldsMap[fieldType];
-};
+}
 
 const groupByGroupName = groupBy<BlockProperty>(["group"]);
 const groupedProperties = computed(() => {
@@ -40,15 +42,9 @@ const groupedProperties = computed(() => {
 
 <template>
   <template v-if="selectedBlockId">
-    <template
-      v-for="(group, name) of groupedProperties"
-      :key="name"
-    >
+    <template v-for="(group, name) of groupedProperties" :key="name">
       <OptionsSection :title="name ? name : 'Other'">
-        <div
-          v-for="field of group"
-          :key="field.id"
-        >
+        <div v-for="field of group" :key="field.id">
           <component
             :is="resolveFieldsComponent(field.type)"
             :id="`${name}-field-${field.id}`"
@@ -73,9 +69,7 @@ const groupedProperties = computed(() => {
     </div>
   </template>
   <div v-else class="w-full flex flex-col items-center p-3">
-    <p class="my-6 text-moon-20 text-beerus font-semibold font-averta">
-      Select a block to edit
-    </p>
+    <p class="my-6 text-moon-20 text-beerus font-semibold font-averta">Select a block to edit</p>
     <SpiralArrow class="w-50% text-beerus" />
   </div>
 </template>

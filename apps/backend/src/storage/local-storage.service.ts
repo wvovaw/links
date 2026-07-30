@@ -23,8 +23,7 @@ export class LocalStorageService {
   }
 
   avatarPath(fileId: string) {
-    if (fileId.includes("/") || fileId.includes("\\"))
-      throw new NotFoundException("Avatar not found.");
+    if (fileId.includes("/") || fileId.includes("\\")) throw new NotFoundException("Avatar not found.");
 
     return join(this.avatarRoot, fileId);
   }
@@ -44,21 +43,16 @@ export class LocalStorageService {
   }
 
   imagePath(fileId: string) {
-    if (fileId.includes("/") || fileId.includes("\\"))
-      throw new NotFoundException("Image not found.");
+    if (fileId.includes("/") || fileId.includes("\\")) throw new NotFoundException("Image not found.");
 
     return join(this.imageRoot, fileId);
   }
 
   private extensionFor(file: Express.Multer.File) {
-    if (file.mimetype === "image/png")
-      return ".png";
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/jpg")
-      return ".jpg";
-    if (file.mimetype === "image/webp")
-      return ".webp";
-    if (file.mimetype === "image/gif")
-      return ".gif";
+    if (file.mimetype === "image/png") return ".png";
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/jpg") return ".jpg";
+    if (file.mimetype === "image/webp") return ".webp";
+    if (file.mimetype === "image/gif") return ".gif";
 
     return extname(file.originalname);
   }

@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed, provide } from "vue";
 import { ToggleGroupRoot, type ToggleGroupRootEmits, type ToggleGroupRootProps, useForwardPropsEmits } from "radix-vue";
+import { type HTMLAttributes, computed, provide } from "vue";
+
 import type { ToggleVariants } from "../Toggle/private/ToggleItem.vue";
+
 import { TOGGLE_GROUP_INJECTION_KEY } from "./providers";
 
-const props = withDefaults(defineProps<ToggleGroupRootProps & {
-  class?: HTMLAttributes["class"];
-  variant?: ToggleVariants["variant"];
-  color?: ToggleVariants["color"];
-  withStroke?: boolean;
-  size?: ToggleVariants["size"];
-}>(), {
-  type: "single",
-});
+const props = withDefaults(
+  defineProps<
+    ToggleGroupRootProps & {
+      class?: HTMLAttributes["class"];
+      variant?: ToggleVariants["variant"];
+      color?: ToggleVariants["color"];
+      withStroke?: boolean;
+      size?: ToggleVariants["size"];
+    }
+  >(),
+  {
+    type: "single",
+  },
+);
 
 const emits = defineEmits<ToggleGroupRootEmits>();
 

@@ -1,21 +1,27 @@
-import { defineConfig, presetIcons, presetTypography, presetUno, presetWebFonts, transformerVariantGroup } from "unocss";
-import presetAnimations from "unocss-preset-animations";
-import transformerDirectives from "@unocss/transformer-directives";
 import extractorMdc from "@unocss/extractor-mdc";
+import transformerDirectives from "@unocss/transformer-directives";
+import {
+  defineConfig,
+  presetIcons,
+  presetTypography,
+  presetUno,
+  presetWebFonts,
+  transformerVariantGroup,
+} from "unocss";
+import presetAnimations from "unocss-preset-animations";
+
 import linksUIPreset from "../src/lib/preset";
 
 export default defineConfig({
-  theme: {
-  },
-  shortcuts: {
-  },
+  theme: {},
+  shortcuts: {},
   presets: [
     presetUno(),
     linksUIPreset(),
     presetIcons({
       collections: {
-        "lucide": () => import("@iconify-json/lucide/icons.json").then(i => i.default),
-        "vscode-icons": () => import("@iconify-json/vscode-icons/icons.json").then(i => i.default),
+        "lucide": () => import("@iconify-json/lucide/icons.json").then((i) => i.default),
+        "vscode-icons": () => import("@iconify-json/vscode-icons/icons.json").then((i) => i.default),
       },
     }),
     presetWebFonts({

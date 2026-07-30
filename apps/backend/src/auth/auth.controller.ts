@@ -1,11 +1,12 @@
 import { Body, Controller, Get, HttpCode, Post, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
-import { CurrentUser } from "../common/current-user.decorator";
+
 import { AuthGuard } from "../common/auth.guard";
+import { CurrentUser } from "../common/current-user.decorator";
 import { toUserDto } from "../users/user.dto";
 import { User } from "../users/user.entity";
-import { accessTokenMaxAgeMs } from "./auth.tokens";
 import { AuthService, AuthTokens } from "./auth.service";
+import { accessTokenMaxAgeMs } from "./auth.tokens";
 import { LoginDto, RefreshTokenDto, RegisterDto } from "./dto/auth.dto";
 
 @Controller("auth")

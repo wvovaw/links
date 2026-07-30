@@ -22,9 +22,7 @@ defineProps<{
           {{ error }}
         </p>
         <NuxtLinkLocale to="links">
-          <UIButton icon="i-lucide:corner-up-left" as="span">
-            Go To My Links
-          </UIButton>
+          <UIButton icon="i-lucide:corner-up-left" as="span"> Go To My Links </UIButton>
         </NuxtLinkLocale>
       </div>
     </template>

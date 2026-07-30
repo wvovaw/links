@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIToggleGroup, UIToggleGroupItem } from "~ui/ToggleGroup";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 type Level = "1" | "2" | "3" | "4" | "5";
 const mood = ref<Level | undefined>();
 
-const msg = computed(() => mood.value ? `Yor mood rating: ${mood.value}` : "Rate your mood from 1 to 5");
+const msg = computed(() => (mood.value ? `Yor mood rating: ${mood.value}` : "Rate your mood from 1 to 5"));
 </script>
 
 <template>

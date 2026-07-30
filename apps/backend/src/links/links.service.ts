@@ -1,12 +1,13 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
+import { Repository } from "typeorm";
+
 import { BlockImage } from "../storage/block-image.entity";
 import { LocalStorageService } from "../storage/local-storage.service";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, defaultBackground, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
-import { Link } from "./link.entity";
 import { LinkStatus } from "./link-status";
+import { Link } from "./link.entity";
 
 @Injectable()
 export class LinksService {
@@ -45,8 +46,7 @@ export class LinksService {
       relations: { owner: true },
     });
 
-    if (!link)
-      throw new NotFoundException("Link not found.");
+    if (!link) throw new NotFoundException("Link not found.");
 
     return link;
   }
@@ -54,17 +54,14 @@ export class LinksService {
   async updateContent(owner: User, id: string, body: UpdateContentDto) {
     const link = await this.getOwned(owner, id);
 
-    if (body.blocks !== undefined)
-      link.blocks = body.blocks;
-    if (body.background !== undefined)
-      link.background = body.background;
+    if (body.blocks !== undefined) link.blocks = body.blocks;
+    if (body.background !== undefined) link.background = body.background;
 
     this.applyStatus(link, body.status);
 
     const saved = await this.links.save(link);
 
-    if (body.imageFileIds !== undefined)
-      await this.syncImages(link, body.imageFileIds);
+    if (body.imageFileIds !== undefined) await this.syncImages(link, body.imageFileIds);
 
     return saved;
   }
@@ -72,10 +69,8 @@ export class LinksService {
   async updateMetadata(owner: User, id: string, body: UpdateMetadataDto) {
     const link = await this.getOwned(owner, id);
 
-    if (body.title !== undefined)
-      link.title = body.title;
-    if (body.seo !== undefined)
-      link.seo = body.seo;
+    if (body.title !== undefined) link.title = body.title;
+    if (body.seo !== undefined) link.seo = body.seo;
 
     this.applyStatus(link, body.status);
     return this.links.save(link);
@@ -102,20 +97,19 @@ export class LinksService {
   }
 
   async isSlugAvailable(slug: string) {
-    return !await this.links.existsBy({ slug });
+    return !(await this.links.existsBy({ slug }));
   }
 
   async getPublishedBySlug(slug: string) {
     const link = await this.links.findOneBy({ slug, status: LinkStatus.PUBLISHED });
-    if (!link)
-      throw new NotFoundException("Public link not found.");
+    if (!link) throw new NotFoundException("Public link not found.");
 
     return link;
   }
 
   private async syncImages(link: Link, imageFileIds: string[]) {
     const existing = await this.blockImages.find({ where: { link: { id: link.id } } });
-    const existingFileIds = new Set(existing.map(i => i.fileId));
+    const existingFileIds = new Set(existing.map((i) => i.fileId));
     const requestedFileIds = new Set(imageFileIds);
 
     for (const image of existing) {
@@ -125,7 +119,7 @@ export class LinksService {
       }
     }
 
-    const toAdd = imageFileIds.filter(fid => !existingFileIds.has(fid));
+    const toAdd = imageFileIds.filter((fid) => !existingFileIds.has(fid));
     for (const fileId of toAdd) {
       const image = this.blockImages.create({ fileId, link });
       await this.blockImages.save(image);
@@ -138,12 +132,10 @@ export class LinksService {
       return;
     }
 
-    if (link.status === LinkStatus.FRESH)
-      link.status = LinkStatus.DRAFT;
+    if (link.status === LinkStatus.FRESH) link.status = LinkStatus.DRAFT;
   }
 
   private async assertSlugAvailable(slug: string) {
-    if (!await this.isSlugAvailable(slug))
-      throw new ConflictException("Slug is already reserved.");
+    if (!(await this.isSlugAvailable(slug))) throw new ConflictException("Slug is already reserved.");
   }
 }

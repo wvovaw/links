@@ -4,9 +4,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import * as argon2 from "argon2";
 import { randomBytes } from "node:crypto";
 import { MoreThan, Repository } from "typeorm";
+
+import { User } from "../users/user.entity";
 import { accessTokenMaxAgeMs, jwtSecret, refreshTokenMaxAgeMs } from "./auth.tokens";
 import { RefreshSession } from "./refresh-session.entity";
-import { User } from "../users/user.entity";
 
 export interface AuthTokens {
   accessToken: string;
@@ -23,8 +24,7 @@ export class AuthService {
 
   async register(email: string, username: string, password: string) {
     const existing = await this.users.findOneBy({ email });
-    if (existing)
-      throw new ConflictException("A user with this email already exists.");
+    if (existing) throw new ConflictException("A user with this email already exists.");
 
     const user = this.users.create({
       email,
@@ -38,7 +38,7 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<{ user: User; tokens: AuthTokens }> {
     const user = await this.users.findOneBy({ email });
-    if (!user || !await argon2.verify(user.passwordHash, password))
+    if (!user || !(await argon2.verify(user.passwordHash, password)))
       throw new UnauthorizedException("Invalid email or password.");
 
     return { user, tokens: await this.createTokenPair(user) };
@@ -51,8 +51,7 @@ export class AuthService {
     });
     const session = await this.findMatchingSession(candidates, refreshToken);
 
-    if (!session)
-      throw new UnauthorizedException("Invalid refresh token.");
+    if (!session) throw new UnauthorizedException("Invalid refresh token.");
 
     const rawRefreshToken = this.generateRefreshToken();
     session.tokenHash = await argon2.hash(rawRefreshToken);
@@ -72,8 +71,7 @@ export class AuthService {
     const candidates = await this.refreshSessions.find();
     const session = await this.findMatchingSession(candidates, refreshToken);
 
-    if (session)
-      await this.refreshSessions.remove(session);
+    if (session) await this.refreshSessions.remove(session);
   }
 
   private async createTokenPair(user: User): Promise<AuthTokens> {
@@ -104,8 +102,7 @@ export class AuthService {
 
   private async findMatchingSession(sessions: RefreshSession[], refreshToken: string) {
     for (const session of sessions) {
-      if (await argon2.verify(session.tokenHash, refreshToken))
-        return session;
+      if (await argon2.verify(session.tokenHash, refreshToken)) return session;
     }
 
     return undefined;

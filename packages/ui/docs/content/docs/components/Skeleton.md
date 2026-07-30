@@ -7,7 +7,7 @@ description: A UI placeholder, shown while the content is loading.
 
 `Skeleton` is a UI component displaying an animated placeholder mimic some content while a real content is loading.
 
-___
+---
 
 ## Examples
 

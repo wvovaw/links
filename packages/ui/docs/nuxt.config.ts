@@ -5,13 +5,7 @@ export default defineNuxtConfig({
   app: {
     baseURL: "/links/",
   },
-  modules: [
-    "@nuxt/content",
-    "@nuxt/image",
-    "@vueuse/nuxt",
-    "@unocss/nuxt",
-    "@pinia/nuxt",
-  ],
+  modules: ["@nuxt/content", "@nuxt/image", "@vueuse/nuxt", "@unocss/nuxt", "@pinia/nuxt"],
   css: ["@unocss/reset/tailwind.css", "@/assets/css/global.css", "@/assets/css/shiki.css", "../src/lib/css/theme.css"],
   alias: {
     "@lib": fileURLToPath(new URL("../src/lib", import.meta.url)),

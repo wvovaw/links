@@ -11,14 +11,10 @@ const { deleteLink } = useLinksStore();
 <template>
   <div class="hidden flex-row gap-2 sm:flex">
     <NuxtLinkLocale :to="{ name: 'links-constructor-id', params: { id: linkId } }">
-      <UIButton size="xs" icon="i-lucide:hammer" as="span">
-        Edit
-      </UIButton>
+      <UIButton size="xs" icon="i-lucide:hammer" as="span"> Edit </UIButton>
     </NuxtLinkLocale>
     <NuxtLinkLocale :to="{ name: 'links-preview-id', params: { id: linkId } }">
-      <UIButton size="xs" icon="i-lucide:eye" as="span">
-        Preview
-      </UIButton>
+      <UIButton size="xs" icon="i-lucide:eye" as="span"> Preview </UIButton>
     </NuxtLinkLocale>
     <UIButton size="xs" icon="i-lucide:trash" color="chichi" variant="outline" @click="deleteLink(linkId)">
       Delete

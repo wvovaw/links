@@ -8,11 +8,12 @@ draft: true
 
 `Form` is a wrapper of the Vee-Validate library.
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="Form.vue" lang="vue"}
+
 ```vue
 <template>
   <form>
@@ -23,7 +24,7 @@ ___
           <!-- any Form (Input, Select, Radio etc.) component -->
           <Input v-bind="componentField" />
           <!-- Or native  -->
-          <input v-bind="field">
+          <input v-bind="field" />
         </Form.Control>
         <Form.Description />
         <Form.ErrorMessage>{{ errorMessage }}</Form.ErrorMessage>
@@ -32,9 +33,10 @@ ___
   </form>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 

@@ -10,11 +10,12 @@ draft: true
 
 This component can be integrated with [`@tanstack/vue-table`](https://tanstack.com/table/latest/docs/framework/vue/vue-table) library for building rich tables.
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="Table.vue" lang="vue"}
+
 ```vue
 <template>
   <Table.Root>
@@ -40,9 +41,10 @@ ___
   </Table.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 

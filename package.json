@@ -13,6 +13,7 @@
     "build": "pnpm -r build",
     "dev": "pnpm --parallel -r dev",
     "lint": "pnpm -r lint",
+    "fmt": "pnpm -r fmt",
     "test": "pnpm -r test",
 "upg": "taze -r",
 "changeset": "changeset",

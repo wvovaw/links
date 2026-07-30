@@ -1,12 +1,7 @@
 <script setup lang="ts">
+import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText, useForwardProps } from "radix-vue";
 import { type HTMLAttributes, computed } from "vue";
-import {
-  SelectItem,
-  SelectItemIndicator,
-  type SelectItemProps,
-  SelectItemText,
-  useForwardProps,
-} from "radix-vue";
+
 import { UIMenu } from "../../Menu";
 
 const props = defineProps<SelectItemProps & { class?: HTMLAttributes["class"] }>();
@@ -20,11 +15,7 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <SelectItem
-    v-bind="forwardedProps"
-    :class="[props.class]"
-    class="p-1 outline-none group"
-  >
+  <SelectItem v-bind="forwardedProps" :class="[props.class]" class="p-1 outline-none group">
     <UIMenu.Item>
       <UIMenu.Title>
         <SelectItemText><slot /></SelectItemText>

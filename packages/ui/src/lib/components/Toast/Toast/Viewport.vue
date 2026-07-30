@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ToastViewportProps } from "radix-vue";
+
 import { ToastViewport } from "radix-vue";
 import { type HTMLAttributes, computed } from "vue";
 

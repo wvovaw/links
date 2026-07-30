@@ -1,6 +1,7 @@
-import { cloneVNode, defineComponent } from "vue";
-import { type VariantProps, cva } from "cva";
 import type { HTMLAttributes } from "vue";
+
+import { type VariantProps, cva } from "cva";
+import { cloneVNode, defineComponent } from "vue";
 
 const groupRootVariants = cva("flex border-none relative h-fit", {
   variants: {
@@ -17,42 +18,34 @@ interface Props {
   class?: HTMLAttributes["class"];
 }
 
-const GroupRoot = defineComponent(({ class: className, orientation = "vertical" }: Props, { slots }) => {
-  if (slots.default) {
-    const children = slots.default()?.filter(ch => ch.type.toString() !== "Symbol(v-cmt)");
-    const modChildren: (typeof children[0])[] = [];
+const GroupRoot = defineComponent(
+  ({ class: className, orientation = "vertical" }: Props, { slots }) => {
+    if (slots.default) {
+      const children = slots.default()?.filter((ch) => ch.type.toString() !== "Symbol(v-cmt)");
+      const modChildren: (typeof children)[0][] = [];
 
-    for (let i = 0; i < children.length; ++i) {
-      const nVnode = cloneVNode(children[i]);
-      if (!nVnode.props)
-        nVnode.props = {};
+      for (let i = 0; i < children.length; ++i) {
+        const nVnode = cloneVNode(children[i]);
+        if (!nVnode.props) nVnode.props = {};
 
-      if (orientation === "horizontal") {
-        if (i === 0)
-          nVnode.props.class = "rounded-r-0!";
-        else if (i === children.length - 1)
-          nVnode.props.class = "rounded-l-0!";
-        else
-          nVnode.props.class = "rounded-0!";
-      }
-      else if (orientation === "vertical") {
-        if (i === 0)
-          nVnode.props.class = "rounded-b-0!";
-        else if (i === children.length - 1)
-          nVnode.props.class = "rounded-t-0!";
-        else
-          nVnode.props.class = "rounded-0!";
+        if (orientation === "horizontal") {
+          if (i === 0) nVnode.props.class = "rounded-r-0!";
+          else if (i === children.length - 1) nVnode.props.class = "rounded-l-0!";
+          else nVnode.props.class = "rounded-0!";
+        } else if (orientation === "vertical") {
+          if (i === 0) nVnode.props.class = "rounded-b-0!";
+          else if (i === children.length - 1) nVnode.props.class = "rounded-t-0!";
+          else nVnode.props.class = "rounded-0!";
+        }
+
+        modChildren.push(nVnode);
       }
 
-      modChildren.push(nVnode);
+      return () => <div class={[groupRootVariants({ orientation }), className]}>{modChildren}</div>;
+    } else {
+      return () => <div></div>;
     }
-
-    return () => (
-      <div class={[groupRootVariants({ orientation }), className]}>
-        { modChildren }
-      </div>
-    );
-  }
-  else { return () => (<div></div>); }
-}, { props: ["orientation"] });
+  },
+  { props: ["orientation"] },
+);
 export default GroupRoot;

@@ -1,8 +1,7 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsdown";
 
 export default defineConfig({
   entry: ["src/main.ts"],
-  splitting: true,
   sourcemap: false,
   dts: true,
   format: "esm",

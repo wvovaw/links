@@ -1,7 +1,8 @@
-import { getErrorMessage } from "../errors";
-import { setRefreshToken, useApiClient } from "../client";
-import { normalizeUser } from "../mappers";
 import type { User } from "../types";
+
+import { setRefreshToken, useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
+import { normalizeUser } from "../mappers";
 
 export interface IUserRegisterData {
   email: string;
@@ -19,8 +20,7 @@ export async function register({ email, username, password }: IUserRegisterData)
     });
     setRefreshToken(data.refreshToken);
     return normalizeUser(data.user, { origin: config.public.backendUrl });
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("user_already_exists"));
   }
 }

@@ -1,10 +1,11 @@
+import type { BlockName, IBlock } from "@links/blocks";
+
+import { checkBlockUpToDate, createBlock, migrateBlock } from "@links/blocks";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { BlockName, IBlock } from "@links/blocks";
-import { checkBlockUpToDate, createBlock, migrateBlock } from "@links/blocks";
-import { randomString } from "~shared/lib/utils";
 import { useLinksStore } from "~entities/links";
 import { LinkStatus, LinksApi } from "~shared/api/backend";
+import { randomString } from "~shared/lib/utils";
 
 const defaultPageTitle = "New multilinks page";
 const defaultBlocksState: IBlock[] = [];
@@ -63,7 +64,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     selectedBlockId.value = id;
   }
   function getBlock(id: string): IBlock | undefined {
-    return blocks.value.find(b => b.id === id);
+    return blocks.value.find((b) => b.id === id);
   }
   function addBlock(name: BlockName) {
     const id = generateBlockId();
@@ -71,15 +72,14 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     selectBlock(id);
   }
   function removeBlock(id: string | null) {
-    if (selectedBlockId.value === id)
-      selectedBlockId.value = null;
-    const index = blocks.value.findIndex(b => b.id === id);
+    if (selectedBlockId.value === id) selectedBlockId.value = null;
+    const index = blocks.value.findIndex((b) => b.id === id);
     blocks.value.splice(index, 1);
   }
   function duplicateBlock(id: string | null) {
     const block = id ? getBlock(id) : null;
     if (block) {
-      const index = blocks.value.findIndex(b => b.id === id);
+      const index = blocks.value.findIndex((b) => b.id === id);
       const newBlockId = generateBlockId();
       blocks.value.splice(index, 0, { ...structuredClone(toRaw(block)), id: newBlockId });
     }
@@ -161,15 +161,13 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         const blocks: IBlock[] = data.blocks as IBlock[];
         blocks.forEach((block) => {
           const info = checkBlockUpToDate(block);
-          if (!info.upToDate)
-            block = migrateBlock(block);
+          if (!info.upToDate) block = migrateBlock(block);
         });
         setBlocks(blocks);
 
         savedDataHash.value = computeStoreHash();
       }
-    }
-    catch (e: unknown) {
+    } catch (e: unknown) {
       if (e instanceof Error) {
         throw createError({
           statusCode: 404,

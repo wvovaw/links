@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDropdownMenu } from "~ui/DropdownMenu";
 import { UIButton } from "~ui/Button";
+import { UIDropdownMenu } from "~ui/DropdownMenu";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const checkboxes = reactive([
   { value: "tomato", chosen: false },
@@ -9,8 +10,8 @@ const checkboxes = reactive([
   { value: "cheese", chosen: false },
   { value: "jalapeno", chosen: false },
 ]);
-const choosen = computed(() => checkboxes.filter(ch => ch.chosen));
-const chosenStr = computed(() => choosen.value.map(ch => ch.value).join(", "));
+const choosen = computed(() => checkboxes.filter((ch) => ch.chosen));
+const chosenStr = computed(() => choosen.value.map((ch) => ch.value).join(", "));
 </script>
 
 <template>

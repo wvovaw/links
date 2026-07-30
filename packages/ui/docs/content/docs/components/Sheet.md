@@ -7,11 +7,12 @@ description: A dialog component, that complements the maint content of the scree
 
 `Sheet' is a dialog component that slides out from one edge of the screen when opened and slides in when closed. It is typically used to supplement the main content of the screen.
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="Sheet.vue" lang="vue"}
+
 ```vue
 <template>
   <Sheet.Root>
@@ -37,9 +38,10 @@ ___
   </Sheet.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 
@@ -51,30 +53,30 @@ ___
 
 :ui-docs-sheet-side
 
-___
+---
 
 ## API Reference
 
 ### Root
 
-Refer to [Radix-Vue Dialog Root](https://www.radix-vue.com/components/dialog#root){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Root](https://www.radix-vue.com/components/dialog#root){:target="\_blank"} API reference
 
 ### Trigger
 
-Refer to [Radix-Vue Dialog Trigger](https://www.radix-vue.com/components/dialog#trigger){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Trigger](https://www.radix-vue.com/components/dialog#trigger){:target="\_blank"} API reference
 
 ### Close
 
-Refer to [Radix-Vue Dialog Close](https://www.radix-vue.com/components/dialog#close){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Close](https://www.radix-vue.com/components/dialog#close){:target="\_blank"} API reference
 
 ### Content
 
-Refer to [Radix-Vue Dialog Content](https://www.radix-vue.com/components/dialog#content){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Content](https://www.radix-vue.com/components/dialog#content){:target="\_blank"} API reference
 
 ### Title
 
-Refer to [Radix-Vue Dialog Title](https://www.radix-vue.com/components/dialog#title){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Title](https://www.radix-vue.com/components/dialog#title){:target="\_blank"} API reference
 
 ### Subtitle
 
-Refer to [Radix-Vue Dialog Description](https://www.radix-vue.com/components/dialog#description){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Description](https://www.radix-vue.com/components/dialog#description){:target="\_blank"} API reference

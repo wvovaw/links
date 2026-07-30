@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IBlock } from "@links/blocks";
+
 import { useBlocksResolver } from "~shared/blocks";
 import "~shared/blocks/theme.css";
 
@@ -27,5 +28,4 @@ const { resolve } = useBlocksResolver();
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UIMenu } from "@links/ui";
 import { blocksList } from "@links/blocks";
+import { UIMenu } from "@links/ui";
+
 import { useConstructorStore } from "../../model";
 
 const { addBlock } = useConstructorStore();

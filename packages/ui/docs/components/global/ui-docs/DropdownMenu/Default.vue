@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDropdownMenu } from "~ui/DropdownMenu";
 import { UIButton } from "~ui/Button";
+import { UIDropdownMenu } from "~ui/DropdownMenu";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

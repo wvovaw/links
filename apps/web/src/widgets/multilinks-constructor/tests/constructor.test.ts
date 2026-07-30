@@ -1,6 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
+
 import PageEditor from "../multilinks-constructor.vue";
 
 describe("testing PageEditor widget", () => {

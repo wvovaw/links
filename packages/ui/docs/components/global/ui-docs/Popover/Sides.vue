@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIPopover, UIPopoverArrow, UIPopoverContent, UIPopoverTrigger } from "~ui/Popover";
 import { UIButton } from "~ui/Button";
+import { UIPopover, UIPopoverArrow, UIPopoverContent, UIPopoverTrigger } from "~ui/Popover";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
@@ -22,7 +23,8 @@ import { UIButton } from "~ui/Button";
         </UIPopoverTrigger>
         <UIPopoverContent side="top">
           <div>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi suscipit mollitia praesentium non error voluptas magnam voluptatibus minima illo impedit.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi suscipit mollitia praesentium non error
+            voluptas magnam voluptatibus minima illo impedit.
           </div>
           <UIPopoverArrow />
         </UIPopoverContent>

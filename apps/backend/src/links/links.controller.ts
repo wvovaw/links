@@ -1,6 +1,7 @@
 import { Controller, Delete, Get, HttpCode, Param, Patch, Post, Body, UseGuards } from "@nestjs/common";
-import { CurrentUser } from "../common/current-user.decorator";
+
 import { AuthGuard } from "../common/auth.guard";
+import { CurrentUser } from "../common/current-user.decorator";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
 import { toLinkDto } from "./link.dto";

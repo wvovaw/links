@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIButton } from "~ui/Button";
 import { useToast } from "~ui/Toast";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const { toast } = useToast();
 function handleClick() {
@@ -25,8 +26,6 @@ function handleClick() {
 
 <template>
   <PreviewFrame>
-    <UIButton @click="handleClick">
-      Show Variants
-    </UIButton>
+    <UIButton @click="handleClick"> Show Variants </UIButton>
   </PreviewFrame>
 </template>

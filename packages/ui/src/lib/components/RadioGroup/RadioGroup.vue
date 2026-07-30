@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { type VariantProps, cva } from "cva";
 import { RadioGroupRoot, type RadioGroupRootEmits, type RadioGroupRootProps, useForwardPropsEmits } from "radix-vue";
 import { type HTMLAttributes, computed, provide } from "vue";
-import { type VariantProps, cva } from "cva";
+
 import { RADIO_GROUP_INJECTION_KEY } from "./providers";
 
 const radioGroupVariants = cva("", {
@@ -14,12 +15,17 @@ const radioGroupVariants = cva("", {
 });
 type RadioRootVariants = VariantProps<typeof radioGroupVariants>;
 
-const props = withDefaults(defineProps<RadioGroupRootProps & {
-  class?: HTMLAttributes["class"];
-  color?: RadioRootVariants["color"];
-}>(), {
-  color: "default",
-});
+const props = withDefaults(
+  defineProps<
+    RadioGroupRootProps & {
+      class?: HTMLAttributes["class"];
+      color?: RadioRootVariants["color"];
+    }
+  >(),
+  {
+    color: "default",
+  },
+);
 const emits = defineEmits<RadioGroupRootEmits>();
 
 const delegatedProps = computed(() => {
@@ -35,11 +41,7 @@ provide(RADIO_GROUP_INJECTION_KEY, {
 </script>
 
 <template>
-  <RadioGroupRoot
-    v-bind="forwarded"
-    class="grid gap-2"
-    :class="props.class"
-  >
+  <RadioGroupRoot v-bind="forwarded" class="grid gap-2" :class="props.class">
     <slot />
   </RadioGroupRoot>
 </template>

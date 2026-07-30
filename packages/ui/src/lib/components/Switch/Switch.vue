@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
-import { SwitchRoot, type SwitchRootEmits, type SwitchRootProps, SwitchThumb, useForwardPropsEmits } from "radix-vue";
 import { type VariantProps, cva } from "cva";
+import { SwitchRoot, type SwitchRootEmits, type SwitchRootProps, SwitchThumb, useForwardPropsEmits } from "radix-vue";
+import { type HTMLAttributes, computed } from "vue";
 
 const switchRootVariants = cva("block cursor-pointer rounded-full transition", {
   variants: {
@@ -31,28 +31,36 @@ const switchRootVariants = cva("block cursor-pointer rounded-full transition", {
   },
 });
 type SwitchRootVariants = VariantProps<typeof switchRootVariants>;
-const switchThumbVariants = cva("absolute top-1/2 -translate-y-1/2 shadow-moon-sm pointer-events-none rounded-full bg-goten transition-all start-0", {
-  variants: {
-    size: { xs: "w-3 h-3", sm: "w-4 h-4", md: "w-6 h-6" },
+const switchThumbVariants = cva(
+  "absolute top-1/2 -translate-y-1/2 shadow-moon-sm pointer-events-none rounded-full bg-goten transition-all start-0",
+  {
+    variants: {
+      size: { xs: "w-3 h-3", sm: "w-4 h-4", md: "w-6 h-6" },
+    },
+    compoundVariants: [
+      { size: "xs", class: "data-[state=checked]:(ltr:left-[calc(100%-12px)] rtl:right-[calc(100%-12px)])" },
+      { size: "sm", class: "data-[state=checked]:(ltr:left-[calc(100%-16px)] rtl:right-[calc(100%-16px)])" },
+      { size: "md", class: "data-[state=checked]:(ltr:left-[calc(100%-24px)] rtl:right-[calc(100%-24px)])" },
+    ],
+    defaultVariants: {
+      size: "md",
+    },
   },
-  compoundVariants: [
-    { size: "xs", class: "data-[state=checked]:(ltr:left-[calc(100%-12px)] rtl:right-[calc(100%-12px)])" },
-    { size: "sm", class: "data-[state=checked]:(ltr:left-[calc(100%-16px)] rtl:right-[calc(100%-16px)])" },
-    { size: "md", class: "data-[state=checked]:(ltr:left-[calc(100%-24px)] rtl:right-[calc(100%-24px)])" },
-  ],
-  defaultVariants: {
+);
+
+const props = withDefaults(
+  defineProps<
+    SwitchRootProps & {
+      color?: SwitchRootVariants["color"];
+      size?: SwitchRootVariants["size"];
+      class?: HTMLAttributes["class"];
+    }
+  >(),
+  {
+    color: "piccolo",
     size: "md",
   },
-});
-
-const props = withDefaults(defineProps<SwitchRootProps & {
-  color?: SwitchRootVariants["color"];
-  size?: SwitchRootVariants["size"];
-  class?: HTMLAttributes["class"];
-}>(), {
-  color: "piccolo",
-  size: "md",
-});
+);
 const emits = defineEmits<SwitchRootEmits>();
 
 const delegatedProps = computed(() => {
@@ -64,14 +72,9 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>
-  <SwitchRoot
-    v-bind="forwarded"
-    :class="switchRootVariants({ color, size })"
-  >
+  <SwitchRoot v-bind="forwarded" :class="switchRootVariants({ color, size })">
     <span class="block relative h-full w-full">
-      <SwitchThumb
-        :class="switchThumbVariants({ size })"
-      />
+      <SwitchThumb :class="switchThumbVariants({ size })" />
     </span>
   </SwitchRoot>
 </template>

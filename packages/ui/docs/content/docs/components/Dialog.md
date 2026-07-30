@@ -7,11 +7,12 @@ description: A window overlaid on the primary window, rendering the content unde
 
 `Dialog` is a window overlaid on the primary window, rendering the content underneath inert
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="Dialog.vue" lang="vue"}
+
 ```vue
 <template>
   <Dialog.Root>
@@ -37,9 +38,10 @@ ___
   </Dialog.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 
@@ -56,6 +58,7 @@ ___
 To activate the `Dialog` component from within a `ContextMenu` or `Dropdown`, you must wrap its root with the `Dialog.Root` component.
 
 ::ui-docs-code-block{filename="DialogFromDropdown.vue" lang="vue"}
+
 ```vue
 <template>
   <Dialog.Root>
@@ -87,32 +90,33 @@ To activate the `Dialog` component from within a `ContextMenu` or `Dropdown`, yo
   </Dialog.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## API Reference
 
 ### Root
 
-Refer to [Radix-Vue Dialog Root](https://www.radix-vue.com/components/dialog#root){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Root](https://www.radix-vue.com/components/dialog#root){:target="\_blank"} API reference
 
 ### Trigger
 
-Refer to [Radix-Vue Dialog Trigger](https://www.radix-vue.com/components/dialog#trigger){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Trigger](https://www.radix-vue.com/components/dialog#trigger){:target="\_blank"} API reference
 
 ### Close
 
-Refer to [Radix-Vue Dialog Close](https://www.radix-vue.com/components/dialog#close){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Close](https://www.radix-vue.com/components/dialog#close){:target="\_blank"} API reference
 
 ### Content
 
-Refer to [Radix-Vue Dialog Content](https://www.radix-vue.com/components/dialog#content){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Content](https://www.radix-vue.com/components/dialog#content){:target="\_blank"} API reference
 
 ### Title
 
-Refer to [Radix-Vue Dialog Title](https://www.radix-vue.com/components/dialog#title){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Title](https://www.radix-vue.com/components/dialog#title){:target="\_blank"} API reference
 
 ### Subtitle
 
-Refer to [Radix-Vue Dialog Description](https://www.radix-vue.com/components/dialog#description){:target="_blank"} API reference
+Refer to [Radix-Vue Dialog Description](https://www.radix-vue.com/components/dialog#description){:target="\_blank"} API reference

@@ -33,8 +33,7 @@ function createBlock(id: string): IBlock<"Paragraph"> {
 }
 
 function migrateBlock(block: IBlock): IBlock {
-  if (!block.version)
-    block.version = 0;
+  if (!block.version) block.version = 0;
 
   if (block.version === 0) {
     (block.properties["inline-padding"] as unknown as IBlockPropertyNumber).step = 1;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIToggle } from "~ui/Toggle";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { UIScrollArea, UITabs, UITabsContent, UITabsList, UITabsTrigger } from "@links/ui";
+import { useConfirmation } from "~shared/ui/confirmation-dialog";
+
+import { useConstructorStore } from "./model";
+import { CONSTRUCTOR_INJECTION_KEY } from "./model/provider";
 import { BlockPropertiesEditor } from "./ui/block-properties-editor";
 import { PagePropertiesEditor } from "./ui/page-properties-editor";
 import { Toolbar } from "./ui/toolbar";
 import { Workspace } from "./ui/workspace";
-import { useConstructorStore } from "./model";
-import { CONSTRUCTOR_INJECTION_KEY } from "./model/provider";
-import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
 const props = defineProps<{
   linkId: string;
@@ -26,8 +27,7 @@ onBeforeRouteLeave(async () => {
       content: "Do you want to leave the page without save?",
     });
     const { isCanceled } = await confirm();
-    if (isCanceled)
-      return false;
+    if (isCanceled) return false;
   }
   return true;
 });
@@ -40,21 +40,20 @@ provide(CONSTRUCTOR_INJECTION_KEY, {
 
 <template>
   <div class="h-[calc(100vh-var(--navbar-height,64px))] w-100vw flex flex-col-reverse md:flex-row">
-    <Toolbar class="min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit" />
+    <Toolbar
+      class="min-w-full inline-flex items-center justify-center bg-gohan p-2 shadow-moon-lg md:min-h-full md:min-w-fit"
+    />
     <UIScrollArea
       v-if="!isMobile"
       orientation="vertical"
       class="border-(x beerus) bg-gohan p-2 lg:max-w-sm lg:min-w-sm"
-      bar-class="rounded-none" thumb-class="bg-trunks"
+      bar-class="rounded-none"
+      thumb-class="bg-trunks"
     >
       <UITabs default-value="1">
         <UITabsList variant="tab">
-          <UITabsTrigger value="1">
-            Block Properties
-          </UITabsTrigger>
-          <UITabsTrigger value="2">
-            Page properties
-          </UITabsTrigger>
+          <UITabsTrigger value="1"> Block Properties </UITabsTrigger>
+          <UITabsTrigger value="2"> Page properties </UITabsTrigger>
         </UITabsList>
         <UITabsContent value="1">
           <BlockPropertiesEditor />

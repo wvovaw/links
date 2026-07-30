@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIProgressBar } from "~ui/Progress";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

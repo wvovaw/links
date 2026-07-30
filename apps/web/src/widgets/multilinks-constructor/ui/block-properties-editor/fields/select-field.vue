@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UIRichSelect, UISelectHint, UISelectLabel } from "@links/ui";
 import type { IBlockPropertySelect } from "@links/blocks";
+
+import { UIRichSelect, UISelectHint, UISelectLabel } from "@links/ui";
 
 interface ITextFieldProps {
   field: IBlockPropertySelect;
@@ -19,11 +20,7 @@ const model = defineModel<IBlockPropertySelect["value"]>();
       <UIRichSelect.Value />
     </UIRichSelect.Trigger>
     <UIRichSelect.Content>
-      <UIRichSelect.Item
-        v-for="option of field.options"
-        :key="option.label"
-        :value="option.value"
-      >
+      <UIRichSelect.Item v-for="option of field.options" :key="option.label" :value="option.value">
         {{ option.label }}
       </UIRichSelect.Item>
     </UIRichSelect.Content>

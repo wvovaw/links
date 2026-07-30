@@ -12,10 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div
-    class="relative flex"
-    :data-block-selected="isSelected"
-  >
+  <div class="relative flex" :data-block-selected="isSelected">
     <Transition
       appear
       enter-from-class="opacity-0"

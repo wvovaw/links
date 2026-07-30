@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIRadioGroup, UIRadioGroupItem } from "~ui/RadioGroup";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const chosenPet = ref<"cat" | "dog" | undefined>();
 
-const msg = computed(() => chosenPet.value ? `You like ${chosenPet.value}s` : "You like dogs or cats?");
+const msg = computed(() => (chosenPet.value ? `You like ${chosenPet.value}s` : "You like dogs or cats?"));
 </script>
 
 <template>

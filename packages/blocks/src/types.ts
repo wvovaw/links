@@ -1,7 +1,7 @@
 export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph", "Picture"] as const;
-export type BlockName = typeof BLOCK_NAMES[number];
+export type BlockName = (typeof BLOCK_NAMES)[number];
 
-export const blocksList = BLOCK_NAMES.map(name => ({ name }));
+export const blocksList = BLOCK_NAMES.map((name) => ({ name }));
 
 export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image";
 

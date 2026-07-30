@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UIInput, UIInputHint, UIInputLabel, UITextArea } from "@links/ui";
 import type { IBlockPropertyText } from "@links/blocks";
+
+import { UIInput, UIInputHint, UIInputLabel, UITextArea } from "@links/ui";
 
 interface ITextFieldProps {
   field: IBlockPropertyText;
@@ -15,20 +16,8 @@ const model = defineModel<IBlockPropertyText["value"]>();
   <UIInputLabel :for="id">
     {{ field.label }}
   </UIInputLabel>
-  <UITextArea
-    v-if="field.multiline"
-    :id="id"
-    v-model="model"
-    resize="vertical"
-    :rows="3"
-  />
-  <UIInput
-    v-else
-    :id="id"
-    v-model="model"
-    full-width
-    type="text"
-  />
+  <UITextArea v-if="field.multiline" :id="id" v-model="model" resize="vertical" :rows="3" />
+  <UIInput v-else :id="id" v-model="model" full-width type="text" />
   <UIInputHint v-if="field.hint">
     {{ field.hint }}
   </UIInputHint>

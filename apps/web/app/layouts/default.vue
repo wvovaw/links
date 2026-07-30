@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { UIButton } from "@links/ui";
+import { SessionModel, UserDropdown } from "~entities/session";
+import { ToggleTheme } from "~features/ui-theme";
 import { NavigationMenu, TopNavbar } from "~widgets/top-navbar";
 import { UserDropdownMenu } from "~widgets/user-dropdown-menu";
-import { ToggleTheme } from "~features/ui-theme";
-import { SessionModel, UserDropdown } from "~entities/session";
 
 const route = useRoute();
 const { t } = useI18n();

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UICheckbox, UIInputHint, UISwitch } from "@links/ui";
 import type { IBlockPropertyBoolean } from "@links/blocks";
+
+import { UICheckbox, UIInputHint, UISwitch } from "@links/ui";
 
 interface ITextFieldProps {
   field: IBlockPropertyBoolean;
@@ -15,18 +16,13 @@ const model = defineModel<IBlockPropertyBoolean["value"]>();
     <label :for="id">
       {{ field.label }}
     </label>
-    <UICheckbox
-      v-if="field.variant === 'checkbox'"
-      :id="id"
-      :checked="model"
-      @update:checked="v => model = v"
-    />
+    <UICheckbox v-if="field.variant === 'checkbox'" :id="id" :checked="model" @update:checked="(v) => (model = v)" />
     <UISwitch
       v-else-if="field.variant === 'switch'"
       :id="id"
       :checked="model"
       size="sm"
-      @update:checked="v => model = v"
+      @update:checked="(v) => (model = v)"
     />
   </div>
   <UIInputHint v-if="field.hint">

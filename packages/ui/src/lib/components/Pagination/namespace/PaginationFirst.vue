@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
 import { PaginationFirst, type PaginationFirstProps } from "radix-vue";
+import { type HTMLAttributes, computed } from "vue";
+
 import { UIButton } from "../../Button";
 
-const props = withDefaults(defineProps<PaginationFirstProps & {
-  class?: HTMLAttributes["class"];
-}>(), {
-  asChild: true,
-});
+const props = withDefaults(
+  defineProps<
+    PaginationFirstProps & {
+      class?: HTMLAttributes["class"];
+    }
+  >(),
+  {
+    asChild: true,
+  },
+);
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;
@@ -17,11 +23,6 @@ const delegatedProps = computed(() => {
 
 <template>
   <PaginationFirst v-bind="delegatedProps">
-    <UIButton
-      :class="[props.class]"
-      size="sm"
-      icon="i-lucide:chevrons-left"
-      variant="outline"
-    />
+    <UIButton :class="[props.class]" size="sm" icon="i-lucide:chevrons-left" variant="outline" />
   </PaginationFirst>
 </template>

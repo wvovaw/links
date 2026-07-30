@@ -1,7 +1,8 @@
+import type { Link } from "~shared/api/backend";
+
 import { useToast } from "@links/ui";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { Link } from "~shared/api/backend";
 import { LinksApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
 
@@ -13,7 +14,15 @@ export const useLinksStore = defineStore("links", () => {
   const links = computed(() => _links.value);
 
   /* Actions */
-  async function updateLink(params: { id: string; title: string; blocks: unknown[]; seo: Record<string, unknown>; background: string; status: any; imageFileIds?: string[] }) {
+  async function updateLink(params: {
+    id: string;
+    title: string;
+    blocks: unknown[];
+    seo: Record<string, unknown>;
+    background: string;
+    status: any;
+    imageFileIds?: string[];
+  }) {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
     const confirm = createConfirmation({
@@ -42,8 +51,7 @@ export const useLinksStore = defineStore("links", () => {
           content: "The link is successfully updated",
           variant: "success",
         });
-      }
-      catch (e: unknown) {
+      } catch (e: unknown) {
         if (e instanceof Error) {
           toast({
             title: "Saving error",
@@ -72,8 +80,7 @@ export const useLinksStore = defineStore("links", () => {
           variant: "success",
         });
         await refreshLinksList();
-      }
-      catch (e: unknown) {
+      } catch (e: unknown) {
         if (e instanceof Error) {
           toast({
             title: "Deletion error",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIToggleGroup, UIToggleGroupItem } from "~ui/ToggleGroup";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const cell = ref();
 </script>

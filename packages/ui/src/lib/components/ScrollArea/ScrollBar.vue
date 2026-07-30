@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
 import { ScrollAreaScrollbar, type ScrollAreaScrollbarProps, ScrollAreaThumb } from "radix-vue";
+import { type HTMLAttributes, computed } from "vue";
 
-const props = withDefaults(defineProps<ScrollAreaScrollbarProps & {
-  barClass?: HTMLAttributes["class"];
-  thumbClass?: HTMLAttributes["class"];
-}>(), {
-  orientation: "vertical",
-});
+const props = withDefaults(
+  defineProps<
+    ScrollAreaScrollbarProps & {
+      barClass?: HTMLAttributes["class"];
+      thumbClass?: HTMLAttributes["class"];
+    }
+  >(),
+  {
+    orientation: "vertical",
+  },
+);
 
 const delegatedProps = computed(() => {
   const { barClass: _bc, thumbClass: _thc, ...delegated } = props;

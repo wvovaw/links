@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { DrawerTitleProps } from "vaul-vue";
+
 import { DrawerTitle } from "vaul-vue";
 import { type HtmlHTMLAttributes, computed } from "vue";
 
@@ -12,7 +13,11 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <DrawerTitle v-bind="delegatedProps" class="text-moon-24 font-semibold leading-none tracking-tight" :class="props.class">
+  <DrawerTitle
+    v-bind="delegatedProps"
+    class="text-moon-24 font-semibold leading-none tracking-tight"
+    :class="props.class"
+  >
     <slot />
   </DrawerTitle>
 </template>

@@ -1,5 +1,4 @@
-<script setup lang="tsx">
-</script>
+<script setup lang="tsx"></script>
 
 <template>
   <div class="flex items-center gap-6 font-semibold font-averta">
@@ -9,12 +8,8 @@
       </NuxtLinkLocale>
     </div>
     <div class="flex gap-8 text-trunks">
-      <NuxtLinkLocale to="links" class="transition-colors duration-250 hover:text-bulma">
-        Links
-      </NuxtLinkLocale>
-      <NuxtLinkLocale to="account" class="transition-colors duration-250 hover:text-bulma">
-        Account
-      </NuxtLinkLocale>
+      <NuxtLinkLocale to="links" class="transition-colors duration-250 hover:text-bulma"> Links </NuxtLinkLocale>
+      <NuxtLinkLocale to="account" class="transition-colors duration-250 hover:text-bulma"> Account </NuxtLinkLocale>
     </div>
   </div>
 </template>

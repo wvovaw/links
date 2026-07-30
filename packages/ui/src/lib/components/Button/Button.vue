@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { type ButtonHTMLAttributes, type HTMLAttributes, ref, useSlots } from "vue";
-import { Primitive, type PrimitiveProps } from "radix-vue";
-import { type VariantProps, cva } from "cva";
 import { useElementHover } from "@vueuse/core";
+import { type VariantProps, cva } from "cva";
+import { Primitive, type PrimitiveProps } from "radix-vue";
+import { type ButtonHTMLAttributes, type HTMLAttributes, ref, useSlots } from "vue";
 
 const btnEl = ref<HTMLElement | null>(null);
 const isHovered = useElementHover(btnEl);
@@ -65,11 +65,27 @@ const buttonVariants = cva(
       /* scale animation */
       { disabled: false, variant: ["fill", "outline", "ghost"], class: "active:scale-90" },
       /* Fill buttons */
-      { variant: ["fill"], color: ["piccolo"], class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)] ring-jiren" },
+      {
+        variant: ["fill"],
+        color: ["piccolo"],
+        class: "text-goten bg-piccolo [box-shadow:_0_0_0_0_var(--piccolo)] ring-jiren",
+      },
       { variant: ["fill"], color: ["hit"], class: "text-goten bg-hit [box-shadow:_0_0_0_0_var(--hit)] ring-jira" },
-      { variant: ["fill"], color: ["chichi"], class: "text-popo bg-chichi [box-shadow:_0_0_0_0_var(--chichi)] ring-chichi-60" },
-      { variant: ["fill"], color: ["krillin"], class: "text-popo bg-krillin [box-shadow:_0_0_0_0_var(--krillin)] ring-krillin-60" },
-      { variant: ["fill"], color: ["roshi"], class: "text-bulma bg-roshi [box-shadow:_0_0_0_0_var(--roshi)] ring-roshi-60" },
+      {
+        variant: ["fill"],
+        color: ["chichi"],
+        class: "text-popo bg-chichi [box-shadow:_0_0_0_0_var(--chichi)] ring-chichi-60",
+      },
+      {
+        variant: ["fill"],
+        color: ["krillin"],
+        class: "text-popo bg-krillin [box-shadow:_0_0_0_0_var(--krillin)] ring-krillin-60",
+      },
+      {
+        variant: ["fill"],
+        color: ["roshi"],
+        class: "text-bulma bg-roshi [box-shadow:_0_0_0_0_var(--roshi)] ring-roshi-60",
+      },
       /* Outline buttons */
       { variant: ["outline"], color: ["piccolo"], class: "text-piccolo ring-piccolo" },
       { variant: ["outline"], color: ["hit"], class: "text-hit ring-hit" },
@@ -77,7 +93,12 @@ const buttonVariants = cva(
       { variant: ["outline"], color: ["krillin"], class: "text-krillin ring-krillin" },
       { variant: ["outline"], color: ["roshi"], class: "text-roshi ring-roshi" },
       /* Ghost buttons (only enabled colored) */
-      { variant: ["ghost"], color: ["piccolo", "hit", "chichi", "krillin", "roshi"], disabled: false, class: "hover:text-bulma ring-bulma focus:ring-1px" },
+      {
+        variant: ["ghost"],
+        color: ["piccolo", "hit", "chichi", "krillin", "roshi"],
+        disabled: false,
+        class: "hover:text-bulma ring-bulma focus:ring-1px",
+      },
       /* Link buttons */
       { variant: ["link"], color: ["piccolo"], class: "text-piccolo font-semibold" },
       { variant: ["link"], color: ["hit"], class: "text-hit font-semibold" },
@@ -112,31 +133,49 @@ const buttonIconVariants = cva("", {
 type ButtonVariants = VariantProps<typeof buttonVariants>;
 type ButtonIconVariants = VariantProps<typeof buttonIconVariants>;
 
-const props = withDefaults(defineProps<PrimitiveProps & {
-  class?: HTMLAttributes["class"];
-  type?: ButtonHTMLAttributes["type"];
-  variant?: ButtonVariants["variant"];
-  size?: ButtonVariants["size"];
-  color?: ButtonVariants["color"];
-  icon?: string;
-  iconPos?: ButtonIconVariants["iconPos"];
-  animation?: ButtonVariants["animation"];
-  loading?: boolean;
-  fullWidth?: boolean;
-  disabled?: boolean;
-}>(), {
-  as: "button",
-  variant: "fill",
-  size: "md",
-  color: "piccolo",
-  iconPos: "left",
-});
+const props = withDefaults(
+  defineProps<
+    PrimitiveProps & {
+      class?: HTMLAttributes["class"];
+      type?: ButtonHTMLAttributes["type"];
+      variant?: ButtonVariants["variant"];
+      size?: ButtonVariants["size"];
+      color?: ButtonVariants["color"];
+      icon?: string;
+      iconPos?: ButtonIconVariants["iconPos"];
+      animation?: ButtonVariants["animation"];
+      loading?: boolean;
+      fullWidth?: boolean;
+      disabled?: boolean;
+    }
+  >(),
+  {
+    as: "button",
+    variant: "fill",
+    size: "md",
+    color: "piccolo",
+    iconPos: "left",
+  },
+);
 </script>
 
 <template>
   <Primitive
     ref="btnEl"
-    :class="[buttonVariants({ variant, size, color, fullWidth, hasIconOrLoading: (!!icon || loading), iconPos, iconOnly: noChildren, animation, disabled }), props.class]"
+    :class="[
+      buttonVariants({
+        variant,
+        size,
+        color,
+        fullWidth,
+        hasIconOrLoading: !!icon || loading,
+        iconPos,
+        iconOnly: noChildren,
+        animation,
+        disabled,
+      }),
+      props.class,
+    ]"
     :disabled="disabled"
     :as="as"
     :as-child="asChild"

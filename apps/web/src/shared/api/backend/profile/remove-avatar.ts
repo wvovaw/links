@@ -1,6 +1,7 @@
-import { getErrorMessage } from "../errors";
-import { useApiClient } from "../client";
 import type { User } from "../types";
+
+import { useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
 
 export async function removeAvatar(): Promise<User | undefined> {
   try {
@@ -9,8 +10,7 @@ export async function removeAvatar(): Promise<User | undefined> {
       method: "DELETE",
     });
     return data;
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }

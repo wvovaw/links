@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ConfigProvider } from "radix-vue";
-import { UITooltipProvider } from "~ui/Tooltip";
 import { UIToaster } from "~ui/Toast";
+import { UITooltipProvider } from "~ui/Tooltip";
 
 const useIdFunction = () => useId();
 
@@ -14,12 +14,15 @@ let cookie = useCookie<{
   expires: expireDate,
   watch: true,
 });
-if (!cookie.value)
-  cookie.value = { theme: "auto" };
+if (!cookie.value) cookie.value = { theme: "auto" };
 
-addRouteMiddleware("theme-cookie-update", () => {
-  cookie = useCookie("theme");
-}, { global: true });
+addRouteMiddleware(
+  "theme-cookie-update",
+  () => {
+    cookie = useCookie("theme");
+  },
+  { global: true },
+);
 </script>
 
 <template>

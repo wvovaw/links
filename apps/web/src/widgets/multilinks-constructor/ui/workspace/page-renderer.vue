@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { animations, dragAndDrop } from "@formkit/drag-and-drop";
 import "~shared/blocks/theme.css";
+import { useBlocksResolver } from "~shared/blocks";
+
 import { useConstructorStore } from "../../model";
 import PageBlock from "./page-block.vue";
-import { useBlocksResolver } from "~shared/blocks";
 
 const { resolve } = useBlocksResolver();
 
@@ -14,7 +15,7 @@ const { selectBlock, setBlocks, clearHistory } = constructorStore;
 function isSelectedBlock(blockId: string) {
   const isit = selectedBlockId.value === blockId;
   return isit;
-};
+}
 
 const draggableRoot = ref<HTMLElement>();
 onMounted(() => {
@@ -22,7 +23,9 @@ onMounted(() => {
   dragAndDrop({
     parent: draggableRoot.value!,
     getValues: () => blocks.value,
-    setValues: (values) => { setBlocks(values); },
+    setValues: (values) => {
+      setBlocks(values);
+    },
     config: {
       plugins: [animations({ duration: 100 })],
     },
@@ -41,11 +44,7 @@ onMounted(() => {
           :is-selected="isSelectedBlock(block.id)"
           @select="selectBlock(block.id)"
         >
-          <component
-            :is="resolve(block.name)"
-            :id="`block-${block.id}`"
-            :properties="block.properties"
-          />
+          <component :is="resolve(block.name)" :id="`block-${block.id}`" :properties="block.properties" />
         </PageBlock>
       </div>
     </div>

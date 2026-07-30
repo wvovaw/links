@@ -30,18 +30,21 @@ export default defineNuxtConfig({
   i18n: {
     baseUrl: "http://localhost:3000",
     langDir: "../src/shared/locales",
-    locales: [{
-      code: "en",
-      language: "en-US",
-      name: "English",
-      file: "en-US.ts",
-      isCatchallLocale: true,
-    }, {
-      code: "ru",
-      language: "ru-RU",
-      name: "Русский",
-      file: "ru-RU.ts",
-    }],
+    locales: [
+      {
+        code: "en",
+        language: "en-US",
+        name: "English",
+        file: "en-US.ts",
+        isCatchallLocale: true,
+      },
+      {
+        code: "ru",
+        language: "ru-RU",
+        name: "Русский",
+        file: "ru-RU.ts",
+      },
+    ],
     defaultLocale: "en",
     strategy: "prefix_and_default",
     detectBrowserLanguage: {
@@ -62,14 +65,7 @@ export default defineNuxtConfig({
     // "/preview/**": { ssr: false },
     "/*": { ssr: true },
   },
-  modules: [
-    "@unocss/nuxt",
-    "@nuxtjs/i18n",
-    "@nuxt/content",
-    "@vueuse/nuxt",
-    "@nuxt/image",
-    "@pinia/nuxt",
-  ],
+  modules: ["@unocss/nuxt", "@nuxtjs/i18n", "@nuxt/content", "@vueuse/nuxt", "@nuxt/image", "@pinia/nuxt"],
   experimental: {
     typedPages: true,
   },

@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
 import { ToastClose, type ToastCloseProps } from "radix-vue";
+import { type HTMLAttributes, computed } from "vue";
+
 import { UIButton } from "../../Button";
 
-const props = defineProps<ToastCloseProps & {
-  class?: HTMLAttributes["class"];
-}>();
+const props = defineProps<
+  ToastCloseProps & {
+    class?: HTMLAttributes["class"];
+  }
+>();
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;
@@ -14,10 +17,7 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <ToastClose
-    v-bind="delegatedProps"
-    as-child
-  >
+  <ToastClose v-bind="delegatedProps" as-child>
     <UIButton
       class="absolute! rounded-full! right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity! duration-300 ease-in"
       :class="props.class"

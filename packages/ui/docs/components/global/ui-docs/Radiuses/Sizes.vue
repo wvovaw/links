@@ -17,30 +17,18 @@ const [SetBlock, Block] = createReusableTemplate();
 
   <div class="flex flex-wrap gap-4">
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-i-xs
-      </UtilityTag>
-      <Block class="rounded-moon-i-xs">
-        xs
-      </Block>
+      <UtilityTag> rounded-moon-i-xs </UtilityTag>
+      <Block class="rounded-moon-i-xs"> xs </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-i-sm
-      </UtilityTag>
-      <Block class="rounded-moon-i-sm">
-        sm
-      </Block>
+      <UtilityTag> rounded-moon-i-sm </UtilityTag>
+      <Block class="rounded-moon-i-sm"> sm </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-i-md
-      </UtilityTag>
-      <Block class="rounded-moon-i-md">
-        md
-      </Block>
+      <UtilityTag> rounded-moon-i-md </UtilityTag>
+      <Block class="rounded-moon-i-md"> md </Block>
     </div>
   </div>
 
@@ -48,39 +36,23 @@ const [SetBlock, Block] = createReusableTemplate();
 
   <div class="flex flex-wrap gap-4">
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-s-xs
-      </UtilityTag>
-      <Block class="rounded-moon-s-xs">
-        xs
-      </Block>
+      <UtilityTag> rounded-moon-s-xs </UtilityTag>
+      <Block class="rounded-moon-s-xs"> xs </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-s-sm
-      </UtilityTag>
-      <Block class="rounded-moon-s-sm">
-        sm
-      </Block>
+      <UtilityTag> rounded-moon-s-sm </UtilityTag>
+      <Block class="rounded-moon-s-sm"> sm </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-s-md
-      </UtilityTag>
-      <Block class="rounded-moon-s-md">
-        md
-      </Block>
+      <UtilityTag> rounded-moon-s-md </UtilityTag>
+      <Block class="rounded-moon-s-md"> md </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        rounded-moon-s-lg
-      </UtilityTag>
-      <Block class="rounded-moon-s-lg">
-        lg
-      </Block>
+      <UtilityTag> rounded-moon-s-lg </UtilityTag>
+      <Block class="rounded-moon-s-lg"> lg </Block>
     </div>
   </div>
 </template>

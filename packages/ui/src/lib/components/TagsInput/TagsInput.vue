@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed, provide } from "vue";
-import { TagsInputRoot, type TagsInputRootEmits, type TagsInputRootProps, useForwardPropsEmits } from "radix-vue";
 import type { VariantProps } from "cva";
+
 import { cva } from "cva";
+import { TagsInputRoot, type TagsInputRootEmits, type TagsInputRootProps, useForwardPropsEmits } from "radix-vue";
+import { type HTMLAttributes, computed, provide } from "vue";
 
 const tagsInputRootVariants = cva("flex flex-wrap gap-2 items-center justify-start bg-goku", {
   variants: {
@@ -17,12 +18,14 @@ const tagsInputRootVariants = cva("flex flex-wrap gap-2 items-center justify-sta
 });
 type TagsInputRootVariants = VariantProps<typeof tagsInputRootVariants>;
 
-const props = defineProps<TagsInputRootProps & {
-  class?: HTMLAttributes["class"];
-  color?: TagsInputRootVariants["color"];
-  size?: TagsInputRootVariants["size"];
-  fullWidth?: boolean;
-}>();
+const props = defineProps<
+  TagsInputRootProps & {
+    class?: HTMLAttributes["class"];
+    color?: TagsInputRootVariants["color"];
+    size?: TagsInputRootVariants["size"];
+    fullWidth?: boolean;
+  }
+>();
 const emits = defineEmits<TagsInputRootEmits>();
 
 const delegatedProps = computed(() => {
@@ -38,7 +41,12 @@ provide("tagsInput", {
 </script>
 
 <template>
-  <TagsInputRoot v-bind="forwarded" class="root" :class="[tagsInputRootVariants({ color, size, fullWidth }), props.class]" tabindex="-1">
+  <TagsInputRoot
+    v-bind="forwarded"
+    class="root"
+    :class="[tagsInputRootVariants({ color, size, fullWidth }), props.class]"
+    tabindex="-1"
+  >
     <slot />
   </TagsInputRoot>
 </template>
@@ -48,7 +56,7 @@ provide("tagsInput", {
   box-shadow: inset 0 0 0 1px var(--beerus);
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration:150ms;
+  transition-duration: 150ms;
   background: var(--goku);
   color: var(--bulma);
   padding-left: 1rem;
@@ -56,7 +64,9 @@ provide("tagsInput", {
   margin: 0;
 }
 .root:hover {
-  box-shadow: inset 0 0 0 var(--border-i-width) var(--trunks), inset 0 0 0 var(--border-i-width) var(--beerus);
+  box-shadow:
+    inset 0 0 0 var(--border-i-width) var(--trunks),
+    inset 0 0 0 var(--border-i-width) var(--beerus);
 }
 /* Colors */
 .root.ti-piccolo:focus,

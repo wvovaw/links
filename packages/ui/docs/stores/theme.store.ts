@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import { useColorMode, useCycleList } from "@vueuse/core";
+import { defineStore } from "pinia";
 
 export const useThemeStore = defineStore("themeStore", () => {
   const modes = {
@@ -23,15 +23,12 @@ export const useThemeStore = defineStore("themeStore", () => {
   const cookie = useCookie<{ theme: string }>("theme", {
     watch: true,
   });
-  if (cookie.value)
-    state.value = cookie.value.theme;
-  else
-    state.value = localStorage.getItem("theme") || "auto";
+  if (cookie.value) state.value = cookie.value.theme;
+  else state.value = localStorage.getItem("theme") || "auto";
 
   function cycle() {
     next();
-    if (cookie.value)
-      cookie.value.theme = state.value;
+    if (cookie.value) cookie.value.theme = state.value;
   }
 
   watchEffect(() => {

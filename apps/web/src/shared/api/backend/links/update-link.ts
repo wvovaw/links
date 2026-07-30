@@ -1,6 +1,7 @@
-import { getErrorMessage } from "../errors";
-import { useApiClient } from "../client";
 import type { Link, LinkStatus } from "../types";
+
+import { useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
 
 export interface IUpdateContentData {
   id: string;
@@ -22,7 +23,13 @@ export interface IUpdateSlugData {
   slug: string;
 }
 
-export async function updateContent({ id, blocks, background, status, imageFileIds }: IUpdateContentData): Promise<Link | undefined> {
+export async function updateContent({
+  id,
+  blocks,
+  background,
+  status,
+  imageFileIds,
+}: IUpdateContentData): Promise<Link | undefined> {
   try {
     const api = useApiClient();
     const data = await api<Link>(`/links/${id}/content`, {
@@ -30,8 +37,7 @@ export async function updateContent({ id, blocks, background, status, imageFileI
       body: { blocks, background, status, imageFileIds },
     });
     return data;
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }
@@ -44,8 +50,7 @@ export async function updateMetadata({ id, title, seo, status }: IUpdateMetadata
       body: { title, seo, status },
     });
     return data;
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }
@@ -58,8 +63,7 @@ export async function updateSlug({ id, slug }: IUpdateSlugData): Promise<Link | 
       body: { slug },
     });
     return data;
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }

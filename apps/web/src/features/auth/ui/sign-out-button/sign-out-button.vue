@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Primitive } from "radix-vue";
+
 import { useAuth } from "../../model";
 
 const { push } = useRouter();
@@ -13,8 +14,6 @@ function handleSignOutClick() {
 
 <template>
   <Primitive @click="handleSignOutClick">
-    <slot>
-      Sign Out
-    </slot>
+    <slot> Sign Out </slot>
   </Primitive>
 </template>

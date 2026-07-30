@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIFileUpload } from "~ui/FileUpload";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const avatar = ref<File | null>(null);
 
 const previewUrl = computed(() => {
-  if (avatar.value)
-    return URL.createObjectURL(avatar.value);
+  if (avatar.value) return URL.createObjectURL(avatar.value);
   return "";
 });
 </script>
@@ -15,20 +15,12 @@ const previewUrl = computed(() => {
   <PreviewFrame>
     <div class="flex flex-col items-center gap-3">
       <UIFileUpload.Root v-model="avatar" accept="image/*">
-        <UIFileUpload.Dropzone
-          v-slot="{ isOver }"
-        >
+        <UIFileUpload.Dropzone v-slot="{ isOver }">
           <div
-            class="grid h-24 w-24 cursor-pointer place-content-center overflow-hidden border-2 rounded-full border-dashed" :class="[
-              isOver ? 'border-piccolo' : avatar ? 'border-transparent' : 'border-beerus',
-            ]"
+            class="grid h-24 w-24 cursor-pointer place-content-center overflow-hidden border-2 rounded-full border-dashed"
+            :class="[isOver ? 'border-piccolo' : avatar ? 'border-transparent' : 'border-beerus']"
           >
-            <img
-              v-if="avatar"
-              :src="previewUrl"
-              class="h-full w-full object-cover"
-              alt="avatar"
-            >
+            <img v-if="avatar" :src="previewUrl" class="h-full w-full object-cover" alt="avatar" />
             <span v-else class="i-lucide:camera h-6 w-6 text-trunks" />
           </div>
         </UIFileUpload.Dropzone>

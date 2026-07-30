@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UITagsInput, UITagsInputInput, UITagsInputItem } from "~ui/TagsInput";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const modelValue1 = ref(["Apple", "Banana"]);
 const modelValue2 = ref(["Aubergine", "Cabbage"]);

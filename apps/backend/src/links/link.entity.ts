@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, OneToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+
 import { BlockImage } from "../storage/block-image.entity";
 import { User } from "../users/user.entity";
 import { LinkStatus } from "./link-status";
@@ -26,10 +35,10 @@ export class Link {
   @Column({ type: "text", default: LinkStatus.FRESH })
   status!: LinkStatus;
 
-  @ManyToOne(() => User, user => user.links, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.links, { onDelete: "CASCADE" })
   owner!: User;
 
-  @OneToMany(() => BlockImage, image => image.link)
+  @OneToMany(() => BlockImage, (image) => image.link)
   images!: BlockImage[];
 
   @CreateDateColumn()

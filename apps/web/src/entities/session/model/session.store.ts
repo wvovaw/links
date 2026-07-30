@@ -1,7 +1,8 @@
+import type { User } from "~shared/api/backend";
+
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { SessionApi } from "~shared/api/backend";
-import type { User } from "~shared/api/backend";
 
 export const useSessionStore = defineStore("session", () => {
   /* State */
@@ -16,10 +17,8 @@ export const useSessionStore = defineStore("session", () => {
   }
   async function refreshUserData() {
     const userData = await SessionApi.getCurrentSession();
-    if (userData)
-      setUser(userData);
-    else
-      setUser(null);
+    if (userData) setUser(userData);
+    else setUser(null);
   }
 
   return {

@@ -7,11 +7,12 @@ description: Dropdown menu displays a menu list of actions to the user after the
 
 `DropdownMenu` is a nested list of actions or options displayed to users after they trigger a button.
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="DropdownMenu.vue" lang="vue"}
+
 ```vue
 <template>
   <DropdownMenu.Root>
@@ -48,9 +49,10 @@ ___
   </DropdownMenu.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 
@@ -74,71 +76,71 @@ ___
 
 :ui-docs-dropdown-menu-complex
 
-___
+---
 
 ## API Reference
 
 ### Root
 
-Refer to [Radix-Vue DropdownMenu Root](https://www.radix-vue.com/components/dropdown-menu#root){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Root](https://www.radix-vue.com/components/dropdown-menu#root){:target="\_blank"} API reference
 
 ### Trigger
 
-Refer to [Radix-Vue DropdownMenu Trigger](https://www.radix-vue.com/components/dropdown-menu#trigger){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Trigger](https://www.radix-vue.com/components/dropdown-menu#trigger){:target="\_blank"} API reference
 
 ### Group
 
-Refer to [Radix-Vue DropdownMenu Group](https://www.radix-vue.com/components/dropdown-menu#group){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Group](https://www.radix-vue.com/components/dropdown-menu#group){:target="\_blank"} API reference
 
 ### Content
 
-Refer to [Radix-Vue DropdownMenu Content](https://www.radix-vue.com/components/dropdown-menu#content){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Content](https://www.radix-vue.com/components/dropdown-menu#content){:target="\_blank"} API reference
 
 ### Item
 
-Refer to [Radix-Vue DropdownMenu Item](https://www.radix-vue.com/components/dropdown-menu#item){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Item](https://www.radix-vue.com/components/dropdown-menu#item){:target="\_blank"} API reference
 
 ### Item Icon
 
 #### Props
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `icon` | `string` | Yes | - | Iconify icon name string |
+| Name   | Type     | Required | Default | Description              |
+| ------ | -------- | -------- | ------- | ------------------------ |
+| `icon` | `string` | Yes      | -       | Iconify icon name string |
 
 ### Radio Group
 
-Refer to [Radix-Vue DropdownMenu Radio Group](https://www.radix-vue.com/components/dropdown-menu#radiogroup){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Radio Group](https://www.radix-vue.com/components/dropdown-menu#radiogroup){:target="\_blank"} API reference
 
 ### Radio Item
 
 #### Props
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No | default | Radio items color |
+| Name    | Type                                                                                                                                                                                                                                              | Required | Default | Description       |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | ----------------- |
+| `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No       | default | Radio items color |
 
-Refer to [Radix-Vue DropdownMenu Radio Item](https://www.radix-vue.com/components/dropdown-menu#radioitem){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Radio Item](https://www.radix-vue.com/components/dropdown-menu#radioitem){:target="\_blank"} API reference
 
 ### Checkbox Item
 
 #### Props
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No | default | Radio items color |
-| `size ` | sm \| md | No | md | Checkbox size |
+| Name    | Type                                                                                                                                                                                                                                              | Required | Default | Description       |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | ----------------- |
+| `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No       | default | Radio items color |
+| `size ` | sm \| md                                                                                                                                                                                                                                          | No       | md      | Checkbox size     |
 
-Refer to [Radix-Vue DropdownMenu Checkbox Item](https://www.radix-vue.com/components/dropdown-menu#checkboxitem){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Checkbox Item](https://www.radix-vue.com/components/dropdown-menu#checkboxitem){:target="\_blank"} API reference
 
 ### Sub
 
-Refer to [Radix-Vue DropdownMenu Sub](https://www.radix-vue.com/components/dropdown-menu#sub){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Sub](https://www.radix-vue.com/components/dropdown-menu#sub){:target="\_blank"} API reference
 
 ### Sub Trigger
 
-Refer to [Radix-Vue DropdownMenu Sub Trigger](https://www.radix-vue.com/components/dropdown-menu#subtrigger){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Sub Trigger](https://www.radix-vue.com/components/dropdown-menu#subtrigger){:target="\_blank"} API reference
 
 ### Sub Content
 
-Refer to [Radix-Vue DropdownMenu Sub Content](https://www.radix-vue.com/components/dropdown-menu#subcontent){:target="_blank"} API reference
+Refer to [Radix-Vue DropdownMenu Sub Content](https://www.radix-vue.com/components/dropdown-menu#subcontent){:target="\_blank"} API reference

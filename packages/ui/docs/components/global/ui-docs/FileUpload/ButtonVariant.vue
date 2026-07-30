@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIFileUploadButton } from "~ui/FileUpload";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const files = ref<File[]>([]);
 </script>

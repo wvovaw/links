@@ -1,5 +1,6 @@
-import { defineStore } from "pinia";
 import { useColorMode, useCycleList } from "@vueuse/core";
+import { defineStore } from "pinia";
+
 import { type ITheme, THEME_CONFIG, themeVariants } from "../lib/config";
 
 export const useThemeStore = defineStore("ui-theme", () => {
@@ -19,8 +20,7 @@ export const useThemeStore = defineStore("ui-theme", () => {
   const cookie = useCookie<ITheme>(THEME_CONFIG.cookieKey, {
     watch: true,
   });
-  if (cookie.value)
-    state.value = cookie.value.theme;
+  if (cookie.value) state.value = cookie.value.theme;
 
   function cycle() {
     next();

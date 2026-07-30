@@ -1,7 +1,9 @@
 import { IsArray, IsEnum, IsObject, IsOptional, IsString, Matches, MaxLength, MinLength } from "class-validator";
+
 import { LinkStatus } from "../link-status";
 
-export const defaultBackground = "background-image: linear-gradient(to top, #13b7c6, #00a1da, #0085e4, #635cd2, #a3009c);";
+export const defaultBackground =
+  "background-image: linear-gradient(to top, #13b7c6, #00a1da, #0085e4, #635cd2, #a3009c);";
 export const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export class CreateLinkDto {

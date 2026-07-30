@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIToggleGroup, UIToggleGroupItem } from "~ui/ToggleGroup";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 type GameMode = "nightcore" | "x2" | "flashlight";
 const gameMode = ref<GameMode[] | undefined>();
 
-const msg = computed(() => Array.isArray(gameMode.value) ? `Game settings: ${gameMode.value.join(", ")}` : "Default game");
+const msg = computed(() =>
+  Array.isArray(gameMode.value) ? `Game settings: ${gameMode.value.join(", ")}` : "Default game",
+);
 </script>
 
 <template>

@@ -16,7 +16,7 @@ const bp = computed(() => {
 
 <template>
   <div class="avatar-block">
-    <img class="avatar-block__image" :src="bp.image">
+    <img class="avatar-block__image" :src="bp.image" />
     <h3 class="avatar-block__heading" v-text="bp.text" />
   </div>
 </template>

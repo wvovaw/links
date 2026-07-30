@@ -1,10 +1,6 @@
 <template>
   <div class="flex flex-col items-center py-4">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 1024 768"
-      class="mx-auto h-32 w-auto text-bulma sm:h-48"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768" class="mx-auto h-32 w-auto text-bulma sm:h-48">
       <g fill="none" fill-rule="evenodd">
         <g class="fill-piccolo">
           <path
@@ -31,13 +27,10 @@
       </g>
     </svg>
 
-    <h1 class="mt-6 text-moon-20 font-bold tracking-tight sm:text-moon-24">
-      You have no links
-    </h1>
+    <h1 class="mt-6 text-moon-20 font-bold tracking-tight sm:text-moon-24">You have no links</h1>
 
     <slot />
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

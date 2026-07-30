@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { UIButton, UITooltip } from "@links/ui";
-import { useConstructorStore } from "../../../model";
 import { useKeyboardShortcut } from "~shared/lib/composables";
+
+import { useConstructorStore } from "../../../model";
 
 const constructorStore = useConstructorStore();
 const { canRedo, canUndo } = storeToRefs(constructorStore);
@@ -19,8 +20,6 @@ useKeyboardShortcut({ combination: { key: "Y", modifiers: ["Control"] }, handler
         <UIButton icon="i-lucide:redo" variant="ghost" size="xs" :disabled="!canRedo" @click="redo" />
       </div>
     </template>
-    <template #content>
-      Undo / Redo
-    </template>
+    <template #content> Undo / Redo </template>
   </UITooltip>
 </template>

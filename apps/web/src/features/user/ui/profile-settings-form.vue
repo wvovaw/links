@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { UIButton, UICard, UIForm, UIInput, UITag, useToast } from "@links/ui";
-import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/valibot";
-import { profileSettingsSchema } from "../model/schema";
-import AvatarUpload from "./avatar-upload.vue";
+import { useForm } from "vee-validate";
 import { SessionModel } from "~entities/session";
 import { ProfileApi } from "~shared/api/backend";
 import { useConfirmation } from "~shared/ui/confirmation-dialog";
+
+import { profileSettingsSchema } from "../model/schema";
+import AvatarUpload from "./avatar-upload.vue";
 
 const { toast } = useToast();
 
@@ -24,7 +25,14 @@ function initForm() {
   };
 }
 
-const { handleSubmit, handleReset, resetForm: reinitForm, isSubmitting, isFieldDirty, meta } = useForm({
+const {
+  handleSubmit,
+  handleReset,
+  resetForm: reinitForm,
+  isSubmitting,
+  isFieldDirty,
+  meta,
+} = useForm({
   validationSchema: toTypedSchema(profileSettingsSchema),
   initialValues: initForm(),
 });
@@ -33,14 +41,11 @@ const isFormValidAndDirty = computed(() => meta.value.valid && meta.value.dirty)
 const resetForm = handleReset;
 const submitForm = handleSubmit(async (values) => {
   try {
-    if (isFieldDirty("username") && values.username)
-      await ProfileApi.updateName({ name: values.username });
+    if (isFieldDirty("username") && values.username) await ProfileApi.updateName({ name: values.username });
 
     if (isFieldDirty("avatar")) {
-      if (values.avatar)
-        await ProfileApi.updateAvatar({ file: values.avatar });
-      else
-        await ProfileApi.removeAvatar();
+      if (values.avatar) await ProfileApi.updateAvatar({ file: values.avatar });
+      else await ProfileApi.removeAvatar();
     }
 
     toast({
@@ -49,10 +54,8 @@ const submitForm = handleSubmit(async (values) => {
       variant: "success",
     });
     await refreshUserData();
-  }
-  catch (e: unknown) {
-    if (e instanceof Error)
-      showError(e.message);
+  } catch (e: unknown) {
+    if (e instanceof Error) showError(e.message);
   }
 });
 
@@ -60,8 +63,7 @@ const submitForm = handleSubmit(async (values) => {
 const isFormInitialized = ref(false);
 
 sessionStore.$subscribe(() => {
-  if (isFormInitialized.value)
-    return;
+  if (isFormInitialized.value) return;
   isFormInitialized.value = true;
   reinitForm({ values: initForm() });
 });
@@ -86,8 +88,7 @@ onBeforeRouteLeave(async () => {
 
     const { isCanceled } = await confirmation();
 
-    if (isCanceled)
-      return false;
+    if (isCanceled) return false;
     else return true;
   }
   return true;
@@ -115,7 +116,8 @@ onBeforeRouteLeave(async () => {
             <UIForm.Field v-slot="{ componentField }" name="email">
               <UIForm.Item>
                 <UIForm.Label class="flex items-center gap-2">
-                  Email <UITag v-if="!user?.emailVerification" variant="outline" color="krillin" size="xs">
+                  Email
+                  <UITag v-if="!user?.emailVerification" variant="outline" color="krillin" size="xs">
                     Unconfirmed
                   </UITag>
                 </UIForm.Label>
@@ -129,9 +131,7 @@ onBeforeRouteLeave(async () => {
           <div class="flex flex-col place-content-center items-center sm:min-w-48">
             <UIForm.Field v-slot="{ componentField }" name="avatar">
               <UIForm.Item>
-                <UIForm.Label>
-                  Avatar image
-                </UIForm.Label>
+                <UIForm.Label> Avatar image </UIForm.Label>
                 <UIForm.Control>
                   <AvatarUpload v-bind="componentField" :src="remoteAvatarUrl" />
                 </UIForm.Control>
@@ -143,16 +143,10 @@ onBeforeRouteLeave(async () => {
       </form>
     </UICard.Body>
     <UICard.Footer class="flex gap-2">
-      <UIButton
-        :disabled="!isFormValidAndDirty || isSubmitting"
-        :loading="isSubmitting"
-        @click="submitForm"
-      >
+      <UIButton :disabled="!isFormValidAndDirty || isSubmitting" :loading="isSubmitting" @click="submitForm">
         Save
       </UIButton>
-      <UIButton variant="ghost" @click="resetForm">
-        Reset
-      </UIButton>
+      <UIButton variant="ghost" @click="resetForm"> Reset </UIButton>
     </UICard.Footer>
   </UICard.Root>
 </template>

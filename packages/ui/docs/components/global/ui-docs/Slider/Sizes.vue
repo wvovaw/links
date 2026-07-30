@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UISlider } from "~ui/Slider";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

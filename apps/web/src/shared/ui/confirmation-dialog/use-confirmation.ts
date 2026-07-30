@@ -27,15 +27,13 @@ export function useConfirmation() {
     Object.assign(config.value, params);
 
     config.value.onConfirm = () => {
-      if (params.onConfirm)
-        confirm(params.onConfirm());
+      if (params.onConfirm) confirm(params.onConfirm());
       else confirm(defaultOnConfirm());
       config.value = defaultConfirmationDialog;
     };
 
     config.value.onCancel = () => {
-      if (params.onCancel)
-        cancel(params.onCancel());
+      if (params.onCancel) cancel(params.onCancel());
       else cancel(defaultOnCancel());
       config.value = defaultConfirmationDialog;
     };

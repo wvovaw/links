@@ -1,23 +1,44 @@
 <script setup lang="ts">
+import {
+  TooltipArrow,
+  TooltipContent,
+  type TooltipContentProps,
+  TooltipRoot,
+  type TooltipRootEmits,
+  type TooltipRootProps,
+  TooltipTrigger,
+  useForwardPropsEmits,
+} from "radix-vue";
 import { type HTMLAttributes, computed } from "vue";
-import { TooltipArrow, TooltipContent, type TooltipContentProps, TooltipRoot, type TooltipRootEmits, type TooltipRootProps, TooltipTrigger, useForwardPropsEmits } from "radix-vue";
 
-const props = withDefaults(defineProps<TooltipRootProps & {
-  contentClass?: HTMLAttributes["class"];
-  arrowClass?: HTMLAttributes["class"];
-  attachSide?: TooltipContentProps["side"];
-  arrowAlign?: TooltipContentProps["align"];
-  sideOffset?: TooltipContentProps["sideOffset"];
-  noArrow?: boolean;
-}>(), {
-  attachSide: "top",
-  arrowAlign: "center",
-  sideOffset: 6,
-});
+const props = withDefaults(
+  defineProps<
+    TooltipRootProps & {
+      contentClass?: HTMLAttributes["class"];
+      arrowClass?: HTMLAttributes["class"];
+      attachSide?: TooltipContentProps["side"];
+      arrowAlign?: TooltipContentProps["align"];
+      sideOffset?: TooltipContentProps["sideOffset"];
+      noArrow?: boolean;
+    }
+  >(),
+  {
+    attachSide: "top",
+    arrowAlign: "center",
+    sideOffset: 6,
+  },
+);
 const emits = defineEmits<TooltipRootEmits>();
 
 const delegatedProps = computed(() => {
-  const { contentClass: _ccl, arrowClass: _acl, attachSide: _si, arrowAlign: _al, sideOffset: _so, ...delegated } = props;
+  const {
+    contentClass: _ccl,
+    arrowClass: _acl,
+    attachSide: _si,
+    arrowAlign: _al,
+    sideOffset: _so,
+    ...delegated
+  } = props;
   return delegated;
 });
 const forwarded = useForwardPropsEmits(delegatedProps, emits);

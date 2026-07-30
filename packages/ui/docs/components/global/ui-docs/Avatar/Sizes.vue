@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIAvatar } from "~ui/Avatar";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

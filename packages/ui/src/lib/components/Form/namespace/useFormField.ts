@@ -1,5 +1,6 @@
 import { FieldContextKey, useFieldError, useIsFieldDirty, useIsFieldTouched, useIsFieldValid } from "vee-validate";
 import { inject } from "vue";
+
 import { FORM_ITEM_INJECTION_KEY } from "./providers";
 
 export function useFormField() {
@@ -13,8 +14,7 @@ export function useFormField() {
     error: useFieldError(),
   };
 
-  if (!fieldContext)
-    throw new Error("useFormField should be used within <FormField> context provider");
+  if (!fieldContext) throw new Error("useFormField should be used within <FormField> context provider");
 
   const { name } = fieldContext;
   const id = fieldItemContext;

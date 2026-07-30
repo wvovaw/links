@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PopoverCloseProps } from "radix-vue";
+
 import { PopoverClose, useForwardProps } from "radix-vue";
 
 defineOptions({

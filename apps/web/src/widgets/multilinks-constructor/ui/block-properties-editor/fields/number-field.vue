@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UIButton, UIInput, UIInputHint, UIInputLabel } from "@links/ui";
 import type { IBlockPropertyNumber } from "@links/blocks";
+
+import { UIButton, UIInput, UIInputHint, UIInputLabel } from "@links/ui";
 
 interface ITextFieldProps {
   field: IBlockPropertyNumber;
@@ -14,8 +15,7 @@ const model = defineModel<IBlockPropertyNumber["value"]>();
  */
 function stepValue(modifier: 1 | -1) {
   const newVal = (model.value ?? 0) + props.field.step * modifier;
-  if (newVal <= props.field.max && newVal >= props.field.min)
-    model.value = newVal;
+  if (newVal <= props.field.max && newVal >= props.field.min) model.value = newVal;
 }
 </script>
 
@@ -25,15 +25,7 @@ function stepValue(modifier: 1 | -1) {
   </UIInputLabel>
   <div class="flex gap-2">
     <UIButton variant="ghost" icon="i-lucide:minus" icon-pos="right" @click="stepValue(-1)" />
-    <UIInput
-      :id="id"
-      v-model="model"
-      full-width
-      type="number"
-      :min="field.min"
-      :max="field.max"
-      :step="field.step"
-    />
+    <UIInput :id="id" v-model="model" full-width type="number" :min="field.min" :max="field.max" :step="field.step" />
     <UIButton variant="ghost" icon="i-lucide:plus" icon-pos="right" @click="stepValue(1)" />
   </div>
   <UIInputHint v-if="field.hint">

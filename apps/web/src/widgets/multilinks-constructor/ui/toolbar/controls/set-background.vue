@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UISheet, UITooltip } from "@links/ui";
+
 import { BackgroundsList } from "../../backgrounds-list";
 
 const [show, setShow] = useToggle();
@@ -10,9 +11,7 @@ const [show, setShow] = useToggle();
     <template #trigger>
       <UIButton icon="i-lucide:image" @click="setShow(true)" />
     </template>
-    <template #content>
-      Set background
-    </template>
+    <template #content> Set background </template>
   </UITooltip>
   <UISheet.Root v-model:open="show">
     <UISheet.Content side="left">

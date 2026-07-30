@@ -53,7 +53,7 @@ export default defineConfig({
 });
 ```
 
-Import `@unocss/reset/tailwind.css` and `@ilnks/ui/theme.css`  in the entry point of your app
+Import `@unocss/reset/tailwind.css` and `@ilnks/ui/theme.css` in the entry point of your app
 
 ```ts:main.ts
 import "@unocss/reset/tailwind.css";

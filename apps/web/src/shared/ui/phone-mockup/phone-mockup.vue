@@ -59,7 +59,7 @@
   height: 4px;
   border-radius: 5px;
   background-color: #0c0b0e;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 .artboard-demo {
   background-color: var(--goku);
@@ -68,6 +68,8 @@
   align-items: center;
   justify-content: flex-start;
   border-radius: 2.5rem;
-  box-shadow: 0 1px 3px #0000001a, 0 1px 2px #0000000f;
+  box-shadow:
+    0 1px 3px #0000001a,
+    0 1px 2px #0000000f;
 }
 </style>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { IBlock } from "@links/blocks";
-import PageNotFound from "./private/page-not-found.vue";
-import OverlayHud from "./private/overlay-hud.vue";
-import { LinksApi } from "~shared/api/backend";
+
 import { LinkPageRenderer } from "~features/links";
+import { LinksApi } from "~shared/api/backend";
+
+import OverlayHud from "./private/overlay-hud.vue";
+import PageNotFound from "./private/page-not-found.vue";
 
 const props = defineProps<{
   linkId: string;
@@ -35,10 +37,7 @@ if (data?.value) {
   </template>
   <template v-else-if="blocks">
     <div class="relative min-h-100vh flex flex-col">
-      <LinkPageRenderer
-        :blocks="blocks"
-        :background-css="background"
-      />
+      <LinkPageRenderer :blocks="blocks" :background-css="background" />
       <OverlayHud :link-id="linkId" :link-name="linkName" />
     </div>
   </template>

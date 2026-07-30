@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
+
+import Clear from "./namespace/Clear.vue";
+import FileList from "./namespace/FileList.vue";
 import Root from "./namespace/Root.vue";
 import Trigger from "./namespace/Trigger.vue";
-import FileList from "./namespace/FileList.vue";
-import Clear from "./namespace/Clear.vue";
 
 const props = defineProps<{
   modelValue?: File | File[] | null;
@@ -26,8 +27,8 @@ const emits = defineEmits<{
     :multiple="multiple"
     :accept="accept"
     :class="props.class"
-    @update:model-value="e => emits('update:modelValue', e)"
-    @change="e => emits('change', e)"
+    @update:model-value="(e) => emits('update:modelValue', e)"
+    @change="(e) => emits('change', e)"
   >
     <div class="flex flex-col gap-3">
       <div class="flex items-center gap-2">
@@ -46,7 +47,9 @@ const emits = defineEmits<{
       </div>
       <FileList class="flex flex-wrap gap-2">
         <template #default="{ file, remove }">
-          <div class="flex items-center gap-2 px-3 py-1.5 rounded-moon-i-xs bg-goku border border-beerus text-moon-14 text-bulma whitespace-nowrap max-w-full">
+          <div
+            class="flex items-center gap-2 px-3 py-1.5 rounded-moon-i-xs bg-goku border border-beerus text-moon-14 text-bulma whitespace-nowrap max-w-full"
+          >
             <span class="i-lucide:file w-4 h-4 shrink-0 text-trunks" />
             <span class="truncate">{{ file.name }}</span>
             <button

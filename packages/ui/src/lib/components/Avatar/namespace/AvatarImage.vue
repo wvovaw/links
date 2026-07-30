@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
 import { AvatarImage, type AvatarImageProps, useForwardProps } from "radix-vue";
+import { type HTMLAttributes, computed } from "vue";
 
-const props = defineProps<AvatarImageProps & {
-  class?: HTMLAttributes["class"];
-}>();
+const props = defineProps<
+  AvatarImageProps & {
+    class?: HTMLAttributes["class"];
+  }
+>();
 const delegatedProps = computed(() => {
   const { class: _cl, ...delegated } = props;
   return delegated;

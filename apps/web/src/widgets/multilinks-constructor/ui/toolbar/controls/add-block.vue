@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UISheet, UITooltip } from "@links/ui";
+
 import { BlocksList } from "../../blocks-list";
 
 const [show, setShow] = useToggle();
@@ -10,9 +11,7 @@ const [show, setShow] = useToggle();
     <template #trigger>
       <UIButton icon="i-lucide:square-plus" @click="setShow(true)" />
     </template>
-    <template #content>
-      Add a block
-    </template>
+    <template #content> Add a block </template>
   </UITooltip>
   <UISheet.Root v-model:open="show">
     <UISheet.Content side="left">

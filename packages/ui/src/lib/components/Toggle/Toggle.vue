@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { Toggle, type ToggleEmits, type ToggleProps, useForwardPropsEmits } from "radix-vue";
 import { computed } from "vue";
+
 import type { ToggleVariants } from "./private/ToggleItem.vue";
+
 import ToggleItem from "./private/ToggleItem.vue";
 
 const emits = defineEmits<ToggleEmits>();
@@ -24,10 +26,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>
-  <Toggle
-    v-bind="forwarded"
-    as-child
-  >
+  <Toggle v-bind="forwarded" as-child>
     <ToggleItem
       :color="color"
       :variant="variant"

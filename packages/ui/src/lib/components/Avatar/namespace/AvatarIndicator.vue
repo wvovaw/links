@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { type VariantProps, cva } from "cva";
 import type { HTMLAttributes } from "vue";
+
+import { type VariantProps, cva } from "cva";
 
 const avatarIndicatorVariant = cva("absolute w-3 h-3 border border-2px border-gohan rounded-full", {
   variants: {
@@ -41,5 +42,9 @@ const props = defineProps<{
 
 <template>
   <span :class="[avatarIndicatorVariant({ vertical, horizontal, color }), props.class]" aria-hidden="true" />
-  <span v-if="ping" :class="[avatarIndicatorVariant({ vertical, horizontal, color, ping }), props.class]" aria-hidden="true" />
+  <span
+    v-if="ping"
+    :class="[avatarIndicatorVariant({ vertical, horizontal, color, ping }), props.class]"
+    aria-hidden="true"
+  />
 </template>

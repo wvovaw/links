@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type HTMLAttributes, onMounted, ref, watch } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
+import { type HTMLAttributes, onMounted, ref, watch } from "vue";
 
 const textAreaVariants = cva("", {
   variants: {
@@ -22,24 +22,27 @@ const textAreaVariants = cva("", {
 });
 type TextAreaVariants = VariantProps<typeof textAreaVariants>;
 
-const props = withDefaults(defineProps<{
-  class?: HTMLAttributes["class"];
-  defaultValue?: string;
-  modelValue?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  readOnly?: boolean;
-  color?: TextAreaVariants["color"];
-  error?: boolean;
-  errorMessage?: string;
-  resize?: TextAreaVariants["resize"];
-  rows?: number;
-  dir?: "ltr" | "rtl";
-}>(), {
-  errorMessage: "Input error",
-  resize: "both",
-  rows: 2,
-});
+const props = withDefaults(
+  defineProps<{
+    class?: HTMLAttributes["class"];
+    defaultValue?: string;
+    modelValue?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    color?: TextAreaVariants["color"];
+    error?: boolean;
+    errorMessage?: string;
+    resize?: TextAreaVariants["resize"];
+    rows?: number;
+    dir?: "ltr" | "rtl";
+  }>(),
+  {
+    errorMessage: "Input error",
+    resize: "both",
+    rows: 2,
+  },
+);
 
 const emits = defineEmits<{
   "update:modelValue": [payload: string | number];
@@ -59,14 +62,15 @@ function cleanError() {
   inpEl.value?.setCustomValidity("");
   inpEl.value?.removeAttribute("aria-invalid");
 }
-watch(() => props.error, (err) => {
-  if (err)
-    setError();
-  else cleanError();
-});
+watch(
+  () => props.error,
+  (err) => {
+    if (err) setError();
+    else cleanError();
+  },
+);
 onMounted(() => {
-  if (props.error)
-    setError();
+  if (props.error) setError();
 });
 </script>
 

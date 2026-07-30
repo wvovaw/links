@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UIScrollArea, UITag } from "@links/ui";
+
 import { useConstructorStore } from "../../model";
 
 const backgrounds = {

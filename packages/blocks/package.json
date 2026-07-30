@@ -1,33 +1,33 @@
 {
   "name": "@links/blocks",
-  "type": "module",
   "version": "0.0.1",
   "private": true,
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "types": "./dist/main.d.ts",
-      "import": "./dist/main.js"
-    }
-  },
-  "module": "./dist/main.js",
-  "types": "./dist/main.d.ts",
   "files": [
     "dist"
   ],
+  "type": "module",
+  "sideEffects": false,
+  "module": "./dist/main.mjs",
+  "types": "./dist/main.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.mts",
+      "import": "./dist/main.mjs"
+    }
+  },
   "scripts": {
     "prepare": "pnpm run build",
-    "dev": "tsup --watch",
-    "build": "tsup",
-    "lint": "eslint --fix .",
+    "dev": "tsdown -w",
+    "build": "tsdown",
+    "lint": "oxlint . --fix",
+    "fmt": "oxfmt . write",
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.15.0",
-    "eslint": "^9.1.0",
-    "eslint-plugin-format": "^0.1.1",
-    "eslint-plugin-import": "^2.29.1",
-    "tsup": "^8.5.1",
-    "typescript": "^5.5.3"
+    "codestyle": "workspace:*",
+    "oxfmt": "^0.44.0",
+    "oxlint": "^1.59.0",
+    "tsdown": "^0.22.14",
+    "typescript": "^7.0.2"
   }
 }

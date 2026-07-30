@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UIAvatar, UIDropdownMenu } from "@links/ui";
+
 import { useSessionStore } from "../../model";
 
 const sessionStore = useSessionStore();
@@ -25,9 +26,7 @@ const [isOpen, toggle] = useToggle(false);
     </UIDropdownMenu.Trigger>
     <UIDropdownMenu.Content class="mx-1 border border-beerus" align="start" :side-offset="20">
       <slot>
-        <DevOnly>
-          Provide a dropdown menu items
-        </DevOnly>
+        <DevOnly> Provide a dropdown menu items </DevOnly>
       </slot>
     </UIDropdownMenu.Content>
   </UIDropdownMenu.Root>

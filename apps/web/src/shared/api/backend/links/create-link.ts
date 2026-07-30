@@ -1,6 +1,7 @@
-import { getErrorMessage } from "../errors";
-import { useApiClient } from "../client";
 import type { Link } from "../types";
+
+import { useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
 
 export interface ICreateLinkData {
   slug: string;
@@ -15,8 +16,7 @@ export async function createLink({ slug, title }: ICreateLinkData): Promise<Link
       body: { slug, title },
     });
     return data;
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }

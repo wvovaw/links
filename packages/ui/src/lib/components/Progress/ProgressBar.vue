@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from "vue";
 import type { ProgressRootProps } from "radix-vue";
-import { ProgressIndicator, ProgressRoot } from "radix-vue";
+
 import { type VariantProps, cva } from "cva";
+import { ProgressIndicator, ProgressRoot } from "radix-vue";
+import { type HTMLAttributes, computed } from "vue";
 
 const progressRootVariants = cva("relative overflow-hidden w-full rounded-full bg-beerus", {
   variants: {
@@ -19,19 +20,23 @@ const progressIndicatorVariants = cva("h-full w-full flex-1 rounded-full transit
   defaultVariants: {
     color: "piccolo",
   },
-
 });
 type ProgressRootVariants = VariantProps<typeof progressRootVariants>;
 type ProgressIndicatorVariants = VariantProps<typeof progressIndicatorVariants>;
 
-const props = withDefaults(defineProps<ProgressRootProps & {
-  class?: HTMLAttributes["class"];
-  size?: ProgressRootVariants["size"];
-  color?: ProgressIndicatorVariants["color"];
-}>(), {
-  modelValue: 0,
-  max: 100,
-});
+const props = withDefaults(
+  defineProps<
+    ProgressRootProps & {
+      class?: HTMLAttributes["class"];
+      size?: ProgressRootVariants["size"];
+      color?: ProgressIndicatorVariants["color"];
+    }
+  >(),
+  {
+    modelValue: 0,
+    max: 100,
+  },
+);
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;
@@ -40,10 +45,7 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <ProgressRoot
-    :class="[progressRootVariants({ size }), props.class]"
-    v-bind="delegatedProps"
-  >
+  <ProgressRoot :class="[progressRootVariants({ size }), props.class]" v-bind="delegatedProps">
     <ProgressIndicator
       class="indicator"
       :class="progressIndicatorVariants({ color })"
@@ -62,10 +64,10 @@ const delegatedProps = computed(() => {
     transform: translateX(0) scaleX(0);
   }
   40% {
-      transform: translateX(0) scaleX(0.4);
+    transform: translateX(0) scaleX(0.4);
   }
   100% {
-      transform: translateX(100%) scaleX(0.5);
+    transform: translateX(100%) scaleX(0.5);
   }
 }
 </style>

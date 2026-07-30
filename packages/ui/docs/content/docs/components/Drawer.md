@@ -7,11 +7,12 @@ description: A Drawer component is a mobile friendly Modal dialog.
 
 `Drawer` is a touch friendly dialog component. It's widely used in mobile apps. It supports a slide gesture to dismiss the dialog.
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="Drawer.vue" lang="vue"}
+
 ```vue
 <template>
   <Drawer.Root>
@@ -37,9 +38,10 @@ ___
   </Drawer.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 

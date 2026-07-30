@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import { AvatarRoot } from "radix-vue";
+
 import { type VariantProps, cva } from "cva";
+import { AvatarRoot } from "radix-vue";
 
 const avatarVariant = cva(
   "relative overflow-hidden uppercase font-medium inline-flex items-center justify-center select-none overflow-hidden shrink-0 text-bulma bg-goku",

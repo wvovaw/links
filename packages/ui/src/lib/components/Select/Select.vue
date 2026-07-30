@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type HTMLAttributes, onMounted, onUpdated, ref, watch } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
+import { type HTMLAttributes, onMounted, onUpdated, ref, watch } from "vue";
 
 const selectVariants = cva("", {
   variants: {
@@ -30,20 +30,23 @@ const arrowVariants = cva("i-lucide:chevron-down", {
 });
 type SelectVariants = VariantProps<typeof selectVariants>;
 
-const props = withDefaults(defineProps<{
-  class?: HTMLAttributes["class"];
-  modelValue?: string | number;
-  disabled?: boolean;
-  multiple?: boolean;
-  color?: SelectVariants["color"];
-  size?: SelectVariants["size"];
-  error?: boolean;
-  errorMessage?: string;
-  immediateValidation?: boolean;
-  dir?: "ltr" | "rtl";
-}>(), {
-  errorMessage: "Select error",
-});
+const props = withDefaults(
+  defineProps<{
+    class?: HTMLAttributes["class"];
+    modelValue?: string | number;
+    disabled?: boolean;
+    multiple?: boolean;
+    color?: SelectVariants["color"];
+    size?: SelectVariants["size"];
+    error?: boolean;
+    errorMessage?: string;
+    immediateValidation?: boolean;
+    dir?: "ltr" | "rtl";
+  }>(),
+  {
+    errorMessage: "Select error",
+  },
+);
 
 const emits = defineEmits<{
   "update:modelValue": [payload: string | number];
@@ -62,19 +65,19 @@ function cleanError() {
   selEl.value?.setCustomValidity("");
   selEl.value?.removeAttribute("aria-invalid");
 }
-watch(() => props.error, (err) => {
-  if (err)
-    setError();
-  else cleanError();
-});
+watch(
+  () => props.error,
+  (err) => {
+    if (err) setError();
+    else cleanError();
+  },
+);
 onUpdated(() => {
-  if (props.error)
-    setError();
+  if (props.error) setError();
 });
 onMounted(() => {
   if (props.immediateValidation) {
-    if (props.error)
-      setError();
+    if (props.error) setError();
   }
 });
 </script>
@@ -92,7 +95,6 @@ onMounted(() => {
       <slot />
     </select>
     <span :class="arrowVariants({ size })" />
-
   </span>
 </template>
 

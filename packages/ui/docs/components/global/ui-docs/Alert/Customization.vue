@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIAlert } from "~ui/Alerrt";
 import { UIButton } from "~ui/Button";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

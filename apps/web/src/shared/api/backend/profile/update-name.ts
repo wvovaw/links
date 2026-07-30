@@ -1,6 +1,7 @@
-import { getErrorMessage } from "../errors";
-import { useApiClient } from "../client";
 import type { User } from "../types";
+
+import { useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
 
 export interface IUserUpdateNameData {
   name: string;
@@ -14,8 +15,7 @@ export async function updateName({ name }: IUserUpdateNameData): Promise<User | 
       body: { name },
     });
     return data;
-  }
-  catch {
+  } catch {
     throw new Error(getErrorMessage("unknown"));
   }
 }

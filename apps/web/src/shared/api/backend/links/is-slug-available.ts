@@ -5,8 +5,7 @@ export async function isSlugAvailable(slug: string): Promise<boolean> {
     const api = useApiClient();
     const data = await api<{ available: boolean }>(`/links/slug/${slug}/availability`);
     return data.available;
-  }
-  catch {
+  } catch {
     return false;
   }
 }

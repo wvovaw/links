@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { IBlock } from "@links/blocks";
-import NotExistPage from "./not-exist-page.vue";
-import { BackendApi } from "~shared/api";
 import type { PublicLink } from "~shared/api/backend";
+
 import { LinkPageRenderer } from "~features/links";
+import { BackendApi } from "~shared/api";
 import { LinkFooter } from "~widgets/link-footer";
+
+import NotExistPage from "./not-exist-page.vue";
 
 const props = defineProps<{
   link: string;
@@ -13,7 +15,9 @@ const props = defineProps<{
 const { locale } = useI18n();
 const config = useRuntimeConfig();
 
-const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${props.link}`, () => BackendApi.PublicApi.getPublicLink(props.link));
+const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${props.link}`, () =>
+  BackendApi.PublicApi.getPublicLink(props.link),
+);
 
 const blocks = ref<IBlock[]>([]);
 const seo = ref<Record<string, any>>({});
@@ -39,9 +43,7 @@ if (pageData.value) {
     ogType: "website",
   });
   useHead({
-    link: [
-      { rel: "canonical", href: url },
-    ],
+    link: [{ rel: "canonical", href: url }],
   });
 }
 </script>
@@ -51,10 +53,7 @@ if (pageData.value) {
     <Body>
       <main class="min-h-100dvh flex flex-col" :style="bg">
         <NotExistPage v-if="error?.status === 404" />
-        <LinkPageRenderer
-          v-else
-          :blocks="blocks"
-        />
+        <LinkPageRenderer v-else :blocks="blocks" />
         <LinkFooter />
       </main>
     </Body>

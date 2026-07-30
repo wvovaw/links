@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UISwitch } from "~ui/Switch";
 import { UIButton } from "~ui/Button";
+import { UISwitch } from "~ui/Switch";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 function handleSubmit(e: SubmitEvent) {
   const { mySwitch } = Object.fromEntries(new FormData(e.target as HTMLFormElement));
@@ -19,9 +20,7 @@ function handleSubmit(e: SubmitEvent) {
         <label for="switch">Some switch</label>
         <UISwitch id="switch" size="sm" name="mySwitch" class="self-center" aria-label="Some switch" />
       </div>
-      <UIButton type="submit" size="xs">
-        Submit
-      </UIButton>
+      <UIButton type="submit" size="xs"> Submit </UIButton>
     </form>
   </PreviewFrame>
 </template>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDrawer } from "~ui/Drawer";
-import { UIDialog } from "~ui/Dialog";
 import { UIButton } from "~ui/Button";
+import { UIDialog } from "~ui/Dialog";
+import { UIDrawer } from "~ui/Drawer";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const [UseTemplate, ContentComp] = createReusableTemplate();
 const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -11,9 +12,7 @@ const isOpen = ref(false);
 
 <template>
   <UseTemplate>
-    <div>
-      Some generic content
-    </div>
+    <div>Some generic content</div>
   </UseTemplate>
 
   <PreviewFrame>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UITable as Table } from "~ui/Table";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

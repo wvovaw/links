@@ -4,13 +4,11 @@ export interface StorageUrlOptions {
 }
 
 export function resolveStorageUrl(path: string | undefined | null, options: StorageUrlOptions): string | undefined {
-  if (!path)
-    return path ?? undefined;
+  if (!path) return path ?? undefined;
   return path.startsWith("/") ? `${options.origin}${path}` : path;
 }
 
 export function resolveImageUrl(fileId: string | undefined | null, options: StorageUrlOptions): string | undefined {
-  if (!fileId)
-    return undefined;
+  if (!fileId) return undefined;
   return `${options.origin}/storage/images/${fileId}`;
 }

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIAlert } from "~ui/Alerrt";
 import { UIButton } from "~ui/Button";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
   <PreviewFrame>
-    <UIAlert.Root>
-      Minimal alert
-    </UIAlert.Root>
+    <UIAlert.Root> Minimal alert </UIAlert.Root>
     <UIAlert.Root>
       <UIAlert.Title>With title</UIAlert.Title>
       <UIAlert.Description>And description</UIAlert.Description>

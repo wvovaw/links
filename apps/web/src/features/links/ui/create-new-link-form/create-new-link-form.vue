@@ -2,9 +2,10 @@
 import { UIButton, UIForm, UIInsertInput, useToast } from "@links/ui";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { useForm } from "vee-validate";
-import { createLinkSchema } from "../../model/schema";
-import isLinkNameAvailable from "../../api/is-link-name-available";
+
 import createNewLinkAndName from "../../api/create-new-link-and-name";
+import isLinkNameAvailable from "../../api/is-link-name-available";
+import { createLinkSchema } from "../../model/schema";
 
 const { push } = useRouter();
 const toast = useToast();
@@ -13,7 +14,9 @@ const { handleSubmit, setFieldError, isSubmitting } = useForm({ validationSchema
 
 // Use memoized version of the request
 const isLinkAvailableMem = useMemoize(isLinkNameAvailable);
-onUnmounted(() => { isLinkAvailableMem.clear(); });
+onUnmounted(() => {
+  isLinkAvailableMem.clear();
+});
 
 const onSubmit = handleSubmit(async (data) => {
   const available = await isLinkAvailableMem(data.slug);
@@ -24,10 +27,8 @@ const onSubmit = handleSubmit(async (data) => {
 
   try {
     const link = await createNewLinkAndName({ slug: data.slug, title: data.title });
-    if (link)
-      push(`/links/constructor/${link.id}`);
-  }
-  catch (e: unknown) {
+    if (link) push(`/links/constructor/${link.id}`);
+  } catch (e: unknown) {
     if (e instanceof Error) {
       toast({
         title: "Create link error",
@@ -54,9 +55,7 @@ const onSubmit = handleSubmit(async (data) => {
           />
         </UIForm.Control>
         <UIForm.ErrorMessage v-show="errorMessage" />
-        <UIForm.Description v-show="!errorMessage">
-          This word will be in the url to the link
-        </UIForm.Description>
+        <UIForm.Description v-show="!errorMessage"> This word will be in the url to the link </UIForm.Description>
       </UIForm.Item>
     </UIForm.Field>
     <UIForm.Field v-slot="{ componentField, errorMessage }" name="title">
@@ -77,16 +76,7 @@ const onSubmit = handleSubmit(async (data) => {
         </UIForm.Description>
       </UIForm.Item>
     </UIForm.Field>
-    <UIButton
-      type="submit"
-      :loading="isSubmitting"
-      icon-pos="right"
-      :disabled="isSubmitting"
-    >
-      Continue
-    </UIButton>
-    <span class="text-center text-moon-10-caption text-trunks">
-      All the settings above can be changed later
-    </span>
+    <UIButton type="submit" :loading="isSubmitting" icon-pos="right" :disabled="isSubmitting"> Continue </UIButton>
+    <span class="text-center text-moon-10-caption text-trunks"> All the settings above can be changed later </span>
   </form>
 </template>

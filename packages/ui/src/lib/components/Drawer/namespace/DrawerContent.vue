@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { DrawerContent, DrawerOverlay, DrawerPortal } from "vaul-vue";
 import type { DialogContentEmits, DialogContentProps } from "radix-vue";
-import { useForwardPropsEmits } from "radix-vue";
 import type { HtmlHTMLAttributes } from "vue";
+
+import { useForwardPropsEmits } from "radix-vue";
+import { DrawerContent, DrawerOverlay, DrawerPortal } from "vaul-vue";
 
 const props = defineProps<DialogContentProps & { class?: HtmlHTMLAttributes["class"] }>();
 const emits = defineEmits<DialogContentEmits>();

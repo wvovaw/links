@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDropdownMenu as DD } from "~ui/DropdownMenu";
 import { UIButton } from "~ui/Button";
+import { UIDropdownMenu as DD } from "~ui/DropdownMenu";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
@@ -11,9 +12,7 @@ import { UIButton } from "~ui/Button";
         <UIButton>Open</UIButton>
       </DD.Trigger>
       <DD.Content>
-        <DD.Label class="font-semibold">
-          My Account
-        </DD.Label>
+        <DD.Label class="font-semibold"> My Account </DD.Label>
         <DD.Separator />
         <DD.Group>
           <DD.Item>

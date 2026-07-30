@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UIFileUpload, UIInputHint, UIInputLabel } from "@links/ui";
 import type { IBlockPropertyImage } from "@links/blocks";
+
+import { UIFileUpload, UIInputHint, UIInputLabel } from "@links/ui";
 import { StorageApi } from "~shared/api/backend";
 
 interface IImageFieldProps {
@@ -15,8 +16,7 @@ const isUploading = ref(false);
 const file = ref<File | null>(model.value ? new File([], model.value) : null);
 
 const config = useRuntimeConfig();
-const previewUrl = computed(() =>
-  StorageApi.resolveImageUrl(model.value, { origin: config.public.backendUrl }));
+const previewUrl = computed(() => StorageApi.resolveImageUrl(model.value, { origin: config.public.backendUrl }));
 
 async function handleChange(payload: File | File[] | null) {
   const picked = Array.isArray(payload) ? payload[0] : payload;
@@ -28,8 +28,7 @@ async function handleChange(payload: File | File[] | null) {
   isUploading.value = true;
   try {
     model.value = await StorageApi.uploadImage(picked);
-  }
-  finally {
+  } finally {
     isUploading.value = false;
   }
 }
@@ -56,13 +55,15 @@ async function handleChange(payload: File | File[] | null) {
 
     <UIFileUpload.FileList>
       <template #default="{ file: item, remove }">
-        <div class="flex items-center gap-2 border border-beerus rounded-moon-i-sm bg-goku p-1.5 text-moon-14 text-bulma">
+        <div
+          class="flex items-center gap-2 border border-beerus rounded-moon-i-sm bg-goku p-1.5 text-moon-14 text-bulma"
+        >
           <img
             v-if="previewUrl"
             :src="previewUrl"
             :alt="field.label"
             class="h-9 w-9 shrink-0 rounded-moon-i-xs object-cover"
-          >
+          />
           <span class="min-w-0 flex-1 truncate">{{ item.name }}</span>
           <button
             type="button"

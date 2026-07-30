@@ -62,8 +62,7 @@ function createBlock(id: string): IBlock<"Button"> {
 }
 
 function migrateBlock(block: IBlock): IBlock {
-  if (!block.version)
-    block.version = 0;
+  if (!block.version) block.version = 0;
   if (block.version === 0) {
     (block.properties.border as unknown as IBlockPropertyColor) = {
       id: block.properties["font-size"].id,

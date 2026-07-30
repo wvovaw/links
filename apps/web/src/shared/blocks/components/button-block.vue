@@ -19,28 +19,22 @@ const bp = computed(() => {
 </script>
 
 <template>
-  <a
-    :href="bp.link"
-    target="_blank"
-    class="button-block"
-  >
+  <a :href="bp.link" target="_blank" class="button-block">
     <div class="button-block__text">
       <template v-if="bp.text">
         {{ bp.text }}
       </template>
-      <template v-else>
-      &ThinSpace;
-      </template>
+      <template v-else> &ThinSpace; </template>
     </div>
   </a>
 </template>
 
 <style>
 .button-block {
-  color: v-bind('bp.foreground');
-  background: v-bind('bp.background');
-  font-size: v-bind('bp.fontSize');
-  border-color: v-bind('bp.border');
+  color: v-bind("bp.foreground");
+  background: v-bind("bp.background");
+  font-size: v-bind("bp.fontSize");
+  border-color: v-bind("bp.border");
   font-weight: 600;
   width: 100%;
   height: 3.5rem;

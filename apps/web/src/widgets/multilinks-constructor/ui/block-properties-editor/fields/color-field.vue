@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { UIInput, UIInputHint, UIInputLabel } from "@links/ui";
 import type { IBlockPropertyColor } from "@links/blocks";
+
+import { UIInput, UIInputHint, UIInputLabel } from "@links/ui";
 
 interface IColorFieldProps {
   field: IBlockPropertyColor;
@@ -20,14 +21,9 @@ const debounce = useDebounceFn((f: () => void) => f(), 200);
       :model-value="model"
       :value="model"
       type="color"
-      @input="(e) => debounce(() => model = (e.target as HTMLInputElement).value)"
-    >
-    <UIInput
-      :id="id"
-      v-model="model"
-      type="text"
-      full-width
+      @input="(e) => debounce(() => (model = (e.target as HTMLInputElement).value))"
     />
+    <UIInput :id="id" v-model="model" type="text" full-width />
   </div>
   <UIInputHint v-if="field.hint">
     {{ field.hint }}
@@ -52,15 +48,15 @@ input[type="color"] {
 ::-webkit-color-swatch-wrapper {
   padding: 0;
 }
-::-webkit-color-swatch{
+::-webkit-color-swatch {
   border: 0;
   border-radius: 0;
 }
 ::-moz-color-swatch,
-::-moz-focus-inner{
+::-moz-focus-inner {
   border: 0;
 }
-::-moz-focus-inner{
+::-moz-focus-inner {
   padding: 0;
 }
 </style>

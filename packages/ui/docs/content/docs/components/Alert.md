@@ -7,11 +7,12 @@ description: A UI component displaying a callout for user attention.
 
 `Alert` is a UI component displaying a callout for user attention. This component is open for any kind of customization via `class` attribute.
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="Alert.vue" lang="vue"}
+
 ```vue
 <template>
   <Alert.Root>
@@ -21,9 +22,10 @@ ___
   </Alert.Root>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 
@@ -35,7 +37,7 @@ ___
 
 :ui-docs-alert-customization
 
-___
+---
 
 ## Accessibility
 

@@ -9,13 +9,14 @@ draft: true
 
 `Toast` component is a notification message that can be displayed on demand after some user action or error or whatever else.
 
-___
+---
 
 ## Anatomy
 
 You can place the `<Toaster />` component in the entry of your app and then emit notifications using `useToast().toast({ ... })`
 
 ::ui-docs-code-block{filename="App.vue" lang="vue"}
+
 ```vue
 <script setup>
 import { UIToaster } from "@links/ui";
@@ -25,9 +26,11 @@ import { UIToaster } from "@links/ui";
   <UIToaster />
 </template>
 ```
+
 ::
 
 ::ui-docs-code-block{filename="~features/inbox/ui/remove-letter.vue" lang="vue"}
+
 ```vue
 <script setup lang="ts">
 import { h } from "vue";
@@ -39,22 +42,26 @@ function deleteLetter() {
   toast({
     title: "Letter has been deleted",
     content: "The letter has been successfully deleted",
-    action: h(UIToast.Action, { altText: "Undo", onClick: () => alert("Can't undo this action :o") }, { default: () => "Undo" }),
+    action: h(
+      UIToast.Action,
+      { altText: "Undo", onClick: () => alert("Can't undo this action :o") },
+      { default: () => "Undo" },
+    ),
   });
 }
 </script>
 
 <template>
-  <UIButton @click="deleteLetter">
-    Delete the letter
-  </UIButton>
+  <UIButton @click="deleteLetter"> Delete the letter </UIButton>
 </template>
 ```
+
 ::
 
 Or you can write an action using TSX
 
 ::ui-docs-code-block{filename="~features/inbox/ui/remove-letter.vue" lang="vue"}
+
 ```vue
 <script setup lang="tsx">
 import { defineComponent } from "vue";
@@ -67,27 +74,30 @@ const UndoAction = defineComponent(() => {
     alert("Can't undo this action :o");
   }
   // @ts-expect-error jsx click event is onClick, but ts think it is a prop of the component which is undefined
-  return () => <UIToast.Action altText="Undo" onClick={handleAction}>Undo</UIToast.Action>;
+  return () => (
+    <UIToast.Action altText="Undo" onClick={handleAction}>
+      Undo
+    </UIToast.Action>
+  );
 });
 
 function deleteLetter() {
   toast({
     title: "Letter has been deleted",
     content: "The letter has been successfully deleted",
-    action: UndoAction
+    action: UndoAction,
   });
 }
 </script>
 
 <template>
-  <UIButton @click="deleteLetter">
-    Delete the letter
-  </UIButton>
+  <UIButton @click="deleteLetter"> Delete the letter </UIButton>
 </template>
 ```
+
 ::
 
-___
+---
 
 ## Examples
 
@@ -103,11 +113,11 @@ ___
 
 :ui-docs-toast-variants
 
-___
+---
 
 ## API Reference
 
-For building a Toaster component from primitives, instead of using provided `<Toaster />` and `useToast`, follow the  [Radix-Vue docs](https://www.radix-vue.com/components/toast#api-reference).
+For building a Toaster component from primitives, instead of using provided `<Toaster />` and `useToast`, follow the [Radix-Vue docs](https://www.radix-vue.com/components/toast#api-reference).
 
 Here's the fast docummentation of the `<Toaster />`, `useToast`, `<Toast.Root /> and `<Toast.Action />` api's.
 
@@ -117,24 +127,24 @@ Wrapper component for the radix-vue `ToastProvider` and `ToastViewport`. Place i
 
 ### Root
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `as ` | `AsTag` \| Component | No | `li` | Setting a root HTML element. li is default |
-| `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `defaultOpen` | `boolean` | No | `true` | The open state of theh dialog when it is initially rendered. Use when you do not need to control its open state. |
-| `duration` | `number` | No | 5000 | Time in ms that toast should remain visible for. Overrides the value given to `ToastProvider` |
-| `forceMount| `boolean` | No | - | Used to force mount when move control is needed. Useful when controlling animation with vue animation libraries. |
-| `open` | `boolean` | No | - | The controlled open state of the toast. Can be bound as `v-model:open`. |
-| `type` | foreground \| background | No | foreground | Control the sensitivity of the toast for accessibility purposes. For toasts that are the result of a user action, use `foreground`. Toasts generated from background tasks should be `background`. |
-| `variant ` | default \| success \| warning \| error | No | default | Variant of a visual look of a toast |
+| Name          | Type                                   | Required | Default    | Description                                                                                                                                                                                         |
+| ------------- | -------------------------------------- | -------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as `         | `AsTag` \| Component                   | No       | `li`       | Setting a root HTML element. li is default                                                                                                                                                          |
+| `asChild`     | `boolean`                              | No       | -          | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| `defaultOpen` | `boolean`                              | No       | `true`     | The open state of theh dialog when it is initially rendered. Use when you do not need to control its open state.                                                                                    |
+| `duration`    | `number`                               | No       | 5000       | Time in ms that toast should remain visible for. Overrides the value given to `ToastProvider`                                                                                                       |
+| `forceMount   | `boolean`                              | No       | -          | Used to force mount when move control is needed. Useful when controlling animation with vue animation libraries.                                                                                    |
+| `open`        | `boolean`                              | No       | -          | The controlled open state of the toast. Can be bound as `v-model:open`.                                                                                                                             |
+| `type`        | foreground \| background               | No       | foreground | Control the sensitivity of the toast for accessibility purposes. For toasts that are the result of a user action, use `foreground`. Toasts generated from background tasks should be `background`.  |
+| `variant `    | default \| success \| warning \| error | No       | default    | Variant of a visual look of a toast                                                                                                                                                                 |
 
 ### Action
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `altText` | `string` | Yes | - | A short description for an alternate way to carry out the action. For screen reader users who will not be able to navigate to the button easily/quickly. |
-| `as ` | `AsTag` \| Component | No | `div` | Setting a root HTML element. div is default |
-| `asChild` | `boolean` | No | - | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                         |
+| --------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `altText` | `string`             | Yes      | -       | A short description for an alternate way to carry out the action. For screen reader users who will not be able to navigate to the button easily/quickly.                                            |
+| `as `     | `AsTag` \| Component | No       | `div`   | Setting a root HTML element. div is default                                                                                                                                                         |
+| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
 
 ### useToast composible
 
@@ -143,10 +153,7 @@ The `useToast` declares a state with the next types
 ```ts
 import type { Component, VNode } from "vue";
 
-export type StringOrVNode =
-  | string
-  | VNode
-  | (() => VNode);
+export type StringOrVNode = string | VNode | (() => VNode);
 
 interface ToasterToast extends ToastProps {
   id: string;

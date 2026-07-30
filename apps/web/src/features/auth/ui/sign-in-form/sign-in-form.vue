@@ -2,8 +2,9 @@
 import { UIButton, UIForm, UIInput, useToast } from "@links/ui";
 import { toTypedSchema } from "@vee-validate/valibot";
 import { useForm } from "vee-validate";
-import { signInSchema } from "../../model/schema";
+
 import { useAuth } from "../../model";
+import { signInSchema } from "../../model/schema";
 
 const { push } = useRouter();
 const { toast } = useToast();
@@ -19,10 +20,8 @@ const onSubmit = handleSubmit(async (data) => {
     await login({ email, password });
 
     push("/links");
-  }
-  catch (e: unknown) {
-    if (e instanceof Error)
-      showError(e.message);
+  } catch (e: unknown) {
+    if (e instanceof Error) showError(e.message);
   }
 });
 
@@ -48,7 +47,13 @@ function showError(message: string) {
       <UIForm.Item>
         <UIForm.Label>Email</UIForm.Label>
         <UIForm.Control>
-          <UIInput type="email" v-bind="componentField" :error="!!errorMessage" :error-message="errorMessage" full-width />
+          <UIInput
+            type="email"
+            v-bind="componentField"
+            :error="!!errorMessage"
+            :error-message="errorMessage"
+            full-width
+          />
         </UIForm.Control>
         <UIForm.ErrorMessage />
       </UIForm.Item>
@@ -57,12 +62,24 @@ function showError(message: string) {
       <UIForm.Item>
         <UIForm.Label>Password</UIForm.Label>
         <UIForm.Control>
-          <UIInput type="password" v-bind="componentField" :error="!!errorMessage" :error-message="errorMessage" full-width />
+          <UIInput
+            type="password"
+            v-bind="componentField"
+            :error="!!errorMessage"
+            :error-message="errorMessage"
+            full-width
+          />
         </UIForm.Control>
         <UIForm.ErrorMessage />
       </UIForm.Item>
     </UIForm.Field>
-    <UIButton type="submit" full-width :loading="isSubmitting" :disabled="isSubmitting" :animation="signInError ? 'error' : null">
+    <UIButton
+      type="submit"
+      full-width
+      :loading="isSubmitting"
+      :disabled="isSubmitting"
+      :animation="signInError ? 'error' : null"
+    >
       Sign In
     </UIButton>
   </form>

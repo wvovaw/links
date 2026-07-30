@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { UITable, UITag } from "@links/ui";
-import LinkActions from "./link-actions.vue";
-import EmptyState from "./empty-state.vue";
 import { CreateNewLinkDialog, useLinksStore } from "~entities/links";
 import { CreateNewLinkForm } from "~features/links";
 import { LoadingSpinner } from "~shared/ui/loading-spinner";
+
+import EmptyState from "./empty-state.vue";
+import LinkActions from "./link-actions.vue";
 
 const linksStore = useLinksStore();
 const { links } = storeToRefs(linksStore);
@@ -20,9 +21,7 @@ onMounted(() => {
 
 <template>
   <ClientOnly>
-    <div
-      class="flex flex-1 flex-col gap-4 p-4 sm:gap-8 sm:p-10"
-    >
+    <div class="flex flex-1 flex-col gap-4 p-4 sm:gap-8 sm:p-10">
       <UITable.Root class="mx-auto max-w-4xl w-full overflow-hidden rounded-moon-s-md bg-gohan shadow-moon-sm">
         <UITable.Header>
           <UITable.Head>Title</UITable.Head>
@@ -35,9 +34,7 @@ onMounted(() => {
             <UITable.Cell colspan="100%">
               <div v-if="isLoading" class="w-full flex flex-col place-items-center gap-3">
                 <LoadingSpinner class="h-16 w-16 text-trunks" />
-                <div class="text-lg font-semibold">
-                  Loading
-                </div>
+                <div class="text-lg font-semibold">Loading</div>
               </div>
               <EmptyState v-else>
                 <div class="mt-6">
@@ -50,9 +47,7 @@ onMounted(() => {
             </UITable.Cell>
           </UITable.Row>
 
-          <UITable.Row
-            v-for="link of links" :key="link.id"
-          >
+          <UITable.Row v-for="link of links" :key="link.id">
             <UITable.Cell class="w-50% font-semibold">
               {{ link.title }}
             </UITable.Cell>
@@ -60,10 +55,7 @@ onMounted(() => {
               {{ link.slug }}
             </UITable.Cell>
             <UITable.Cell>
-              <UITag
-                class="w-fit"
-                :variant="link.status === 'DRAFT' ? 'outline' : 'fill'"
-              >
+              <UITag class="w-fit" :variant="link.status === 'DRAFT' ? 'outline' : 'fill'">
                 {{ link.status }}
               </UITag>
             </UITable.Cell>

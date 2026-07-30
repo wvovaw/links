@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIDropdownMenu } from "~ui/DropdownMenu";
 import { UIButton } from "~ui/Button";
+import { UIDropdownMenu } from "~ui/DropdownMenu";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
@@ -11,9 +12,7 @@ import { UIButton } from "~ui/Button";
         <UIButton> Open </UIButton>
       </UIDropdownMenu.Trigger>
       <UIDropdownMenu.Content>
-        <UIDropdownMenu.Label class="font-semibold">
-          Menu Title
-        </UIDropdownMenu.Label>
+        <UIDropdownMenu.Label class="font-semibold"> Menu Title </UIDropdownMenu.Label>
         <UIDropdownMenu.Separator />
         <UIDropdownMenu.Group>
           <UIDropdownMenu.Label>Group 1</UIDropdownMenu.Label>

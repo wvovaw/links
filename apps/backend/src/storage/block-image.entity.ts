@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
 import { Link } from "../links/link.entity";
 
 @Entity("block_images")
@@ -9,7 +10,7 @@ export class BlockImage {
   @Column()
   fileId!: string;
 
-  @ManyToOne(() => Link, link => link.images, { onDelete: "CASCADE" })
+  @ManyToOne(() => Link, (link) => link.images, { onDelete: "CASCADE" })
   link!: Link;
 
   @CreateDateColumn()

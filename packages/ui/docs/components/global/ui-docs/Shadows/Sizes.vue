@@ -15,48 +15,28 @@ const [SetBlock, Block] = createReusableTemplate();
 
   <div class="flex flex-wrap gap-4">
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        shadow-moon-xs
-      </UtilityTag>
-      <Block class="shadow-moon-xs">
-        xs
-      </Block>
+      <UtilityTag> shadow-moon-xs </UtilityTag>
+      <Block class="shadow-moon-xs"> xs </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        shadow-moon-sm
-      </UtilityTag>
-      <Block class="shadow-moon-sm">
-        sm
-      </Block>
+      <UtilityTag> shadow-moon-sm </UtilityTag>
+      <Block class="shadow-moon-sm"> sm </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        shadow-moon-md
-      </UtilityTag>
-      <Block class="shadow-moon-md">
-        md
-      </Block>
+      <UtilityTag> shadow-moon-md </UtilityTag>
+      <Block class="shadow-moon-md"> md </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        shadow-moon-lg
-      </UtilityTag>
-      <Block class="shadow-moon-lg">
-        lg
-      </Block>
+      <UtilityTag> shadow-moon-lg </UtilityTag>
+      <Block class="shadow-moon-lg"> lg </Block>
     </div>
 
     <div class="flex flex-col items-center gap-4">
-      <UtilityTag>
-        shadow-moon-xl
-      </UtilityTag>
-      <Block class="shadow-moon-xl">
-        xl
-      </Block>
+      <UtilityTag> shadow-moon-xl </UtilityTag>
+      <Block class="shadow-moon-xl"> xl </Block>
     </div>
   </div>
 </template>

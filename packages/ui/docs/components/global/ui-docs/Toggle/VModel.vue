@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewBox from "../PreviewFrame.vue";
 import { UIToggle } from "~ui/Toggle";
+
+import PreviewBox from "../PreviewFrame.vue";
 
 const [state] = useToggle();
 </script>

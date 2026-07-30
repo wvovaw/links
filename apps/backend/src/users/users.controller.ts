@@ -1,13 +1,25 @@
-import { BadRequestException, Body, Controller, Delete, Get, Patch, Put, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CurrentUser } from "../common/current-user.decorator";
+
 import { AuthGuard } from "../common/auth.guard";
+import { CurrentUser } from "../common/current-user.decorator";
 import { LocalStorageService } from "../storage/local-storage.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { User } from "./user.entity";
 import { toUserDto } from "./user.dto";
+import { User } from "./user.entity";
 
 @Controller("users")
 @UseGuards(AuthGuard)
@@ -24,8 +36,7 @@ export class UsersController {
 
   @Patch("me")
   async updateMe(@CurrentUser() user: User, @Body() body: UpdateUserDto) {
-    if (body.name !== undefined)
-      user.name = body.name;
+    if (body.name !== undefined) user.name = body.name;
 
     return toUserDto(await this.users.save(user));
   }
@@ -33,17 +44,14 @@ export class UsersController {
   @Put("me/avatar")
   @UseInterceptors(FileInterceptor("avatar"))
   async updateAvatar(@CurrentUser() user: User, @UploadedFile() file?: Express.Multer.File) {
-    if (!file)
-      throw new BadRequestException("Avatar file is required.");
+    if (!file) throw new BadRequestException("Avatar file is required.");
 
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.mimetype))
       throw new BadRequestException("Only JPEG and PNG avatars are allowed.");
 
-    if (file.size > 5 * 1024 * 1024)
-      throw new BadRequestException("Avatar must be 5 MB or smaller.");
+    if (file.size > 5 * 1024 * 1024) throw new BadRequestException("Avatar must be 5 MB or smaller.");
 
-    if (user.avatarFileId)
-      await this.storage.removeAvatar(user.avatarFileId);
+    if (user.avatarFileId) await this.storage.removeAvatar(user.avatarFileId);
 
     user.avatarFileId = await this.storage.saveAvatar(file);
     return toUserDto(await this.users.save(user));
@@ -51,8 +59,7 @@ export class UsersController {
 
   @Delete("me/avatar")
   async removeAvatar(@CurrentUser() user: User) {
-    if (user.avatarFileId)
-      await this.storage.removeAvatar(user.avatarFileId);
+    if (user.avatarFileId) await this.storage.removeAvatar(user.avatarFileId);
 
     user.avatarFileId = null;
     return toUserDto(await this.users.save(user));

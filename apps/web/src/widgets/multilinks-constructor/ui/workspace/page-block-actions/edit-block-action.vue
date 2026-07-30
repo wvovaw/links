@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { VisuallyHidden } from "radix-vue";
 import { UIDrawer } from "@links/ui";
+import { VisuallyHidden } from "radix-vue";
+
 import { BlockPropertiesEditor } from "../../block-properties-editor";
 import ActionButton from "./action-button.vue";
 
@@ -12,9 +13,7 @@ defineProps<{
 <template>
   <UIDrawer.Root>
     <UIDrawer.Trigger as-child>
-      <ActionButton
-        icon="i-lucide:pencil"
-      />
+      <ActionButton icon="i-lucide:pencil" />
     </UIDrawer.Trigger>
     <UIDrawer.Content>
       <UIDrawer.Header>

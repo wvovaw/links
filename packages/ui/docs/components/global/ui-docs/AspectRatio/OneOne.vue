@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIAspectRatio } from "~ui/AspectRatio";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
@@ -11,7 +12,7 @@ import { UIAspectRatio } from "~ui/AspectRatio";
           class="h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1709603945846-6901ed447ecd?w=920"
           alt="Photo by Marek Piwnicki on Unsplash"
-        >
+        />
       </UIAspectRatio>
     </div>
   </PreviewFrame>

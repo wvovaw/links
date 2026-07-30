@@ -1,22 +1,27 @@
-import { defineConfig, presetIcons, presetTypography, presetUno, presetWebFonts, transformerVariantGroup } from "unocss";
-import presetAnimations from "unocss-preset-animations";
-import transformerDirectives from "@unocss/transformer-directives";
-import extractorMdc from "@unocss/extractor-mdc";
 import linksUIPreset from "@links/ui/preset";
+import extractorMdc from "@unocss/extractor-mdc";
+import transformerDirectives from "@unocss/transformer-directives";
+import {
+  defineConfig,
+  presetIcons,
+  presetTypography,
+  presetUno,
+  presetWebFonts,
+  transformerVariantGroup,
+} from "unocss";
+import presetAnimations from "unocss-preset-animations";
 
 export default defineConfig({
   safelist: ["i-lucide:sun-medium", "i-lucide:moon", "i-lucide:monitor"],
-  theme: {
-  },
-  shortcuts: {
-  },
+  theme: {},
+  shortcuts: {},
   presets: [
     presetUno(),
     linksUIPreset(),
     presetIcons({
       collections: {
-        "lucide": () => import("@iconify-json/lucide/icons.json").then(i => i.default),
-        "vscode-icons": () => import("@iconify-json/vscode-icons/icons.json").then(i => i.default),
+        "lucide": () => import("@iconify-json/lucide/icons.json").then((i) => i.default),
+        "vscode-icons": () => import("@iconify-json/vscode-icons/icons.json").then((i) => i.default),
       },
     }),
     presetWebFonts({

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UIFileUploadDropzone } from "~ui/FileUpload";
+
+import PreviewFrame from "../PreviewFrame.vue";
 
 const files = ref<File[]>([]);
 </script>

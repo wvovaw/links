@@ -9,8 +9,6 @@ import { UIButton, UITooltip } from "@links/ui";
         <UIButton icon="i-lucide:log-out rotate-y-180" variant="ghost" color="chichi" as="span" />
       </NuxtLinkLocale>
     </template>
-    <template #content>
-      Leave constructor
-    </template>
+    <template #content> Leave constructor </template>
   </UITooltip>
 </template>

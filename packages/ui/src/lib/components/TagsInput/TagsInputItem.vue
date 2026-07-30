@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed, inject } from "vue";
 import type { TagsInputItemProps } from "radix-vue";
+
 import { TagsInputItem, TagsInputItemDelete, TagsInputItemText, useForwardProps } from "radix-vue";
+import { type HTMLAttributes, computed, inject } from "vue";
+
 import { UITag } from "../Tag";
 
-const props = defineProps<TagsInputItemProps & {
-  class?: HTMLAttributes["class"];
-  size?: "sm" | "xs";
-  color?: "default" | "piccolo" | "hit" | "chichi" | "krillin" | "roshi";
-  variant?: "outline" | "fill";
-  iconLeft?: string;
-}>();
+const props = defineProps<
+  TagsInputItemProps & {
+    class?: HTMLAttributes["class"];
+    size?: "sm" | "xs";
+    color?: "default" | "piccolo" | "hit" | "chichi" | "krillin" | "roshi";
+    variant?: "outline" | "fill";
+    iconLeft?: string;
+  }
+>();
 
 const delegatedProps = computed(() => {
   const { class: _, size: _s, color: _co, variant: _v, iconLeft: _il, ...delegated } = props;

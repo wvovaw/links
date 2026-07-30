@@ -7,11 +7,12 @@ description: A UI element representing an element of a radio group.
 
 `RadioItem` is a visual only element used it [RadioGroup](/docs/components/radiogroup), [Menu](/docs/components/menu) and [DropdownMenu](/docs/components/dropdownmenu)
 
-___
+---
 
 ## Anatomy
 
 ::ui-docs-code-block{filename="RadioItem.vue" lang="vue"}
+
 ```vue
 <template>
   <RadioItem.Root>
@@ -19,13 +20,14 @@ ___
   </RadioItem.Root>
 </template>
 ```
+
 ::
 
 ## Examples
 
 ### Default
 
-___
+---
 
 ## API Reference
 
@@ -33,6 +35,6 @@ ___
 
 #### Props
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No | default | Radio items color |
+| Name    | Type                                                                                                                                                                                                                                              | Required | Default | Description       |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | ----------------- |
+| `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No       | default | Radio items color |

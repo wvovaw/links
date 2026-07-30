@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useDropZone } from "@vueuse/core";
 import { type HTMLAttributes, ref } from "vue";
+
 import { useFileUploadContext } from "./useFileUploadContext";
 
 const props = defineProps<{
@@ -13,8 +14,7 @@ const dropZoneRef = ref<HTMLDivElement>();
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
   onDrop(files) {
-    if (files)
-      addFiles(Array.from(files));
+    if (files) addFiles(Array.from(files));
   },
 });
 
@@ -24,11 +24,7 @@ function onClick() {
 </script>
 
 <template>
-  <div
-    ref="dropZoneRef"
-    :class="props.class"
-    @click="onClick"
-  >
+  <div ref="dropZoneRef" :class="props.class" @click="onClick">
     <slot :is-over="isOverDropZone" />
   </div>
 </template>

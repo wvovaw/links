@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UICheckbox } from "~ui/Checkbox";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

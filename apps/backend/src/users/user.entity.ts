@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+
 import { RefreshSession } from "../auth/refresh-session.entity";
 import { Link } from "../links/link.entity";
 
@@ -19,10 +20,10 @@ export class User {
   @Column({ type: "text", nullable: true })
   avatarFileId!: string | null;
 
-  @OneToMany(() => RefreshSession, session => session.user)
+  @OneToMany(() => RefreshSession, (session) => session.user)
   refreshSessions!: RefreshSession[];
 
-  @OneToMany(() => Link, link => link.owner)
+  @OneToMany(() => Link, (link) => link.owner)
   links!: Link[];
 
   @CreateDateColumn()

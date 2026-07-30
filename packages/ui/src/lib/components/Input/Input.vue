@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type HTMLAttributes, type InputTypeHTMLAttribute, onMounted, onUpdated, ref, watch } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
+import { type HTMLAttributes, type InputTypeHTMLAttribute, onMounted, onUpdated, ref, watch } from "vue";
 
 const inputVariants = cva(``, {
   variants: {
@@ -21,24 +21,41 @@ const inputVariants = cva(``, {
 type InputVariants = VariantProps<typeof inputVariants>;
 
 // TODO: prepend and append icons
-const props = withDefaults(defineProps<{
-  type?: Exclude<InputTypeHTMLAttribute, "button" | "checkbox" | "color" | "file" | "hidden" | "image" | "month" | "radio" | "range" | "reset" | "submit" | "week">;
-  class?: HTMLAttributes["class"];
-  defaultValue?: string | number;
-  modelValue?: string | number;
-  placeholder?: string;
-  disabled?: boolean;
-  readOnly?: boolean;
-  color?: InputVariants["color"];
-  size?: InputVariants["size"];
-  fullWidth?: boolean;
-  error?: boolean;
-  errorMessage?: string;
-  immediateValidation?: boolean;
-  dir?: "ltr" | "rtl";
-}>(), {
-  errorMessage: "Input error",
-});
+const props = withDefaults(
+  defineProps<{
+    type?: Exclude<
+      InputTypeHTMLAttribute,
+      | "button"
+      | "checkbox"
+      | "color"
+      | "file"
+      | "hidden"
+      | "image"
+      | "month"
+      | "radio"
+      | "range"
+      | "reset"
+      | "submit"
+      | "week"
+    >;
+    class?: HTMLAttributes["class"];
+    defaultValue?: string | number;
+    modelValue?: string | number;
+    placeholder?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    color?: InputVariants["color"];
+    size?: InputVariants["size"];
+    fullWidth?: boolean;
+    error?: boolean;
+    errorMessage?: string;
+    immediateValidation?: boolean;
+    dir?: "ltr" | "rtl";
+  }>(),
+  {
+    errorMessage: "Input error",
+  },
+);
 
 const emits = defineEmits<{
   "update:modelValue": [payload: string | number];
@@ -58,19 +75,19 @@ function cleanError() {
   inpEl.value?.setCustomValidity("");
   inpEl.value?.removeAttribute("aria-invalid");
 }
-watch(() => props.error, (err) => {
-  if (err)
-    setError();
-  else cleanError();
-});
+watch(
+  () => props.error,
+  (err) => {
+    if (err) setError();
+    else cleanError();
+  },
+);
 onUpdated(() => {
-  if (props.error)
-    setError();
+  if (props.error) setError();
 });
 onMounted(() => {
   if (props.immediateValidation) {
-    if (props.error)
-      setError();
+    if (props.error) setError();
   }
 });
 </script>
@@ -85,7 +102,7 @@ onMounted(() => {
     :readonly="readOnly"
     :type="type"
     v-bind="$attrs"
-  >
+  />
 </template>
 
 <style scoped>
@@ -98,7 +115,7 @@ onMounted(() => {
 .i-md {
   height: 2.5rem;
   @apply leading-10 rounded-moon-i-sm input-dt-shared;
- }
+}
 .i-lg {
   height: 3rem;
   @apply leading-[3rem] rounded-moon-i-sm input-lg-dt-shared;

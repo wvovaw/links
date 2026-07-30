@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ConfigProvider } from "radix-vue";
 import { UIToaster, UITooltipProvider } from "@links/ui";
-import { ConfirmationDialog } from "~shared/ui/confirmation-dialog";
+import { ConfigProvider } from "radix-vue";
 import { type ITheme, THEME_CONFIG } from "~entities/ui-theme";
+import { ConfirmationDialog } from "~shared/ui/confirmation-dialog";
 
 const useIdFunction = () => useId();
 

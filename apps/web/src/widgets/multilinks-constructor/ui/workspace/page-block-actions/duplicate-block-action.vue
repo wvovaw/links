@@ -11,8 +11,5 @@ const { duplicateBlock } = constructorStore;
 </script>
 
 <template>
-  <ActionButton
-    icon="i-lucide:copy"
-    @click="duplicateBlock(blockId)"
-  />
+  <ActionButton icon="i-lucide:copy" @click="duplicateBlock(blockId)" />
 </template>

@@ -11,13 +11,14 @@ export function useBlocksResolver() {
   function resolve(blockName: string): Component {
     if (blocksMap.has(blockName)) {
       return blocksMap.get(blockName);
-    }
-    else {
-      const comp = defineAsyncComponent(() => import(`./components/${blockName.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}-block.vue`));
+    } else {
+      const comp = defineAsyncComponent(
+        () => import(`./components/${blockName.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}-block.vue`),
+      );
       blocksMap.set(blockName, comp);
       return comp;
     }
-  };
+  }
 
   return {
     resolve,

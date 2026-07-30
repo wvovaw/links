@@ -1,7 +1,6 @@
 import { definePreset } from "unocss";
 
-interface PresetMoonOptions {
-}
+interface PresetMoonOptions {}
 export default definePreset((_options?: PresetMoonOptions) => {
   return {
     name: "@links/ui-preset",
@@ -253,10 +252,13 @@ export default definePreset((_options?: PresetMoonOptions) => {
       },
       animation: {
         keyframes: {
-          "error": "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 20%, 80% { transform: translate3d(2px, 0, 0) } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0) } 40%, 60% { transform: translate3d(4px, 0, 0) } }",
-          "explode": "{ 0% { transform: translate(-50%, -50%) scale(0); opacity: 1 } 50% { transform: translate(-50%, -50%) scale(1); opacity: 0.4 } 80%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0 } }",
+          "error":
+            "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 20%, 80% { transform: translate3d(2px, 0, 0) } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0) } 40%, 60% { transform: translate3d(4px, 0, 0) } }",
+          "explode":
+            "{ 0% { transform: translate(-50%, -50%) scale(0); opacity: 1 } 50% { transform: translate(-50%, -50%) scale(1); opacity: 0.4 } 80%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0 } }",
           "rotation": "{ 0% { transform: rotate(0deg) } 100% { transform: rotate(360deg) } }",
-          "pulse2": "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 0% { transform: scale(1) } 70% { transform: scale(1); box-shadow: 0 0 0 30px transparent } 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent } }",
+          "pulse2":
+            "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 0% { transform: scale(1) } 70% { transform: scale(1); box-shadow: 0 0 0 30px transparent } 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent } }",
           // Collapsible
           "collapsible-down": "{ from { height: 0 } to { height: var(--radix-collapsible-content-height) } }",
           "collapsible-up": "{ to { height: 0 } from { height: var(--radix-collapsible-content-height) } }",
@@ -265,11 +267,15 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "accordion-up": "{ to { height: 0 } from { height: var(--radix-accordion-content-height) } }",
           // Toast
           "toast-hide": "{ 0% { opacity: 1 } 100% { opacity: 0 } }",
-          "toast-slide-in-right": "{ 0% { transform: translateX(calc(100% + 1rem)) } 100% { transform: translateX(0) } }",
-          "toast-slide-in-left": "{ 0% { transform: translateX(calc(-100% + 1rem)) } 100% { transform: translateX(0) } }",
-          "toast-slide-in-down": "{ 0% { transform: translateY(calc(100% + 1rem)) } 100% { transform: translateY(0) } }",
+          "toast-slide-in-right":
+            "{ 0% { transform: translateX(calc(100% + 1rem)) } 100% { transform: translateX(0) } }",
+          "toast-slide-in-left":
+            "{ 0% { transform: translateX(calc(-100% + 1rem)) } 100% { transform: translateX(0) } }",
+          "toast-slide-in-down":
+            "{ 0% { transform: translateY(calc(100% + 1rem)) } 100% { transform: translateY(0) } }",
           "toast-slide-in-up": "{ 0% { transform: translateY(calc(-100% + 1rem)) } 100% { transform: translateY(0) } }",
-          "toast-swipe-out": "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } 100% { transform: translateX(100%) } }",
+          "toast-swipe-out":
+            "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } 100% { transform: translateX(100%) } }",
         },
         durations: {
           "pulse2": "1.5s",

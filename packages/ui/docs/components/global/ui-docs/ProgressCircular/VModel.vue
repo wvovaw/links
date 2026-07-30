@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
-import { UIProgressCircular } from "~ui/Progress";
 import { UIButton } from "~ui/Button";
+import { UIProgressCircular } from "~ui/Progress";
 
-const { count: progress, inc, dec } = useCounter(10, {
+import PreviewFrame from "../PreviewFrame.vue";
+
+const {
+  count: progress,
+  inc,
+  dec,
+} = useCounter(10, {
   max: 100,
   min: 0,
 });
@@ -19,13 +24,9 @@ const { count: progress, inc, dec } = useCounter(10, {
       <UIProgressCircular v-model="progress" size="xl" color="roshi" />
     </div>
     <div class="flex flex-row gap-2">
-      <UIButton size="xs" @click="inc(10)">
-        +
-      </UIButton>
+      <UIButton size="xs" @click="inc(10)"> + </UIButton>
       <span class="w-6 text-center font-mono"> {{ progress }} </span>
-      <UIButton size="xs" @click="dec(10)">
-        -
-      </UIButton>
+      <UIButton size="xs" @click="dec(10)"> - </UIButton>
     </div>
   </PreviewFrame>
 </template>

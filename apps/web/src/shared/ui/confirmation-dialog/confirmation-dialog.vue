@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { UIButton, UIDialog, UISheet } from "@links/ui";
 import { isVNode } from "vue";
+
 import { useConfirmation } from "./use-confirmation";
 
 const { config, show } = useConfirmation();
@@ -8,8 +9,7 @@ const isDesktop = useMediaQuery("(min-width: 640px)");
 const [UseTemplate, ContentComp] = createReusableTemplate();
 
 function closeIfOpen() {
-  if (show.value && config.value.onCancel)
-    config.value.onCancel();
+  if (show.value && config.value.onCancel) config.value.onCancel();
 }
 </script>
 
@@ -35,12 +35,8 @@ function closeIfOpen() {
         <ContentComp />
       </div>
       <UIDialog.Footer class="flex gap-2">
-        <UIButton variant="ghost" @click="config.onCancel">
-          Cancel
-        </UIButton>
-        <UIButton @click="config.onConfirm">
-          Confirm
-        </UIButton>
+        <UIButton variant="ghost" @click="config.onCancel"> Cancel </UIButton>
+        <UIButton @click="config.onConfirm"> Confirm </UIButton>
       </UIDialog.Footer>
     </UIDialog.Content>
   </UIDialog.Root>
@@ -56,12 +52,8 @@ function closeIfOpen() {
           <ContentComp />
         </div>
         <UISheet.Footer class="flex gap-2">
-          <UIButton variant="ghost" @click="config.onCancel">
-            Cancel
-          </UIButton>
-          <UIButton @click="config.onConfirm">
-            Confirm
-          </UIButton>
+          <UIButton variant="ghost" @click="config.onCancel"> Cancel </UIButton>
+          <UIButton @click="config.onConfirm"> Confirm </UIButton>
         </UISheet.Footer>
       </UISheet.Header>
     </UISheet.Content>

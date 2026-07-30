@@ -5,14 +5,7 @@ import { UIButton, UISheet } from "@links/ui";
 <template>
   <UISheet.Root>
     <UISheet.Trigger as-child>
-      <UIButton
-        class="w-52!"
-        full-width
-        icon="i-lucide:plus"
-        icon-pos="right"
-      >
-        Create new link
-      </UIButton>
+      <UIButton class="w-52!" full-width icon="i-lucide:plus" icon-pos="right"> Create new link </UIButton>
     </UISheet.Trigger>
     <UISheet.Content class="w-full sm:min-w-md sm:w-fit">
       <UISheet.Header>

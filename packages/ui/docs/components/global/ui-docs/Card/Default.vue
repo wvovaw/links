@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
+import { UIButton } from "~ui/Button";
 import { UICard } from "~ui/Card";
 import { UIGroup } from "~ui/Group";
 import { UIInput, UIInputHint, UIInputLabel, UIInsertInput } from "~ui/Input";
 import { UIInsertSelect } from "~ui/Select";
-import { UIButton } from "~ui/Button";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>
@@ -23,28 +24,16 @@ import { UIButton } from "~ui/Button";
         <UIGroup>
           <UIInsertInput label="Name" placeholder="your name" />
           <UIInsertSelect label="Mark">
-            <option value="1">
-              1
-            </option>
-            <option value="2">
-              2
-            </option>
-            <option value="3">
-              3
-            </option>
-            <option value="4">
-              4
-            </option>
-            <option value="5">
-              5
-            </option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </UIInsertSelect>
         </UIGroup>
       </UICard.Body>
       <UICard.Footer class="flex justify-between">
-        <UIButton variant="ghost" color="chichi">
-          Cancel
-        </UIButton>
+        <UIButton variant="ghost" color="chichi"> Cancel </UIButton>
         <UIButton>Submit</UIButton>
       </UICard.Footer>
     </UICard.Root>

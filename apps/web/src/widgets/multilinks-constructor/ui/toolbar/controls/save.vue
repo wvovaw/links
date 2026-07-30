@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UIButton, UITooltip } from "@links/ui";
+
 import { useConstructorStore } from "../../../model";
 
 const { saveCurrentState } = useConstructorStore();
@@ -10,8 +11,6 @@ const { saveCurrentState } = useConstructorStore();
     <template #trigger>
       <UIButton icon="i-lucide:save" variant="ghost" @click="saveCurrentState" />
     </template>
-    <template #content>
-      Save changes
-    </template>
+    <template #content> Save changes </template>
   </UITooltip>
 </template>

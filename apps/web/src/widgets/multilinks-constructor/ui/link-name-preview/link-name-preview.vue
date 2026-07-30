@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { UISwitch } from "@links/ui";
-import { useConstructorStore } from "../../model";
 import { LinkStatus } from "~shared/api/backend";
+
+import { useConstructorStore } from "../../model";
 
 const constructorStore = useConstructorStore();
 const { linkName, publishStatus } = storeToRefs(constructorStore);
@@ -12,8 +13,9 @@ const url = computed(() => {
   if (linkName.value) {
     const url = new URL(linkName.value, baseUrl);
     return url;
+  } else {
+    return null;
   }
-  else { return null; }
 });
 
 const [publishStatusToggle, togglePublishStatus] = useToggle(publishStatus.value, {
@@ -40,12 +42,7 @@ const published = computed(() => publishStatusToggle.value === LinkStatus.PUBLIS
       </div>
       <div class="flex flex-row gap-2">
         <label for="publish-link-switch" class="text-xs">Publish</label>
-        <UISwitch
-          id="publish-link-switch"
-          :checked="published"
-          size="xs"
-          @update:checked="togglePublishStatus()"
-        />
+        <UISwitch id="publish-link-switch" :checked="published" size="xs" @update:checked="togglePublishStatus()" />
       </div>
     </div>
   </div>

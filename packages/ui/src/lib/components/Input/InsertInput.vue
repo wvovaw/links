@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useId } from "radix-vue";
-import { type HTMLAttributes, type InputTypeHTMLAttribute, onMounted, onUpdated, ref, watch } from "vue";
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
+import { useId } from "radix-vue";
+import { type HTMLAttributes, type InputTypeHTMLAttribute, onMounted, onUpdated, ref, watch } from "vue";
 
 const insertInputVariants = cva("h-[3.5rem] leading-[3.5rem] rounded-moon-i-sm input-dt-shared pt-[1.25rem]", {
   variants: {
@@ -20,24 +20,41 @@ const insertInputVariants = cva("h-[3.5rem] leading-[3.5rem] rounded-moon-i-sm i
 type InsertInputVariants = VariantProps<typeof insertInputVariants>;
 
 // TODO: prepend and append icons
-const props = withDefaults(defineProps<{
-  type?: Exclude<InputTypeHTMLAttribute, "button" | "checkbox" | "color" | "file" | "hidden" | "image" | "month" | "radio" | "range" | "reset" | "submit" | "week">;
-  class?: HTMLAttributes["class"];
-  defaultValue?: string | number;
-  modelValue?: string | number;
-  placeholder?: string;
-  label?: string;
-  disabled?: boolean;
-  readOnly?: boolean;
-  color?: InsertInputVariants["color"];
-  fullWidth?: boolean;
-  error?: boolean;
-  errorMessage?: string;
-  immediateValidation?: boolean;
-  dir?: "ltr" | "rtl";
-}>(), {
-  errorMessage: "InsertInput error",
-});
+const props = withDefaults(
+  defineProps<{
+    type?: Exclude<
+      InputTypeHTMLAttribute,
+      | "button"
+      | "checkbox"
+      | "color"
+      | "file"
+      | "hidden"
+      | "image"
+      | "month"
+      | "radio"
+      | "range"
+      | "reset"
+      | "submit"
+      | "week"
+    >;
+    class?: HTMLAttributes["class"];
+    defaultValue?: string | number;
+    modelValue?: string | number;
+    placeholder?: string;
+    label?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    color?: InsertInputVariants["color"];
+    fullWidth?: boolean;
+    error?: boolean;
+    errorMessage?: string;
+    immediateValidation?: boolean;
+    dir?: "ltr" | "rtl";
+  }>(),
+  {
+    errorMessage: "InsertInput error",
+  },
+);
 
 const emits = defineEmits<{
   "update:modelValue": [payload: string | number];
@@ -57,19 +74,19 @@ function cleanError() {
   inpEl.value?.setCustomValidity("");
   inpEl.value?.removeAttribute("aria-invalid");
 }
-watch(() => props.error, (err) => {
-  if (err)
-    setError();
-  else cleanError();
-});
+watch(
+  () => props.error,
+  (err) => {
+    if (err) setError();
+    else cleanError();
+  },
+);
 onUpdated(() => {
-  if (props.error)
-    setError();
+  if (props.error) setError();
 });
 onMounted(() => {
   if (props.immediateValidation) {
-    if (props.error)
-      setError();
+    if (props.error) setError();
   }
 });
 const id = useId();
@@ -87,8 +104,10 @@ const id = useId();
       :disabled="disabled"
       :readonly="readOnly"
       :type="type"
-    >
-    <label :for="id" class="absolute text-moon-12 text-trunks top-3 start-4 z-[1] cursor-inherit transition-all">{{ label }}</label>
+    />
+    <label :for="id" class="absolute text-moon-12 text-trunks top-3 start-4 z-[1] cursor-inherit transition-all">{{
+      label
+    }}</label>
   </div>
 </template>
 
@@ -99,14 +118,15 @@ input {
   max-width: unset;
   width: 100%;
 }
-input:before,input:after {
+input:before,
+input:after {
   box-sizing: unset;
 }
-input:not(:focus):not([disabled]):placeholder-shown+label {
-    top: 50%;
-    margin-top: -0.438rem;
-    font-size: 1rem;
-    line-height: 1rem;
+input:not(:focus):not([disabled]):placeholder-shown + label {
+  top: 50%;
+  margin-top: -0.438rem;
+  font-size: 1rem;
+  line-height: 1rem;
 }
 input::placeholder {
   opacity: 1000%;

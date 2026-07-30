@@ -11,8 +11,5 @@ const { removeBlock } = constructorStore;
 </script>
 
 <template>
-  <ActionButton
-    icon="i-lucide:trash"
-    @click="removeBlock(blockId)"
-  />
+  <ActionButton icon="i-lucide:trash" @click="removeBlock(blockId)" />
 </template>

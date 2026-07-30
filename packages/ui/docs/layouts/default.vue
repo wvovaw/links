@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import pack from "../../package.json";
 import { UITag } from "~ui/Tag";
+
+import pack from "../../package.json";
 
 const route = useRoute();
 const { data: doc } = await useAsyncData(`page-${route.path}`, () =>
-  queryCollection("content").path(route.path).first()
+  queryCollection("content").path(route.path).first(),
 );
 
 const name = pack.name;
@@ -25,7 +26,9 @@ const version = pack.version;
         </template>
       </NavigationBar>
 
-      <div class="gap-8 md:grid lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)]">
+      <div
+        class="gap-8 md:grid lg:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)_minmax(250px,250px)] md:grid-cols-[minmax(250px,250px)_minmax(320px,1fr)]"
+      >
         <DocsAsideNavigation class="hidden md:block" />
         <main class="max-w-screen-lg p-4 lg:p-0">
           <slot />

@@ -1,5 +1,5 @@
-import { getErrorMessage } from "../errors";
 import { clearRefreshToken, getRefreshToken, useApiClient } from "../client";
+import { getErrorMessage } from "../errors";
 
 export async function logout() {
   try {
@@ -10,8 +10,7 @@ export async function logout() {
       body: { refreshToken },
     });
     clearRefreshToken();
-  }
-  catch {
+  } catch {
     clearRefreshToken();
     throw new Error(getErrorMessage("user_unauthorized"));
   }

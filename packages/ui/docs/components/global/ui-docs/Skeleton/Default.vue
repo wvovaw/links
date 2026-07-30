@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PreviewFrame from "../PreviewFrame.vue";
 import { UISkeleton } from "~ui/Skeleton";
+
+import PreviewFrame from "../PreviewFrame.vue";
 </script>
 
 <template>

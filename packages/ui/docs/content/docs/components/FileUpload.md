@@ -9,7 +9,7 @@ description: Headless file upload primitives and styled variants for button-base
 
 All components support single and multiple file uploads, file type filtering, incremental selection, and `v-model` binding.
 
-___
+---
 
 ## Styled Variants
 
@@ -31,7 +31,7 @@ Drag-and-drop zone with file list.
 
 :ui-docs-file-upload-multiple
 
-___
+---
 
 ## Headless Primitives
 
@@ -66,66 +66,66 @@ Circular dropzone for a single image, implemented using headless upload. The pre
 
 :ui-docs-file-upload-avatar
 
-___
+---
 
 ## API Reference
 
 ### UIFileUploadButton / UIFileUploadDropzone
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `modelValue` | `File \| File[] \| null` | No | - | Model value binding |
-| `accept` | `string` | No | - | Accepted file types |
-| `multiple` | `boolean` | No | `false` | Enables multiple files and incremental addition |
-| `label` | `string` | No | `"Upload File(s)"` | Trigger button text (button variant only) |
-| `resetLabel` | `string` | No | `"Reset"` | Reset button text (button variant only) |
+| Name         | Type                     | Required | Default            | Description                                     |
+| ------------ | ------------------------ | -------- | ------------------ | ----------------------------------------------- |
+| `modelValue` | `File \| File[] \| null` | No       | -                  | Model value binding                             |
+| `accept`     | `string`                 | No       | -                  | Accepted file types                             |
+| `multiple`   | `boolean`                | No       | `false`            | Enables multiple files and incremental addition |
+| `label`      | `string`                 | No       | `"Upload File(s)"` | Trigger button text (button variant only)       |
+| `resetLabel` | `string`                 | No       | `"Reset"`          | Reset button text (button variant only)         |
 
 ### Headless Primitives
 
 #### UIFileUpload.Root
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `modelValue` | `File \| File[] \| null` | - | v-model binding |
-| `multiple` | `boolean` | `false` | Enable multiple file selection |
-| `accept` | `string` | - | Accepted file types |
+| Prop         | Type                     | Default | Description                    |
+| ------------ | ------------------------ | ------- | ------------------------------ |
+| `modelValue` | `File \| File[] \| null` | -       | v-model binding                |
+| `multiple`   | `boolean`                | `false` | Enable multiple file selection |
+| `accept`     | `string`                 | -       | Accepted file types            |
 
-| Emit | Payload |
-|------|---------|
+| Emit                | Payload                             |
+| ------------------- | ----------------------------------- |
 | `update:modelValue` | `[payload: File \| File[] \| null]` |
-| `change` | `[payload: File \| File[] \| null]` |
+| `change`            | `[payload: File \| File[] \| null]` |
 
 #### UIFileUpload.Trigger
 
 Renders a `<button>` that opens the file picker on click.
 
-| Slot | Description |
-|------|-------------|
+| Slot      | Description    |
+| --------- | -------------- |
 | `default` | Button content |
 
 #### UIFileUpload.Dropzone
 
 Drag-and-drop target. Also opens file picker on click.
 
-| Slot Prop | Type | Description |
-|-----------|------|-------------|
-| `isOver` | `boolean` | Whether a drag is currently hovering over the zone |
+| Slot Prop | Type      | Description                                        |
+| --------- | --------- | -------------------------------------------------- |
+| `isOver`  | `boolean` | Whether a drag is currently hovering over the zone |
 
 #### UIFileUpload.FileList
 
 Renders each file via a scoped slot.
 
-| Slot Prop | Type | Description |
-|-----------|------|-------------|
-| `file` | `File` | The current file |
-| `index` | `number` | File index |
-| `remove` | `() => void` | Removes the current file |
-| `multiple` | `boolean` | Whether multiple mode is enabled |
+| Slot Prop  | Type         | Description                      |
+| ---------- | ------------ | -------------------------------- |
+| `file`     | `File`       | The current file                 |
+| `index`    | `number`     | File index                       |
+| `remove`   | `() => void` | Removes the current file         |
+| `multiple` | `boolean`    | Whether multiple mode is enabled |
 
 #### UIFileUpload.Clear
 
 Renders a `<button>` that clears all files on click.
 
-| Slot | Description |
-|------|-------------|
+| Slot      | Description    |
+| --------- | -------------- |
 | `default` | Button content |
