@@ -1,5 +1,5 @@
 export * from "./Accordion";
-export * from "./Alerrt";
+export * from "./Alert";
 export * from "./AspectRatio";
 export * from "./Avatar";
 export * from "./Button";

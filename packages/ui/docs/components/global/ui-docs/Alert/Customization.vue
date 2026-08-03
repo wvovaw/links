@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UIAlert } from "~ui/Alerrt";
+import { UIAlert } from "~ui/Alert";
 import { UIButton } from "~ui/Button";
 
 import PreviewFrame from "../PreviewFrame.vue";
