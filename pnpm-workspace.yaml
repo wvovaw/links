@@ -2,3 +2,11 @@ packages:
   - apps/*
   - packages/*
   - packages/codestyle
+
+onlyBuiltDependencies:
+  - argon2
+  - better-sqlite3
+  - esbuild
+  - is-installed-globally
+  - sharp
+  - vue-demi

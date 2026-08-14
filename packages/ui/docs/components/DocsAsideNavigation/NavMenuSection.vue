@@ -2,8 +2,16 @@
 import { UIMenu } from "~ui/Menu";
 import { UITag } from "~ui/Tag";
 
+interface NavLink {
+  _path?: string;
+  path?: string;
+  title?: string;
+  draft?: boolean;
+  new?: boolean;
+}
+
 defineProps<{
-  links: any;
+  links: NavLink[];
   title: string;
 }>();
 </script>

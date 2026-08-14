@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { UIScrollArea } from "~ui/ScrollArea";
 
-const props = withDefaults(defineProps<{ value: any }>(), {});
+interface TocLink {
+  id?: string;
+  text?: string;
+  children?: TocLink[];
+}
+
+const props = withDefaults(
+  defineProps<{ value: { body?: { toc?: { links?: TocLink[] } } } }>(),
+  {},
+);
 const tocLinks = computed(() => props.value?.body?.toc?.links ?? []);
 const visible = ref(false);
 

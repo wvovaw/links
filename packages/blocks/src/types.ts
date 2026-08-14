@@ -5,7 +5,7 @@ export const blocksList = BLOCK_NAMES.map((name) => ({ name }));
 
 export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image";
 
-export interface IBlockPropertyCommon<T = any> {
+export interface IBlockPropertyCommon<T = unknown> {
   id: number;
   type: BlockPropertyType;
   label: string;

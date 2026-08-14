@@ -8,7 +8,7 @@ import PreviewFrame from "../PreviewFrame.vue";
 
 function handleSubmit(e: SubmitEvent) {
   const formData = new FormData(e.target as HTMLFormElement);
-  const form: Record<string, any> = {};
+  const form: Record<string, FormDataEntryValue> = {};
   formData.forEach((val, key) => (form[key] = val));
   console.log(form);
 }

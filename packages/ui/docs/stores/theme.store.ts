@@ -32,7 +32,7 @@ export const useThemeStore = defineStore("themeStore", () => {
   }
 
   watchEffect(() => {
-    mode.value = state.value as any;
+    mode.value = state.value as "auto" | "light" | "dark";
   });
 
   return {
