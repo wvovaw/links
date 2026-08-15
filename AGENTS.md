@@ -1,6 +1,6 @@
 # AGENTS.md
 
-pnpm 8 monorepo (`pnpm-workspace.yaml`). Node 20. `.npmrc` sets `shamefully-hoist=true`. Branch: `master`.
+pnpm 10 monorepo (`pnpm-workspace.yaml`). Node 24 (`.nvmrc`; root `package.json` sets `engines` to `node: ^24.0.0`, `pnpm: ^10.0.0`). There is no root `.npmrc` — dependency resolution is plain pnpm, so packages only see what they declare. Branch: `master`.
 
 ## Agent skills
 
@@ -21,8 +21,10 @@ Issues are tracked as Obsidian vault ticket notes. See `docs/agents/issue-tracke
 ## Commands
 
 - `pnpm install` — workspace install (runs each package's `prepare`, which builds `ui`/`blocks` dist).
+- **pnpm 10 runs no dependency install scripts unless allowlisted.** Native packages are opted in via `onlyBuiltDependencies` in `pnpm-workspace.yaml` (`argon2`, `better-sqlite3`, `esbuild`, `sharp`, …); a new dependency needing a native build must be added there, or it installs without its binary.
 - `pnpm dev` — parallel dev: backend watch (3001), web (3000), ui docs (3002), blocks `tsdown -w`.
 - `pnpm build` / `pnpm lint` / `pnpm fmt` / `pnpm test` — run recursively; target one package with `pnpm --filter <name> …`.
+- Recursive scripts silently skip packages that don't define them — notably `@links/ui`, whose library build is `lib:build`, so root `pnpm build` does **not** build it. `packages/codestyle` defines no scripts at all.
 - Lint/format is **oxlint/oxfmt**, not eslint/prettier. Each package extends the shared `codestyle` config; per-package configs are `oxlint.config.*` / `oxfmt.config.*`.
 - **`pnpm lint` auto-fixes** (`oxlint . --fix`) in `web`, `ui`, and `blocks` — running it edits files. Backend lint does not.
 - Root `.vscode/settings.json` still points at a stale `packages/configurable-codestyle/` config path; the real package is `packages/codestyle`.
@@ -43,11 +45,25 @@ Issues are tracked as Obsidian vault ticket notes. See `docs/agents/issue-tracke
 - Web calls the backend via runtime config `public.backendUrl` (env `NUXT_PUBLIC_BACKEND_URL`, see `apps/web/.env`); also used to build uploaded-image URLs. `public.baseUrl` is used for public link URLs.
 - Content (MDC docs) in `apps/web/content/`; `packages/ui/docs/` is a separate Nuxt docs site for the UI library.
 
-## apps/backend (NestJS) — sql.js gotcha
+## apps/backend (NestJS) — database & migrations
 
-- Persistence is TypeORM + **sql.js** (SQLite WASM, in-memory with `autoSave: true`), stored to `data.sqlite` in `apps/backend` (gitignored).
-- `synchronize: true` — schema is derived from entities, no migration files; entity edits change the schema directly.
-- Env is read straight from `process.env` (no dotenv/ConfigModule): `PORT` (default 3001), `FRONTEND_URL` (default `http://localhost:3000`), `DATABASE_PATH`.
+- Persistence is TypeORM + **better-sqlite3** (native driver) writing to `data.sqlite` in `apps/backend` (gitignored).
+- Connection options live in `src/database/database.config.ts` and are shared by `TypeOrmModule.forRoot` and the CLI data source (`src/data-source.ts`).
+- `synchronize: false` — **schema changes only through migrations** in `src/migrations/`. The app applies pending ones on boot (`migrationsRun: true`, set in `app.module.ts`); the CLI data source deliberately does not, so generate/revert stay explicit.
+- Dev workflow (from `apps/backend`): `pnpm migration:generate src/migrations/<Name>` after editing entities, then `pnpm migration:run` / `pnpm migration:revert` / `pnpm migration:show`. Generate diffs entities against the *current* `data.sqlite`, so run pending migrations first.
+- A `data.sqlite` predating migrations (built by the old `synchronize`, so it has no `migrations` table) collides with the baseline — delete the file and let migrations rebuild it.
+- Env is read straight from `process.env` (no dotenv/ConfigModule), each at its point of use with an inline default:
+
+| Var | Default | Read in |
+|---|---|---|
+| `PORT` | `3001` | `main.ts` |
+| `FRONTEND_URL` | `http://localhost:3000` | `main.ts` (CORS origin) |
+| `DATABASE_PATH` | `data.sqlite` | `database/database.config.ts` |
+| `UPLOADS_PATH` | `uploads/avatars` | `storage/local-storage.service.ts` |
+| `IMAGES_PATH` | `uploads/images` | `storage/local-storage.service.ts` |
+| `JWT_SECRET` | a dev-only literal — **must** be set in production | `auth/auth.tokens.ts` |
+| `NODE_ENV` | — gates the `secure` refresh-cookie flag | `auth/auth.controller.ts` |
+
 - Auth: JWT access tokens + cookie-based refresh sessions; file uploads via multer into `apps/backend/uploads` (gitignored).
 - API collections for Bruno live in `apps/backend/.bruno`.
 
