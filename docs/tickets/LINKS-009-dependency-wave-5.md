@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-009
 title: "Dependencies wave 5: framework majors (TypeScript, NestJS, TypeORM)"
-status: claimed
+status: done
 priority: high
 area: backend
 created: 2026-11-13
@@ -38,19 +38,86 @@ Out of scope: waves 2–4 packages (already merged by then), new features, schem
 
 ## Acceptance criteria
 
-- [ ] one TypeScript version across the workspace, and no removed compiler option left in any tsconfig
-- [ ] `@types/express` is on the major that matches the Express version Nest actually runs
-- [ ] the framework upgrade's own dry run was executed and its report is summarised in the journal
-- [ ] the backend builds, boots on the pinned runtime, and applies the baseline migration to a deleted
+- [x] one TypeScript version across the workspace, and no removed compiler option left in any tsconfig
+- [x] `@types/express` is on the major that matches the Express version Nest actually runs
+- [x] the framework upgrade's own dry run was executed and its report is summarised in the journal
+- [x] the backend builds, boots on the pinned runtime, and applies the baseline migration to a deleted
       `data.sqlite` (no `synchronize`, no manual SQL)
-- [ ] the migration workflow still works from the CLI: `migration:show`, `migration:run`,
+- [x] the migration workflow still works from the CLI: `migration:show`, `migration:run`,
       `migration:revert`
-- [ ] registration, login (JWT + refresh cookie), link CRUD and uploads pass through the Bruno
+- [x] registration, login (JWT + refresh cookie), link CRUD and uploads pass through the Bruno
       collection, plus one public-page read
-- [ ] `pnpm verify` green on the pinned runtime, working tree clean afterwards
-- [ ] `docs/upgrades/2026-11-dependency-majors.md` records, per major: from → to, the migration guide
+- [x] `pnpm verify` green on the pinned runtime, working tree clean afterwards
+- [x] `docs/upgrades/2026-11-dependency-majors.md` records, per major: from → to, the migration guide
       read with its link, the mechanical steps applied, what had to be changed by hand, what remains
-- [ ] documentation contains no version numbers outside `docs/upgrades/`
+- [x] documentation contains no version numbers outside `docs/upgrades/`
+
+## Verification
+
+All commands ran with `fnm exec --using=26.13.1 --` in front, from the repo root unless a path says
+otherwise.
+
+```text
+pnpm verify
+  tickets:check passed — 11 ticket(s), 0 warning(s)
+  lint: no errors; fmt: clean; build: all four packages
+  test: apps/web 4 files, 62 tests passed
+  tree clean afterwards
+
+node apps/backend/dist/main.js with DATABASE_PATH=/tmp/wave5-v12.sqlite (deleted)
+  Nest application successfully started; baseline migration applied on boot
+  sqlite tables: block_images, links, migrations, refresh_sessions, sqlite_sequence, users
+  GET /public/links/nonexistent → 404 (route alive)
+
+cd apps/backend && pnpm migration:show
+  [ ] Baseline1786793535331            (database missing)
+pnpm migration:run
+  CREATE TABLE users / refresh_sessions / links / block_images
+  Migration Baseline1786793535331 has been executed successfully.
+pnpm migration:revert
+  DROP TABLE block_images / links / refresh_sessions / users
+  Migration Baseline1786793535331 has been reverted successfully.
+pnpm migration:run
+  Migration Baseline1786793535331 has been executed successfully.
+pnpm migration:show
+  [X] Baseline1786793535331
+
+cd apps/backend/.bruno && bru run . --env local -r
+  Requests 50 (50 Passed), Tests 98/98, Status ✓ PASS
+  covers register, login with JWT + refresh cookie, refresh/logout/session, link CRUD,
+  avatar and block-image upload, and public-page reads
+  (first run on the deleted database reports 4 failed tests because the collection assumes an
+  existing user and a reserved `my-new-link`; the second run is the pass above)
+
+cd apps/backend && pnpm exec nest upgrade --dry-run   (at v11, CLI 12)
+  Changes applied:
+    ✔ Updated NestJS packages: @nestjs/common@^12.0.0, @nestjs/core@^12.0.0,
+      @nestjs/platform-express@^12.0.0, @nestjs/cli@^12.0.0, @nestjs/jwt@^12.0.0,
+      @nestjs/mapped-types@^12.0.0, @nestjs/typeorm@^12.0.0
+    ✔ Scheduled "npm install"
+  Dry run enabled. No files written to disk.
+
+cd apps/backend && npx @typeorm/codemod v1 src/ --dry
+  Files processed: 31, Files transformed: 0, Files skipped: 31, Parse errors: 0
+  Dependency changes: typeorm ^0.3.20 → ^1.0.0
+
+pnpm why multer -r
+  Found 1 version of multer (2.5.0)
+
+pnpm outdated -r
+  no entries, exit 0
+
+apps/backend/node_modules/.bin/tsc --version
+  Version 7.0.2
+
+pnpm --filter @links/ui lib:build
+  exits 0, emits dist/index.*, dist/preset/*, dist/css/theme.css and per-component .d.ts
+pnpm --filter @links/blocks build
+  exits 0, emits dist/main.mjs and dist/main.d.mts
+```
+
+The TypeScript decision and the remaining peer/type-check notes are recorded in
+`docs/upgrades/2026-11-dependency-majors.md` (wave 5).
 
 ## Notes
 
