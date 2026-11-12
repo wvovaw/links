@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-008
 title: "Dependencies wave 4: tooling majors"
-status: claimed
+status: done
 priority: medium
 area: tooling
 created: 2026-11-13
@@ -40,15 +40,74 @@ and say so in the journal.
 
 ## Acceptance criteria
 
-- [ ] `pnpm outdated -r` lists nothing in scope, and every remaining entry is either a wave 5 package
+- [x] `pnpm outdated -r` lists nothing in scope, and every remaining entry is either a wave 5 package
       or explained in the journal
-- [ ] the commit hook still rejects a non-conventional message and accepts a conventional one
-- [ ] `pnpm upg` (or its replacement) runs and reports without crashing
-- [ ] `@types/node` matches the runtime named by `.nvmrc` in every package that uses it
-- [ ] `pnpm verify` green on the pinned runtime, working tree clean afterwards
-- [ ] `docs/upgrades/2026-11-dependency-majors.md` records per package: from → to, the release notes
+- [x] the commit hook still rejects a non-conventional message and accepts a conventional one
+- [x] `pnpm upg` (or its replacement) runs and reports without crashing
+- [x] `@types/node` matches the runtime named by `.nvmrc` in every package that uses it
+- [x] `pnpm verify` green on the pinned runtime, working tree clean afterwards
+- [x] `docs/upgrades/2026-11-dependency-majors.md` records per package: from → to, the release notes
       read, what changed here, what was deferred
-- [ ] documentation contains no version numbers outside `docs/upgrades/`
+- [x] documentation contains no version numbers outside `docs/upgrades/`
+
+## Verification
+
+All commands ran on the runtime pinned in `.nvmrc`, through `fnm exec --using=26.13.1 --`.
+
+```bash
+pnpm install                     # after the bumps: 4 deprecated subdependencies, the
+                                 # @vitejs/plugin-vue and vitest @types/node peer warnings gone,
+                                 # four warnings left (typeorm→better-sqlite3, nuxt→rolldown ×2,
+                                 # unctx→oxc-parser/unplugin)
+pnpm why @types/node -r          # "Found 1 version of @types/node" — the runtime's major —
+                                 # declared by @links/backend and @links/ui
+pnpm outdated -r                 # only @nestjs/* (7), typeorm, typescript, @types/express remain
+```
+
+`@types/node` surfaced no type errors at all, so nothing was silenced and nothing was fixed:
+
+```bash
+pnpm --filter @links/backend build     # tsc -p tsconfig.build.json, no diagnostics
+pnpm --filter @links/ui lib:build      # unbuild/mkdist, dist emitted, no warnings
+cd packages/ui && pnpm exec vue-tsc --noEmit
+# 297 errors, all under docs/ (the pre-existing docs-app debt). Measured again with the packages
+# at their pre-bump versions: byte-identical output, `diff` empty. Nothing outside docs/ fails.
+```
+
+The `upg` script, dry (it has no `-w`, so it never writes):
+
+```bash
+pnpm upg    # exit 0, lists @nestjs/*, typeorm, typescript, @types/express as majors plus the
+            # in-range patch/minor bumps; `git status` unchanged afterwards
+```
+
+The commit hook, both ways. It had to be wired first: this checkout was missing husky's `.husky/_`
+shim and `core.hooksPath`, because the machine's `~/.npmrc` sets `ignore-scripts=true`, so
+`pnpm install` never ran the root `prepare`. After `pnpm exec husky`:
+
+```bash
+git commit --allow-empty -m "bad message"
+# ⧗ ... ✖ subject may not be empty [subject-empty]
+#       ✖ type may not be empty [type-empty]
+# husky - commit-msg script failed (code 1)          -> exit 1, no commit created
+
+git commit --allow-empty -m "chore: probe the commit-msg hook"
+# [master 74c3227] ...                               -> exit 0, commit created
+git reset --soft HEAD~1                              # probe commit removed again
+```
+
+The config needed no change: `commitlint.config.mjs` still extends
+`@commitlint/config-conventional`, and the hook still calls `npx --no -- commitlint --edit`.
+
+```bash
+pnpm verify    # tickets:check + lint + fmt + build + test, green: 4 test files, 62 tests, the
+               # web suite exits on its own; `git status` clean afterwards
+```
+
+Two warnings remain by design, both written up in the journal: `nuxt` ↔ `rolldown` cannot be
+resolved from this package set (the two build tools resolve different rolldown lines, and forcing
+one would either downgrade tsdown's bundler or leave Nuxt on a version it does not support), and
+the `unctx` → `oxc-parser`/`unplugin` chain belongs to the framework wave.
 
 ## Notes
 
