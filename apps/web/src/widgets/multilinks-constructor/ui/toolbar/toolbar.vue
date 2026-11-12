@@ -1,10 +1,11 @@
 <script setup lang="tsx">
 import { UISeparator } from "@links/ui";
+
 import AddBlock from "./controls/add-block.vue";
-import SetBackground from "./controls/set-background.vue";
-import Save from "./controls/save.vue";
-import UndoRedo from "./controls/undo-redo.vue";
 import GoBack from "./controls/go-back.vue";
+import Save from "./controls/save.vue";
+import SetBackground from "./controls/set-background.vue";
+import UndoRedo from "./controls/undo-redo.vue";
 
 const Separator = defineComponent(() => {
   return () => (

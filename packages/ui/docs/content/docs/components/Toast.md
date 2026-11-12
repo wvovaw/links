@@ -33,8 +33,8 @@ import { UIToaster } from "@links/ui";
 
 ```vue
 <script setup lang="ts">
-import { h } from "vue";
 import { UIButton, UIToast, useToast } from "@links/ui";
+import { h } from "vue";
 
 const { toast } = useToast();
 
@@ -64,8 +64,8 @@ Or you can write an action using TSX
 
 ```vue
 <script setup lang="tsx">
-import { defineComponent } from "vue";
 import { UIButton, UIToast, useToast } from "@links/ui";
+import { defineComponent } from "vue";
 
 const { toast } = useToast();
 
