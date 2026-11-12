@@ -17,6 +17,12 @@ Inherited knowledge that is expensive to rediscover. Versions are deliberately a
 - `pnpm` does not run dependency install scripts unless the package is allowlisted in
   `onlyBuiltDependencies` in `pnpm-workspace.yaml`. A new dependency that needs a native build must
   be added there, or it installs without its binary.
+- That allowlist only matters when scripts are permitted at all: a user-level `ignore-scripts=true`
+  in `~/.npmrc` disables every install script, so the root `prepare` (husky) and dependency
+  postinstalls silently do nothing. Native packages still work on such a machine only because the
+  pnpm store already holds a built copy — a fresh store would produce a binary-less install, and no
+  git hook would reject a bad commit message. When a hook suddenly does nothing, check this before
+  debugging husky.
 - There is no root `.npmrc`: dependency resolution is plain pnpm, so packages see only what they
   declare. An undeclared import may work by accident of hoisting and break later.
 - Conventional commits are enforced by husky + commitlint on `commit-msg`.
