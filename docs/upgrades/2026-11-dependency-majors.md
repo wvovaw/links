@@ -15,7 +15,7 @@ first, so every later wave is judged by the same standard.
 | 0    | Gates: CI, read-only lint/format scripts, formatting pass, in-repo tracker                                    | done        |
 | 0.5  | Runtime: switch `.nvmrc` to the current Node LTS, rebuild native modules                                      | done        |
 | 1    | Patch/minor across the workspace; align `vue-tsc`, `@nuxt/schema`, single TypeScript version                  | done        |
-| 2    | Backend security majors: `multer`, `argon2`, `class-validator`                                                | not started |
+| 2    | Backend security majors: `multer`, `argon2`, `class-validator`                                                | done        |
 | 3    | Frontend majors: `vitest`, `@vueuse/*`, `@formkit/drag-and-drop`, `unbuild`/`mkdist`, `radix-vue` → `reka-ui` | not started |
 | 4    | Tooling: `commitlint`, `taze`, `@types/node`, `@vitejs/plugin-vue`, `@vue/tsconfig`, `oxlint`/`oxfmt`         | not started |
 | 5    | Framework majors: TypeScript → 7 path, NestJS, TypeORM                                                        | not started |
@@ -263,3 +263,133 @@ The rest of the outdated list is the out-of-scope set the ticket names (NestJS, 
 `@formkit/drag-and-drop`, `unbuild`/`mkdist`, `radix-vue`, TypeScript's next major). The
 `@types/express` and `@types/multer` majors are left too: they are not patch/minor bumps and they
 travel with the NestJS and multer waves.
+
+## Wave 2 — backend security majors
+
+**Status:** done (LINKS-006). Three backend runtime dependencies, moved to their current releases and
+proven against a running API rather than only compiled. `@types/multer` travels with `multer`; no
+other package version moved in the lockfile.
+
+### `multer` and `@types/multer`
+
+```text
+package            multer ^1.4.5-lts.1 → ^2.5.0 (apps/backend)
+                   @types/multer ^1.4.11 → ^2.3.0
+                   the workspace now resolves one multer: 1.4.5-lts.2 + 2.0.2 → 2.5.0
+                   (2.0.2 came in through @nestjs/platform-express, 1.4.5-lts.2 was the declared one)
+guide read         https://github.com/expressjs/multer/releases/tag/v2.5.0 — security release,
+                   https://github.com/expressjs/multer/security/advisories/GHSA-q7qp-rjg7-q26m
+                   (CVE-2026-113872), and the two earlier advisory releases
+                   https://github.com/expressjs/multer/releases/tag/v2.4.0
+                   (GHSA-3pph-fpjx-jg34 / CVE-2026-88932) and
+                   https://github.com/expressjs/multer/releases/tag/v2.3.0 (four more CVEs, among them
+                   a crash on a `fileFilter` that calls back twice and a request-level DoS).
+                   v2.4.0 is also where non-integer limits start being rejected at construction and
+                   where fields at exactly the limit start being accepted:
+                   https://github.com/expressjs/multer/pull/1395, /pull/1335, /pull/1407.
+changed            version ranges only, plus the workspace override below. No interceptor option and no
+                   API call changed: `FileInterceptor("avatar")` and `FileInterceptor("file")` still run
+                   multer with its defaults (memory storage, no `limits`).
+                   Because 2.4.0 validates `limits` in the `multer()` constructor, a non-integer value
+                   would now break app boot instead of silently disabling the limit. Nothing in the
+                   workspace passes `limits`, so there is nothing to convert; the only size limit is the
+                   avatar controller's integer `5 * 1024 * 1024` check, and the web client's
+                   `maxSize(1024 * 1024 * 5)` in `features/user/model/schema.ts` agrees with it exactly.
+                   Nest 10's `transformException` maps multer errors by `error.message`, and 2.4.0 moved
+                   the filename into `error.filename` instead of the message, so `LIMIT_FILE_SIZE` is
+                   still “File too large” and still becomes a 413 — checked at runtime, not assumed.
+deferred           `POST /storage/images` (block images) has no server-side size limit at all: a 6 MiB
+                   file is accepted and written. That is pre-existing, not a wave-2 regression, and
+                   adding a limit changes API behaviour, so it needs its own ticket rather than a
+                   smuggled change here. The 3.0 alphas are not taken — the campaign tracks current
+                   stable majors.
+verified           pnpm why multer -r → “Found 1 version of multer”; backend boots on the pinned
+                   runtime against an existing data.sqlite; the Bruno collection passes 50/50 requests,
+                   98/98 tests; oversized uploads exercised with curl (6 MiB avatar → 400, 5 MiB exactly
+                   → 200, 5 MiB + 1 byte → 400, 6 MiB block image → 201); a throwaway probe with
+                   `limits.fileSize = 1.5` throws `TypeError: Expected limits.fileSize to be a
+                   non-negative integer or Infinity`, and with `limits.fileSize = 1024` a 2048-byte
+                   upload comes back 413 `PayloadTooLargeException`.
+```
+
+### Workspace override for `multer`
+
+```text
+package            pnpm-workspace.yaml → `overrides: { multer: ^2.5.0 }`
+                   @nestjs/platform-express 10.4.22 pins `multer: 2.0.2` (exact, Nest pins its runtime
+                   deps exactly by policy), so declaring the current release in the backend alone left
+                   two copies — and `FileInterceptor` loads the nested one, i.e. the unpatched code.
+                   The override makes the pinned copy resolve to the workspace's 2.x line, which is what
+                   makes `pnpm why multer` show one version *and* makes the upload endpoints actually run
+                   the patched release. Multer 2.5.0 only adds API on top of 2.0.2, and the upload paths
+                   are exercised end to end above.
+deferred           removing the override — wave 5 (NestJS), when platform-express starts pinning a line
+                   that is current on its own. Keeping it past that wave would silently hold Nest's own
+                   dependency back, so the comment in pnpm-workspace.yaml says to drop it then.
+verified           pnpm install, pnpm why multer -r, the upload requests in the Bruno collection
+```
+
+### `argon2`
+
+```text
+package            argon2 ^0.40.3 → ^0.45.2 (native module, still allowed in onlyBuiltDependencies)
+guide read         https://github.com/ranisalt/node-argon2/releases/tag/v0.45.2 — “Fix Argon2 PHC
+                   parameter order” (https://github.com/ranisalt/node-argon2/pull/562): `hash()` used to
+                   serialize parameters as `m,p,t`, the PHC spec wants `m,t,p`. The parser accepts both
+                   orders and the digest is unchanged, so existing hashes keep verifying;
+                   https://github.com/ranisalt/node-argon2/releases/tag/v0.45.0 drops Node 18 and 20
+                   support (the workspace runtime is past both, see .nvmrc), v0.45.1 fixes the generated
+                   types for `hash()`.
+changed            version range only. The package still ships CommonJS, and the backend's `tsc` build
+                   imports it as `import * as argon2` — unchanged. Hash output is back on the canonical
+                   `m,t,p` order: the pre-bump hash in the test database already read
+                   `$argon2id$v=19$m=65536,t=3,p=4$…`, and hashes written after the bump are identical in
+                   shape.
+deferred           nothing
+verified           a user registered *before* the bump (password hashed by 0.40.3) logs in through the
+                   API after it — same row, byte-identical `passwordHash`, 200 plus a JWT and a refresh
+                   token; `argon2.verify()` returns true for that hash in a direct module call; the full
+                   collection then exercises refresh, logout and the argon2-hashed refresh sessions.
+```
+
+### `class-validator`
+
+```text
+package            class-validator ^0.14.1 → ^0.15.1
+guide read         https://github.com/typestack/class-validator/releases/tag/v0.15.0 — the one flagged
+                   breaking change is `IsIBAN`, which now takes an `IsIBANOptions` argument; the rest is
+                   additive (`@IsISO31661Numeric`, `isISO6391`, `validateIf` in validation options, UUID
+                   versions 1-8). https://github.com/typestack/class-validator/releases/tag/v0.15.1 is a
+                   publish fix (0.15.0 was never released as `latest`).
+changed            version range only. `@nestjs/common` declares class-validator as an optional `*` peer,
+                   so the `ValidationPipe` in `main.ts` keeps working unchanged; the DTOs use only
+                   IsEmail/IsString/MinLength/MaxLength/Matches/IsOptional/IsArray/IsObject/IsEnum, none
+                   of which changed.
+deferred           adding `forbidUnknownValues` cleanup or moving DTO validation to another library is not
+                   in scope; the validation stack (`valibot` on the web side) is revisited in wave 3.
+verified           the collection's 400 responses (short password, short username, invalid email, short
+                   link title, short slug, unknown/extra fields) keep their status codes and messages.
+```
+
+### Lockfile note
+
+Aside from the four packages above and their transitives (`cross-env` and `@epic-web/invariant` arrive
+with argon2, `concat-stream`/`mkdirp`/`typedarray`/`xtend` leave with multer 1.x), the lockfile diff
+is peer-variant re-keying: the same versions re-keyed under `class-validator@0.15.1` suffixes and a
+handful of rollup/oxc-parser variants collapsing to one. No other package version moved, and
+`pnpm why` for anything outside wave 2 is unchanged. Re-checked after a clean install.
+
+### Peer warnings after wave 2
+
+Same six as the end of wave 1, none new: `typeorm` → `better-sqlite3` 13 (wave 5), `nuxt` →
+`rolldown` and the `unctx` → `oxc-parser`/`unplugin` chain (framework wave), `@unocss/rollup` →
+`rollup` 4 and `mkdist` → `vue-tsc` 3 (wave 3), `@vitejs/plugin-vue` → `vite` (wave 4).
+
+### Left behind deliberately
+
+```text
+@types/express     4.17.x → 5.x     not named — travels with the NestJS wave (wave 5)
+multer 3.x alphas  —                prerelease, not a current stable major
+```
+
+Wave 2 closes without touching NestJS, TypeORM, TypeScript or anything in waves 3-5.
