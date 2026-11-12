@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-005
 title: "Dependencies wave 1: patches, minors and version alignment"
-status: ready-for-agent
+status: claimed
 priority: high
 area: tooling
 created: 2026-11-13
