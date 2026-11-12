@@ -3,9 +3,10 @@ packages:
   - packages/*
   - packages/codestyle
 
-# @nestjs/platform-express pins multer to an exact version, so without this the workspace
-# ships a second, older copy — the one FileInterceptor actually loads. Drop the override
-# when the NestJS wave moves platform-express to a multer version it pins by range.
+# @nestjs/platform-express pins multer to an exact version. Since the NestJS 12 wave that
+# pin is the same release the backend declares, so the override no longer changes what is
+# installed and is kept only as the guard the wave-2 note called for. Remove it once
+# platform-express widens the pin or moves off the version the backend declares.
 overrides:
   multer: ^2.5.0
 
