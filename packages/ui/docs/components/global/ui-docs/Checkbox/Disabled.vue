@@ -11,7 +11,7 @@ import PreviewFrame from "../PreviewFrame.vue";
       <label for="disabled-checkbox-00" class="peer-disabled:text-trunks">Disabled</label>
     </span>
     <span class="flex items-center space-x-2">
-      <UICheckbox id="disabled-checkbox-01" class="peer" default-checked disabled />
+      <UICheckbox id="disabled-checkbox-01" class="peer" default-value disabled />
       <label for="disabled-checkbox-00" class="peer-disabled:text-trunks">Disabled checked</label>
     </span>
     <span class="flex items-center space-x-2">

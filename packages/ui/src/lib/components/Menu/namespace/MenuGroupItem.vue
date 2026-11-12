@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ToggleGroupItem, type ToggleGroupItemProps, useForwardProps } from "radix-vue";
+import { ToggleGroupItem, type ToggleGroupItemProps, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed, provide, toRefs } from "vue";
 
 import MenuItem from "./MenuItem.vue";

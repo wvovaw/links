@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIToaster, UITooltipProvider } from "@links/ui";
-import { ConfigProvider } from "radix-vue";
+import { ConfigProvider } from "reka-ui";
 import { type ITheme, THEME_CONFIG } from "~entities/ui-theme";
 import { ConfirmationDialog } from "~shared/ui/confirmation-dialog";
 

@@ -82,23 +82,23 @@ description: Dropdown menu displays a menu list of actions to the user after the
 
 ### Root
 
-Refer to [Radix-Vue DropdownMenu Root](https://www.radix-vue.com/components/dropdown-menu#root){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Root](https://reka-ui.com/docs/components/dropdown-menu#root){:target="\_blank"} API reference
 
 ### Trigger
 
-Refer to [Radix-Vue DropdownMenu Trigger](https://www.radix-vue.com/components/dropdown-menu#trigger){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Trigger](https://reka-ui.com/docs/components/dropdown-menu#trigger){:target="\_blank"} API reference
 
 ### Group
 
-Refer to [Radix-Vue DropdownMenu Group](https://www.radix-vue.com/components/dropdown-menu#group){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Group](https://reka-ui.com/docs/components/dropdown-menu#group){:target="\_blank"} API reference
 
 ### Content
 
-Refer to [Radix-Vue DropdownMenu Content](https://www.radix-vue.com/components/dropdown-menu#content){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Content](https://reka-ui.com/docs/components/dropdown-menu#content){:target="\_blank"} API reference
 
 ### Item
 
-Refer to [Radix-Vue DropdownMenu Item](https://www.radix-vue.com/components/dropdown-menu#item){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Item](https://reka-ui.com/docs/components/dropdown-menu#item){:target="\_blank"} API reference
 
 ### Item Icon
 
@@ -110,7 +110,7 @@ Refer to [Radix-Vue DropdownMenu Item](https://www.radix-vue.com/components/drop
 
 ### Radio Group
 
-Refer to [Radix-Vue DropdownMenu Radio Group](https://www.radix-vue.com/components/dropdown-menu#radiogroup){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Radio Group](https://reka-ui.com/docs/components/dropdown-menu#radiogroup){:target="\_blank"} API reference
 
 ### Radio Item
 
@@ -120,7 +120,7 @@ Refer to [Radix-Vue DropdownMenu Radio Group](https://www.radix-vue.com/componen
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | ----------------- |
 | `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No       | default | Radio items color |
 
-Refer to [Radix-Vue DropdownMenu Radio Item](https://www.radix-vue.com/components/dropdown-menu#radioitem){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Radio Item](https://reka-ui.com/docs/components/dropdown-menu#radioitem){:target="\_blank"} API reference
 
 ### Checkbox Item
 
@@ -131,16 +131,16 @@ Refer to [Radix-Vue DropdownMenu Radio Item](https://www.radix-vue.com/component
 | `color` | [default]{stule="color: var(--bulma)"} [piccolo]{style="color: var(--piccolo)"} \| [hit]{style="color: var(--hit)"} \| [roshi]{style="color: var(--roshi)"} \| [krillin]{style="color: var(--krillin)"} \| [chichi]{style="color: var(--chichi)"} | No       | default | Radio items color |
 | `size ` | sm \| md                                                                                                                                                                                                                                          | No       | md      | Checkbox size     |
 
-Refer to [Radix-Vue DropdownMenu Checkbox Item](https://www.radix-vue.com/components/dropdown-menu#checkboxitem){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Checkbox Item](https://reka-ui.com/docs/components/dropdown-menu#checkboxitem){:target="\_blank"} API reference
 
 ### Sub
 
-Refer to [Radix-Vue DropdownMenu Sub](https://www.radix-vue.com/components/dropdown-menu#sub){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Sub](https://reka-ui.com/docs/components/dropdown-menu#sub){:target="\_blank"} API reference
 
 ### Sub Trigger
 
-Refer to [Radix-Vue DropdownMenu Sub Trigger](https://www.radix-vue.com/components/dropdown-menu#subtrigger){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Sub Trigger](https://reka-ui.com/docs/components/dropdown-menu#subtrigger){:target="\_blank"} API reference
 
 ### Sub Content
 
-Refer to [Radix-Vue DropdownMenu Sub Content](https://www.radix-vue.com/components/dropdown-menu#subcontent){:target="\_blank"} API reference
+Refer to [Reka UI DropdownMenu Sub Content](https://reka-ui.com/docs/components/dropdown-menu#subcontent){:target="\_blank"} API reference

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { DropdownMenuCheckboxItemEmits, DropdownMenuCheckboxItemProps } from "radix-vue";
+import type { DropdownMenuCheckboxItemEmits, DropdownMenuCheckboxItemProps } from "reka-ui";
 
-import { DropdownMenuCheckboxItem, useForwardPropsEmits } from "radix-vue";
+import { DropdownMenuCheckboxItem, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 import { UICheckbox, type UICheckboxVariants } from "../../Checkbox";
@@ -25,7 +25,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
   <DropdownMenuCheckboxItem v-bind="forwarded" :class="[props.class]" as-child>
     <MenuItem class="group">
       <slot />
-      <UICheckbox :checked="checked" :disabled="disabled" :color="color" :size="size" />
+      <UICheckbox :model-value="modelValue" :disabled="disabled" :color="color" :size="size" />
     </MenuItem>
   </DropdownMenuCheckboxItem>
 </template>

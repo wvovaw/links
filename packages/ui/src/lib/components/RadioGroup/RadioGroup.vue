@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
-import { RadioGroupRoot, type RadioGroupRootEmits, type RadioGroupRootProps, useForwardPropsEmits } from "radix-vue";
+import { RadioGroupRoot, type RadioGroupRootEmits, type RadioGroupRootProps, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed, provide } from "vue";
 
 import { RADIO_GROUP_INJECTION_KEY } from "./providers";

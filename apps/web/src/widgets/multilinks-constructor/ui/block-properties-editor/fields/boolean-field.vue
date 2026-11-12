@@ -16,14 +16,8 @@ const model = defineModel<IBlockPropertyBoolean["value"]>();
     <label :for="id">
       {{ field.label }}
     </label>
-    <UICheckbox v-if="field.variant === 'checkbox'" :id="id" :checked="model" @update:checked="(v) => (model = v)" />
-    <UISwitch
-      v-else-if="field.variant === 'switch'"
-      :id="id"
-      :checked="model"
-      size="sm"
-      @update:checked="(v) => (model = v)"
-    />
+    <UICheckbox v-if="field.variant === 'checkbox'" :id="id" v-model="model" />
+    <UISwitch v-else-if="field.variant === 'switch'" :id="id" v-model="model" size="sm" />
   </div>
   <UIInputHint v-if="field.hint">
     {{ field.hint }}

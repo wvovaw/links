@@ -1,19 +1,21 @@
-import type { Component, VNode } from "vue";
+import type { Component, ComputedRef, VNode } from "vue";
 
 import { computed, ref } from "vue";
-
-import type { ToastProps } from "./Toast";
 
 const TOAST_LIMIT = 3;
 const TOAST_REMOVE_DELAY = 1000000;
 
 export type StringOrVNode = string | VNode | (() => VNode);
 
-interface ToasterToast extends ToastProps {
+interface ToasterToast {
   id: string;
   title?: string;
   content?: StringOrVNode;
   action?: Component;
+  class?: string;
+  variant?: "default" | "error" | "warning" | "success" | null;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const actionTypes = {
@@ -52,6 +54,18 @@ type Action =
 
 interface State {
   toasts: ToasterToast[];
+}
+
+interface ToastController {
+  id: string;
+  dismiss: () => void;
+  update: (props: Partial<ToasterToast>) => void;
+}
+
+interface UseToastReturn {
+  toasts: ComputedRef<ToasterToast[]>;
+  toast: (props: Toast) => ToastController;
+  dismiss: (toastId?: string) => void;
 }
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
@@ -114,7 +128,7 @@ function dispatch(action: Action) {
   }
 }
 
-function useToast() {
+function useToast(): UseToastReturn {
   return {
     toasts: computed(() => state.value.toasts),
     toast,
@@ -124,7 +138,7 @@ function useToast() {
 
 type Toast = Omit<ToasterToast, "id">;
 
-function toast(props: Toast) {
+function toast(props: Toast): ToastController {
   const id = genId();
 
   const update = (props: Partial<ToasterToast>) =>

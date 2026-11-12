@@ -36,7 +36,7 @@ A `Progress` component is a visual representation of a progress.
 | Name | Type | Required | Default | Description |
 | --------------- | ---------------------------------------------------------------------------- | ---------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | `as` | `AsTag` \| Component | No | button | Sets the root HTML element. button is default |
-| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 | `modelValue` | `string \| number` | No | - | Model value binding. Can be bound with `v-model` |
 | `max` | `number` | No | DEFAULT_MAX | The maximum progress value. |
 | `getValueLabel` | `(val: number, max: number) => string` | No | `${Math.round((value / max) * DEFAULT_MAX)}%` | A function to get the accessible label text representing the current value in a human-readable format.<br> If not provided, the value label will be read as the numeric value as a percentage of the max value. |

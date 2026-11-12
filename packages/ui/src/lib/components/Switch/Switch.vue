@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
-import { SwitchRoot, type SwitchRootEmits, type SwitchRootProps, SwitchThumb, useForwardPropsEmits } from "radix-vue";
+import { SwitchRoot, type SwitchRootEmits, type SwitchRootProps, SwitchThumb, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const switchRootVariants = cva("block cursor-pointer rounded-full transition", {

@@ -8,6 +8,6 @@ const { state, next } = useCycleList(["indeterminate", true, false as const]);
 
 <template>
   <PreviewFrame>
-    <UICheckbox :checked="state" @click="next()" />
+    <UICheckbox :model-value="state" @click="next()" />
   </PreviewFrame>
 </template>

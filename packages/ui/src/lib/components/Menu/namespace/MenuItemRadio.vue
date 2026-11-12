@@ -9,9 +9,10 @@ defineProps<UIRadioItemVariants>();
 const menuItemCtx = inject(menuItemKey);
 const menuItemsGroupCtx = inject(menuItemsGroupKey);
 
-const checked = computed(() =>
-  menuItemCtx ? menuItemsGroupCtx?.modelValue.value?.includes(menuItemCtx?.value.value) : false,
-);
+const checked = computed(() => {
+  const selected = menuItemsGroupCtx?.modelValue.value;
+  return menuItemCtx && Array.isArray(selected) ? selected.includes(menuItemCtx.value.value) : false;
+});
 const disabled = computed(() => menuItemCtx?.disabled.value);
 </script>
 

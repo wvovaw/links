@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { ToastViewportProps } from "radix-vue";
+import type { ToastViewportProps } from "reka-ui";
 
-import { ToastViewport } from "radix-vue";
+import { ToastViewport } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const props = defineProps<ToastViewportProps & { class?: HTMLAttributes["class"] }>();

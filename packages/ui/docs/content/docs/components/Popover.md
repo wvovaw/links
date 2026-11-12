@@ -66,10 +66,10 @@ description: A UI component displaying rich content in a portal.
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | button  | Sets the root HTML element. button is default                                                                                                                                                        |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | button  | Sets the root HTML element. button is default                                                                                                                                                     |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Data Attributes
 
@@ -87,7 +87,7 @@ description: A UI component displaying rich content in a portal.
 | `alignOffset` | `number` | No | - | An offset in pixels from the start or end alignment options. |
 | `arrowPadding` | `number` | No | - | The padding between the arrow and the edges of the content. If your content has border-radius, this will prevent it from overflowing the corners. |
 | `as` | `AsTag` \| Component | No | button | Sets the root HTML element. button is default |
-| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 | `avoidCollisions` | `boolean` | No | - | When `true`, overrides the side and align preferences to prevent collisions with boundary edges. |
 | `collisionBoundary` | `Element \| (Element \| null)[]                                             | null` | No | - | The Distance The element used as the collision boundary. By default this is the viewport, though you can provide additional element(s) to be included in this check. |
 | `collisionPadding` | `number` \| Partial<Record<'top' \| 'right' \| 'bottom' \| 'left', number>> | No | - | TheThe distance in pixels from the boundary edges where collision detection should occur. Accepts a number (same for all sides), or a partial padding object, for example: { top: 20, left: 20 }. |
@@ -139,4 +139,4 @@ Adheres to the [Dialog WAI-ARIA design pattern](https://www.w3.org/WAI/ARIA/apg/
 
 ## Other
 
-For more details refer to [Radix-Vue Popover docs](https://www.radix-vue.com/components/popover.html).
+For more details refer to [Reka UI Popover docs](https://reka-ui.com/docs/components/popover).

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Separator, type SeparatorProps } from "radix-vue";
+import { Separator, type SeparatorProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const props = defineProps<

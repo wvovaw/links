@@ -1,1 +1,1 @@
-export { AspectRatio as UIAspectRatio } from "radix-vue";
+export { AspectRatio as UIAspectRatio } from "reka-ui";

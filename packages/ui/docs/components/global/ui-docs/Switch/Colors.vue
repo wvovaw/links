@@ -6,11 +6,11 @@ import { UISwitch } from "~ui/Switch";
 <template>
   <PreviewBox>
     <div class="w-full flex items-center justify-around">
-      <UISwitch default-checked />
-      <UISwitch default-checked color="hit" />
-      <UISwitch default-checked color="chichi" />
-      <UISwitch default-checked color="krillin" />
-      <UISwitch default-checked color="roshi" />
+      <UISwitch default-value />
+      <UISwitch default-value color="hit" />
+      <UISwitch default-value color="chichi" />
+      <UISwitch default-value color="krillin" />
+      <UISwitch default-value color="roshi" />
     </div>
   </Previewbox>
 </template>

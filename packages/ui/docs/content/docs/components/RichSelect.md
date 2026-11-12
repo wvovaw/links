@@ -79,10 +79,10 @@ description: A UI component displaying ilst of options for the user to pick from
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| --------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                      |
-| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`      | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                   |
+| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Data Attributes
 
@@ -96,11 +96,11 @@ description: A UI component displaying ilst of options for the user to pick from
 
 #### Props
 
-| Name          | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| ------------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`          | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                      |
-| `asChild`     | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `placeholder` | `string`             | No       | -       | The content that will be rendered inside when no `value` or `defaultValue` is set.                                                                                                                  |
+| Name          | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| ------------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`          | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                   |
+| `asChild`     | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `placeholder` | `string`             | No       | -       | The content that will be rendered inside when no `value` or `defaultValue` is set.                                                                                                               |
 
 ### Content
 
@@ -112,13 +112,13 @@ description: A UI component displaying ilst of options for the user to pick from
 | `alignOffset` | `number` | No | - | An offset in pixels from the start or end alignment options. |
 | `arrowPadding` | `number` | No | - | The padding between the arrow and the edges of the content. If your content has border-radius, this will prevent it from overflowing the corners. |
 | `as` | `AsTag` \| Component | No | button | Sets the root HTML element. button is default |
-| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| `asChild` | `boolean` | No | - | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 | `avoidCollisions` | `boolean` | No | - | When `true`, overrides the side and align preferences to prevent collisions with boundary edges. |
 | `collisionBoundary` | `Element \| (Element \| null)[]                                             | null` | No | - | The Distance The element used as the collision boundary. By default this is the viewport, though you can provide additional element(s) to be included in this check. |
 | `collisionPadding` | `number` \| Partial<Record<'top' \| 'right' \| 'bottom' \| 'left', number>> | No | - | TheThe distance in pixels from the boundary edges where collision detection should occur. Accepts a number (same for all sides), or a partial padding object, for example: { top: 20, left: 20 }. |
 | `forceMount` | `boolean` | No | - | Used to force mounting when more control is needed. Useful when controlling animation with Vue animation libraries. |
 | `hideWhenDetached` | `boolean` | No | - | Whether to hide the content when the trigger becomes fully occluded. |
-| `position` | popover \| item-aligned | No | - | The positioning mode to use<br>`item-aligned` (default) - behaves similarly to a native MacOS menu by positioning content relative to the active item.<br>`popper` - positions content in the same way as other Radix-Vue primitives, for example `Popover` or `DropdownMenu`. |
+| `position` | popover \| item-aligned | No | - | The positioning mode to use<br>`item-aligned` (default) - behaves similarly to a native MacOS menu by positioning content relative to the active item.<br>`popper` - positions content in the same way as other Reka UI primitives, for example `Popover` or `DropdownMenu`. |
 | `prioritizePosition` | `boolean` | No | - | Force content to be position within the viewport.<br>Might overlap the reference element, which may not be desired. |
 | `side` | top \| right \| bottom \| left | No | - | The preferred side of the trigger to render against when open. Will be reversed when collisions occur and avoidCollisions is enabled. |
 | `sideOffset` | `number` | No | - | The distance in pixels from the trigger. |
@@ -145,11 +145,11 @@ description: A UI component displaying ilst of options for the user to pick from
 
 ### Props
 
-| Name        | Type                 | Required | Default                                              | Description                                                                                                                                                                                          |
-| ----------- | -------------------- | -------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`        | `AsTag` \| Component | No       | button                                               | Sets the root HTML element. button is default                                                                                                                                                        |
-| `asChild`   | `boolean`            | No       | -                                                    | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `disabeld`  | `boolean`            | No       | -                                                    | When `true`, prevents user from interaction                                                                                                                                                          |
+| Name        | Type                 | Required | Default                                              | Description                                                                                                                                                                                       |
+| ----------- | -------------------- | -------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`        | `AsTag` \| Component | No       | button                                               | Sets the root HTML element. button is default                                                                                                                                                     |
+| `asChild`   | `boolean`            | No       | -                                                    | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `disabeld`  | `boolean`            | No       | -                                                    | When `true`, prevents user from interaction                                                                                                                                                       |
 | `textValue` | `string`             | No       | Optional text used for typehead purposes.            |
 | `value`     | `string`             | Yes      | The value given as data when submited with a `name`. |
 
@@ -165,4 +165,4 @@ description: A UI component displaying ilst of options for the user to pick from
 
 ## Other
 
-For more details refer to [Radix-Vue Popover docs](https://www.radix-vue.com/components/select.html).
+For more details refer to [Reka UI Popover docs](https://reka-ui.com/docs/components/select).

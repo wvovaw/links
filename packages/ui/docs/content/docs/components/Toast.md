@@ -117,34 +117,34 @@ function deleteLetter() {
 
 ## API Reference
 
-For building a Toaster component from primitives, instead of using provided `<Toaster />` and `useToast`, follow the [Radix-Vue docs](https://www.radix-vue.com/components/toast#api-reference).
+For building a Toaster component from primitives, instead of using provided `<Toaster />` and `useToast`, follow the [Reka UI docs](https://reka-ui.com/docs/components/toast#api-reference).
 
 Here's the fast docummentation of the `<Toaster />`, `useToast`, `<Toast.Root /> and `<Toast.Action />` api's.
 
 ### Toaster
 
-Wrapper component for the radix-vue `ToastProvider` and `ToastViewport`. Place it in the entry of the app, like `App.vue`.
+Wrapper component for the reka-ui `ToastProvider` and `ToastViewport`. Place it in the entry of the app, like `App.vue`.
 
 ### Root
 
-| Name          | Type                                   | Required | Default    | Description                                                                                                                                                                                         |
-| ------------- | -------------------------------------- | -------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as `         | `AsTag` \| Component                   | No       | `li`       | Setting a root HTML element. li is default                                                                                                                                                          |
-| `asChild`     | `boolean`                              | No       | -          | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `defaultOpen` | `boolean`                              | No       | `true`     | The open state of theh dialog when it is initially rendered. Use when you do not need to control its open state.                                                                                    |
-| `duration`    | `number`                               | No       | 5000       | Time in ms that toast should remain visible for. Overrides the value given to `ToastProvider`                                                                                                       |
-| `forceMount   | `boolean`                              | No       | -          | Used to force mount when move control is needed. Useful when controlling animation with vue animation libraries.                                                                                    |
-| `open`        | `boolean`                              | No       | -          | The controlled open state of the toast. Can be bound as `v-model:open`.                                                                                                                             |
-| `type`        | foreground \| background               | No       | foreground | Control the sensitivity of the toast for accessibility purposes. For toasts that are the result of a user action, use `foreground`. Toasts generated from background tasks should be `background`.  |
-| `variant `    | default \| success \| warning \| error | No       | default    | Variant of a visual look of a toast                                                                                                                                                                 |
+| Name          | Type                                   | Required | Default    | Description                                                                                                                                                                                        |
+| ------------- | -------------------------------------- | -------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as `         | `AsTag` \| Component                   | No       | `li`       | Setting a root HTML element. li is default                                                                                                                                                         |
+| `asChild`     | `boolean`                              | No       | -          | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details   |
+| `defaultOpen` | `boolean`                              | No       | `true`     | The open state of theh dialog when it is initially rendered. Use when you do not need to control its open state.                                                                                   |
+| `duration`    | `number`                               | No       | 5000       | Time in ms that toast should remain visible for. Overrides the value given to `ToastProvider`                                                                                                      |
+| `forceMount   | `boolean`                              | No       | -          | Used to force mount when move control is needed. Useful when controlling animation with vue animation libraries.                                                                                   |
+| `open`        | `boolean`                              | No       | -          | The controlled open state of the toast. Can be bound as `v-model:open`.                                                                                                                            |
+| `type`        | foreground \| background               | No       | foreground | Control the sensitivity of the toast for accessibility purposes. For toasts that are the result of a user action, use `foreground`. Toasts generated from background tasks should be `background`. |
+| `variant `    | default \| success \| warning \| error | No       | default    | Variant of a visual look of a toast                                                                                                                                                                |
 
 ### Action
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| --------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `altText` | `string`             | Yes      | -       | A short description for an alternate way to carry out the action. For screen reader users who will not be able to navigate to the button easily/quickly.                                            |
-| `as `     | `AsTag` \| Component | No       | `div`   | Setting a root HTML element. div is default                                                                                                                                                         |
-| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `altText` | `string`             | Yes      | -       | A short description for an alternate way to carry out the action. For screen reader users who will not be able to navigate to the button easily/quickly.                                         |
+| `as `     | `AsTag` \| Component | No       | `div`   | Setting a root HTML element. div is default                                                                                                                                                      |
+| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 ### useToast composible
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cva } from "cva";
-import { TagsInputInput, type TagsInputInputProps, useForwardProps } from "radix-vue";
+import { TagsInputInput, type TagsInputInputProps, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed, inject } from "vue";
 
 const tagsInputInputVariants = cva(

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { ProgressRootProps } from "radix-vue";
+import type { ProgressRootProps } from "reka-ui";
 
 import { type VariantProps, cva } from "cva";
-import { ProgressIndicator, ProgressRoot } from "radix-vue";
+import { ProgressIndicator, ProgressRoot } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const progressRootVariants = cva("", {

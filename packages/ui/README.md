@@ -6,7 +6,7 @@ This package is heavily dependent on the Unocss and its presets. This may change
 Install dependencies and follow the next steps to get the library working.
 
 ```sh
-pnpm add -D unocss @unocss/reset @unocss/transformer-directives unocss-preset-animations @iconify-json/lucide @iconify-json/vscode-icons radix-vue @vueuse/core cva:class-variance-authority@^7.0.0
+pnpm add -D unocss @unocss/reset @unocss/transformer-directives unocss-preset-animations @iconify-json/lucide @iconify-json/vscode-icons reka-ui @vueuse/core cva:class-variance-authority@^7.0.0
 ```
 
 Your unocss config file must look like this.

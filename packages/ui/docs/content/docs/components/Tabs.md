@@ -58,14 +58,14 @@ Tabs is a component allowing users to navigate between views within the same con
 
 #### Props
 
-| Name           | Type                   | Required | Default | Description                                                                                                                                                                                         |
-| -------------- | ---------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`           | `AsTag` \| Component   | No       | div     | Sets the root HTML element. button is default                                                                                                                                                       |
-| `asChild`      | `boolean`              | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `modelvalue`   | `string`               | No       | -       | The controlled value of the tab to activate. Can be binded as `v-model`                                                                                                                             |
-| `defaultValue` | `string`               | No       | -       | The value of the tab that should be active when initially rendered. Use when you do not need to control the state of the tabs                                                                       |
-| `dir`          | ltr \| rtl             | No       | ltr     | The reading direction of the combobox when applicable.\nIf omitted, inherits globally from `DirectionProvider` or assumes LTR (left-to-right) reading mode                                          |
-| `orientation`  | vertical \| horizontal | No       | -       | The orientation of the component, which determines how focus moves: **horizontal** for left/right arrows and **vertical** for up/down arrows                                                        |
+| Name           | Type                   | Required | Default | Description                                                                                                                                                                                      |
+| -------------- | ---------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`           | `AsTag` \| Component   | No       | div     | Sets the root HTML element. button is default                                                                                                                                                    |
+| `asChild`      | `boolean`              | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `modelvalue`   | `string`               | No       | -       | The controlled value of the tab to activate. Can be binded as `v-model`                                                                                                                          |
+| `defaultValue` | `string`               | No       | -       | The value of the tab that should be active when initially rendered. Use when you do not need to control the state of the tabs                                                                    |
+| `dir`          | ltr \| rtl             | No       | ltr     | The reading direction of the combobox when applicable.\nIf omitted, inherits globally from `DirectionProvider` or assumes LTR (left-to-right) reading mode                                       |
+| `orientation`  | vertical \| horizontal | No       | -       | The orientation of the component, which determines how focus moves: **horizontal** for left/right arrows and **vertical** for up/down arrows                                                     |
 
 #### Emits
 
@@ -83,13 +83,13 @@ Tabs is a component allowing users to navigate between views within the same con
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| --------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                      |
-| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `loop`    | `boolean`            | No       | true    | When `loop` is `true`, keyboard navigation will loop from last tab to first, and vice versa                                                                                                         |
-| `size`    | sm \| md \| lg       | No       | md      | Size of the tabs list and tabs triggers                                                                                                                                                             |
-| `variant` | tab \| pill          | No       | pill    | Visual variant of the tabs list and tabs triggers                                                                                                                                                   |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`      | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                   |
+| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `loop`    | `boolean`            | No       | true    | When `loop` is `true`, keyboard navigation will loop from last tab to first, and vice versa                                                                                                      |
+| `size`    | sm \| md \| lg       | No       | md      | Size of the tabs list and tabs triggers                                                                                                                                                          |
+| `variant` | tab \| pill          | No       | pill    | Visual variant of the tabs list and tabs triggers                                                                                                                                                |
 
 #### Data Attributes
 
@@ -101,12 +101,12 @@ Tabs is a component allowing users to navigate between views within the same con
 
 #### Props
 
-| Name       | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| ---------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`       | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                      |
-| `asChild`  | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `value`    | `string`             | Yes      | -       | The unique value that associates the trigger with a content                                                                                                                                         |
-| `disabeld` | `boolean`            | No       | -       | When `true`, prevents user from selecting the tab                                                                                                                                                   |
+| Name       | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| ---------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`       | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                   |
+| `asChild`  | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `value`    | `string`             | Yes      | -       | The unique value that associates the trigger with a content                                                                                                                                      |
+| `disabeld` | `boolean`            | No       | -       | When `true`, prevents user from selecting the tab                                                                                                                                                |
 
 #### Data Attributes
 
@@ -120,11 +120,11 @@ Tabs is a component allowing users to navigate between views within the same con
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| --------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                      |
-| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `value`   | `string`             | Yes      | -       | The unique value that associates the content with a trigger                                                                                                                                         |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`      | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                   |
+| `asChild` | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `value`   | `string`             | Yes      | -       | The unique value that associates the content with a trigger                                                                                                                                      |
 
 #### Data Attributes
 

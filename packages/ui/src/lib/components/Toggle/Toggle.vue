@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Toggle, type ToggleEmits, type ToggleProps, useForwardPropsEmits } from "radix-vue";
+import { Toggle, type ToggleEmits, type ToggleProps, useForwardPropsEmits } from "reka-ui";
 import { computed } from "vue";
 
 import type { ToggleVariants } from "./private/ToggleItem.vue";

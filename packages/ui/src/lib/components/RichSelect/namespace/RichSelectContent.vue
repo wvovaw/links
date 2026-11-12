@@ -8,7 +8,7 @@ import {
   SelectScrollUpButton,
   SelectViewport,
   useForwardPropsEmits,
-} from "radix-vue";
+} from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 defineOptions({
@@ -51,7 +51,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
       <SelectViewport
         :class="[
-          position === 'popper' && 'h-[--radix-select-trigger-height] w-full min-w-[--radix-select-trigger-width]',
+          position === 'popper' && 'h-[--reka-select-trigger-height] w-full min-w-[--reka-select-trigger-width]',
         ]"
       >
         <slot />

@@ -53,17 +53,17 @@ draft: true
 
 #### Props
 
-| Name           | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| -------------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`           | `AsTag` \| Component | No       | nav     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild`      | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `defaultPage`  | `number`             | No       | 1       | The value of the page that should be active when initially rendered.<br>Use when you do not need to control the value state.                                                                         |
-| `disabeld`     | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                          |
-| `itemsPerPage` | `number`             | No       | 10      | Number of items per page.                                                                                                                                                                            |
-| `page`         | `number`             | No       | -       | The controlled value of the current page. Can be bound as `v-model:page`.                                                                                                                            |
-| `showEdges`    | `boolean`            | No       | false   | When `true`, always shows first page, last page and ellipsis.                                                                                                                                        |
-| `siblingCount` | `number`             | No       | 2       | Number of sibling should be shown around the current page.                                                                                                                                           |
-| `total`        | `number`             | No       | 0       | Number of items in your list.                                                                                                                                                                        |
+| Name           | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| -------------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`           | `AsTag` \| Component | No       | nav     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild`      | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `defaultPage`  | `number`             | No       | 1       | The value of the page that should be active when initially rendered.<br>Use when you do not need to control the value state.                                                                      |
+| `disabeld`     | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                       |
+| `itemsPerPage` | `number`             | No       | 10      | Number of items per page.                                                                                                                                                                         |
+| `page`         | `number`             | No       | -       | The controlled value of the current page. Can be bound as `v-model:page`.                                                                                                                         |
+| `showEdges`    | `boolean`            | No       | false   | When `true`, always shows first page, last page and ellipsis.                                                                                                                                     |
+| `siblingCount` | `number`             | No       | 2       | Number of sibling should be shown around the current page.                                                                                                                                        |
+| `total`        | `number`             | No       | 0       | Number of items in your list.                                                                                                                                                                     |
 
 #### Emits
 
@@ -84,10 +84,10 @@ default
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Slots
 
@@ -110,10 +110,10 @@ default
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Data Attributes
 
@@ -125,7 +125,7 @@ default
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | button  | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | button  | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |

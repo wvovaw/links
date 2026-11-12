@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { SliderRootEmits, SliderRootProps } from "radix-vue";
+import type { SliderRootEmits, SliderRootProps } from "reka-ui";
 
 import { type VariantProps, cva } from "cva";
-import { SliderRange, SliderRoot, SliderThumb, SliderTrack, useForwardPropsEmits } from "radix-vue";
+import { SliderRange, SliderRoot, SliderThumb, SliderTrack, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed, ref } from "vue";
 
 const variants = {
@@ -99,7 +99,7 @@ const transitionClass = computed(() => {
       </SliderTrack>
 
       <SliderThumb v-for="thumb of nOfThumbs" :key="thumb" :class="[thumbVariants({ color, size }), transitionClass]">
-        <slot :name="`thumb-${thumb}`" :value="modelValue[thumb - 1]" />
+        <slot :name="`thumb-${thumb}`" :value="modelValue?.[thumb - 1]" />
       </SliderThumb>
     </template>
   </SliderRoot>

@@ -30,7 +30,7 @@ const chosenStr = computed(() => choosen.value.map((ch) => ch.value).join(", "))
           <UIDropdownMenu.CheckboxItem
             v-for="item of checkboxes"
             :key="item.value"
-            v-model:checked="item.chosen"
+            v-model="item.chosen"
             color="piccolo"
           >
             <UIDropdownMenu.ItemTitle class="capitalize">
