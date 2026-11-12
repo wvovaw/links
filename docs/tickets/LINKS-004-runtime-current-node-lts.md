@@ -8,7 +8,8 @@ area: tooling
 created: 2026-11-12
 updated: 2026-11-13
 blocked_by: []
-blocks: []
+blocks:
+  - LINKS-005
 ---
 
 # LINKS-004 — Runtime: move to the current Node LTS

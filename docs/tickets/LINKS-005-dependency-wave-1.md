@@ -1,0 +1,66 @@
+---
+type: ticket
+id: LINKS-005
+title: "Dependencies wave 1: patches, minors and version alignment"
+status: ready-for-agent
+priority: high
+area: tooling
+created: 2026-11-13
+updated: 2026-11-13
+blocked_by:
+  - LINKS-004
+blocks: []
+---
+
+# LINKS-005 — Dependencies wave 1: patches, minors and version alignment
+
+## What to build
+
+Wave 1 of the dependency campaign: take every package that only needs a patch or minor bump to its
+current release, and remove the version drift inside the workspace. No behaviour rewrite is expected;
+this wave exists to shrink the diff of the later majors.
+
+In scope:
+
+- framework minors: `nuxt`, `@nuxt/content`, `@nuxt/image`, `@nuxt/test-utils`, `@nuxt/schema`
+- frontend minors: `vue`, `vue-router`, `pinia`, `@pinia/nuxt`, `unocss` (all four packages),
+  `@iconify-json/*`
+- build/dev minors: `tsdown`, `oxlint`, `oxfmt`, `better-sqlite3` (native: rebuild and prove it loads)
+- **alignment**, equally part of the job:
+  - `vue-tsc` and `@vue/typescript-plugin` on one current major everywhere (`packages/ui` still sits
+    on an older major than `apps/web`)
+  - `@nuxt/schema` must not stay pinned to a version that disagrees with `nuxt`
+  - one TypeScript version across the workspace instead of three
+- clear the peer warnings recorded in the campaign baseline, where a patch/minor fixes them
+
+Out of scope — these are later waves and must not be touched here: `vitest`/`@vitest/ui` majors,
+`happy-dom`, `@pinia/testing`, `@vueuse/*`, `@formkit/drag-and-drop`, `unbuild`/`mkdist`,
+`radix-vue` → `reka-ui`, `multer`, `argon2`, `class-validator`, `@commitlint/*`, `taze`,
+`@types/node`, `@vitejs/plugin-vue`, `@vue/tsconfig`, TypeScript's next major, NestJS, TypeORM.
+
+## Acceptance criteria
+
+- [ ] every in-scope package is on its current release; `pnpm outdated -r` no longer lists them
+- [ ] a single TypeScript version resolves in the workspace, and `packages/ui` uses the same
+      `vue-tsc` major as `apps/web`
+- [ ] `@nuxt/schema` agrees with the installed `nuxt`
+- [ ] the peer warnings from the campaign baseline are gone, or each remaining one is explained in
+      the campaign journal with the wave that will fix it
+- [ ] native modules still load after their bump (`better-sqlite3` opens a database and runs a query)
+- [ ] `pnpm verify` green twice in a row, and the working tree still clean after the second run
+- [ ] formatting churn (if the formatter bump causes it) is its own commit, separate from the bumps
+- [ ] `docs/upgrades/2026-11-dependency-majors.md` records, per package: from → to, the release notes
+      or migration guide that was read, what changed here, and what was deferred
+- [ ] documentation contains no version numbers outside `docs/upgrades/`
+
+## Notes
+
+- Work on the runtime pinned in `.nvmrc`; it is not the machine default, so prefix commands or shell
+  out through the version manager.
+- `lint`/`fmt` are read-only; use `lint:fix`/`fmt:write` when you intend to change files.
+- Library changes are invisible to `apps/web` until `pnpm build` runs, and the web test suite needs
+  the built libraries too — the gate already orders build before test, keep it that way.
+- The formatter is pre-1.0 and its bump is allowed to reformat the tree; land that as its own
+  commit.
+- Tsdown is pre-1.0 as well: if its bump fights the current TypeScript version, prefer the
+  workspace-wide TypeScript version and record why in the journal.
