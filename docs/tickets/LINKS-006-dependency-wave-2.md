@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-006
 title: "Dependencies wave 2: backend security majors"
-status: ready-for-agent
+status: claimed
 priority: high
 area: backend
 created: 2026-11-13
