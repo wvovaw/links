@@ -1,35 +1,32 @@
 {
-"name": "links",
-"version": "0.1.0",
-"private": "true",
-"type": "module",
-"engines": {
-  "node": "^24.0.0",
-  "pnpm": "^10.0.0"
-},
-"main": "./dist/main.js",
-"module": "./dist/main.mjs",
-"types": "./dist/main.d.ts",
-"files": [
-  "dist"
-],
-"scripts": {
+  "name": "links",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^24.0.0",
+    "pnpm": "^10.0.0"
+  },
+  "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm --parallel -r dev",
-    "lint": "pnpm -r lint",
-    "fmt": "pnpm -r fmt",
+    "lint": "pnpm -r lint && oxlint --config packages/codestyle/oxlint.config.ts scripts",
+    "lint:fix": "pnpm -r lint:fix && oxlint --config packages/codestyle/oxlint.config.ts scripts --fix",
+    "fmt": "pnpm -r fmt && oxfmt --config packages/codestyle/oxfmt.config.ts --check AGENTS.md docs scripts .github .vscode",
+    "fmt:write": "pnpm -r fmt:write && oxfmt --config packages/codestyle/oxfmt.config.ts --write AGENTS.md docs scripts .github .vscode",
     "test": "pnpm -r test",
-"upg": "taze -r",
-"changeset": "changeset",
-"prerelease": "changeset version",
-"prepare": "husky"
-},
-"devDependencies": {
-"@changesets/cli": "^2.27.1",
-"@commitlint/cli": "^19.2.0",
-"@commitlint/config-conventional": "^19.1.0",
-"husky": "^9.0.11",
+    "tickets:check": "node scripts/tickets-check.mjs",
+    "verify": "pnpm tickets:check && pnpm lint && pnpm fmt && pnpm test && pnpm build",
+    "upg": "taze -r",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.0",
+    "@commitlint/config-conventional": "^19.1.0",
+    "husky": "^9.0.11",
+    "oxfmt": "^0.44.0",
+    "oxlint": "^1.59.0",
     "taze": "^0.13.3"
-},
-"packageManager": "pnpm@10.34.5"
+  },
+  "packageManager": "pnpm@10.34.5"
 }

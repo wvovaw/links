@@ -19,8 +19,10 @@
     "prepare": "pnpm run build",
     "dev": "tsdown -w",
     "build": "tsdown",
-    "lint": "oxlint . --fix",
-    "fmt": "oxfmt . write",
+    "lint": "oxlint --config oxlint.config.ts .",
+    "lint:fix": "oxlint --config oxlint.config.ts . --fix",
+    "fmt": "oxfmt --config oxfmt.config.ts --check .",
+    "fmt:write": "oxfmt --config oxfmt.config.ts --write .",
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {

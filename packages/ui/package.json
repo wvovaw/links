@@ -30,10 +30,13 @@
     "docs:build": "nuxt build --cwd docs",
     "docs:generate": "nuxt generate --cwd docs",
     "docs:preview": "nuxt preview --cwd docs --port 3002",
+    "build": "pnpm run lib:build",
     "lib:build": "unbuild",
     "lib:prepublishOnly": "pnpm build",
-    "lint": "oxlint . --fix",
-    "fmt": "oxfmt . write"
+    "lint": "oxlint --config oxlint.config.ts .",
+    "lint:fix": "oxlint --config oxlint.config.ts . --fix",
+    "fmt": "oxfmt --config oxfmt.config.ts --check .",
+    "fmt:write": "oxfmt --config oxfmt.config.ts --write ."
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.1.183",
