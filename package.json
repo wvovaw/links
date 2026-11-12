@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "^24.0.0",
+    "node": "^26.0.0",
     "pnpm": "^10.0.0"
   },
   "scripts": {
@@ -16,7 +16,7 @@
     "fmt:write": "pnpm -r fmt:write && oxfmt --config packages/codestyle/oxfmt.config.ts --write AGENTS.md docs scripts .github .vscode",
     "test": "pnpm -r test",
     "tickets:check": "node scripts/tickets-check.mjs",
-    "verify": "pnpm tickets:check && pnpm lint && pnpm fmt && pnpm test && pnpm build",
+    "verify": "pnpm tickets:check && pnpm lint && pnpm fmt && pnpm build && pnpm test",
     "upg": "taze -r",
     "prepare": "husky"
   },

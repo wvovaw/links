@@ -41,7 +41,7 @@ backlog → ready-for-agent → claimed → review → done
 The gate is one command:
 
 ```bash
-pnpm verify   # tickets:check + lint + fmt + test + build
+pnpm verify   # tickets:check + lint + fmt + build + test
 ```
 
 A ticket is done when, in order:
@@ -49,8 +49,9 @@ A ticket is done when, in order:
 1. `pnpm tickets:check` passes — the tracker itself stays consistent.
 2. `pnpm lint` passes **without touching files** (`git status` clean afterwards).
 3. `pnpm fmt` passes — formatting is checked, not applied.
-4. `pnpm test` passes and the test process exits on its own.
-5. `pnpm build` passes for every package, libraries included.
+4. `pnpm build` passes for every package, libraries included. Build comes before test on purpose:
+   the web suite imports the UI library preset from dist.
+5. `pnpm test` passes and the test process exits on its own.
 6. Anything touching runtime behaviour was exercised for real, not only compiled: the API against
    its Bruno collection (`apps/backend/.bruno`), the constructor and a public page in a browser.
 7. `## Verification` lists what was actually run and what came out.

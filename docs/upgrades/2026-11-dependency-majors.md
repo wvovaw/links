@@ -57,4 +57,33 @@ deferred           follow-up ticket, or "nothing"
 verified           install, build, tests, manual check
 ```
 
-_(no entries yet — wave 0 did not change dependency versions beyond removing `changesets`)_
+### Runtime
+
+```text
+node               24.15.0 → 26.13.1 (Lithium)
+guide read         https://github.com/nodejs/Release (schedule), nodejs blog entry announcing the LTS transition
+changed            .nvmrc pinned to the exact release; engines.node → ^26.0.0; Node 26 ships no corepack,
+                   so pnpm (the version in packageManager) is installed globally with npm into that runtime
+deferred           @types/node still on the 20 line — wave 4 aligns it with the runtime
+verified           clean install, every allowlisted native module loaded, pnpm verify green,
+                   backend booted on a deleted database and applied the baseline migration
+```
+
+### `@changesets/cli`
+
+```text
+package            removed (was 2.31.1)
+guide read         not applicable — removal, not an upgrade
+changed            .changeset/ directory, root scripts, devDependency
+deferred           nothing
+verified           pnpm install, pnpm verify
+```
+
+Also fixed in wave 0.5, because the gate could not be trusted without it:
+
+```text
+gate order         test now runs after build — the web suite imports the UI preset from dist, so a
+                   fresh clone failed at test time
+cold build         apps/web build runs `nuxt prepare` first; the first build after a clean install
+                   could race the generated tsconfig
+```

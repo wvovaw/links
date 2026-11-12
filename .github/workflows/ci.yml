@@ -36,8 +36,9 @@ jobs:
       - name: Check formatting
         run: pnpm fmt
 
-      - name: Test
-        run: pnpm test
-
+      # Build before testing: the web suite loads the UI library preset from dist.
       - name: Build
         run: pnpm build
+
+      - name: Test
+        run: pnpm test

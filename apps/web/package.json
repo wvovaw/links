@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt prepare && nuxt build",
     "preview": "nuxt preview",
     "dev": "nuxt dev",
     "lint": "oxlint --config oxlint.config.ts .",

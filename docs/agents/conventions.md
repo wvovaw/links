@@ -12,6 +12,8 @@ Inherited knowledge that is expensive to rediscover. Versions are deliberately a
   read-only ones, so a "green local lint" that reformatted files is a false green.
 - Recursive root scripts (`pnpm -r <script>`) silently **skip** packages that do not define the
   script. Add the script to a package before wiring it elsewhere.
+- Node 26 bundles no corepack: if `pnpm` is missing on a machine, install the version named by
+  `package.json#packageManager` with `npm i -g` into that runtime.
 - `pnpm` does not run dependency install scripts unless the package is allowlisted in
   `onlyBuiltDependencies` in `pnpm-workspace.yaml`. A new dependency that needs a native build must
   be added there, or it installs without its binary.
@@ -39,7 +41,9 @@ pnpm --filter @links/blocks build      # tsdown
 ```
 
 `pnpm build` at the root is recursive and runs in dependency order, so it builds both libraries
-before web. `prepare` also builds them on `pnpm install`.
+before web. `pnpm install` does **not** build them: `prepare` fires when a package is installed as a
+dependency, not for workspace links, so a fresh clone has to be built before anything that imports
+the preset can run — the web test suite included.
 
 ## apps/web (Nuxt) — two directories per feature
 
