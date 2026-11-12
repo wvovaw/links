@@ -3,6 +3,12 @@ packages:
   - packages/*
   - packages/codestyle
 
+# @nestjs/platform-express pins multer to an exact version, so without this the workspace
+# ships a second, older copy — the one FileInterceptor actually loads. Drop the override
+# when the NestJS wave moves platform-express to a multer version it pins by range.
+overrides:
+  multer: ^2.5.0
+
 onlyBuiltDependencies:
   - argon2
   - better-sqlite3
