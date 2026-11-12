@@ -12,8 +12,8 @@ Inherited knowledge that is expensive to rediscover. Versions are deliberately a
   read-only ones, so a "green local lint" that reformatted files is a false green.
 - Recursive root scripts (`pnpm -r <script>`) silently **skip** packages that do not define the
   script. Add the script to a package before wiring it elsewhere.
-- Node 26 bundles no corepack: if `pnpm` is missing on a machine, install the version named by
-  `package.json#packageManager` with `npm i -g` into that runtime.
+- The current Node line ships without corepack: if `pnpm` is missing on a machine, install the
+  version named by `package.json#packageManager` with `npm i -g` into that runtime.
 - `pnpm` does not run dependency install scripts unless the package is allowlisted in
   `onlyBuiltDependencies` in `pnpm-workspace.yaml`. A new dependency that needs a native build must
   be added there, or it installs without its binary.

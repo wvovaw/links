@@ -93,9 +93,11 @@ contract, an op set, a prerender pipeline).
 ## Documentation rules
 
 - **No version numbers in docs.** Not the runtime, not packages. Version-dependent statements point
-  at `.nvmrc`, `package.json#packageManager`, `engines`, or the package's own `package.json`. The one
-  exception is [`docs/upgrades/`](upgrades/): a migration journal has to record what moved, because
-  it is history, not reference. It is never the answer to "what do we run now".
+  at `.nvmrc`, `package.json#packageManager`, `engines`, or the package's own `package.json`.
+  Two exceptions, both historical rather than referential: [`docs/upgrades/`](upgrades/), a migration
+  journal that has to record what moved, and the `## Verification` section of a ticket, where the
+  exact command that produced the evidence may be quoted verbatim. Neither is ever the answer to
+  "what do we run now".
 - `AGENTS.md` stays short: identity, layout, truth sources, commands, invariants, map of `docs/`.
   Detail belongs in `docs/agents/`, procedures in skills, work in `docs/tickets/`.
 - One documentation directory: lowercase `docs/` at the repo root.
