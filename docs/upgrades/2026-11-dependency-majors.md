@@ -13,7 +13,7 @@ first, so every later wave is judged by the same standard.
 | Wave | Scope                                                                                                         | Status      |
 | ---- | ------------------------------------------------------------------------------------------------------------- | ----------- |
 | 0    | Gates: CI, read-only lint/format scripts, formatting pass, in-repo tracker                                    | done        |
-| 0.5  | Runtime: switch `.nvmrc` to the current Node LTS, rebuild native modules                                      | not started |
+| 0.5  | Runtime: switch `.nvmrc` to the current Node LTS, rebuild native modules                                      | done        |
 | 1    | Patch/minor across the workspace; align `vue-tsc`, `@nuxt/schema`, single TypeScript version                  | done        |
 | 2    | Backend security majors: `multer`, `argon2`, `class-validator`                                                | not started |
 | 3    | Frontend majors: `vitest`, `@vueuse/*`, `@formkit/drag-and-drop`, `unbuild`/`mkdist`, `radix-vue` → `reka-ui` | not started |
