@@ -9,7 +9,9 @@ created: 2026-11-13
 updated: 2026-11-13
 blocked_by:
   - LINKS-004
-blocks: []
+blocks:
+  - LINKS-006
+  - LINKS-007
 ---
 
 # LINKS-005 — Dependencies wave 1: patches, minors and version alignment
