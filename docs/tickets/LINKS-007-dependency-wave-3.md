@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-007
 title: "Dependencies wave 3: frontend majors"
-status: ready-for-agent
+status: claimed
 priority: high
 area: web
 created: 2026-11-13
