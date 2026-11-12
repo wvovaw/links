@@ -4,8 +4,8 @@ import { mount } from "@vue/test-utils";
 import { createPinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import BlocksList from "./blocks-list.vue";
 import { useConstructorStore } from "../../model";
+import BlocksList from "./blocks-list.vue";
 
 describe("testing BlocksList component", () => {
   let wrapper: VueWrapper;

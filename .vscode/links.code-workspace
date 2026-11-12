@@ -22,16 +22,16 @@
     },
     {
       "name": ".ROOT",
-      "path": "../"
+      "path": "../",
     },
   ],
   "settings": {
     "files.associations": {
       "*.md": "mdc",
-      "*.mdc": "mdc"
+      "*.mdc": "mdc",
     },
     "todo-tree.tree.showBadges": false,
     "prettier.enable": false,
-    "eslint.enable": false
-  }
+    "eslint.enable": false,
+  },
 }

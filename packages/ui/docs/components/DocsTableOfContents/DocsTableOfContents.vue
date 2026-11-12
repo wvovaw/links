@@ -7,10 +7,7 @@ interface TocLink {
   children?: TocLink[];
 }
 
-const props = withDefaults(
-  defineProps<{ value: { body?: { toc?: { links?: TocLink[] } } } }>(),
-  {},
-);
+const props = withDefaults(defineProps<{ value: { body?: { toc?: { links?: TocLink[] } } } }>(), {});
 const tocLinks = computed(() => props.value?.body?.toc?.links ?? []);
 const visible = ref(false);
 

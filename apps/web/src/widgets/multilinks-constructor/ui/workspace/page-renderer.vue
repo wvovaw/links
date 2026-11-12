@@ -39,8 +39,12 @@ onMounted(() => {
   <div class="link" :style="background">
     <div class="link__container">
       <div ref="draggableRoot" class="link__blocks-root">
-        <PageBlock v-for="block of blocks" :key="block.id" :is-selected="isSelectedBlock(block.id)"
-          @select="selectBlock(block.id)">
+        <PageBlock
+          v-for="block of blocks"
+          :key="block.id"
+          :is-selected="isSelectedBlock(block.id)"
+          @select="selectBlock(block.id)"
+        >
           <component :is="resolve(block.name)" :id="`block-${block.id}`" :properties="block.properties" />
         </PageBlock>
       </div>
