@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { animations, dragAndDrop } from "@formkit/drag-and-drop";
+import type { IBlock } from "@links/blocks";
+
+import { animations, dragAndDrop, tearDown } from "@formkit/drag-and-drop";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 import { useBlocksResolver } from "~shared/blocks";
@@ -11,7 +13,7 @@ const { resolve } = useBlocksResolver();
 
 const constructorStore = useConstructorStore();
 const { selectedBlockId, blocks, background } = storeToRefs(constructorStore);
-const { selectBlock, setBlocks, clearHistory } = constructorStore;
+const { selectBlock, setBlocks, clearHistory, pauseHistory, resumeHistory } = constructorStore;
 
 function isSelectedBlock(blockId: string) {
   const isit = selectedBlockId.value === blockId;
@@ -19,19 +21,42 @@ function isSelectedBlock(blockId: string) {
 }
 
 const draggableRoot = ref<HTMLElement>();
+let reordered = false;
+
+function hasSameBlockOrder(nextBlocks: IBlock[]) {
+  return (
+    nextBlocks.length === blocks.value.length &&
+    nextBlocks.every((block, index) => block.id === blocks.value[index]?.id)
+  );
+}
+
 onMounted(() => {
   // TODO: Make this work on mobile on long hold
   dragAndDrop({
     parent: draggableRoot.value!,
     getValues: () => blocks.value,
     setValues: (values) => {
+      if (hasSameBlockOrder(values)) return;
+      reordered = true;
       setBlocks(values);
     },
     config: {
       plugins: [animations({ duration: 100 })],
+      onDragstart: () => {
+        reordered = false;
+        pauseHistory();
+      },
+      onDragend: () => {
+        resumeHistory(reordered);
+        reordered = false;
+      },
     },
   });
   clearHistory();
+});
+
+onBeforeUnmount(() => {
+  if (draggableRoot.value) tearDown(draggableRoot.value);
 });
 </script>
 
