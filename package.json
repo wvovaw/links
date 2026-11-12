@@ -24,8 +24,8 @@
     "@commitlint/cli": "^19.2.0",
     "@commitlint/config-conventional": "^19.1.0",
     "husky": "^9.0.11",
-    "oxfmt": "^0.44.0",
-    "oxlint": "^1.59.0",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
     "taze": "^0.13.3"
   },
   "packageManager": "pnpm@10.34.5"
