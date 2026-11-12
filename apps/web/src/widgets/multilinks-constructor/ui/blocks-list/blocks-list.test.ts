@@ -25,6 +25,6 @@ describe("testing BlocksList component", () => {
     await wrapper.find("[data-testid='blocks-list-item']").trigger("click");
     const store = useConstructorStore();
     expect(store.blocks.length).toBeGreaterThan(0);
-    expect(store.selectedBlockId).toBe(store.blocks[0].id);
+    expect(store.selectedBlockId).toBe(store.blocks[0]?.id);
   });
 });

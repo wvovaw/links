@@ -8,7 +8,7 @@ import isLinkNameAvailable from "../../api/is-link-name-available";
 import { createLinkSchema } from "../../model/schema";
 
 const { push } = useRouter();
-const toast = useToast();
+const { toast } = useToast();
 
 const { handleSubmit, setFieldError, isSubmitting } = useForm({ validationSchema: toTypedSchema(createLinkSchema) });
 
