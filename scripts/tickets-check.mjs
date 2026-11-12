@@ -93,7 +93,7 @@ function section(heading, text) {
 
 const tickets = new Map();
 
-for (const entry of readdirSync(TICKETS_DIR).sort()) {
+for (const entry of readdirSync(TICKETS_DIR).toSorted()) {
   if (SKIP_FILES.has(entry)) continue;
   if (!entry.endsWith(".md")) continue;
 

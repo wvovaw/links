@@ -20,6 +20,13 @@ Inherited knowledge that is expensive to rediscover. Versions are deliberately a
 - Conventional commits are enforced by husky + commitlint on `commit-msg`.
 - `apps/web` is the only package with tests (vitest + happy-dom + `@nuxt/test-utils`). Backend has
   none; the API is exercised through the Bruno collection in `apps/backend/.bruno`.
+- **A toolchain change can leave a poisoned `node_modules`.** After the hoisting migration, stale
+  symlinks from the previous layout survived in the root `node_modules` (a link pointing into a
+  `.pnpm` path that no longer existed). Resolution then died at build time with `ENOENT ...
+realpath` on a package that looked installed. `find node_modules -maxdepth 2 -xtype l` finds them;
+  the fix is `rm -rf node_modules packages/*/node_modules apps/*/node_modules && pnpm install`. CI
+  starts from a clean tree, so this class of failure is local-only and easy to misread as a
+  regression.
 
 ## Workspace packages are consumed via dist
 

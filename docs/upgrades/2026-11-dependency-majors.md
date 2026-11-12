@@ -33,8 +33,11 @@ Recorded while setting up wave 0, so later waves can tell regressions from pre-e
 - Two `multer` copies coexist: the backend declares the old line directly, while
   `@nestjs/platform-express` already pulls the current major. Wave 2 removes the duplicate.
 - `vue-tsc` does not pass on `apps/web` or `packages/ui` (pre-existing type errors in Pinia typing,
-  `useToast` declarations, and the UI docs site). Type checking therefore cannot join CI yet; it is
-  debt to clear in wave 1/3, not a gate.
+  `useToast` declarations, and the UI docs site). Part of it is a build defect, not a typing nit:
+  the UI library build emits `TS2742` for `useToast.ts` ("inferred type cannot be named without a
+  reference to `@vue/shared`"), which leaves `dist/components/Toast/useToast.d.ts` unusable as a
+  module and breaks web type checking on an import it can compile fine. Type checking therefore
+  cannot join CI yet; it is debt to clear in wave 1/3, not a gate.
 - `apps/web` tests pass but the vitest process does not exit on its own; wave 3 (vitest major) is the
   natural place to fix it.
 - `packages/blocks` builds through a TypeScript major that is ahead of the rest of the workspace;
@@ -48,7 +51,7 @@ Filled in as waves land. One block per package:
 
 ```text
 package            from → to
-guide read         <link>
+guide read         <link>          official migration guide or release notes
 changed            config / scripts / imports / API calls
 deferred           follow-up ticket, or "nothing"
 verified           install, build, tests, manual check
