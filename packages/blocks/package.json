@@ -30,6 +30,6 @@
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "tsdown": "^0.23.7",
-    "typescript": "^5.9.3"
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
   }
 }

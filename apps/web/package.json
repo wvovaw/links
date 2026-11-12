@@ -51,7 +51,7 @@
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "reka-ui": "^2.11.0",
-    "typescript": "^5.9.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "unocss-preset-animations": "^1.0.2",
     "valibot": "^1.5.0",
     "vaul-vue": "^0.4.1",

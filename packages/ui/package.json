@@ -62,7 +62,7 @@
     "oxlint": "^1.93.0",
     "pinia": "^4.1.0",
     "reka-ui": "^2.11.0",
-    "typescript": "^5.9.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "unbuild": "^3.6.1",
     "unocss": "^66.12.0",
     "unocss-preset-animations": "^1.0.2",
