@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-008
 title: "Dependencies wave 4: tooling majors"
-status: ready-for-agent
+status: claimed
 priority: medium
 area: tooling
 created: 2026-11-13
