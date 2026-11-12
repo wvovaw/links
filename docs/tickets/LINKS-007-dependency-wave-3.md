@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-007
 title: "Dependencies wave 3: frontend majors"
-status: claimed
+status: done
 priority: high
 area: web
 created: 2026-11-13
@@ -43,18 +43,18 @@ components: the migration keeps current behaviour and appearance.
 
 ## Acceptance criteria
 
-- [ ] `radix-vue` appears in no `package.json`, no import, no CSS variable and no lockfile entry
-- [ ] the dark/light theming still works after the CSS variable prefix change (visually checked in the
+- [x] `radix-vue` appears in no `package.json`, no import, no CSS variable and no lockfile entry
+- [x] the dark/light theming still works after the CSS variable prefix change (visually checked in the
       constructor and on a public page)
-- [ ] the web test suite passes on the new vitest major and the process exits on its own — the
+- [x] the web test suite passes on the new vitest major and the process exits on its own — the
       "close timed out" hang is part of this wave
-- [ ] `pnpm --filter @links/ui lib:build` produces the same public contract as before; a consuming
+- [x] `pnpm --filter @links/ui lib:build` produces the same public contract as before; a consuming
       build (`pnpm build`) resolves `@links/ui`, `@links/ui/preset` and `@links/ui/theme.css`
-- [ ] drag-and-drop reordering in the constructor works, records history, and survives undo/redo
-- [ ] `pnpm verify` green on the pinned runtime, working tree clean afterwards
-- [ ] `docs/upgrades/2026-11-dependency-majors.md` records per package: from → to, the migration guide
+- [x] drag-and-drop reordering in the constructor works, records history, and survives undo/redo
+- [x] `pnpm verify` green on the pinned runtime, working tree clean afterwards
+- [x] `docs/upgrades/2026-11-dependency-majors.md` records per package: from → to, the migration guide
       that was read, what changed here, what was deferred
-- [ ] documentation contains no version numbers outside `docs/upgrades/`
+- [x] documentation contains no version numbers outside `docs/upgrades/`
 
 ## Notes
 
@@ -66,3 +66,36 @@ components: the migration keeps current behaviour and appearance.
   composable. Fixing that debt is welcome if it is cheap once `@vueuse/*` and vue-tsc are current;
   otherwise record it and move on. Type checking is not a gate.
 - A `mkdist` ↔ `vue-tsc` peer warning appeared after the wave 1 alignment; this wave owns it.
+
+## Verification
+
+All commands ran on the runtime pinned by `.nvmrc`, through `fnm exec --using=26.13.1 --`.
+
+- `pnpm install` — clean resolution; no `radix-vue` in the result. Remaining peer warnings are the
+  out-of-scope ones listed in the journal plus the new `vitest → @types/node` warning owned by wave 4.
+- `git grep radix-vue -- . ':!docs/tickets' ':!docs/upgrades'` — no output. `grep radix
+  pnpm-lock.yaml` only matches the unrelated `radix3` package. `git grep -i radix` likewise only
+  matches `radix3`.
+- Built output: `packages/ui/dist/css/theme.css` and the web production CSS contain only `--reka-*`
+  variables (`--reka-accordion-content-height`, `--reka-collapsible-content-height`,
+  `--reka-select-trigger-*`, `--reka-toast-swipe-*`); no `--radix-*`.
+- `pnpm --filter @links/ui lib:build` — exits 0 with no warnings; `dist/index.*`, `dist/preset/*`,
+  `dist/css/theme.css` and the per-component `.d.ts` files are produced. The toast TS2742 is gone.
+- `pnpm build` — all packages build. From `apps/web`, `import.meta.resolve` resolves `@links/ui`,
+  `@links/ui/preset` and `@links/ui/theme.css` into `packages/ui/dist`. Note: `components.d.ts` is
+  listed in `packages/ui/package.json#files` but was already absent before this wave and is still not
+  produced by the build; the journal records this as a stale packaging entry rather than a regression.
+- `pnpm --filter @links/web test` — 4 files, 62 tests pass; the process exits with code 0 and no
+  "close timed out" message. The new `constructor.store.test.ts` covers the reorder-history rules.
+- Browser check (Chromium, constructor and public page): the public page and constructor both loaded;
+  the constructor showed all three seeded blocks. Toggling `data-theme` between `light` and `dark`
+  changed the computed body text colour from `rgb(0, 0, 0)` to `rgb(255, 255, 255)`; screenshots were
+  inspected. The public page footer and blocks followed the same theme.
+- Drag check (Chromium via the DevTools protocol): pressed and dragged the first block
+  (`block-par1`) past the second; the rendered order became `block-btn1, block-par1, block-ava1`,
+  the undo button became enabled, undo restored the original order and redo re-applied the new one.
+- Type checking: `vue-tsc --noEmit` passes in `apps/web`. In `packages/ui` the library sources and
+  generated declarations are clean; the remaining errors are the pre-existing docs-app errors that
+  require the docs Nuxt build's generated aliases and auto-imports.
+- `pnpm verify` — green (tickets:check, lint, fmt, build, test). The working tree contains only the
+  wave's intended edits; no build artifacts.
