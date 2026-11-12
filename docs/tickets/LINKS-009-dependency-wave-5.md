@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-009
 title: "Dependencies wave 5: framework majors (TypeScript, NestJS, TypeORM)"
-status: backlog
+status: ready-for-agent
 priority: high
 area: backend
 created: 2026-11-13
