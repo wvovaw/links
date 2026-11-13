@@ -1,10 +1,10 @@
-import type { ToggleGroupRootProps } from "radix-vue";
+import type { AcceptableValue, ToggleGroupRootProps } from "reka-ui";
 import type { InjectionKey, Ref } from "vue";
 
 type ModelValue = ToggleGroupRootProps["modelValue"];
 
 export const menuItemKey = Symbol("MenuItemContext") as InjectionKey<{
-  value: Ref<string>;
+  value: Ref<AcceptableValue>;
   disabled: Ref<boolean>;
 }>;
 

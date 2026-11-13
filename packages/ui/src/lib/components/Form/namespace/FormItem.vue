@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { PrimitiveProps } from "radix-vue";
+import type { PrimitiveProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
 
-import { Primitive, useForwardProps, useId } from "radix-vue";
+import { Primitive, useForwardProps, useId } from "reka-ui";
 import { computed, provide } from "vue";
 
 import { FORM_ITEM_INJECTION_KEY } from "./providers";

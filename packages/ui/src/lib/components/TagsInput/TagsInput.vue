@@ -2,7 +2,7 @@
 import type { VariantProps } from "cva";
 
 import { cva } from "cva";
-import { TagsInputRoot, type TagsInputRootEmits, type TagsInputRootProps, useForwardPropsEmits } from "radix-vue";
+import { TagsInputRoot, type TagsInputRootEmits, type TagsInputRootProps, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed, provide } from "vue";
 
 const tagsInputRootVariants = cva("flex flex-wrap gap-2 items-center justify-start bg-goku", {

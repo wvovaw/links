@@ -40,6 +40,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     canRedo: blocksCanRedo,
     canUndo: blocksCanUndo,
     history: blocksHistory,
+    pause: pauseBlocksHistory,
+    resume: resumeBlocksHistory,
   } = useDebouncedRefHistory(blocks, { deep: true, dump: JSON.stringify, parse: JSON.parse, debounce: 350 });
 
   /* Getters */
@@ -54,6 +56,11 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     publishStatus.value = status;
   }
   function setBlocks(newBlocks: IBlock[]) {
+    if (
+      blocks.value.length === newBlocks.length &&
+      blocks.value.every((block, index) => block.id === newBlocks[index]?.id)
+    )
+      return;
     blocks.value.length = 0;
     blocks.value.push(...newBlocks);
   }
@@ -120,6 +127,12 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   }
   function clearHistory() {
     clearBlocksHistory();
+  }
+  function pauseHistory() {
+    pauseBlocksHistory();
+  }
+  function resumeHistory(commit = false) {
+    resumeBlocksHistory(commit);
   }
   function computeStoreHash() {
     return computeHash({
@@ -194,6 +207,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     undo,
     redo,
     clearHistory,
+    pauseHistory,
+    resumeHistory,
     setBlocks,
     setTitle,
     setBackground,

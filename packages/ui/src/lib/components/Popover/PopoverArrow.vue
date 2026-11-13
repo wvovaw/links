@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PopoverArrow, type PrimitiveProps, useForwardProps } from "radix-vue";
+import { PopoverArrow, type PrimitiveProps, useForwardProps } from "reka-ui";
 
 const props = defineProps<PrimitiveProps>();
 const forwarded = useForwardProps(props);

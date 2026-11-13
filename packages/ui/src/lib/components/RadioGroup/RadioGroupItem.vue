@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps, useForwardProps } from "radix-vue";
+import { RadioGroupIndicator, RadioGroupItem, type RadioGroupItemProps, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed, inject } from "vue";
 
 import { UIRadioItem, type UIRadioItemVariants } from "../RadioItem";

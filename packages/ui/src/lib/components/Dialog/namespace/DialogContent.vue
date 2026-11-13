@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { DialogContentEmits, DialogContentProps } from "radix-vue";
+import type { DialogContentEmits, DialogContentProps } from "reka-ui";
 
-import { DialogClose, DialogContent, DialogOverlay, DialogPortal, useForwardPropsEmits } from "radix-vue";
+import { DialogClose, DialogContent, DialogOverlay, DialogPortal, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 import { UIButton } from "../../Button";

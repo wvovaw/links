@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AccordionRoot, type AccordionRootEmits, type AccordionRootProps, useForwardPropsEmits } from "radix-vue";
+import { AccordionRoot, type AccordionRootEmits, type AccordionRootProps, useForwardPropsEmits } from "reka-ui";
 
 const props = withDefaults(defineProps<AccordionRootProps>(), {
   type: "single",

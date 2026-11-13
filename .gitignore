@@ -3,6 +3,7 @@
 .data
 .nuxt
 .nitro
+.nuxtrc
 .cache
 dist
 dist-ssr
@@ -12,6 +13,9 @@ node_modules
 .eslintcache
 .turbo
 *.local
+
+# Scratch space for throwaway probes
+.scratch
 
 # Logs
 logs

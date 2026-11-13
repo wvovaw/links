@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ToggleGroupItem, type ToggleGroupItemProps, useForwardProps } from "radix-vue";
+import { ToggleGroupItem, type ToggleGroupItemProps, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed, inject } from "vue";
 
 import type { ToggleVariants } from "../Toggle/private/ToggleItem.vue";

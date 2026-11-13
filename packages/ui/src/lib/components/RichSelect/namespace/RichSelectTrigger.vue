@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
-import { SelectIcon, SelectTrigger, type SelectTriggerProps, useForwardProps } from "radix-vue";
+import { SelectIcon, SelectTrigger, type SelectTriggerProps, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const selectTriggerVariants = cva(

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { TagsInputItemProps } from "radix-vue";
+import type { TagsInputItemProps } from "reka-ui";
 
-import { TagsInputItem, TagsInputItemDelete, TagsInputItemText, useForwardProps } from "radix-vue";
+import { TagsInputItem, TagsInputItemDelete, TagsInputItemText, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed, inject } from "vue";
 
 import { UITag } from "../Tag";

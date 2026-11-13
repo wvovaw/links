@@ -2,7 +2,7 @@
 import type { HTMLAttributes, Ref } from "vue";
 
 import { type VariantProps, cva } from "cva";
-import { TabsTrigger, type TabsTriggerProps, useForwardProps } from "radix-vue";
+import { TabsTrigger, type TabsTriggerProps, useForwardProps } from "reka-ui";
 import { computed, inject } from "vue";
 
 const tabsTriggerVariants = cva(

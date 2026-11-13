@@ -49,22 +49,22 @@ description: Avatar is an image element with a fallback for representing a user.
 
 #### Props
 
-| Name      | Type                              | Required | Default | Description                                                                                                                                                                                          |
-| --------- | --------------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component              | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`                         | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `size`    | xs \| sm \| md \| lg \| xl \| 2xl | No       | md      | Size property of the avatar.                                                                                                                                                                         |
-| `shape`   | circle \| square                  | No       | square  | Square with rounded borders or fully rounded avatar variants.                                                                                                                                        |
+| Name      | Type                              | Required | Default | Description                                                                                                                                                                                       |
+| --------- | --------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component              | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`                         | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `size`    | xs \| sm \| md \| lg \| xl \| 2xl | No       | md      | Size property of the avatar.                                                                                                                                                                      |
+| `shape`   | circle \| square                  | No       | square  | Square with rounded borders or fully rounded avatar variants.                                                                                                                                     |
 
 ### Image
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `src`     | `string`             | Yes      | -       | An image source URL.                                                                                                                                                                                 |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `src`     | `string`             | Yes      | -       | An image source URL.                                                                                                                                                                              |
 
 #### Emits
 
@@ -76,11 +76,11 @@ description: Avatar is an image element with a fallback for representing a user.
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `delayMs` | `number`             | No       | 0       | Useful for delaying rendering so it only appears for those with slower connections.                                                                                                                  |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `delayMs` | `number`             | No       | 0       | Useful for delaying rendering so it only appears for those with slower connections.                                                                                                               |
 
 ### Indicator
 

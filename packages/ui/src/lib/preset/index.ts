@@ -260,11 +260,11 @@ export default definePreset((_options?: PresetMoonOptions) => {
           "pulse2":
             "{ 10%, 90% { transform: translate3d(-1px, 0, 0) } 0% { transform: scale(1) } 70% { transform: scale(1); box-shadow: 0 0 0 30px transparent } 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent } }",
           // Collapsible
-          "collapsible-down": "{ from { height: 0 } to { height: var(--radix-collapsible-content-height) } }",
-          "collapsible-up": "{ to { height: 0 } from { height: var(--radix-collapsible-content-height) } }",
+          "collapsible-down": "{ from { height: 0 } to { height: var(--reka-collapsible-content-height) } }",
+          "collapsible-up": "{ to { height: 0 } from { height: var(--reka-collapsible-content-height) } }",
           // Accordion
-          "accordion-down": "{ from { height: 0 } to { height: var(--radix-accordion-content-height) } }",
-          "accordion-up": "{ to { height: 0 } from { height: var(--radix-accordion-content-height) } }",
+          "accordion-down": "{ from { height: 0 } to { height: var(--reka-accordion-content-height) } }",
+          "accordion-up": "{ to { height: 0 } from { height: var(--reka-accordion-content-height) } }",
           // Toast
           "toast-hide": "{ 0% { opacity: 1 } 100% { opacity: 0 } }",
           "toast-slide-in-right":
@@ -275,7 +275,7 @@ export default definePreset((_options?: PresetMoonOptions) => {
             "{ 0% { transform: translateY(calc(100% + 1rem)) } 100% { transform: translateY(0) } }",
           "toast-slide-in-up": "{ 0% { transform: translateY(calc(-100% + 1rem)) } 100% { transform: translateY(0) } }",
           "toast-swipe-out":
-            "{ 0% { transform: translateX(var(--radix-toast-swipe-end-x)) } 100% { transform: translateX(100%) } }",
+            "{ 0% { transform: translateX(var(--reka-toast-swipe-end-x)) } 100% { transform: translateX(100%) } }",
         },
         durations: {
           "pulse2": "1.5s",

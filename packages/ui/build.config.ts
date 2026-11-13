@@ -27,7 +27,7 @@ export default defineBuildConfig({
   clean: true,
   externals: [
     "vue",
-    "radix-vue",
+    "reka-ui",
     "unocss",
     "@unocss/reset",
     "@unocss/transformer-directives",

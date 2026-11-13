@@ -6,6 +6,6 @@ import PreviewFrame from "../PreviewFrame.vue";
 
 <template>
   <PreviewFrame>
-    <UICheckbox default-checked />
+    <UICheckbox default-value />
   </PreviewFrame>
 </template>

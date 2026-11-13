@@ -1,5 +1,6 @@
 <!-- TODO: use browserDetected language on first app load; Set prefered language cookie on change; -->
 <script setup lang="ts">
+import type { AcceptableValue } from "reka-ui";
 import type { HTMLAttributes } from "vue";
 
 import { UIRichSelect } from "@links/ui";
@@ -12,8 +13,8 @@ const props = defineProps<{
   class?: HTMLAttributes["class"];
 }>();
 
-function onChangeLocale(newLocale: string) {
-  setLocale(newLocale as "en" | "ru");
+function onChangeLocale(newLocale: AcceptableValue) {
+  setLocale(String(newLocale) as "en" | "ru");
   router.replace(switchLocalePath(locale.value));
 }
 </script>

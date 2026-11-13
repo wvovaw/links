@@ -47,13 +47,13 @@ The `Collapsible` component itself is a headless component. That means that you 
 
 #### Props
 
-| Name          | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| ------------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`          | `AsTag` \| Component | No       | div     | Sets the root HTML element. div is default                                                                                                                                                          |
-| `asChild`     | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `defaultOpen` | `boolean`            | No       | `false` | The open state of the collapsible when it is initially rendered. Use when you don't need to controll its open state.                                                                                |
-| `disabled`    | `boolean`            | No       | -       | When `true`, prevents user from interaction.                                                                                                                                                        |
-| `open`        | `boolean`            | No       | -       | The controlled open state of the collapsible. Can be bound with `v-model`                                                                                                                           |
+| Name          | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| ------------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`          | `AsTag` \| Component | No       | div     | Sets the root HTML element. div is default                                                                                                                                                       |
+| `asChild`     | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `defaultOpen` | `boolean`            | No       | `false` | The open state of the collapsible when it is initially rendered. Use when you don't need to controll its open state.                                                                             |
+| `disabled`    | `boolean`            | No       | -       | When `true`, prevents user from interaction.                                                                                                                                                     |
+| `open`        | `boolean`            | No       | -       | The controlled open state of the collapsible. Can be bound with `v-model`                                                                                                                        |
 
 #### Emits
 
@@ -82,10 +82,10 @@ default
 
 #### Props
 
-| Name      | Type                 | Required | Default  | Description                                                                                                                                                                                         |
-| --------- | -------------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | `button` | Sets the root HTML element. button is default                                                                                                                                                       |
-| `asChild` | `boolean`            | No       | -        | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default  | Description                                                                                                                                                                                      |
+| --------- | -------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`      | `AsTag` \| Component | No       | `button` | Sets the root HTML element. button is default                                                                                                                                                    |
+| `asChild` | `boolean`            | No       | -        | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Data Attributes
 
@@ -100,11 +100,11 @@ default
 
 #### Props
 
-| Name         | Type                 | Required | Default  | Description                                                                                                                                                                                         |
-| ------------ | -------------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`         | `AsTag` \| Component | No       | `button` | Sets the root HTML element. button is default                                                                                                                                                       |
-| `asChild`    | `boolean`            | No       | -        | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `forceMount` | `boolean`            | No       | -        | Used to force mounting when more control is needed. Useful when controlling animation with Vue animation libraries.                                                                                 |
+| Name         | Type                 | Required | Default  | Description                                                                                                                                                                                      |
+| ------------ | -------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`         | `AsTag` \| Component | No       | `button` | Sets the root HTML element. button is default                                                                                                                                                    |
+| `asChild`    | `boolean`            | No       | -        | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `forceMount` | `boolean`            | No       | -        | Used to force mounting when more control is needed. Useful when controlling animation with Vue animation libraries.                                                                              |
 
 #### Data Attributes
 

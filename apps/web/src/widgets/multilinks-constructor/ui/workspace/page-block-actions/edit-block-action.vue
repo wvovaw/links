@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UIDrawer } from "@links/ui";
-import { VisuallyHidden } from "radix-vue";
+import { VisuallyHidden } from "reka-ui";
 
 import { BlockPropertiesEditor } from "../../block-properties-editor";
 import ActionButton from "./action-button.vue";

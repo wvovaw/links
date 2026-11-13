@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { DropdownMenuContentEmits, DropdownMenuContentProps } from "radix-vue";
+import type { DropdownMenuContentEmits, DropdownMenuContentProps } from "reka-ui";
 
-import { DropdownMenuContent, DropdownMenuPortal, useForwardPropsEmits } from "radix-vue";
+import { DropdownMenuContent, DropdownMenuPortal, useForwardPropsEmits } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const props = withDefaults(

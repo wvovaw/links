@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
-import { AccordionHeader, AccordionTrigger, type AccordionTriggerProps } from "radix-vue";
+import { AccordionHeader, AccordionTrigger, type AccordionTriggerProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const accordionTriggerVariants = cva(

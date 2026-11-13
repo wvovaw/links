@@ -6,6 +6,6 @@ import PreviewFrame from "../PreviewFrame.vue";
 
 <template>
   <PreviewFrame>
-    <UISwitch default-checked />
+    <UISwitch default-value />
   </PreviewFrame>
 </template>

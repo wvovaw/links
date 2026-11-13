@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
-import { TabsList, type TabsListProps } from "radix-vue";
+import { TabsList, type TabsListProps } from "reka-ui";
 import { type HTMLAttributes, computed, inject, provide, readonly, toRefs } from "vue";
 
 const tabsListVariants = cva("flex items-center justify-center w-fit", {

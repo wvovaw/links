@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ToastClose, type ToastCloseProps } from "radix-vue";
+import { ToastClose, type ToastCloseProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 import { UIButton } from "../../Button";

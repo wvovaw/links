@@ -99,24 +99,24 @@ To activate the `Dialog` component from within a `ContextMenu` or `Dropdown`, yo
 
 ### Root
 
-Refer to [Radix-Vue Dialog Root](https://www.radix-vue.com/components/dialog#root){:target="\_blank"} API reference
+Refer to [Reka UI Dialog Root](https://reka-ui.com/docs/components/dialog#root){:target="\_blank"} API reference
 
 ### Trigger
 
-Refer to [Radix-Vue Dialog Trigger](https://www.radix-vue.com/components/dialog#trigger){:target="\_blank"} API reference
+Refer to [Reka UI Dialog Trigger](https://reka-ui.com/docs/components/dialog#trigger){:target="\_blank"} API reference
 
 ### Close
 
-Refer to [Radix-Vue Dialog Close](https://www.radix-vue.com/components/dialog#close){:target="\_blank"} API reference
+Refer to [Reka UI Dialog Close](https://reka-ui.com/docs/components/dialog#close){:target="\_blank"} API reference
 
 ### Content
 
-Refer to [Radix-Vue Dialog Content](https://www.radix-vue.com/components/dialog#content){:target="\_blank"} API reference
+Refer to [Reka UI Dialog Content](https://reka-ui.com/docs/components/dialog#content){:target="\_blank"} API reference
 
 ### Title
 
-Refer to [Radix-Vue Dialog Title](https://www.radix-vue.com/components/dialog#title){:target="\_blank"} API reference
+Refer to [Reka UI Dialog Title](https://reka-ui.com/docs/components/dialog#title){:target="\_blank"} API reference
 
 ### Subtitle
 
-Refer to [Radix-Vue Dialog Description](https://www.radix-vue.com/components/dialog#description){:target="\_blank"} API reference
+Refer to [Reka UI Dialog Description](https://reka-ui.com/docs/components/dialog#description){:target="\_blank"} API reference

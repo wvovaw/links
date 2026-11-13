@@ -3,6 +3,13 @@ packages:
   - packages/*
   - packages/codestyle
 
+# @nestjs/platform-express pins multer to an exact version. Since the NestJS 12 wave that
+# pin is the same release the backend declares, so the override no longer changes what is
+# installed and is kept only as the guard the wave-2 note called for. Remove it once
+# platform-express widens the pin or moves off the version the backend declares.
+overrides:
+  multer: ^2.5.0
+
 onlyBuiltDependencies:
   - argon2
   - better-sqlite3

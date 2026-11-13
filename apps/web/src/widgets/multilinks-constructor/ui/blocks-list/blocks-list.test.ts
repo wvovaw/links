@@ -4,8 +4,8 @@ import { mount } from "@vue/test-utils";
 import { createPinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import BlocksList from "./blocks-list.vue";
 import { useConstructorStore } from "../../model";
+import BlocksList from "./blocks-list.vue";
 
 describe("testing BlocksList component", () => {
   let wrapper: VueWrapper;
@@ -25,6 +25,6 @@ describe("testing BlocksList component", () => {
     await wrapper.find("[data-testid='blocks-list-item']").trigger("click");
     const store = useConstructorStore();
     expect(store.blocks.length).toBeGreaterThan(0);
-    expect(store.selectedBlockId).toBe(store.blocks[0].id);
+    expect(store.selectedBlockId).toBe(store.blocks[0]?.id);
   });
 });

@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Every gate step continues on error, so one failure does not hide the others; the
+      # `Fail the job` step at the bottom turns any non-success outcome into a red check.
+      - name: Install dependencies
+        id: install
+        continue-on-error: true
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        id: lint
+        continue-on-error: true
+        if: steps.install.outcome == 'success'
+        run: pnpm lint
+
+      - name: Check formatting
+        id: fmt
+        continue-on-error: true
+        if: steps.install.outcome == 'success'
+        run: pnpm fmt
+
+      # Build before testing: the web suite loads the UI library preset from dist.
+      - name: Build
+        id: build
+        continue-on-error: true
+        if: steps.install.outcome == 'success'
+        run: pnpm build
+
+      - name: Test
+        id: test
+        continue-on-error: true
+        if: steps.build.outcome == 'success'
+        run: pnpm test
+
+      - name: Publish summary
+        if: always()
+        uses: actions/github-script@v9
+        env:
+          OUTCOME_INSTALL: ${{ steps.install.outcome }}
+          OUTCOME_LINT: ${{ steps.lint.outcome }}
+          OUTCOME_FMT: ${{ steps.fmt.outcome }}
+          OUTCOME_BUILD: ${{ steps.build.outcome }}
+          OUTCOME_TEST: ${{ steps.test.outcome }}
+        with:
+          script: |
+            const fs = require("fs");
+
+            const checks = [
+              ["Install dependencies", process.env.OUTCOME_INSTALL],
+              ["Lint", process.env.OUTCOME_LINT],
+              ["Check formatting", process.env.OUTCOME_FMT],
+              ["Build", process.env.OUTCOME_BUILD],
+              ["Test", process.env.OUTCOME_TEST],
+            ];
+
+            const icon = { success: "✅", failure: "❌", cancelled: "🚫", skipped: "⏭️" };
+            const failed = checks.filter(([, outcome]) => outcome === "failure" || outcome === "cancelled");
+            const skipped = checks.filter(([, outcome]) => outcome === "skipped");
+            const heading = failed.length
+              ? `## CI failed — ${failed.map(([name]) => name).join(", ")}`
+              : skipped.length
+                ? "## CI stopped before finishing"
+                : "## CI passed";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const pr = context.payload.pull_request;
+            const ref = pr ? `\`${pr.head.label}\` → \`${pr.base.label}\`` : `\`${context.ref}\``;
+
+            const body = [
+              "<!-- ci-summary: do not remove, the workflow updates this comment -->",
+              heading,
+              "",
+              `Run: [${context.runId}](${runUrl}) · ${ref} · \`${context.sha.slice(0, 7)}\``,
+              "",
+              "| Check | Result |",
+              "| ----- | ------ |",
+              ...checks.map(([name, outcome]) => `| ${name} | ${icon[outcome] ?? "❔"} ${outcome ?? "unknown"} |`),
+            ].join("\n");
+
+            // The run page shows this even for pushes to master, where there is no PR to comment on.
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${body}\n`);
+
+            if (pr && pr.head.repo.full_name === context.payload.repository.full_name) {
+              const { data: comments } = await github.rest.issues.listComments({
+                ...context.repo,
+                issue_number: context.issue.number,
+                per_page: 100,
+              });
+              const previous = comments.find((comment) => comment.body?.includes("<!-- ci-summary:"));
+              if (previous) {
+                await github.rest.issues.updateComment({ ...context.repo, comment_id: previous.id, body });
+              } else {
+                await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
+              }
+            }
+
+      - name: Fail the job
+        if: always() && (steps.install.outcome != 'success' || steps.lint.outcome != 'success' || steps.fmt.outcome != 'success' || steps.build.outcome != 'success' || steps.test.outcome != 'success')
+        run: |
+          echo "One or more checks failed — see the summary above."
+          exit 1

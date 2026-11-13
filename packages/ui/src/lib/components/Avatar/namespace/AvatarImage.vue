@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AvatarImage, type AvatarImageProps, useForwardProps } from "radix-vue";
+import { AvatarImage, type AvatarImageProps, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const props = defineProps<

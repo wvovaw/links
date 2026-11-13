@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type VariantProps, cva } from "cva";
-import { Label, type LabelProps } from "radix-vue";
+import { Label, type LabelProps } from "reka-ui";
 import { type HTMLAttributes, type LabelHTMLAttributes, computed } from "vue";
 
 const labelVariants = cva("w-full block text-bulma pb-2", {

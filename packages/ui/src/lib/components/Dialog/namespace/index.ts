@@ -1,6 +1,6 @@
-export { DialogRoot as Root } from "radix-vue";
-export { DialogTrigger as Trigger } from "radix-vue";
-export { DialogClose as Close } from "radix-vue";
+export { DialogRoot as Root } from "reka-ui";
+export { DialogTrigger as Trigger } from "reka-ui";
+export { DialogClose as Close } from "reka-ui";
 export { default as Content } from "./DialogContent.vue";
 export { default as Header } from "./DialogHeader.vue";
 export { default as Footer } from "./DialogFooter.vue";

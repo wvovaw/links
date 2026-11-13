@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
-import { useId } from "radix-vue";
+import { useId } from "reka-ui";
 import { type HTMLAttributes, type InputTypeHTMLAttribute, onMounted, onUpdated, ref, watch } from "vue";
 
 const insertInputVariants = cva("h-[3.5rem] leading-[3.5rem] rounded-moon-i-sm input-dt-shared pt-[1.25rem]", {

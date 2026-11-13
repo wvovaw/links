@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ScrollAreaScrollbar, type ScrollAreaScrollbarProps, ScrollAreaThumb } from "radix-vue";
+import { ScrollAreaScrollbar, type ScrollAreaScrollbarProps, ScrollAreaThumb } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 const props = withDefaults(

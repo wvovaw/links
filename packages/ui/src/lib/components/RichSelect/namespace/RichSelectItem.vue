@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText, useForwardProps } from "radix-vue";
+import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText, useForwardProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 import { UIMenu } from "../../Menu";

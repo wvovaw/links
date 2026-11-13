@@ -42,7 +42,12 @@ const published = computed(() => publishStatusToggle.value === LinkStatus.PUBLIS
       </div>
       <div class="flex flex-row gap-2">
         <label for="publish-link-switch" class="text-xs">Publish</label>
-        <UISwitch id="publish-link-switch" :checked="published" size="xs" @update:checked="togglePublishStatus()" />
+        <UISwitch
+          id="publish-link-switch"
+          :model-value="published"
+          size="xs"
+          @update:model-value="togglePublishStatus()"
+        />
       </div>
     </div>
   </div>

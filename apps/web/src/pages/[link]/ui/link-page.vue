@@ -31,7 +31,7 @@ if (pageData.value) {
   bg.value = pageData.value.background;
 
   const title = pageData.value.title;
-  const description = seo.value.description ? seo.value.description : defaultDescription;
+  const description = typeof seo.value.description === "string" ? seo.value.description : defaultDescription;
   const url = `${config.public.baseUrl}/${props.link}`;
 
   useSeoMeta({

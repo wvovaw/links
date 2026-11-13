@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useElementHover } from "@vueuse/core";
 import { type VariantProps, cva } from "cva";
-import { Primitive, type PrimitiveProps } from "radix-vue";
+import { Primitive, type PrimitiveProps } from "reka-ui";
 import { type ButtonHTMLAttributes, type HTMLAttributes, ref, useSlots } from "vue";
 
 const btnEl = ref<HTMLElement | null>(null);

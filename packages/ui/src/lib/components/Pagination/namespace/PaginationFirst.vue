@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PaginationFirst, type PaginationFirstProps } from "radix-vue";
+import { PaginationFirst, type PaginationFirstProps } from "reka-ui";
 import { type HTMLAttributes, computed } from "vue";
 
 import { UIButton } from "../../Button";

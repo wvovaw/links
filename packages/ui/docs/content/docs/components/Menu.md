@@ -95,14 +95,14 @@ Radio group
 
 #### Props
 
-| Name           | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| -------------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`           | `AsTag` \| Component | No       | button  | Sets the root HTML element. button is default                                                                                                                                                        |
-| `asChild`      | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `type`         | single \| multiple   | No       | single  | Determines whether a single or multiple items can be pressed at a time                                                                                                                               |
-| `modelvalue`   | `string \| string[]` | No       | -       | The controlled value of the pressed item. Can be bind as `v-model`                                                                                                                                   |
-| `defaultValue` | `string \| string[]` | No       | -       | The value of the item to show as pressed when initially rendered. Use when you do not need to control the state of the items                                                                         |
-| `disabeld`     | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                          |
+| Name           | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| -------------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`           | `AsTag` \| Component | No       | button  | Sets the root HTML element. button is default                                                                                                                                                     |
+| `asChild`      | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `type`         | single \| multiple   | No       | single  | Determines whether a single or multiple items can be pressed at a time                                                                                                                            |
+| `modelvalue`   | `string \| string[]` | No       | -       | The controlled value of the pressed item. Can be bind as `v-model`                                                                                                                                |
+| `defaultValue` | `string \| string[]` | No       | -       | The value of the item to show as pressed when initially rendered. Use when you do not need to control the state of the items                                                                      |
+| `disabeld`     | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                       |
 
 #### Emits
 
@@ -122,15 +122,15 @@ default
 
 #### Props
 
-| Name            | Type                 | Required | Default | Description                                                                                                                                                                                         |
-| --------------- | -------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`            | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                      |
-| `asChild`       | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `defaultValue ` | `boolean`            | No       | -       | The pressed state of the toggle when it is initially rendered. Use when you do not need to control its open state                                                                                   |
-| `value`         | `string`             | Yes      | -       | A string value for the menu group item. All items within a menu group should use a unique value.                                                                                                    |
-| `pressed `      | `boolean`            | No       | -       | The controlled pressed state of the toggle. Can be bind as `v-model`                                                                                                                                |
-| `disabeld`      | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                         |
-| `isActive`      | `boolean`            | No       | -       | Menu item active state                                                                                                                                                                              |
+| Name            | Type                 | Required | Default | Description                                                                                                                                                                                      |
+| --------------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`            | `AsTag` \| Component | No       | div     | Setting a root HTML element. button is default                                                                                                                                                   |
+| `asChild`       | `boolean`            | No       | -       | Change the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `defaultValue ` | `boolean`            | No       | -       | The pressed state of the toggle when it is initially rendered. Use when you do not need to control its open state                                                                                |
+| `value`         | `string`             | Yes      | -       | A string value for the menu group item. All items within a menu group should use a unique value.                                                                                                 |
+| `pressed `      | `boolean`            | No       | -       | The controlled pressed state of the toggle. Can be bind as `v-model`                                                                                                                             |
+| `disabeld`      | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                      |
+| `isActive`      | `boolean`            | No       | -       | Menu item active state                                                                                                                                                                           |
 
 #### Data Attributes
 

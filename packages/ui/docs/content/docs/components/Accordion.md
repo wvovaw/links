@@ -49,7 +49,7 @@ description: A vertically stacked set of interactive headings that each reveal a
 | Name           | Type                   | Required | Default | Description                                                                                                                                                                                            |
 | -------------- | ---------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `as`           | `AsTag` \| Component   | No       | div     | Sets the root HTML element.                                                                                                                                                                            |
-| `asChild`      | `boolean`              | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details   |
+| `asChild`      | `boolean`              | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details      |
 | `collapsible`  | `boolean`              | No       | true    | When type is "single", allows closing content when clicking trigger for an open item. When type is "multiple", this prop has no effect.                                                                |
 | `defaultValue` | `string \| string[]`   | No       | -       | The default active value of the item(s).<br>Use when you do not need to control the state of the item(s).                                                                                              |
 | `dir`          | ltr \| rtl             | No       | ltr     | The reading direction of the combobox when applicable.\nIf omitted, inherits globally from `DirectionProvider` or assumes LTR (left-to-right) reading mode                                             |
@@ -82,12 +82,12 @@ Default
 
 #### Props
 
-| Name       | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| ---------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`       | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild`  | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
-| `disabeld` | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                          |
-| `value`    | `string`             | Yes      | -       | A string value for the accordion item. All items within an accordion must use unique values.                                                                                                         |
+| Name       | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| ---------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`       | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild`  | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
+| `disabeld` | `boolean`            | No       | -       | When `true`, prevents user from interaction                                                                                                                                                       |
+| `value`    | `string`             | Yes      | -       | A string value for the accordion item. All items within an accordion must use unique values.                                                                                                      |
 
 #### Slots
 
@@ -109,10 +109,10 @@ Default
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Data Attributes
 
@@ -126,10 +126,10 @@ Default
 
 #### Props
 
-| Name      | Type                 | Required | Default | Description                                                                                                                                                                                          |
-| --------- | -------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                          |
-| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Radix-Vue composition guide](https://www.radix-vue.com/guides/composition) for more details |
+| Name      | Type                 | Required | Default | Description                                                                                                                                                                                       |
+| --------- | -------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `AsTag` \| Component | No       | div     | Sets the root HTML element.                                                                                                                                                                       |
+| `asChild` | `boolean`            | No       | -       | Changes the root rendered element for the one passed as a child, merging their props and behavior. Read [Reka UI composition guide](https://reka-ui.com/docs/guides/composition) for more details |
 
 #### Data Attributes
 
