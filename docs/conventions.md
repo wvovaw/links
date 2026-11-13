@@ -30,8 +30,14 @@ Knowledge that is expensive to rediscover. Versions are deliberately absent — 
 - No root `.npmrc`: packages see only what they declare. An undeclared import may work by hoisting
   and break later.
 - Conventional commits are enforced by husky + commitlint on `commit-msg`.
-- `apps/web` is the only package with tests (vitest + happy-dom + `@nuxt/test-utils`). The backend
-  has none; the API is exercised through the Bruno collection in `apps/backend/.bruno`.
+- `apps/web` tests with vitest + happy-dom + `@nuxt/test-utils`; `apps/backend` with vitest +
+  `@nestjs/testing` + supertest against an in-memory better-sqlite3 (`apps/backend/test/`). The
+  Bruno collection in `apps/backend/.bruno` remains the check for real HTTP and file behaviour.
+- **Backend tests compile through SWC** (`unplugin-swc` in `vitest.config.mts`), not esbuild: NestJS
+  DI reads `design:paramtypes`, which esbuild cannot emit. Same reason makes `import type`
+  mandatory for type-only imports — SWC has no type information, so a plain import of a type
+  survives into the runtime graph and fails to resolve. That includes migrations, which TypeORM
+  loads through Node rather than through the test bundler.
 - **A toolchain change can leave a poisoned `node_modules`.** Stale symlinks into a `.pnpm` path
   that no longer exists make resolution die with `ENOENT ... realpath` on a package that looks
   installed. `find node_modules -maxdepth 2 -xtype l` finds them; the fix is

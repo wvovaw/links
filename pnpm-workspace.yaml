@@ -11,6 +11,7 @@ overrides:
   multer: ^2.5.0
 
 onlyBuiltDependencies:
+  - "@swc/core"
   - argon2
   - better-sqlite3
   - esbuild

@@ -1,3 +1,5 @@
+import type { Response } from "express";
+
 import {
   Controller,
   Delete,
@@ -12,7 +14,6 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { Response } from "express";
 import { access } from "node:fs/promises";
 
 import { AuthGuard } from "../common/auth.guard";

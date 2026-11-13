@@ -1,7 +1,8 @@
+import type { Request } from "express";
+
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Request } from "express";
 import { Repository } from "typeorm";
 
 import { jwtSecret } from "../auth/auth.tokens";

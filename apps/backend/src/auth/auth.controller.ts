@@ -1,5 +1,6 @@
+import type { Response } from "express";
+
 import { Body, Controller, Get, HttpCode, Post, Res, UseGuards } from "@nestjs/common";
-import { Response } from "express";
 
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";

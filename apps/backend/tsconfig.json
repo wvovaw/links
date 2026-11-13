@@ -17,5 +17,5 @@
     "moduleResolution": "bundler",
     "types": ["node", "express", "multer"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.mts"]
 }
