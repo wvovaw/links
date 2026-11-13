@@ -2,7 +2,7 @@
 type: ticket
 id: LINKS-013
 title: "Drop the ticket validation script; keep the contract in the skill"
-status: ready-for-agent
+status: done
 priority: medium
 area: tooling
 created: 2026-11-13
@@ -49,15 +49,15 @@ tracker out of `docs/tickets/`.
 
 ## Acceptance criteria
 
-- [ ] `scripts/` no longer exists, or contains nothing ticket-related
-- [ ] `grep -rn "tickets:check\|tickets-check"` finds nothing outside `docs/upgrades/` and closed
+- [x] `scripts/` no longer exists, or contains nothing ticket-related
+- [x] `grep -rn "tickets:check\|tickets-check"` finds nothing outside `docs/upgrades/` and closed
       ticket `## Verification` sections
-- [ ] `pnpm verify` runs clean end to end (`lint`, `fmt`, `build`, `test`) with no missing-path errors
+- [x] `pnpm verify` runs clean end to end (`lint`, `fmt`, `build`, `test`) with no missing-path errors
       from the removed `scripts` directory
-- [ ] CI runs the same steps as `pnpm verify` and nothing more
-- [ ] `docs/tickets/README.md`, `docs/agents/workflow.md` and the skill each state the tracker rules
+- [x] CI runs the same steps as `pnpm verify` and nothing more
+- [x] `docs/tickets/README.md`, `docs/agents/workflow.md` and the skill each state the tracker rules
       as instructions an editor follows by reading, with no reference to a checker
-- [ ] a freshly written ticket can be judged correct using only those documents — sanity-check by
+- [x] a freshly written ticket can be judged correct using only those documents — sanity-check by
       describing one, not by writing a tool
 
 ## Notes
@@ -69,3 +69,19 @@ tracker out of `docs/tickets/`.
   `status`/`priority`/`area`, date formats with `updated >= created`, unique ids, resolvable and
   acyclic blockers, `## What to build` + `## Acceptance criteria`, and a `## Verification` section
   (with all criteria checked) for `done`. Those rules must survive as prose, not disappear.
+
+## Verification
+
+- `scripts/tickets-check.mjs` deleted; `scripts/` no longer exists (`ls -d scripts` → missing)
+- root `package.json`: `tickets:check` gone, `verify` is now `lint && fmt && build && test`, and the
+  dead `scripts` argument was dropped from `lint`, `lint:fix`, `fmt`, `fmt:write`
+- `.github/workflows/ci.yml` runs install → lint → fmt → build → test, with no ticket step
+- `grep -rn "tickets:check\|tickets-check"` over the tracked markdown/config leaves only the
+  historical `## Verification` sections of the closed campaign tickets and this ticket's own scope
+  description — no instruction anywhere still points at a checker
+- `pnpm verify` on the pinned runtime: exit 0 — lint and format clean, every package builds, 62 tests
+  pass; no missing-path errors after the `scripts` argument was removed
+- the rules carried over rather than disappearing: the list the script enforced is now prose in
+  `docs/tickets/README.md` under "Editing a ticket" and in the skill under "Rules you check yourself"
+- sanity check was done before the removal: this ticket was authored by hand from `_template.md` and
+  reviewed against the written rules, with no tool involved

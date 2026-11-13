@@ -10,13 +10,12 @@
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm --parallel -r dev",
-    "lint": "pnpm -r lint && oxlint --config packages/codestyle/oxlint.config.ts scripts",
-    "lint:fix": "pnpm -r lint:fix && oxlint --config packages/codestyle/oxlint.config.ts scripts --fix",
-    "fmt": "pnpm -r fmt && oxfmt --config packages/codestyle/oxfmt.config.ts --check AGENTS.md docs scripts .github .vscode",
-    "fmt:write": "pnpm -r fmt:write && oxfmt --config packages/codestyle/oxfmt.config.ts --write AGENTS.md docs scripts .github .vscode",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix",
+    "fmt": "pnpm -r fmt && oxfmt --config packages/codestyle/oxfmt.config.ts --check AGENTS.md docs .github .vscode",
+    "fmt:write": "pnpm -r fmt:write && oxfmt --config packages/codestyle/oxfmt.config.ts --write AGENTS.md docs .github .vscode",
     "test": "pnpm -r test",
-    "tickets:check": "node scripts/tickets-check.mjs",
-    "verify": "pnpm tickets:check && pnpm lint && pnpm fmt && pnpm build && pnpm test",
+    "verify": "pnpm lint && pnpm fmt && pnpm build && pnpm test",
     "upg": "taze -r major --no-node-version --no-github-actions",
     "prepare": "husky"
   },

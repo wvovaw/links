@@ -17,7 +17,7 @@ months of absence — can pick up work without archaeology.
 ## The tracker
 
 Tickets are markdown files in [`docs/tickets/`](tickets/), one file per ticket, validated by
-`pnpm tickets:check`. The format, statuses and field semantics are documented in
+working markdown. The format, statuses and field semantics are documented in
 [`docs/tickets/README.md`](tickets/README.md). The agent-facing procedure lives in the
 `.agents/skills/issue-tracker` skill.
 
@@ -41,12 +41,13 @@ backlog → ready-for-agent → claimed → review → done
 The gate is one command:
 
 ```bash
-pnpm verify   # tickets:check + lint + fmt + build + test
+pnpm verify   # lint + fmt + build + test
 ```
 
 A ticket is done when, in order:
 
-1. `pnpm tickets:check` passes — the tracker itself stays consistent.
+1. The tracker is consistent: the edited tickets still honour the rules in
+   [`docs/tickets/README.md`](tickets/README.md) — checked by reading, not by a tool.
 2. `pnpm lint` passes **without touching files** (`git status` clean afterwards).
 3. `pnpm fmt` passes — formatting is checked, not applied.
 4. `pnpm build` passes for every package, libraries included. Build comes before test on purpose:

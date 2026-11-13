@@ -57,13 +57,18 @@ Required sections: `## What to build`, `## Acceptance criteria`. Required for `s
 
 Acceptance criteria are checkboxes. A ticket with unchecked criteria cannot be `done`.
 
-## Validation
+## Editing a ticket
 
-```bash
-pnpm tickets:check
-```
+There is no checker. Whoever edits a ticket re-reads it against this list before committing — it is
+short enough to hold in your head, and the rules are the format above:
 
-The script (`scripts/tickets-check.mjs`, no dependencies) enforces: file naming and id agreement,
-required fields, allowed enum values, date formats, unique ids, resolvable and acyclic blockers,
-required sections, and checked criteria for done tickets. It runs in CI, so a broken tracker fails
-the build instead of quietly rotting.
+- file name and `id` agree, and the id is not already used by another ticket
+- `type`, `id`, `title`, `status`, `priority`, `area`, `created`, `updated`, `blocked_by`, `blocks`
+  are all present; `status`, `priority` and `area` use the values listed above and nothing else
+- dates are `YYYY-MM-DD` and `updated` is never earlier than `created`
+- every id in `blocked_by` and `blocks` exists, and `blocked_by` has no cycle
+- the two blocker lists mirror each other: if `A.blocks` names `B`, then `B.blocked_by` names `A`
+- `## What to build` and `## Acceptance criteria` exist; criteria are checkboxes and describe
+  observable outcomes
+- `status: done` means no criterion is left unchecked and `## Verification` says what was run
+- `dropped` says why in the body

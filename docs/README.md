@@ -6,7 +6,7 @@ Index of everything a human or an agent needs beyond `AGENTS.md`.
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | [`agents/workflow.md`](agents/workflow.md)       | How work happens here: tickets, gates, definition of done, dependency upgrades, research probes |
 | [`agents/conventions.md`](agents/conventions.md) | Repo layout details, tooling quirks, backend data rules, traps                                  |
-| [`tickets/`](tickets/)                           | Issue tracker: one markdown file per ticket, validated by `pnpm tickets:check`                  |
+| [`tickets/`](tickets/)                           | Issue tracker: one markdown file per ticket, rules for editing it included                      |
 | [`upgrades/`](upgrades/)                         | Dependency upgrade journal: one file per campaign, per-package evidence                         |
 
 Related, outside `docs/`:

@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate tickets
-        run: pnpm tickets:check
-
       - name: Lint
         run: pnpm lint
 

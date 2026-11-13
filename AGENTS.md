@@ -32,18 +32,17 @@ Documentation in this repo contains **no runtime or package version numbers**. S
 
 ## Commands
 
-| Command              | Meaning                                                                 |
-| -------------------- | ----------------------------------------------------------------------- |
-| `pnpm install`       | workspace install (does **not** build the libraries — run `pnpm build`) |
-| `pnpm dev`           | parallel dev servers: backend, web, ui docs, blocks watcher             |
-| `pnpm build`         | recursive build in dependency order, `@links/ui` included               |
-| `pnpm lint`          | lint, **read-only**                                                     |
-| `pnpm lint:fix`      | lint with autofix — edits files                                         |
-| `pnpm fmt`           | format check, **read-only**                                             |
-| `pnpm fmt:write`     | format write — edits files                                              |
-| `pnpm test`          | recursive tests                                                         |
-| `pnpm tickets:check` | validate ticket files                                                   |
-| `pnpm verify`        | `tickets:check` + `lint` + `fmt` + `build` + `test` — the gate          |
+| Command          | Meaning                                                                 |
+| ---------------- | ----------------------------------------------------------------------- |
+| `pnpm install`   | workspace install (does **not** build the libraries — run `pnpm build`) |
+| `pnpm dev`       | parallel dev servers: backend, web, ui docs, blocks watcher             |
+| `pnpm build`     | recursive build in dependency order, `@links/ui` included               |
+| `pnpm lint`      | lint, **read-only**                                                     |
+| `pnpm lint:fix`  | lint with autofix — edits files                                         |
+| `pnpm fmt`       | format check, **read-only**                                             |
+| `pnpm fmt:write` | format write — edits files                                              |
+| `pnpm test`      | recursive tests                                                         |
+| `pnpm verify`    | `lint` + `fmt` + `build` + `test` — the gate                            |
 
 Target one package with `pnpm --filter <name> …`. Recursive scripts silently skip packages that do
 not define them.

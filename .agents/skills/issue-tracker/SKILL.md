@@ -5,8 +5,9 @@ description: Read and write the repo's in-repo issue tracker (docs/tickets/*.md)
 
 # Issue tracker
 
-Tickets are markdown files in `docs/tickets/`, one file per ticket, validated by
-`pnpm tickets:check`. The tracker lives in this repository — no external app, no vault.
+Tickets are markdown files in `docs/tickets/`, one file per ticket. The tracker lives in this
+repository — no external app, no vault, and no checker: you validate your own edits by re-reading them
+against the rules below.
 
 Read `docs/tickets/README.md` before writing: it is the authority on fields and statuses. The
 policy behind the tracker (when a ticket is allowed to be `done`) is in `docs/agents/workflow.md`.
@@ -18,7 +19,6 @@ policy behind the tracker (when a ticket is allowed to be `done`) is in `docs/ag
 | `docs/tickets/` | all tickets, flat: `<ID>-<slug>.md` |
 | `docs/tickets/README.md` | conventions: frontmatter, statuses, body sections |
 | `docs/tickets/_template.md` | starting point for a new ticket |
-| `scripts/tickets-check.mjs` | validator behind `pnpm tickets:check` |
 
 ## Creating a ticket
 
@@ -29,15 +29,15 @@ policy behind the tracker (when a ticket is allowed to be `done`) is in `docs/ag
    `## Acceptance criteria` as checkboxes that can be judged without reading the diff.
 5. Wire blockers on **both** sides: your `blocked_by` and the matching `blocks` entry on the ticket
    you depend on.
-6. Run `pnpm tickets:check`.
+6. Re-read the file against **Rules you check yourself** below and fix what does not match.
 
 A ticket without acceptance criteria is `backlog`, not `ready-for-agent`.
 
 ## Working a ticket
 
 ```bash
-pnpm tickets:check                                   # tracker is healthy before you start
 grep -l "status: ready-for-agent" docs/tickets/*.md  # what is ready
+grep -n "blocked_by" -A3 docs/tickets/<ID>-*.md      # are its blockers done?
 ```
 
 - Only `ready-for-agent` is fair game, and only if every `blocked_by` ticket is `done`.
@@ -49,7 +49,7 @@ grep -l "status: ready-for-agent" docs/tickets/*.md  # what is ready
 `done` is an evidence claim, not a feeling:
 
 1. Check off every acceptance criterion.
-2. Run `pnpm verify` (`tickets:check` + `lint` + `fmt` + `test` + `build`) — all green.
+2. Run `pnpm verify` (`lint` + `fmt` + `build` + `test`) — all green.
 3. Add `## Verification` listing the commands you ran and what they produced, including any manual
    check (API against the Bruno collection, constructor and public page in a browser).
 4. If dependency versions moved, update `docs/upgrades/`, not the ticket.
@@ -57,9 +57,17 @@ grep -l "status: ready-for-agent" docs/tickets/*.md  # what is ready
 
 `dropped` needs the reason in the body.
 
-## Rules that the validator enforces
+## Rules you check yourself
 
-File name and `id` agree; required fields present; `status`, `priority`, `area` from the allowed sets;
-dates `YYYY-MM-DD` with `updated >= created`; ids unique; blockers exist and contain no cycles;
-`## What to build` and `## Acceptance criteria` present; `done` tickets have `## Verification` and no
-unchecked criteria. Asymmetric `blocks`/`blocked_by` pairs are warnings.
+No script enforces these; you do, by reading the file you just wrote (and the ticket you linked):
+
+- file name and `id` agree, and the id is free — take the next number, never reuse a retired one
+- all fields present: `type`, `id`, `title`, `status`, `priority`, `area`, `created`, `updated`,
+  `blocked_by`, `blocks`
+- `status`, `priority`, `area` use the documented values and nothing else
+- dates are `YYYY-MM-DD`, `updated` never earlier than `created`
+- every id in `blocked_by` and `blocks` exists; `blocked_by` has no cycle
+- the two lists mirror each other — if `A.blocks` names `B`, then `B.blocked_by` names `A`
+- `## What to build` and `## Acceptance criteria` exist; criteria are checkboxes stating observable
+  outcomes
+- a `done` ticket has every criterion checked and a `## Verification` section; `dropped` says why
