@@ -1,6 +1,6 @@
 ---
 type: ticket
-id: LINKS-010
+id: LINKS-011
 title: "Resolve the @links/ui components.d.ts packaging entry"
 status: backlog
 priority: low
@@ -11,7 +11,7 @@ blocked_by: []
 blocks: []
 ---
 
-# LINKS-010 — Resolve the `@links/ui` `components.d.ts` packaging entry
+# LINKS-011 — Resolve the `@links/ui` `components.d.ts` packaging entry
 
 ## What to build
 
