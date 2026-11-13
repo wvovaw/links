@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Entry point for agents working in this repo. Anything longer than a screen lives in `docs/`.
+Entry point for agents. Repo-specific knowledge lives in [`docs/conventions.md`](docs/conventions.md).
 
 ## What the repo is
 
@@ -27,8 +27,7 @@ Never restate these in prose — link the file instead:
 - allowed native builds → `onlyBuiltDependencies` in `pnpm-workspace.yaml`
 - dependency versions → each package's `package.json` and `pnpm-lock.yaml`
 
-Documentation in this repo contains **no runtime or package version numbers**. See
-`docs/agents/workflow.md` for the rule in context.
+Documentation in this repo contains **no runtime or package version numbers**.
 
 ## Commands
 
@@ -55,12 +54,21 @@ not define them.
 2. Backend schema changes go through TypeORM migrations only — `synchronize` is off.
 3. Block schema changes follow the backward-compatibility flow in `packages/blocks/README.md`.
 4. `lint` / `fmt` never write. When you mean to change files, use `lint:fix` / `fmt:write`.
+5. One documentation directory: lowercase `docs/` at the root. Docs contain no version numbers.
 
-## Documentation map
+## Working rules
 
-- `docs/agents/workflow.md` — how work happens: tickets, gates, definition of done, dependency
-  upgrades, research probes
-- `docs/agents/conventions.md` — repo layout details and traps
-- `docs/tickets/` — the issue tracker, in-repo markdown
-- `docs/upgrades/` — dependency upgrade journal
-- `.agents/skills/issue-tracker/` — the skill that drives the tracker
+- State what you will do, then do it. Smallest change that fully solves the task.
+- Before saying something works, run it. `pnpm verify` is the floor for anything touching packages;
+  runtime behaviour also gets exercised — the API through its Bruno collection
+  (`apps/backend/.bruno`), the constructor and a public page in a browser.
+- Docs describe the repo as it is: a behaviour change and its doc change are one commit.
+- Conventional commits — enforced by husky + commitlint.
+
+## Agent tooling
+
+- Skills live in [`.agents/skills/`](.agents/skills/), declared by `skills-lock.json`, installed with
+  `npx skills add <owner/repo@skill>` (project scope — no `-g`). Installed: Vue best practices,
+  Vue testing, Pinia, NestJS, UnoCSS, ponytail.
+- Superpowers (brainstorming, writing-plans, TDD, code review, verification) is a Pi package
+  declared in `.pi/settings.json`. It loads only after project trust is granted.
