@@ -44,6 +44,8 @@ The gate is one command:
 pnpm verify   # lint + fmt + build + test
 ```
 
+The same gate runs in CI on every pull request — see [CI](#ci) below.
+
 A ticket is done when, in order:
 
 1. The tracker is consistent: the edited tickets still honour the rules in
@@ -58,6 +60,18 @@ A ticket is done when, in order:
 7. `## Verification` lists what was actually run and what came out.
 
 Never mark a ticket done because a build compiled. Compilation is the floor.
+
+## CI
+
+[`ci.yml`](../../.github/workflows/ci.yml) reproduces the gate on GitHub Actions: `pnpm install
+--frozen-lockfile`, then lint, fmt, build and test, in that order — build first because the web
+suite imports the UI preset from dist. It runs on every pull request and on pushes to `master`.
+
+A step failure does not cut the run short: the remaining steps still run, so one red run reports
+every problem instead of the first one. The verdict lands in the run summary and, on pull requests,
+in a single sticky comment that the workflow keeps updated instead of appending a new one per push.
+The job is a single check named `verify`; making merges depend on it is branch-protection
+configuration in the GitHub settings, not something this repository stores.
 
 ## Dependency upgrades
 
