@@ -13,11 +13,20 @@ const props = defineProps<{
 
 const { resolve } = useBlocksResolver();
 
-const pageStyle = computed(() => resolvePageStyle(props.theme ?? null, props.background ?? null));
+/**
+ * Passing neither prop means the caller owns the page background (it styles an element around this
+ * one, so the footer sits on it too); an explicitly passed `null` still asks for the default style.
+ * Without a style the element gets no `style` attribute at all, as it had before themes existed.
+ */
+const linkAttrs = computed(() =>
+  props.theme === undefined && props.background === undefined
+    ? {}
+    : { style: resolvePageStyle(props.theme ?? null, props.background ?? null) },
+);
 </script>
 
 <template>
-  <div class="link" :style="pageStyle">
+  <div class="link" v-bind="linkAttrs">
     <div class="link__container">
       <div class="link__blocks-root">
         <component

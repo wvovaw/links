@@ -4,6 +4,7 @@ import type { PublicLink } from "~shared/api/backend";
 
 import { LinkPageRenderer } from "~features/links";
 import { BackendApi } from "~shared/api";
+import { resolvePageStyle } from "~shared/blocks";
 import { LinkFooter } from "~widgets/link-footer";
 
 import NotExistPage from "./not-exist-page.vue";
@@ -21,6 +22,9 @@ const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${
 
 const blocks = ref<IBlock[]>([]);
 const seo = ref<Record<string, unknown>>({});
+
+/* The page background belongs to `<main>` so it covers the footer, exactly as a legacy page expects. */
+const pageStyle = computed(() => resolvePageStyle(pageData.value?.theme ?? null, pageData.value?.background ?? null));
 
 const defaultDescription = "Welcome to my link";
 
@@ -49,9 +53,9 @@ if (pageData.value) {
 <template>
   <Html :lang="locale">
     <Body>
-      <main class="min-h-100dvh flex flex-col">
+      <main class="min-h-100dvh flex flex-col" :style="pageStyle">
         <NotExistPage v-if="error?.status === 404" />
-        <LinkPageRenderer v-else :blocks="blocks" :theme="pageData?.theme" :background="pageData?.background" />
+        <LinkPageRenderer v-else :blocks="blocks" />
         <LinkFooter />
       </main>
     </Body>
