@@ -24,7 +24,8 @@
     "lint:fix": "oxlint --config oxlint.config.ts . --fix",
     "fmt": "oxfmt --config oxfmt.config.ts --check .",
     "fmt:write": "oxfmt --config oxfmt.config.ts --write .",
-    "test": "vitest run",
+    "typecheck": "tsc6 --noEmit -p tsconfig.test.json",
+    "test": "pnpm run typecheck && vitest run",
     "test:watch": "vitest watch",
     "prepublishOnly": "pnpm build"
   },

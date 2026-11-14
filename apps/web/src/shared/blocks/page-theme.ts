@@ -16,7 +16,9 @@ export function resolvePageStyle(
 ): Record<string, string> | string {
   if (!theme) return legacyBackground ?? themeStyle(DEFAULT_PAGE_THEME);
 
-  return themeStyle(theme);
+  /* The button tokens belong to a stored theme alone: a page without one keeps the defaults in
+     `theme.css`, which is the look it had before the theme control existed. */
+  return { ...themeStyle(theme), ...buttonTokens(theme) };
 }
 
 function themeStyle(theme: PageTheme): Record<string, string> {
@@ -35,6 +37,22 @@ function themeStyle(theme: PageTheme): Record<string, string> {
     "--links-page-fg": theme.text,
     "--links-page-overlay": overlayColor(theme.accent, theme.overlayOpacity),
     "--links-page-radius": `${theme.radius}px`,
+  };
+}
+
+/**
+ * The page-wide button look. A block's own colours still win over these, and `outline` is the only
+ * variant that draws a border, so its width travels with the colour.
+ */
+function buttonTokens(theme: PageTheme): Record<string, string> {
+  const filled = theme.buttonVariant === "solid";
+  const outlined = theme.buttonVariant === "outline";
+
+  return {
+    "--links-theme-button-bg": filled ? theme.accent : "transparent",
+    "--links-theme-button-fg": filled ? "#ffffff" : theme.accent,
+    "--links-theme-button-border": outlined ? theme.accent : "transparent",
+    "--links-theme-button-border-width": outlined ? "1px" : "0",
   };
 }
 

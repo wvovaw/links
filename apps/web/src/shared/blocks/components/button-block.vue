@@ -28,7 +28,7 @@ const bp = computed(() => {
       "--button-fg": foreground || "var(--links-theme-button-fg)",
       "--button-bg": background || "var(--links-theme-button-bg)",
       "--button-font-size": fontSize || "var(--links-theme-button-font-size-md)",
-      "--button-border": border || "#eee",
+      "--button-border": border || "var(--links-theme-button-border, #eee)",
     },
   };
 });
@@ -57,6 +57,8 @@ const bp = computed(() => {
   background: var(--button-bg, var(--links-theme-button-bg));
   font-size: var(--button-font-size, var(--links-theme-button-font-size-md));
   border-color: var(--button-border, #eee);
+  /* Preflight zeroes every border, so the theme's outline needs its width back. */
+  border-width: var(--links-theme-button-border-width, 0);
   font-weight: 600;
   width: 100%;
   height: 3.5rem;

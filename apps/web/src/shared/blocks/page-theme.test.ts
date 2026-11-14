@@ -32,4 +32,26 @@ describe("resolvePageStyle", () => {
     expect(style["background-image"]).toBe(presetImage(DEFAULT_PAGE_THEME.backgroundPreset));
     expect(resolvePageStyle(null, null)).toMatchObject({ "--links-page-accent": DEFAULT_PAGE_THEME.accent });
   });
+
+  it("leaves the button tokens to theme.css when no theme is stored", () => {
+    expect(resolvePageStyle(null, null)).not.toHaveProperty("--links-theme-button-bg");
+  });
+});
+
+describe.each([
+  { variant: "solid", background: "#112233", foreground: "#ffffff", border: "transparent", borderWidth: "0" },
+  { variant: "outline", background: "transparent", foreground: "#112233", border: "#112233", borderWidth: "1px" },
+  { variant: "ghost", background: "transparent", foreground: "#112233", border: "transparent", borderWidth: "0" },
+] as const)("the $variant button variant", ({ variant, background, foreground, border, borderWidth }) => {
+  it("derives the button tokens from the accent", () => {
+    const style = resolvePageStyle(
+      { ...DEFAULT_PAGE_THEME, accent: "#112233", buttonVariant: variant },
+      null,
+    ) as Record<string, string>;
+
+    expect(style["--links-theme-button-bg"]).toBe(background);
+    expect(style["--links-theme-button-fg"]).toBe(foreground);
+    expect(style["--links-theme-button-border"]).toBe(border);
+    expect(style["--links-theme-button-border-width"]).toBe(borderWidth);
+  });
 });

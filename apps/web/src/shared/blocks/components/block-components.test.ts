@@ -86,6 +86,13 @@ describe("ButtonBlock", () => {
     const style = wrapper.get(".button-block").attributes("style") ?? "";
     expect(style).toContain("--button-font-size: var(--links-theme-button-font-size-md)");
   });
+
+  it("falls back to the theme border colour so the page variant reaches the button", () => {
+    const wrapper = mount(ButtonBlock, { props: { properties: blockOf("Button", base).properties } });
+
+    const style = wrapper.get(".button-block").attributes("style") ?? "";
+    expect(style).toContain("--button-border: var(--links-theme-button-border, #eee)");
+  });
 });
 
 describe("PictureBlock", () => {
