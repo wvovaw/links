@@ -98,6 +98,41 @@ exports[`Button > has a pinned schema snapshot 1`] = `
     "label": "Text Color",
     "type": "color",
   },
+  "height": {
+    "defaultValue": 56,
+    "group": "Appearance",
+    "id": 11,
+    "label": "Height",
+    "max": 96,
+    "min": 40,
+    "step": 1,
+    "type": "number",
+  },
+  "icon": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 9,
+    "label": "Icon",
+    "options": [
+      {
+        "label": "Circle user round",
+        "value": "i-lucide:circle-user-round",
+      },
+      {
+        "label": "Link",
+        "value": "i-lucide:link",
+      },
+      {
+        "label": "Align left",
+        "value": "i-lucide:align-left",
+      },
+      {
+        "label": "Image",
+        "value": "i-lucide:image",
+      },
+    ],
+    "type": "select",
+  },
   "link": {
     "defaultValue": null,
     "group": "Content",
@@ -114,6 +149,23 @@ exports[`Button > has a pinned schema snapshot 1`] = `
     "type": "boolean",
     "variant": "switch",
   },
+  "radius": {
+    "defaultValue": 8,
+    "group": "Appearance",
+    "id": 12,
+    "label": "Radius",
+    "max": 32,
+    "min": 0,
+    "step": 1,
+    "type": "number",
+  },
+  "subtitle": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 8,
+    "label": "Subtitle",
+    "type": "text",
+  },
   "text": {
     "defaultValue": null,
     "group": "Content",
@@ -121,6 +173,38 @@ exports[`Button > has a pinned schema snapshot 1`] = `
     "label": "Button text",
     "required": true,
     "type": "text",
+  },
+  "thumbnail": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 7,
+    "label": "Thumbnail",
+    "type": "image",
+  },
+  "variant": {
+    "defaultValue": null,
+    "group": "Appearance",
+    "id": 10,
+    "label": "Style",
+    "options": [
+      {
+        "label": "Page default",
+        "value": "inherit",
+      },
+      {
+        "label": "Solid",
+        "value": "solid",
+      },
+      {
+        "label": "Outline",
+        "value": "outline",
+      },
+      {
+        "label": "Ghost",
+        "value": "ghost",
+      },
+    ],
+    "type": "select",
   },
 }
 `;

@@ -1,6 +1,84 @@
-import type { BlockModuleSchema, IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
+import type { BlockModuleSchema, BlockProperty, IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
 
-const BLOCK_VERSION = 2;
+import { BLOCK_ICONS } from "../types";
+
+const BLOCK_VERSION = 3;
+
+/**
+ * The link-card properties the version 3 migration adds. One list serves both the factory and the
+ * migration, so a stored Button ends up with exactly the shape `createBlock` writes today.
+ */
+function cardProperties(): Record<string, BlockProperty> {
+  return {
+    thumbnail: {
+      id: 7,
+      type: "image",
+      label: "Thumbnail",
+      group: "Content",
+      defaultValue: null,
+    },
+    subtitle: {
+      id: 8,
+      type: "text",
+      label: "Subtitle",
+      group: "Content",
+      defaultValue: null,
+    },
+    icon: {
+      id: 9,
+      type: "select",
+      label: "Icon",
+      options: linkIconOptions(),
+      group: "Content",
+      defaultValue: null,
+    },
+    variant: {
+      id: 10,
+      type: "select",
+      label: "Style",
+      options: [
+        { label: "Page default", value: "inherit" },
+        { label: "Solid", value: "solid" },
+        { label: "Outline", value: "outline" },
+        { label: "Ghost", value: "ghost" },
+      ],
+      group: "Appearance",
+      defaultValue: null,
+    },
+    height: {
+      id: 11,
+      type: "number",
+      label: "Height",
+      min: 40,
+      max: 96,
+      step: 1,
+      group: "Appearance",
+      defaultValue: 56,
+    },
+    radius: {
+      id: 12,
+      type: "number",
+      label: "Radius",
+      min: 0,
+      max: 32,
+      step: 1,
+      group: "Appearance",
+      defaultValue: 8,
+    },
+  };
+}
+
+/**
+ * Only the icons the palette safelists are offered: UnoCSS emits no class for any other name, so a
+ * wider list would render an empty box with no error.
+ */
+function linkIconOptions(): IBlockPropertySelect["options"] {
+  return BLOCK_ICONS.map((icon) => {
+    const name = icon.slice(icon.indexOf(":") + 1).replaceAll("-", " ");
+
+    return { label: name.charAt(0).toUpperCase() + name.slice(1), value: icon };
+  });
+}
 
 function createBlock(id: string): IBlock<"Button"> {
   return {
@@ -65,6 +143,7 @@ function createBlock(id: string): IBlock<"Button"> {
         group: "Content",
         defaultValue: true,
       },
+      ...cardProperties(),
     },
   };
 }
@@ -95,6 +174,13 @@ function migrateBlock(block: IBlock): IBlock {
       defaultValue: true,
     };
     block.version = 2;
+  }
+  if (block.version === 2) {
+    /* A stored button keeps every value it has: only the properties it never had are filled in. */
+    for (const [name, property] of Object.entries(cardProperties())) {
+      block.properties[name] ??= property;
+    }
+    block.version = 3;
   }
 
   return block;

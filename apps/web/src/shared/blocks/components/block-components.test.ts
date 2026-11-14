@@ -93,6 +93,117 @@ describe("ButtonBlock", () => {
     const style = wrapper.get(".button-block").attributes("style") ?? "";
     expect(style).toContain("--button-border: var(--links-theme-button-border, #eee)");
   });
+
+  it("keeps the height and radius a stored button already rendered at", () => {
+    const wrapper = mount(ButtonBlock, { props: { properties: blockOf("Button", base).properties } });
+
+    const style = wrapper.get(".button-block").attributes("style") ?? "";
+    expect(style).toContain("--button-height: 56px");
+    expect(style).toContain("--button-radius: 8px");
+  });
+
+  it("takes the height and radius from the stored properties", () => {
+    const wrapper = mount(ButtonBlock, {
+      props: { properties: blockOf("Button", { ...base, height: 72, radius: 16 }).properties },
+    });
+
+    const style = wrapper.get(".button-block").attributes("style") ?? "";
+    expect(style).toContain("--button-height: 72px");
+    expect(style).toContain("--button-radius: 16px");
+  });
+
+  it("renders a plain link exactly as before, with no card parts", () => {
+    const wrapper = mount(ButtonBlock, { props: { properties: blockOf("Button", base).properties } });
+
+    const link = wrapper.get(".button-block");
+    expect(link.classes()).not.toContain("button-block--card");
+    expect(link.find(".button-block__thumbnail").exists()).toBe(false);
+    expect(link.find(".button-block__subtitle").exists()).toBe(false);
+    expect(link.find(".button-block__icon").exists()).toBe(false);
+    expect(link.get(".button-block__text").text()).toBe("Go");
+  });
+
+  it("puts a thumbnail, a subtitle and an icon around the text in one row", () => {
+    const wrapper = mount(ButtonBlock, {
+      props: {
+        properties: blockOf("Button", {
+          ...base,
+          thumbnail: "https://cdn.example/card.png",
+          subtitle: "A short note",
+          icon: "i-lucide:link",
+        }).properties,
+      },
+    });
+
+    const link = wrapper.get(".button-block");
+    expect(link.classes()).toContain("button-block--card");
+    expect(link.get(".button-block__thumbnail").attributes("src")).toBe("https://cdn.example/card.png");
+    expect(link.get(".button-block__subtitle").text()).toBe("A short note");
+    expect(link.get(".button-block__icon").classes()).toContain("i-lucide:link");
+  });
+
+  it("resolves a stored thumbnail file id to a served image", () => {
+    const wrapper = mount(ButtonBlock, {
+      props: { properties: blockOf("Button", { ...base, thumbnail: "file-123" }).properties },
+    });
+
+    expect(wrapper.get(".button-block__thumbnail").attributes("src")).toMatch(/\/storage\/images\/file-123$/);
+  });
+
+  it.each([
+    ["inherit", { "--button-bg": "var(--links-theme-button-bg)", "--button-fg": "var(--links-theme-button-fg)" }],
+    ["solid", { "--button-bg": "var(--links-page-accent)", "--button-fg": "#fff", "--button-border-width": "0" }],
+    [
+      "outline",
+      {
+        "--button-bg": "transparent",
+        "--button-fg": "var(--links-page-accent)",
+        "--button-border": "var(--links-page-accent)",
+        "--button-border-width": "1px",
+      },
+    ],
+    [
+      "ghost",
+      {
+        "--button-bg": "transparent",
+        "--button-fg": "var(--links-page-accent)",
+        "--button-border": "transparent",
+        "--button-border-width": "0",
+      },
+    ],
+  ])("draws the %s variant", (variant, expected) => {
+    const wrapper = mount(ButtonBlock, {
+      props: { properties: blockOf("Button", { ...base, variant }).properties },
+    });
+
+    const style = wrapper.get(".button-block").attributes("style") ?? "";
+    for (const [token, value] of Object.entries(expected)) expect(style).toContain(`${token}: ${value}`);
+  });
+
+  it("keeps the block's own colours over the variant accent", () => {
+    const solid = mount(ButtonBlock, {
+      props: {
+        properties: blockOf("Button", { ...base, variant: "solid", background: "#111111", foreground: "#222222" })
+          .properties,
+      },
+    });
+
+    const solidStyle = solid.get(".button-block").attributes("style") ?? "";
+    expect(solidStyle).toContain("--button-bg: #111111");
+    expect(solidStyle).toContain("--button-fg: #222222");
+
+    /* An outline is transparent by definition, so it never draws a stored background. */
+    const outline = mount(ButtonBlock, {
+      props: {
+        properties: blockOf("Button", { ...base, variant: "outline", background: "#111111", border: "#333333" })
+          .properties,
+      },
+    });
+
+    const outlineStyle = outline.get(".button-block").attributes("style") ?? "";
+    expect(outlineStyle).toContain("--button-bg: transparent");
+    expect(outlineStyle).toContain("--button-border: #333333");
+  });
 });
 
 describe("PictureBlock", () => {
