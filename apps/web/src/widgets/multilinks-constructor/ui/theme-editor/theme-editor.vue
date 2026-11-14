@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PageTheme } from "@links/blocks";
 
-import { BACKGROUND_PRESETS, BUTTON_VARIANTS, COLOR_SCHEMES, FONT_PRESETS } from "@links/blocks";
+import { BACKGROUND_PRESETS, BUTTON_VARIANTS, COLOR_SCHEMES, DEFAULT_PAGE_THEME, FONT_PRESETS } from "@links/blocks";
 import { UIInput, UIInputLabel, UIScrollArea, UISelect, UISlider, UITag } from "@links/ui";
 
 import { useConstructorStore } from "../../model";
@@ -9,6 +9,9 @@ import { useConstructorStore } from "../../model";
 const constructorStore = useConstructorStore();
 const { theme } = storeToRefs(constructorStore);
 const { setTheme } = constructorStore;
+
+/** A page without a stored theme shows the default one; the first edit makes that theme real. */
+const shownTheme = computed(() => theme.value ?? DEFAULT_PAGE_THEME);
 
 const fontLabels: Record<PageTheme["fontPreset"], string> = {
   "dm-sans": "DM Sans",
@@ -46,7 +49,7 @@ function setColorScheme(value: string | number) {
             v-for="(preset, id) of BACKGROUND_PRESETS"
             :key="id"
             class="relative aspect-3/5 w-22 cursor-pointer border-(1 beerus) rounded-moon-i-sm transition-colors duration-300 hover:(border-bulma)"
-            :class="{ 'border-bulma': theme.backgroundPreset === id }"
+            :class="{ 'border-bulma': shownTheme.backgroundPreset === id }"
             :style="preset"
             @click="setTheme({ backgroundPreset: id })"
           >
@@ -61,7 +64,7 @@ function setColorScheme(value: string | number) {
         <UIInputLabel> Scrim opacity </UIInputLabel>
         <UISlider
           aria-label="Scrim opacity"
-          :model-value="[theme.overlayOpacity]"
+          :model-value="[shownTheme.overlayOpacity]"
           :min="0"
           :max="1"
           :step="0.05"
@@ -73,7 +76,7 @@ function setColorScheme(value: string | number) {
         <UIInputLabel> Corner radius </UIInputLabel>
         <UISlider
           aria-label="Corner radius"
-          :model-value="[theme.radius]"
+          :model-value="[shownTheme.radius]"
           :min="0"
           :max="40"
           :step="1"
@@ -88,12 +91,12 @@ function setColorScheme(value: string | number) {
             class="theme-editor__color"
             type="color"
             aria-label="Accent colour"
-            :value="theme.accent"
+            :value="shownTheme.accent"
             @input="(event) => setTheme({ accent: (event.target as HTMLInputElement).value })"
           />
           <UIInput
             id="theme-accent-input"
-            :model-value="theme.accent"
+            :model-value="shownTheme.accent"
             full-width
             @update:model-value="(value) => setTheme({ accent: String(value) })"
           />
@@ -107,12 +110,12 @@ function setColorScheme(value: string | number) {
             class="theme-editor__color"
             type="color"
             aria-label="Text colour"
-            :value="theme.text"
+            :value="shownTheme.text"
             @input="(event) => setTheme({ text: (event.target as HTMLInputElement).value })"
           />
           <UIInput
             id="theme-text-input"
-            :model-value="theme.text"
+            :model-value="shownTheme.text"
             full-width
             @update:model-value="(value) => setTheme({ text: String(value) })"
           />
@@ -121,7 +124,7 @@ function setColorScheme(value: string | number) {
 
       <section>
         <UIInputLabel> Font </UIInputLabel>
-        <UISelect aria-label="Font" :model-value="theme.fontPreset" @update:model-value="setFont">
+        <UISelect aria-label="Font" :model-value="shownTheme.fontPreset" @update:model-value="setFont">
           <option v-for="preset of FONT_PRESETS" :key="preset" :value="preset">
             {{ fontLabels[preset] }}
           </option>
@@ -130,7 +133,11 @@ function setColorScheme(value: string | number) {
 
       <section>
         <UIInputLabel> Button style </UIInputLabel>
-        <UISelect aria-label="Button style" :model-value="theme.buttonVariant" @update:model-value="setButtonVariant">
+        <UISelect
+          aria-label="Button style"
+          :model-value="shownTheme.buttonVariant"
+          @update:model-value="setButtonVariant"
+        >
           <option v-for="variant of BUTTON_VARIANTS" :key="variant" :value="variant">
             {{ variant }}
           </option>
@@ -139,7 +146,7 @@ function setColorScheme(value: string | number) {
 
       <section>
         <UIInputLabel> Colour scheme </UIInputLabel>
-        <UISelect aria-label="Colour scheme" :model-value="theme.colorScheme" @update:model-value="setColorScheme">
+        <UISelect aria-label="Colour scheme" :model-value="shownTheme.colorScheme" @update:model-value="setColorScheme">
           <option v-for="scheme of COLOR_SCHEMES" :key="scheme" :value="scheme">
             {{ scheme }}
           </option>

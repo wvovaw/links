@@ -28,7 +28,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const linkName = ref<string | null>(null);
   const publishStatus = ref<LinkStatus>(LinkStatus.DRAFT);
   const blocks = ref<IBlock[]>(defaultBlocksState);
-  const theme = ref<PageTheme>({ ...DEFAULT_PAGE_THEME });
+  /* `null` means the page has no stored theme yet: it keeps rendering its raw legacy `background`. */
+  const theme = ref<PageTheme | null>(null);
   const background = ref<string>(defaultBackground);
   const seo = ref<Record<string, unknown>>({});
   const selectedBlockId = ref<string | null>(null);
@@ -65,8 +66,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     blocks.value.length = 0;
     blocks.value.push(...newBlocks);
   }
+  /** A first edit turns a themeless (legacy) page into a themed one, starting from the defaults. */
   function setTheme(patch: Partial<PageTheme>) {
-    theme.value = { ...theme.value, ...patch };
+    theme.value = { ...(theme.value ?? DEFAULT_PAGE_THEME), ...patch };
   }
   function selectBlock(id: string) {
     selectedBlockId.value = id;
@@ -106,19 +108,24 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
 
   async function saveCurrentState() {
     const { updateLink } = useLinksStore();
-    if (linkId.value) {
-      const imageFileIds = collectImageFileIds(blocks.value);
-      await updateLink({
-        id: linkId.value,
-        title: title.value,
-        blocks: blocks.value,
-        seo: seo.value,
-        status: publishStatus.value,
-        imageFileIds,
-      });
-      await LinksApi.updateTheme({ id: linkId.value, theme: toRaw(theme.value) });
-      savedDataHash.value = computeStoreHash();
-    }
+    const id = linkId.value;
+    if (!id) return;
+
+    const imageFileIds = collectImageFileIds(blocks.value);
+    const contentSaved = await updateLink({
+      id,
+      title: title.value,
+      blocks: blocks.value,
+      seo: seo.value,
+      status: publishStatus.value,
+      imageFileIds,
+    });
+    /* Cancelled or failed content update: nothing else is persisted and the page stays unsaved. */
+    if (!contentSaved) return;
+
+    /* A page that was never re-themed keeps its raw CSS, so it has no theme to store. */
+    if (theme.value) await LinksApi.updateTheme({ id, theme: toRaw(theme.value) });
+    savedDataHash.value = computeStoreHash();
   }
   function undo() {
     blocksUndo();
@@ -154,7 +161,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     linkName.value = null;
     publishStatus.value = LinkStatus.DRAFT;
     blocks.value = defaultBlocksState;
-    theme.value = { ...DEFAULT_PAGE_THEME };
+    theme.value = null;
     background.value = defaultBackground;
     seo.value = {};
     selectedBlockId.value = null;
@@ -171,7 +178,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         linkName.value = data.slug;
         setTitle(data.title);
         setPublishStatus(data.status);
-        setTheme(data.theme ?? DEFAULT_PAGE_THEME);
+        theme.value = data.theme;
         background.value = data.background;
 
         // Blocks are already parsed from the backend

@@ -13,8 +13,8 @@
   --links-page-fg: #171515;
   --links-page-overlay: transparent;
   --links-page-radius: 10px;
-  --links-font:
-    var(--dm-sans, "DM Sans"), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  /* A themed page sets the font stack inline; without one the page keeps the font it inherited. */
+  --links-font: inherit;
 
   /* Button */
   --links-theme-button-bg: hsl(215, 94%, 45%);
@@ -38,7 +38,7 @@
   position: relative;
   flex-grow: 1;
   width: 100%;
-  font-family: var(--links-font);
+  font-family: var(--links-font, inherit);
 }
 
 /* The scrim sits under the blocks, so an overlay of 0 leaves the gradient untouched. */
