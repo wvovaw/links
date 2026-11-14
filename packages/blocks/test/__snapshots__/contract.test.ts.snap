@@ -1,0 +1,121 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Avatar > has a pinned schema snapshot 1`] = `
+{
+  "image": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Image url",
+    "type": "url",
+  },
+  "text": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "Text under avatar",
+    "id": 1,
+    "label": "Heading",
+    "type": "text",
+  },
+}
+`;
+
+exports[`Button > has a pinned schema snapshot 1`] = `
+{
+  "background": {
+    "defaultValue": null,
+    "group": "Appearance",
+    "id": 2,
+    "label": "Background Color",
+    "type": "color",
+  },
+  "border": {
+    "defaultValue": null,
+    "group": "Border",
+    "id": 4,
+    "label": "Border Color",
+    "type": "color",
+  },
+  "font-size": {
+    "defaultValue": "var(--links-theme-button-font-size-sm)",
+    "group": "Appearance",
+    "id": 5,
+    "label": "Font size",
+    "options": [
+      {
+        "label": "sm",
+        "value": "var(--links-theme-button-font-size-sm)",
+      },
+      {
+        "label": "md",
+        "value": "var(--links-theme-button-font-size-md)",
+      },
+      {
+        "label": "lg",
+        "value": "var(--links-theme-button-font-size-lg)",
+      },
+    ],
+    "type": "select",
+  },
+  "foreground": {
+    "defaultValue": null,
+    "group": "Appearance",
+    "id": 3,
+    "label": "Text Color",
+    "type": "color",
+  },
+  "link": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 1,
+    "label": "Link",
+    "required": true,
+    "type": "url",
+  },
+  "text": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Button text",
+    "required": true,
+    "type": "text",
+  },
+}
+`;
+
+exports[`Paragraph > has a pinned schema snapshot 1`] = `
+{
+  "inline-padding": {
+    "defaultValue": 0,
+    "group": "Appearance",
+    "id": 1,
+    "label": "Inline padding",
+    "max": 125,
+    "min": 0,
+    "step": 1,
+    "type": "number",
+  },
+  "text": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Paragraph text",
+    "maxLength": 200,
+    "multiline": true,
+    "required": true,
+    "type": "text",
+  },
+}
+`;
+
+exports[`Picture > has a pinned schema snapshot 1`] = `
+{
+  "image": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Image",
+    "type": "image",
+  },
+}
+`;
