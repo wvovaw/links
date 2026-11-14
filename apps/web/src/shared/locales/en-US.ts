@@ -11,5 +11,14 @@ export default defineI18nLocale(async (_locale) => {
     "pages.links.constructor.title": "Page Constructor",
     "pages.preview.title": "Preview page",
     "pages.link.404": "This link does not exist",
+
+    "blocks.Avatar.label": "Avatar",
+    "blocks.Avatar.description": "A round profile photo with a short caption.",
+    "blocks.Button.label": "Button",
+    "blocks.Button.description": "A large clickable link to another page or site.",
+    "blocks.Paragraph.label": "Paragraph",
+    "blocks.Paragraph.description": "A block of text for a bio, an address or a note.",
+    "blocks.Picture.label": "Picture",
+    "blocks.Picture.description": "A single image with an optional caption.",
   };
 });

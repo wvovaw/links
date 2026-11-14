@@ -11,5 +11,14 @@ export default defineI18nLocale(async (_locale) => {
     "pages.links.constructor.title": "Конструктор страницы",
     "pages.preview.title": "Предосмотр страницы",
     "pages.link.404": "Этой ссылки не существует",
+
+    "blocks.Avatar.label": "Аватар",
+    "blocks.Avatar.description": "Круглое фото профиля с короткой подписью.",
+    "blocks.Button.label": "Кнопка",
+    "blocks.Button.description": "Крупная ссылка на другую страницу или сайт.",
+    "blocks.Paragraph.label": "Параграф",
+    "blocks.Paragraph.description": "Блок текста для описания, адреса или заметки.",
+    "blocks.Picture.label": "Изображение",
+    "blocks.Picture.description": "Одно изображение с необязательной подписью.",
   };
 });

@@ -27,4 +27,17 @@ describe("testing BlocksList component", () => {
     expect(store.blocks.length).toBeGreaterThan(0);
     expect(store.selectedBlockId).toBe(store.blocks[0]?.id);
   });
+
+  it("filters blocks by the search query", async () => {
+    await wrapper.find("[data-testid='blocks-search']").setValue("para");
+
+    const items = wrapper.findAll("[data-testid='blocks-list-item']");
+    expect(items).toHaveLength(1);
+    expect(items[0]?.text()).toContain("Paragraph");
+  });
+
+  it("groups blocks by category", () => {
+    const groups = wrapper.findAll("[data-testid='blocks-group']");
+    expect(groups.length).toBeGreaterThan(0);
+  });
 });

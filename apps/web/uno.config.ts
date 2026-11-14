@@ -1,3 +1,4 @@
+import { BLOCK_ICONS } from "@links/blocks";
 import linksUIPreset from "@links/ui/preset";
 import extractorMdc from "@unocss/extractor-mdc";
 import transformerDirectives from "@unocss/transformer-directives";
@@ -12,7 +13,7 @@ import {
 import presetAnimations from "unocss-preset-animations";
 
 export default defineConfig({
-  safelist: ["i-lucide:sun-medium", "i-lucide:moon", "i-lucide:monitor"],
+  safelist: ["i-lucide:sun-medium", "i-lucide:moon", "i-lucide:monitor", ...BLOCK_ICONS],
   theme: {},
   shortcuts: {},
   presets: [

@@ -1,7 +1,62 @@
 export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph", "Picture"] as const;
 export type BlockName = (typeof BLOCK_NAMES)[number];
 
-export const blocksList = BLOCK_NAMES.map((name) => ({ name }));
+export const BLOCK_CATEGORIES = ["Content", "Media", "Links", "Social", "Commerce", "Layout"] as const;
+export type BlockCategory = (typeof BLOCK_CATEGORIES)[number];
+
+export interface BlockMeta {
+  readonly name: BlockName;
+  readonly label: string;
+  readonly description: string;
+  readonly icon: string;
+  readonly category: BlockCategory;
+  readonly keywords: readonly string[];
+}
+
+/**
+ * Every icon referenced by `BLOCK_META` must be listed here: UnoCSS generates icon classes at build
+ * time, so an icon missing from the web app's safelist renders as an empty box without any error.
+ */
+export const BLOCK_ICONS: readonly string[] = [
+  "i-lucide:circle-user-round",
+  "i-lucide:link",
+  "i-lucide:align-left",
+  "i-lucide:image",
+];
+
+/** English fallbacks: the i18n layer overrides them through `blocks.<Name>.label` / `.description`. */
+export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
+  Avatar: {
+    label: "Avatar",
+    description: "A round profile photo with a short caption.",
+    icon: "i-lucide:circle-user-round",
+    category: "Content",
+    keywords: ["profile", "photo", "user"],
+  },
+  Button: {
+    label: "Button",
+    description: "A large clickable link to another page or site.",
+    icon: "i-lucide:link",
+    category: "Links",
+    keywords: ["link", "cta", "action"],
+  },
+  Paragraph: {
+    label: "Paragraph",
+    description: "A block of text for a bio, an address or a note.",
+    icon: "i-lucide:align-left",
+    category: "Content",
+    keywords: ["text", "copy", "about"],
+  },
+  Picture: {
+    label: "Picture",
+    description: "A single image with an optional caption.",
+    icon: "i-lucide:image",
+    category: "Media",
+    keywords: ["image", "photo", "gallery"],
+  },
+};
+
+export const blocksList: readonly BlockMeta[] = BLOCK_NAMES.map((name) => ({ name, ...BLOCK_META[name] }));
 
 export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image";
 
