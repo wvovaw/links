@@ -70,5 +70,9 @@ not define them.
 - Skills live in [`.agents/skills/`](.agents/skills/), declared by `skills-lock.json`, installed with
   `npx skills add <owner/repo@skill>` (project scope — no `-g`). Installed: Vue best practices,
   Vue testing, Pinia, NestJS, UnoCSS, ponytail.
+- Subagents are project-defined in [`.pi/agents/`](.pi/agents/) and only those run — see
+  [docs/conventions.md](docs/conventions.md#subagents). MCP servers for them come from `~/.config/mcp/mcp.json` — see
+  [docs/conventions.md](docs/conventions.md#mcp).
 - Superpowers (brainstorming, writing-plans, TDD, code review, verification) is a Pi package
-  declared in `.pi/settings.json`. It loads only after project trust is granted.
+  declared in `.pi/settings.json`. It loads only after project trust is granted. Designs and plans it
+  produces live in [`docs/superpowers/`](docs/superpowers/).

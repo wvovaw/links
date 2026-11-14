@@ -1,5 +1,14 @@
 {
-  "packages": [
-    "git:github.com/obra/superpowers"
-  ]
+  "packages": ["git:github.com/obra/superpowers"],
+  "subagents": {
+    "agentScope": "project",
+    "disableBuiltins": true,
+    "agentOverrides": {
+      "implementer": { "model": "openrouter/deepseek/deepseek-v4.1-flash-1017", "thinking": "high" },
+      "reviewer": { "model": "openrouter/minimax/minimax-m3.1-flash", "thinking": "high" },
+      "scout": { "model": "openrouter/deepseek/deepseek-v4.1-flash-1017", "thinking": "low" },
+      "researcher": { "model": "openrouter/deepseek/deepseek-v4.1-flash-1017", "thinking": "high" },
+      "oracle": { "model": "openrouter/z-ai/glm-5.3", "thinking": "high" }
+    }
+  }
 }

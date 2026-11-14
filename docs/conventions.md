@@ -111,3 +111,70 @@ components. Read it before touching block schemas.
 
 Backend, web, the UI docs site and the blocks watcher all run from `pnpm dev`; ports are the ones
 configured per package, and `NUXT_PUBLIC_BACKEND_URL` must agree with the backend's port.
+
+## Subagents
+
+The subagent roster lives in `.pi/agents/` and only those agents run: `.pi/settings.json` sets
+`subagents.agentScope: "project"` and disables the bundled ones, so an agent missing here does not
+exist. Each file pins its own model, thinking level and tool allowlist. Tool access is a strict
+allowlist (`tools`), never a deny-list: what an agent does not name it cannot call, and a typo fails
+the launch instead of silently granting nothing.
+
+The same model and thinking pins are repeated in `subagents.agentOverrides`, and that duplication is
+load-bearing: a user-level `agentOverrides.<name>` beats project frontmatter, so the project copy is
+the only thing that keeps the models and thinking levels the same on someone else's machine. It does
+not cover the other fields — a user-level override that sets `tools` still wins. Change both or
+neither.
+
+Prompt bodies are copied from the bundled `pi-subagents` agents (`worker` is our `implementer`), so
+upstream fixes arrive by re-copying the body and keeping the frontmatter. Only frontmatter is ours.
+
+`implementer` and `reviewer` name the project skills they can load (`skills:`), because
+`inheritSkills: false` is what keeps every other skill out. An agent with no `skills:` line sees none
+of them, and a skill it was not given cannot be invoked.
+
+`codemode` is on every agent: it batches reads and searches into one script. From a script an agent
+cannot call `contact_supervisor`, `subagent`, or `structured_output` — escalation stays a direct call.
+
+Everything except `implementer` carries `async: true`. Four reasons, all of them launch-time failures
+in a foreground child: `mcp:qmd` and `watchdog_diff` come from extensions, and `web_search`,
+`fetch_content`, `get_search_content`, `source_check` come from `pi-web-access`. A foreground launch
+of such an agent dies before its first turn.
+
+Read "read-only" in an agent file as a role, not an enforcement. Only the tool allowlist is technical.
+`reviewer` and `oracle` keep `bash` from their bundled prompts, so the bar on them is their prompt
+plus review, not a sandbox.
+
+### MCP
+
+Pi's native MCP is disabled (`-builtin:mcp`) and `pi-mcp-adapter` owns MCP. The `qmd` server lives in
+`~/.config/mcp/mcp.json`, and that location is the point: `pi-subagents` resolves an agent's `mcp:`
+selectors against exactly four files —
+
+- `~/.config/mcp/mcp.json`
+- `~/.pi/agent/mcp-adapter.json`
+- `<repo>/.mcp.json`
+- `<repo>/.pi/mcp-adapter.json`
+
+— and never against Pi's own `~/.pi/agent/mcp.json`, whose servers it treats as built-in MCP. A server
+that lives only there reaches the main session and no child: `mcp:qmd` fails the launch with
+`Unresolved MCP direct-tool selectors`. A `<repo>/.mcp.json` resolves but needs interactive approval,
+and a child cannot approve, so it is blocked there too — tried and reverted.
+
+An agent names the server (`mcp:qmd`) or a single tool (`mcp:qmd/query`), must run `async: true`, and
+gets the tools under their adapter names (`qmd_query`, `qmd_get`, `qmd_multi_get`, `qmd_status`). The
+`mcp` gateway tool stays available for discovery. An agent with `bash` can always fall back to the
+`qmd` CLI.
+
+The qmd index holds a `links` collection covering this repo's `**/*.md`. Pass `collections: ["links"]`
+to keep results inside the repo — the index also holds unrelated projects, and an unfiltered query
+happily answers from them. Re-index with `qmd update && qmd embed -c links` after documentation
+changes; a stale index answers confidently from deleted text.
+
+| Agent         | Model                                          | Thinking | Purpose                            |
+| ------------- | ---------------------------------------------- | -------- | ---------------------------------- |
+| `implementer` | `openrouter/deepseek/deepseek-v4.1-flash-1017` | high     | Writes code, tests, commits        |
+| `reviewer`    | `openrouter/minimax/minimax-m3.1-flash`        | high     | Reviews diffs and plans, read-only |
+| `scout`       | `openrouter/deepseek/deepseek-v4.1-flash-1017` | low      | Recon; writes `context.md`         |
+| `researcher`  | `openrouter/deepseek/deepseek-v4.1-flash-1017` | high     | Sourced web research brief         |
+| `oracle`      | `openrouter/z-ai/glm-5.3`                      | high     | Second opinion before acting       |
