@@ -1,6 +1,6 @@
-import type { BlockModuleSchema, IBlock } from "../types";
+import type { BlockModuleSchema, IBlock, IBlockPropertyImage } from "../types";
 
-const BLOCK_VERSION = 0;
+const BLOCK_VERSION = 1;
 
 function createBlock(id: string): IBlock<"Avatar"> {
   return {
@@ -10,8 +10,8 @@ function createBlock(id: string): IBlock<"Avatar"> {
     properties: {
       image: {
         id: 0,
-        type: "url",
-        label: "Image url",
+        type: "image",
+        label: "Image",
         group: "Content",
         defaultValue: null,
       },
@@ -23,12 +23,78 @@ function createBlock(id: string): IBlock<"Avatar"> {
         group: "Content",
         defaultValue: null,
       },
+      size: {
+        id: 2,
+        type: "number",
+        label: "Size",
+        min: 40,
+        max: 240,
+        step: 1,
+        group: "Appearance",
+        defaultValue: 100,
+      },
+      shape: {
+        id: 3,
+        type: "select",
+        label: "Shape",
+        options: [
+          { label: "Circle", value: "circle" },
+          { label: "Rounded", value: "rounded" },
+        ],
+        group: "Appearance",
+        defaultValue: "circle",
+      },
+      link: {
+        id: 4,
+        type: "url",
+        label: "Link",
+        group: "Content",
+        defaultValue: null,
+      },
     },
   };
 }
 
 function migrateBlock(block: IBlock): IBlock {
   if (!block.version) block.version = 0;
+
+  if (block.version === 0) {
+    /* The stored value survives as-is: `image` only stops being a hand-pasted url and becomes an
+       upload, so the constructor offers the uploader instead of a text input. */
+    const image = block.properties.image as unknown as IBlockPropertyImage;
+    image.type = "image";
+    image.label = "Image";
+    block.properties.size = {
+      id: 2,
+      type: "number",
+      label: "Size",
+      min: 40,
+      max: 240,
+      step: 1,
+      group: "Appearance",
+      defaultValue: 100,
+    };
+    block.properties.shape = {
+      id: 3,
+      type: "select",
+      label: "Shape",
+      options: [
+        { label: "Circle", value: "circle" },
+        { label: "Rounded", value: "rounded" },
+      ],
+      group: "Appearance",
+      defaultValue: "circle",
+    };
+    block.properties.link = {
+      id: 4,
+      type: "url",
+      label: "Link",
+      group: "Content",
+      defaultValue: null,
+    };
+    block.version = 1;
+  }
+
   return block;
 }
 

@@ -1,6 +1,6 @@
 import type { BlockModuleSchema, IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
 
-const BLOCK_VERSION = 1;
+const BLOCK_VERSION = 2;
 
 function createBlock(id: string): IBlock<"Button"> {
   return {
@@ -57,6 +57,14 @@ function createBlock(id: string): IBlock<"Button"> {
         group: "Appearance",
         defaultValue: "var(--links-theme-button-font-size-sm)",
       },
+      "new-tab": {
+        id: 6,
+        type: "boolean",
+        label: "Open in a new tab",
+        variant: "switch",
+        group: "Content",
+        defaultValue: true,
+      },
     },
   };
 }
@@ -76,6 +84,17 @@ function migrateBlock(block: IBlock): IBlock {
     };
     (block.properties["font-size"] as unknown as IBlockPropertySelect).id = nextId;
     block.version = 1;
+  }
+  if (block.version === 1) {
+    block.properties["new-tab"] = {
+      id: 6,
+      type: "boolean",
+      label: "Open in a new tab",
+      variant: "switch",
+      group: "Content",
+      defaultValue: true,
+    };
+    block.version = 2;
   }
 
   return block;

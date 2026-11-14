@@ -28,6 +28,10 @@
   --links-theme-paragraph-fg: var(--links-page-fg);
   --links-theme-paragraph-inline-padding: 0px;
 
+  --links-theme-paragraph-font-size-sm: 0.8rem;
+  --links-theme-paragraph-font-size-md: 1rem;
+  --links-theme-paragraph-font-size-lg: 1.2rem;
+
   /* Avatar */
 
   /* Picture */

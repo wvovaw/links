@@ -6,8 +6,42 @@ exports[`Avatar > has a pinned schema snapshot 1`] = `
     "defaultValue": null,
     "group": "Content",
     "id": 0,
-    "label": "Image url",
+    "label": "Image",
+    "type": "image",
+  },
+  "link": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 4,
+    "label": "Link",
     "type": "url",
+  },
+  "shape": {
+    "defaultValue": "circle",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Shape",
+    "options": [
+      {
+        "label": "Circle",
+        "value": "circle",
+      },
+      {
+        "label": "Rounded",
+        "value": "rounded",
+      },
+    ],
+    "type": "select",
+  },
+  "size": {
+    "defaultValue": 100,
+    "group": "Appearance",
+    "id": 2,
+    "label": "Size",
+    "max": 240,
+    "min": 40,
+    "step": 1,
+    "type": "number",
   },
   "text": {
     "defaultValue": null,
@@ -72,6 +106,14 @@ exports[`Button > has a pinned schema snapshot 1`] = `
     "required": true,
     "type": "url",
   },
+  "new-tab": {
+    "defaultValue": true,
+    "group": "Content",
+    "id": 6,
+    "label": "Open in a new tab",
+    "type": "boolean",
+    "variant": "switch",
+  },
   "text": {
     "defaultValue": null,
     "group": "Content",
@@ -85,6 +127,48 @@ exports[`Button > has a pinned schema snapshot 1`] = `
 
 exports[`Paragraph > has a pinned schema snapshot 1`] = `
 {
+  "align": {
+    "defaultValue": "center",
+    "group": "Appearance",
+    "id": 2,
+    "label": "Align",
+    "options": [
+      {
+        "label": "Left",
+        "value": "left",
+      },
+      {
+        "label": "Center",
+        "value": "center",
+      },
+      {
+        "label": "Right",
+        "value": "right",
+      },
+    ],
+    "type": "select",
+  },
+  "font-size": {
+    "defaultValue": "var(--links-theme-paragraph-font-size-md)",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Font size",
+    "options": [
+      {
+        "label": "sm",
+        "value": "var(--links-theme-paragraph-font-size-sm)",
+      },
+      {
+        "label": "md",
+        "value": "var(--links-theme-paragraph-font-size-md)",
+      },
+      {
+        "label": "lg",
+        "value": "var(--links-theme-paragraph-font-size-lg)",
+      },
+    ],
+    "type": "select",
+  },
   "inline-padding": {
     "defaultValue": 0,
     "group": "Appearance",
@@ -110,12 +194,71 @@ exports[`Paragraph > has a pinned schema snapshot 1`] = `
 
 exports[`Picture > has a pinned schema snapshot 1`] = `
 {
+  "alt": {
+    "defaultValue": "",
+    "group": "Content",
+    "hint": "Describes the picture when it cannot be seen",
+    "id": 1,
+    "label": "Alt text",
+    "type": "text",
+  },
   "image": {
     "defaultValue": null,
     "group": "Content",
     "id": 0,
     "label": "Image",
     "type": "image",
+  },
+  "link": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 4,
+    "label": "Link",
+    "type": "url",
+  },
+  "loading": {
+    "defaultValue": "lazy",
+    "group": "Appearance",
+    "id": 2,
+    "label": "Loading",
+    "options": [
+      {
+        "label": "Lazy",
+        "value": "lazy",
+      },
+      {
+        "label": "Eager",
+        "value": "eager",
+      },
+    ],
+    "type": "select",
+  },
+  "object-fit": {
+    "defaultValue": "cover",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Object fit",
+    "options": [
+      {
+        "label": "Cover",
+        "value": "cover",
+      },
+      {
+        "label": "Contain",
+        "value": "contain",
+      },
+    ],
+    "type": "select",
+  },
+  "radius": {
+    "defaultValue": 10,
+    "group": "Appearance",
+    "id": 5,
+    "label": "Radius",
+    "max": 40,
+    "min": 0,
+    "step": 1,
+    "type": "number",
   },
 }
 `;

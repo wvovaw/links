@@ -1,6 +1,6 @@
 import type { BlockModuleSchema, IBlock, IBlockPropertyNumber } from "../types";
 
-const BLOCK_VERSION = 2;
+const BLOCK_VERSION = 3;
 
 function createBlock(id: string): IBlock<"Paragraph"> {
   return {
@@ -28,6 +28,30 @@ function createBlock(id: string): IBlock<"Paragraph"> {
         group: "Appearance",
         defaultValue: 0,
       },
+      "align": {
+        id: 2,
+        type: "select",
+        label: "Align",
+        options: [
+          { label: "Left", value: "left" },
+          { label: "Center", value: "center" },
+          { label: "Right", value: "right" },
+        ],
+        group: "Appearance",
+        defaultValue: "center",
+      },
+      "font-size": {
+        id: 3,
+        type: "select",
+        label: "Font size",
+        options: [
+          { label: "sm", value: "var(--links-theme-paragraph-font-size-sm)" },
+          { label: "md", value: "var(--links-theme-paragraph-font-size-md)" },
+          { label: "lg", value: "var(--links-theme-paragraph-font-size-lg)" },
+        ],
+        group: "Appearance",
+        defaultValue: "var(--links-theme-paragraph-font-size-md)",
+      },
     },
   };
 }
@@ -42,6 +66,33 @@ function migrateBlock(block: IBlock): IBlock {
   if (block.version === 1) {
     delete block.properties.flag;
     block.version = 2;
+  }
+  if (block.version === 2) {
+    block.properties.align = {
+      id: 2,
+      type: "select",
+      label: "Align",
+      options: [
+        { label: "Left", value: "left" },
+        { label: "Center", value: "center" },
+        { label: "Right", value: "right" },
+      ],
+      group: "Appearance",
+      defaultValue: "center",
+    };
+    block.properties["font-size"] = {
+      id: 3,
+      type: "select",
+      label: "Font size",
+      options: [
+        { label: "sm", value: "var(--links-theme-paragraph-font-size-sm)" },
+        { label: "md", value: "var(--links-theme-paragraph-font-size-md)" },
+        { label: "lg", value: "var(--links-theme-paragraph-font-size-lg)" },
+      ],
+      group: "Appearance",
+      defaultValue: "var(--links-theme-paragraph-font-size-md)",
+    };
+    block.version = 3;
   }
 
   return block;

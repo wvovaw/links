@@ -4,8 +4,12 @@ import type { BlockName } from "../src/main";
 
 import { checkBlockUpToDate, migrateBlock } from "../src/main";
 import { getBlockModule, registry } from "../src/registry";
+import { avatarV0 } from "./fixtures/avatar-v0";
 import { buttonV0 } from "./fixtures/button-v0";
+import { buttonV1 } from "./fixtures/button-v1";
 import { paragraphV0 } from "./fixtures/paragraph-v0";
+import { paragraphV2 } from "./fixtures/paragraph-v2";
+import { pictureV0 } from "./fixtures/picture-v0";
 
 describe.each(Object.values(registry))("$name", (module) => {
   it("creates a block matching its own version and name", () => {
@@ -57,8 +61,12 @@ describe.each(Object.values(registry))("$name", (module) => {
 });
 
 it.each([
+  ["Avatar", 0, avatarV0],
   ["Paragraph", 0, paragraphV0],
+  ["Paragraph", 2, paragraphV2],
   ["Button", 0, buttonV0],
+  ["Button", 1, buttonV1],
+  ["Picture", 0, pictureV0],
 ])("migrates a stored %s block from version %i to the current schema", (name, version, fixture) => {
   const module = getBlockModule(name as BlockName);
   const migrated = migrateBlock(structuredClone(fixture));
