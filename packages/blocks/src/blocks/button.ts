@@ -64,6 +64,9 @@ function createBlock(id: string): IBlock<"Button"> {
 function migrateBlock(block: IBlock): IBlock {
   if (!block.version) block.version = 0;
   if (block.version === 0) {
+    // Read the next free id before `border` takes a slot, so `font-size` lands on the id the
+    // current schema pins (5) rather than on the post-insert property count (6).
+    const nextId = Object.keys(block.properties).length;
     (block.properties.border as unknown as IBlockPropertyColor) = {
       id: block.properties["font-size"].id,
       type: "color",
@@ -71,7 +74,7 @@ function migrateBlock(block: IBlock): IBlock {
       group: "Border",
       defaultValue: null,
     };
-    (block.properties["font-size"] as unknown as IBlockPropertySelect).id = Object.keys(block.properties).length;
+    (block.properties["font-size"] as unknown as IBlockPropertySelect).id = nextId;
     block.version = 1;
   }
 

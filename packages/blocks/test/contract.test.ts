@@ -57,11 +57,15 @@ describe.each(Object.values(registry))("$name", (module) => {
 });
 
 it.each([
-  ["Paragraph", paragraphV0, 0],
-  ["Button", buttonV0, 0],
-])("migrates a stored %s block from version %i to the current schema", (name, fixture, version) => {
+  ["Paragraph", 0, paragraphV0],
+  ["Button", 0, buttonV0],
+])("migrates a stored %s block from version %i to the current schema", (name, version, fixture) => {
+  const module = getBlockModule(name as BlockName);
   const migrated = migrateBlock(structuredClone(fixture));
 
   expect(fixture.version).toBe(version);
-  expect(migrated.version).toBe(getBlockModule(name as BlockName).BLOCK_VERSION);
+  expect(migrated.version).toBe(module.BLOCK_VERSION);
+  // A stored block that has been through every step must reproduce what the factory writes today:
+  // a step that bumps the version without doing its property work otherwise stays green.
+  expect(migrated.properties).toEqual(module.createBlock("b1").properties);
 });
