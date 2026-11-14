@@ -8,7 +8,7 @@ import type {
   IBlockPropertyUrl,
 } from "@links/blocks";
 
-import { StorageApi } from "~shared/api/backend";
+import { resolveBlockImageUrl } from "~shared/blocks";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -22,12 +22,12 @@ const bp = computed(() => {
 
   return {
     image:
-      StorageApi.resolveImageUrl((p.image as IBlockPropertyImage | undefined)?.value, {
+      resolveBlockImageUrl((p.image as IBlockPropertyImage | undefined)?.value, {
         origin: config.public.backendUrl,
       }) ?? "",
     /* A picture stored before these properties existed is decorative, lazy and cropped the same way. */
     alt: (p.alt as IBlockPropertyText | undefined)?.value ?? "",
-    loading: (p.loading as IBlockPropertySelect | undefined)?.value ?? "lazy",
+    loading: (p.loading as IBlockPropertySelect<"eager" | "lazy"> | undefined)?.value ?? "lazy",
     link: (p.link as IBlockPropertyUrl | undefined)?.value,
     style: {
       "--picture-object-fit": (p["object-fit"] as IBlockPropertySelect | undefined)?.value ?? "cover",
@@ -45,7 +45,8 @@ const bp = computed(() => {
       :href="bp.link || undefined"
       :rel="bp.link ? 'noopener noreferrer' : undefined"
     >
-      <img class="picture-block__image" :src="bp.image" :alt="bp.alt" :loading="bp.loading" />
+      <img v-if="bp.image" class="picture-block__image" :src="bp.image" :alt="bp.alt" :loading="bp.loading" />
+      <div v-else class="picture-block__placeholder" />
     </component>
   </div>
 </template>
@@ -63,11 +64,21 @@ const bp = computed(() => {
   width: 100%;
   line-height: 0;
 }
-/* The box is reserved before the image lands, so the page below it does not jump on load. */
+/* A stored picture keeps its own ratio, exactly as it rendered before the properties existed. */
 .picture-block__image {
+  max-width: 100%;
+  height: auto;
+  object-fit: var(--picture-object-fit, cover);
+  border-radius: var(--picture-radius, var(--links-theme-picture-radius));
+}
+/*
+  Fallback box only, for a picture with no image yet: reserving 16/9 keeps the page from shifting when
+  one is added or loads. A picture that has an image never gets this box, because the page must keep
+  rendering exactly as it does today.
+*/
+.picture-block__placeholder {
   width: 100%;
   aspect-ratio: 16 / 9;
-  object-fit: var(--picture-object-fit, cover);
   border-radius: var(--picture-radius, var(--links-theme-picture-radius));
 }
 </style>

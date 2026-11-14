@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import type { BlockProperty, IBlockPropertyBoolean, IBlockPropertyText, IBlockPropertyUrl } from "@links/blocks";
+import type {
+  BlockProperty,
+  IBlockPropertyBoolean,
+  IBlockPropertyColor,
+  IBlockPropertySelect,
+  IBlockPropertyText,
+  IBlockPropertyUrl,
+} from "@links/blocks";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -7,16 +14,21 @@ const props = defineProps<{
 
 const bp = computed(() => {
   const p = props.properties;
+  const foreground = (p.foreground as IBlockPropertyColor | undefined)?.value;
+  const background = (p.background as IBlockPropertyColor | undefined)?.value;
+  const fontSize = (p["font-size"] as IBlockPropertySelect | undefined)?.value;
+  const border = (p.border as IBlockPropertyColor | undefined)?.value;
+
   return {
     text: (p.text! as IBlockPropertyText).value,
     link: p.link!.value ? (p.link as IBlockPropertyUrl).value : "#",
     /* Buttons stored before the switch existed always opened in a new tab. */
     newTab: (p["new-tab"] as IBlockPropertyBoolean | undefined)?.value ?? true,
     style: {
-      "--button-fg": p.foreground!.value ? p.foreground!.value : "var(--links-theme-button-fg)",
-      "--button-bg": p.background!.value ? p.background!.value : "var(--links-theme-button-bg)",
-      "--button-font-size": p["font-size"]!.value ? p["font-size"]!.value : "var(--links-theme-button-font-size-md)",
-      "--button-border": p.border!.value ? p.border!.value : "#eee",
+      "--button-fg": foreground || "var(--links-theme-button-fg)",
+      "--button-bg": background || "var(--links-theme-button-bg)",
+      "--button-font-size": fontSize || "var(--links-theme-button-font-size-md)",
+      "--button-border": border || "#eee",
     },
   };
 });

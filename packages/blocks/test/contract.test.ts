@@ -60,6 +60,16 @@ describe.each(Object.values(registry))("$name", (module) => {
   });
 });
 
+it("keeps a pasted avatar image url when an Avatar migrates", () => {
+  const stored = structuredClone(avatarV0);
+  stored.properties.image.value = "https://example.com/avatar.png";
+
+  const migrated = migrateBlock(stored);
+
+  expect(migrated.properties.image.type).toBe("image");
+  expect(migrated.properties.image.value).toBe("https://example.com/avatar.png");
+});
+
 it.each([
   ["Avatar", 0, avatarV0],
   ["Paragraph", 0, paragraphV0],

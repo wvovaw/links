@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useLinksStore } from "~entities/links";
 import { LinkStatus, LinksApi } from "~shared/api/backend";
+import { isAbsoluteImageUrl } from "~shared/blocks";
 import { randomString } from "~shared/lib/utils";
 
 const defaultPageTitle = "New multilinks page";
@@ -98,7 +99,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     const ids: string[] = [];
     for (const block of blocksList) {
       for (const prop of Object.values(block.properties)) {
-        if (prop.type === "image" && prop.value) {
+        /* A migrated Avatar may still hold a pasted url: it is not a stored file and must never be
+           sent as one, or the backend would try to keep `https://…` as an existing image. */
+        if (prop.type === "image" && prop.value && !isAbsoluteImageUrl(prop.value)) {
           ids.push(prop.value);
         }
       }

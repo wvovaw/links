@@ -8,7 +8,7 @@ import type {
   IBlockPropertyUrl,
 } from "@links/blocks";
 
-import { StorageApi } from "~shared/api/backend";
+import { resolveBlockImageUrl } from "~shared/blocks";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -16,21 +16,15 @@ const props = defineProps<{
 
 const config = useRuntimeConfig();
 
-/* An avatar stored before the uploader holds a full url; anything else is a storage file id. */
-const ABSOLUTE_URL = /^https?:\/\//;
-
 const bp = computed(() => {
   const p = props.properties;
-  const stored = (p.image as IBlockPropertyImage | undefined)?.value;
-  const image = stored
-    ? ABSOLUTE_URL.test(stored)
-      ? stored
-      : StorageApi.resolveImageUrl(stored, { origin: config.public.backendUrl })
-    : "";
   const size = (p.size as IBlockPropertyNumber | undefined)?.value;
 
   return {
-    image: image ?? "",
+    image:
+      resolveBlockImageUrl((p.image as IBlockPropertyImage | undefined)?.value, {
+        origin: config.public.backendUrl,
+      }) ?? "",
     text: (p.text as IBlockPropertyText | undefined)?.value,
     link: (p.link as IBlockPropertyUrl | undefined)?.value,
     /* A block stored before these properties existed renders at the size and shape it always had. */
@@ -68,11 +62,12 @@ const bp = computed(() => {
   display: block;
   line-height: 0;
 }
+/* `size` caps the longest edge: the image keeps its own ratio, as it did at the old fixed 100px cap. */
 .avatar-block__image {
-  width: var(--avatar-size, 100px);
-  max-width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
+  max-width: var(--avatar-size, 100px);
+  max-height: var(--avatar-size, 100px);
+  width: auto;
+  height: auto;
   border-radius: var(--avatar-radius, 100%);
 }
 .avatar-block__heading {

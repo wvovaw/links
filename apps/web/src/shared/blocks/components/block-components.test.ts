@@ -114,6 +114,16 @@ describe("PictureBlock", () => {
     expect(plain.find("a").exists()).toBe(false);
   });
 
+  it("reserves the fallback box only while there is no image", () => {
+    const empty = mount(PictureBlock, { props: { properties: blockOf("Picture").properties } });
+    expect(empty.find(".picture-block__placeholder").exists()).toBe(true);
+    expect(empty.find("img").exists()).toBe(false);
+
+    const filled = mount(PictureBlock, { props: { properties: blockOf("Picture", { image: "file-1" }).properties } });
+    expect(filled.find(".picture-block__placeholder").exists()).toBe(false);
+    expect(filled.find("img").exists()).toBe(true);
+  });
+
   it("keeps the theme radius as the fallback", () => {
     const wrapper = mount(PictureBlock, { props: { properties: blockOf("Picture", { image: "file-1" }).properties } });
 

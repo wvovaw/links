@@ -3,6 +3,7 @@ import type { IBlockPropertyImage } from "@links/blocks";
 
 import { UIFileUpload, UIInputHint, UIInputLabel } from "@links/ui";
 import { StorageApi } from "~shared/api/backend";
+import { resolveBlockImageUrl } from "~shared/blocks";
 
 interface IImageFieldProps {
   field: IBlockPropertyImage;
@@ -16,7 +17,7 @@ const isUploading = ref(false);
 const file = ref<File | null>(model.value ? new File([], model.value) : null);
 
 const config = useRuntimeConfig();
-const previewUrl = computed(() => StorageApi.resolveImageUrl(model.value, { origin: config.public.backendUrl }));
+const previewUrl = computed(() => resolveBlockImageUrl(model.value, { origin: config.public.backendUrl }));
 
 async function handleChange(payload: File | File[] | null) {
   const picked = Array.isArray(payload) ? payload[0] : payload;
