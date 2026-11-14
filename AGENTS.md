@@ -72,7 +72,7 @@ not define them.
   Vue testing, Pinia, NestJS, UnoCSS, ponytail.
 - Subagents are project-defined in [`.pi/agents/`](.pi/agents/) and only those run — see
   [docs/conventions.md](docs/conventions.md#subagents). MCP servers for them come from `~/.config/mcp/mcp.json` — see
-  [docs/conventions.md](docs/conventions.md#mcp).
+  [docs/conventions.md](docs/conventions.md#mcp). Dispatch them as configured: never pass a model override.
 - Superpowers (brainstorming, writing-plans, TDD, code review, verification) is a Pi package
   declared in `.pi/settings.json`. It loads only after project trust is granted. Designs and plans it
   produces live in [`docs/superpowers/`](docs/superpowers/).

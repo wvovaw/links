@@ -126,6 +126,13 @@ the only thing that keeps the models and thinking levels the same on someone els
 not cover the other fields — a user-level override that sets `tools` still wins. Change both or
 neither.
 
+**A dispatch never names a model.** The pinned model in the agent file is the model the agent runs on,
+and a `model:` passed to `subagent()` overrides it for that call — which quietly turns a cheap worker
+into an expensive one for the whole run. If a task seems to need a stronger model, change the pin in
+`.pi/agents/` (and in `agentOverrides`) so the choice is visible and reviewable, or split the task;
+never override it from inside a session. The same holds for role guidance that asks for "the most
+capable available model": use `reviewer` as pinned.
+
 Prompt bodies are copied from the bundled `pi-subagents` agents (`worker` is our `implementer`), so
 upstream fixes arrive by re-copying the body and keeping the frontmatter. Only frontmatter is ours.
 
