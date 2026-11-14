@@ -8,16 +8,23 @@ import { groupBy } from "~shared/lib/utils";
 
 import { useConstructorStore } from "../../model";
 
+const emit = defineEmits<{ select: [] }>();
+
 const { addBlock } = useConstructorStore();
 const { t, te } = useI18n();
 
 const query = ref("");
 
+function blockLabel(block: BlockMeta) {
+  const key = `blocks.${block.name}.label`;
+  return te(key) ? t(key) : block.label;
+}
+
 const filteredBlocks = computed(() => {
   const needle = query.value.trim().toLowerCase();
   if (!needle) return blocksList;
   return blocksList.filter((block) =>
-    [block.label, block.name, block.description, ...block.keywords].some((field) =>
+    [blockLabel(block), block.name, block.description, ...block.keywords].some((field) =>
       field.toLowerCase().includes(needle),
     ),
   );
@@ -25,9 +32,9 @@ const filteredBlocks = computed(() => {
 
 const groupedBlocks = computed(() => Object.entries(groupBy<BlockMeta>(["category"])([...filteredBlocks.value])));
 
-function blockLabel(block: BlockMeta) {
-  const key = `blocks.${block.name}.label`;
-  return te(key) ? t(key) : block.label;
+function selectBlock(block: BlockMeta) {
+  addBlock(block.name);
+  emit("select");
 }
 </script>
 
@@ -41,12 +48,7 @@ function blockLabel(block: BlockMeta) {
       class="flex flex-col gap-1"
     >
       <span class="px-2 text-trunks text-moon-12">{{ category }}</span>
-      <UIMenu.Item
-        v-for="block of blocks"
-        :key="block.name"
-        data-testid="blocks-list-item"
-        @click="addBlock(block.name)"
-      >
+      <UIMenu.Item v-for="block of blocks" :key="block.name" data-testid="blocks-list-item" @click="selectBlock(block)">
         <UIMenu.Icon :icon="block.icon" />
         <UIMenu.Title class="font-semibold">
           {{ blockLabel(block) }}

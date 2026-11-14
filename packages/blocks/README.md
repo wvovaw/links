@@ -1,3 +1,14 @@
+## Adding a block
+
+1. Schema module in `src/blocks/<name>.ts` with its own `BLOCK_VERSION` and `migrateBlock`
+2. Name added to `BLOCK_NAMES` (`src/types.ts`) and to `registry` (`src/registry.ts`)
+3. Metadata in `BLOCK_META` (`src/types.ts`): label, description, category and search keywords
+4. Icon added to `BLOCK_ICONS` (`src/types.ts`): UnoCSS generates icon classes at build time, so an
+   icon missing from that list renders as an empty box with no error anywhere
+5. Component in `apps/web/src/shared/blocks/components/<kebab>-block.vue`
+6. `blocks.<Name>.label` and `blocks.<Name>.description` in every locale of
+   `apps/web/src/shared/locales`
+
 ## Blocks Backward Compatibility
 
 Every block is an object with predefined set of properties. This properties may change in future. We can change some property, remove some from a block or add a new one. This makes dissalignment with the existing pages in the DB so we need track block versions and upgrade it aplying every change we make to the block schema. The migration process may run when a user visits the constructor page.

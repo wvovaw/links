@@ -19,7 +19,7 @@ const [show, setShow] = useToggle();
         <UISheet.Title>Add Block</UISheet.Title>
         <UISheet.Subtitle>Select a block to add</UISheet.Subtitle>
       </UISheet.Header>
-      <BlocksList @click="setShow(false)" />
+      <BlocksList @select="setShow(false)" />
     </UISheet.Content>
   </UISheet.Root>
 </template>
