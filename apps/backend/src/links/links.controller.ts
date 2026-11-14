@@ -4,6 +4,7 @@ import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
+import { UpdateThemeDto } from "./dto/theme.dto";
 import { toLinkDto } from "./link.dto";
 import { LinksService } from "./links.service";
 
@@ -38,6 +39,12 @@ export class LinksController {
   @UseGuards(AuthGuard)
   async updateContent(@CurrentUser() user: User, @Param("id") id: string, @Body() body: UpdateContentDto) {
     return toLinkDto(await this.linksService.updateContent(user, id, body));
+  }
+
+  @Patch(":id/theme")
+  @UseGuards(AuthGuard)
+  async updateTheme(@CurrentUser() user: User, @Param("id") id: string, @Body() body: UpdateThemeDto) {
+    return toLinkDto(await this.linksService.updateTheme(user, id, body));
   }
 
   @Patch(":id/metadata")

@@ -32,6 +32,9 @@ importers:
 
   apps/backend:
     dependencies:
+      '@links/blocks':
+        specifier: workspace:*
+        version: link:../../packages/blocks
       '@nestjs/common':
         specifier: ^12.5.0
         version: 12.5.0(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)

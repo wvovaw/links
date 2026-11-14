@@ -1,3 +1,5 @@
+import type { PageTheme } from "@links/blocks";
+
 import {
   Column,
   CreateDateColumn,
@@ -31,6 +33,9 @@ export class Link {
 
   @Column()
   background!: string;
+
+  @Column({ type: "simple-json", nullable: true })
+  theme!: PageTheme | null;
 
   @Column({ type: "text", default: LinkStatus.FRESH })
   status!: LinkStatus;

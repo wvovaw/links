@@ -12,7 +12,8 @@
   "exports": {
     ".": {
       "types": "./dist/main.d.mts",
-      "import": "./dist/main.mjs"
+      "import": "./dist/main.mjs",
+      "require": "./dist/main.mjs"
     }
   },
   "scripts": {

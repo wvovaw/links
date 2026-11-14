@@ -7,7 +7,7 @@ import { defineConfig } from "vitest/config";
  * `experimentalDecorators` / `emitDecoratorMetadata` from `tsconfig.json`.
  */
 export default defineConfig({
-  plugins: [swc.vite()],
+  plugins: [swc.vite({ exclude: [/node_modules/, /packages\/blocks\/dist/] })],
   test: {
     environment: "node",
     include: ["src/**/*.spec.ts", "test/**/*.spec.ts"],

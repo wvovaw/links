@@ -6,6 +6,7 @@ import { BlockImage } from "../storage/block-image.entity";
 import { LocalStorageService } from "../storage/local-storage.service";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, defaultBackground, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
+import { UpdateThemeDto } from "./dto/theme.dto";
 import { LinkStatus } from "./link-status";
 import { Link } from "./link.entity";
 
@@ -55,7 +56,6 @@ export class LinksService {
     const link = await this.getOwned(owner, id);
 
     if (body.blocks !== undefined) link.blocks = body.blocks;
-    if (body.background !== undefined) link.background = body.background;
 
     this.applyStatus(link, body.status);
 
@@ -64,6 +64,14 @@ export class LinksService {
     if (body.imageFileIds !== undefined) await this.syncImages(link, body.imageFileIds);
 
     return saved;
+  }
+
+  async updateTheme(owner: User, id: string, body: UpdateThemeDto) {
+    const link = await this.getOwned(owner, id);
+
+    link.theme = body.toPageTheme();
+
+    return this.links.save(link);
   }
 
   async updateMetadata(owner: User, id: string, body: UpdateMetadataDto) {

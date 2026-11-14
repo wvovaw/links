@@ -25,10 +25,6 @@ export class UpdateContentDto {
   blocks?: unknown[];
 
   @IsOptional()
-  @IsString()
-  background?: string;
-
-  @IsOptional()
   @IsEnum(LinkStatus)
   status?: LinkStatus;
 
