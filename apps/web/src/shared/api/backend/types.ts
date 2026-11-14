@@ -1,3 +1,5 @@
+import type { PageTheme } from "@links/blocks";
+
 export interface User {
   id: string;
   email: string;
@@ -12,7 +14,9 @@ export interface Link {
   title: string;
   blocks: unknown[];
   seo: Record<string, unknown>;
+  /** Legacy pages only: the raw client-authored CSS a page published before themes keeps. */
   background: string;
+  theme: PageTheme | null;
   status: LinkStatus;
 }
 
@@ -21,7 +25,9 @@ export interface PublicLink {
   slug: string;
   blocks: unknown[];
   seo: Record<string, unknown>;
+  /** Legacy pages only: the raw client-authored CSS a page published before themes keeps. */
   background: string;
+  theme: PageTheme | null;
 }
 
 export enum LinkStatus {

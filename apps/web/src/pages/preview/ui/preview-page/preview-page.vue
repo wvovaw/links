@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IBlock } from "@links/blocks";
+import type { IBlock, PageTheme } from "@links/blocks";
 
 import { LinkPageRenderer } from "~features/links";
 import { LinksApi } from "~shared/api/backend";
@@ -12,6 +12,7 @@ const props = defineProps<{
 }>();
 
 const blocks = ref<IBlock[]>();
+const theme = ref<PageTheme | null>(null);
 const background = ref<string>();
 const linkName = ref<string>("");
 
@@ -19,6 +20,7 @@ const { data, error } = await useAsyncData("preview-link-data", () => LinksApi.g
 
 if (data?.value) {
   blocks.value = data.value.blocks as IBlock[];
+  theme.value = data.value.theme;
   background.value = data.value.background;
   linkName.value = data.value.slug;
 
@@ -37,7 +39,7 @@ if (data?.value) {
   </template>
   <template v-else-if="blocks">
     <div class="relative min-h-100vh flex flex-col">
-      <LinkPageRenderer :blocks="blocks" :background-css="background" />
+      <LinkPageRenderer :blocks="blocks" :theme="theme" :background="background" />
       <OverlayHud :link-id="linkId" :link-name="linkName" />
     </div>
   </template>

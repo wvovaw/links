@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UIButton, UISheet, UITooltip } from "@links/ui";
 
-import { BackgroundsList } from "../../backgrounds-list";
+import { ThemeEditor } from "../../theme-editor";
 
 const [show, setShow] = useToggle();
 </script>
@@ -11,15 +11,15 @@ const [show, setShow] = useToggle();
     <template #trigger>
       <UIButton icon="i-lucide:image" @click="setShow(true)" />
     </template>
-    <template #content> Set background </template>
+    <template #content> Page theme </template>
   </UITooltip>
   <UISheet.Root v-model:open="show">
     <UISheet.Content side="left">
       <UISheet.Header>
-        <UISheet.Title>Set Background</UISheet.Title>
-        <UISheet.Subtitle>Select one of suggested backgrounds</UISheet.Subtitle>
+        <UISheet.Title>Page theme</UISheet.Title>
+        <UISheet.Subtitle>Pick a background and tune the page tokens</UISheet.Subtitle>
       </UISheet.Header>
-      <BackgroundsList />
+      <ThemeEditor />
     </UISheet.Content>
   </UISheet.Root>
 </template>

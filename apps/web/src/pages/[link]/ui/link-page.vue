@@ -21,14 +21,12 @@ const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${
 
 const blocks = ref<IBlock[]>([]);
 const seo = ref<Record<string, unknown>>({});
-const bg = ref<string>();
 
 const defaultDescription = "Welcome to my link";
 
 if (pageData.value) {
   blocks.value = pageData.value.blocks as IBlock[];
   seo.value = pageData.value.seo;
-  bg.value = pageData.value.background;
 
   const title = pageData.value.title;
   const description = typeof seo.value.description === "string" ? seo.value.description : defaultDescription;
@@ -51,9 +49,9 @@ if (pageData.value) {
 <template>
   <Html :lang="locale">
     <Body>
-      <main class="min-h-100dvh flex flex-col" :style="bg">
+      <main class="min-h-100dvh flex flex-col">
         <NotExistPage v-if="error?.status === 404" />
-        <LinkPageRenderer v-else :blocks="blocks" />
+        <LinkPageRenderer v-else :blocks="blocks" :theme="pageData?.theme" :background="pageData?.background" />
         <LinkFooter />
       </main>
     </Body>

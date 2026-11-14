@@ -1,6 +1,6 @@
-import type { BlockName, IBlock } from "@links/blocks";
+import type { BlockName, IBlock, PageTheme } from "@links/blocks";
 
-import { checkBlockUpToDate, createBlock, migrateBlock } from "@links/blocks";
+import { checkBlockUpToDate, createBlock, DEFAULT_PAGE_THEME, migrateBlock } from "@links/blocks";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useLinksStore } from "~entities/links";
@@ -28,6 +28,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const linkName = ref<string | null>(null);
   const publishStatus = ref<LinkStatus>(LinkStatus.DRAFT);
   const blocks = ref<IBlock[]>(defaultBlocksState);
+  const theme = ref<PageTheme>({ ...DEFAULT_PAGE_THEME });
   const background = ref<string>(defaultBackground);
   const seo = ref<Record<string, unknown>>({});
   const selectedBlockId = ref<string | null>(null);
@@ -64,8 +65,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     blocks.value.length = 0;
     blocks.value.push(...newBlocks);
   }
-  function setBackground(newBackground: string) {
-    background.value = newBackground;
+  function setTheme(patch: Partial<PageTheme>) {
+    theme.value = { ...theme.value, ...patch };
   }
   function selectBlock(id: string) {
     selectedBlockId.value = id;
@@ -112,10 +113,10 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         title: title.value,
         blocks: blocks.value,
         seo: seo.value,
-        background: background.value,
         status: publishStatus.value,
         imageFileIds,
       });
+      await LinksApi.updateTheme({ id: linkId.value, theme: toRaw(theme.value) });
       savedDataHash.value = computeStoreHash();
     }
   }
@@ -139,6 +140,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks: toRaw(blocks.value),
       title: toRaw(title.value),
       seo: toRaw(seo.value),
+      theme: toRaw(theme.value),
     });
   }
   function hasUnsavedChanges() {
@@ -152,6 +154,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     linkName.value = null;
     publishStatus.value = LinkStatus.DRAFT;
     blocks.value = defaultBlocksState;
+    theme.value = { ...DEFAULT_PAGE_THEME };
     background.value = defaultBackground;
     seo.value = {};
     selectedBlockId.value = null;
@@ -168,7 +171,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         linkName.value = data.slug;
         setTitle(data.title);
         setPublishStatus(data.status);
-        setBackground(data.background);
+        setTheme(data.theme ?? DEFAULT_PAGE_THEME);
+        background.value = data.background;
 
         // Blocks are already parsed from the backend
         const blocksList: IBlock[] = data.blocks as IBlock[];
@@ -200,6 +204,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     publishStatus,
     title,
     blocks,
+    theme,
     background,
     canUndo,
     canRedo,
@@ -211,7 +216,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     resumeHistory,
     setBlocks,
     setTitle,
-    setBackground,
+    setTheme,
     setPublishStatus,
     getBlock,
     selectBlock,

@@ -4,7 +4,7 @@ import type { IBlock } from "@links/blocks";
 import { animations, dragAndDrop, tearDown } from "@formkit/drag-and-drop";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
-import { useBlocksResolver } from "~shared/blocks";
+import { resolvePageStyle, useBlocksResolver } from "~shared/blocks";
 
 import { useConstructorStore } from "../../model";
 import PageBlock from "./page-block.vue";
@@ -12,8 +12,10 @@ import PageBlock from "./page-block.vue";
 const { resolve } = useBlocksResolver();
 
 const constructorStore = useConstructorStore();
-const { selectedBlockId, blocks, background } = storeToRefs(constructorStore);
+const { selectedBlockId, blocks, theme, background } = storeToRefs(constructorStore);
 const { selectBlock, setBlocks, clearHistory, pauseHistory, resumeHistory } = constructorStore;
+
+const pageStyle = computed(() => resolvePageStyle(theme.value, background.value));
 
 function isSelectedBlock(blockId: string) {
   const isit = selectedBlockId.value === blockId;
@@ -61,7 +63,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="link" :style="background">
+  <div class="link" :style="pageStyle">
     <div class="link__container">
       <div ref="draggableRoot" class="link__blocks-root">
         <PageBlock

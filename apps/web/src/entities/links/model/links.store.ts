@@ -19,7 +19,6 @@ export const useLinksStore = defineStore("links", () => {
     title: string;
     blocks: unknown[];
     seo: Record<string, unknown>;
-    background: string;
     status: LinkStatus;
     imageFileIds?: string[];
   }) {
@@ -36,7 +35,6 @@ export const useLinksStore = defineStore("links", () => {
         await LinksApi.updateContent({
           id: params.id,
           blocks: params.blocks,
-          background: params.background,
           status: params.status,
           imageFileIds: params.imageFileIds,
         });

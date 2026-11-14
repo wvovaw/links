@@ -1,20 +1,23 @@
 <script setup lang="ts">
-import type { IBlock } from "@links/blocks";
+import type { IBlock, PageTheme } from "@links/blocks";
 
-import { useBlocksResolver } from "~shared/blocks";
+import { resolvePageStyle, useBlocksResolver } from "~shared/blocks";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 
-defineProps<{
+const props = defineProps<{
   blocks: IBlock[];
-  backgroundCss?: string;
+  theme?: PageTheme | null;
+  background?: string | null;
 }>();
 
 const { resolve } = useBlocksResolver();
+
+const pageStyle = computed(() => resolvePageStyle(props.theme ?? null, props.background ?? null));
 </script>
 
 <template>
-  <div class="link" :style="backgroundCss">
+  <div class="link" :style="pageStyle">
     <div class="link__container">
       <div class="link__blocks-root">
         <component

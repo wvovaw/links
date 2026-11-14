@@ -1,3 +1,5 @@
+import type { PageTheme } from "@links/blocks";
+
 import type { Link, LinkStatus } from "../types";
 
 import { useApiClient } from "../client";
@@ -6,9 +8,13 @@ import { getErrorMessage } from "../errors";
 export interface IUpdateContentData {
   id: string;
   blocks?: unknown[];
-  background?: string;
   status?: LinkStatus;
   imageFileIds?: string[];
+}
+
+export interface IUpdateThemeData {
+  id: string;
+  theme: PageTheme;
 }
 
 export interface IUpdateMetadataData {
@@ -26,7 +32,6 @@ export interface IUpdateSlugData {
 export async function updateContent({
   id,
   blocks,
-  background,
   status,
   imageFileIds,
 }: IUpdateContentData): Promise<Link | undefined> {
@@ -34,7 +39,21 @@ export async function updateContent({
     const api = useApiClient();
     const data = await api<Link>(`/links/${id}/content`, {
       method: "PATCH",
-      body: { blocks, background, status, imageFileIds },
+      body: { blocks, status, imageFileIds },
+    });
+    return data;
+  } catch {
+    throw new Error(getErrorMessage("unknown"));
+  }
+}
+
+/** The theme endpoint stores the whole theme at once; every field is required. */
+export async function updateTheme({ id, theme }: IUpdateThemeData): Promise<Link | undefined> {
+  try {
+    const api = useApiClient();
+    const data = await api<Link>(`/links/${id}/theme`, {
+      method: "PATCH",
+      body: theme,
     });
     return data;
   } catch {
