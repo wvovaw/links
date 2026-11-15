@@ -15,6 +15,7 @@ import MapBlock from "./map-block.vue";
 import MusicBlock from "./music-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
+import QrCodeBlock from "./qr-code-block.vue";
 import SocialIconsBlock from "./social-icons-block.vue";
 import SpacerBlock from "./spacer-block.vue";
 import VideoBlock from "./video-block.vue";
@@ -567,6 +568,71 @@ describe("MusicBlock", () => {
 
     expect(wrapper.find("iframe").exists()).toBe(false);
     expect(wrapper.get(".music-block__placeholder").text()).toBe(url);
+  });
+});
+
+describe("QrCodeBlock", () => {
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(QrCodeBlock, { props: { properties: blockOf("QrCode", values).properties } });
+  }
+
+  it("draws the stored address at the default size", () => {
+    const code = wrapperOf({ url: "https://links.example/me" }).get(".qr-code-block__code");
+
+    expect(code.html()).toContain("<svg");
+    expect(code.html()).toContain('width="160"');
+    expect(code.attributes("role")).toBe("img");
+  });
+
+  it("draws the page's own address when no link is stored", () => {
+    const own = wrapperOf().get(".qr-code-block__code").html();
+    const stored = wrapperOf({ url: "https://links.example/me" }).get(".qr-code-block__code").html();
+
+    expect(own).toContain("<svg");
+    expect(own).not.toBe(stored);
+  });
+
+  it("draws the stored size and colours", () => {
+    const code = wrapperOf({
+      url: "https://links.example/me",
+      size: 320,
+      foreground: "#112233",
+      background: "#ffeeee",
+    }).get(".qr-code-block__code");
+    const html = code.html();
+
+    expect(html).toContain('width="320"');
+    expect(html).toContain("#112233");
+    expect(html).toContain("#ffeeee");
+  });
+
+  it("keeps the default size and colours for a code stored without them", () => {
+    const block = blockOf("QrCode", { url: "https://links.example/me" });
+    delete block.properties.size;
+    delete block.properties.foreground;
+    delete block.properties.background;
+
+    const html = mount(QrCodeBlock, { props: { properties: block.properties } })
+      .get(".qr-code-block__code")
+      .html();
+
+    expect(html).toContain('width="160"');
+    expect(html).toContain("#171515");
+    expect(html).toContain("#ffffff");
+  });
+
+  it("prints the caption below the code and names the figure with it", () => {
+    const wrapper = wrapperOf({ url: "https://links.example/me", caption: "Scan me" });
+
+    expect(wrapper.get(".qr-code-block__caption").text()).toBe("Scan me");
+    expect(wrapper.get(".qr-code-block__code").attributes("aria-label")).toBe("Scan me");
+  });
+
+  it("draws no caption line for a caption of only whitespace", () => {
+    const wrapper = wrapperOf({ url: "https://links.example/me", caption: "   " });
+
+    expect(wrapper.find(".qr-code-block__caption").exists()).toBe(false);
+    expect(wrapper.get(".qr-code-block__code").attributes("aria-label")).toBe("QR code");
   });
 });
 

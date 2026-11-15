@@ -610,6 +610,50 @@ exports[`Picture > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`QrCode > has a pinned schema snapshot 1`] = `
+{
+  "background": {
+    "defaultValue": "#ffffff",
+    "group": "Appearance",
+    "id": 4,
+    "label": "Background colour",
+    "type": "color",
+  },
+  "caption": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 1,
+    "label": "Caption",
+    "type": "text",
+  },
+  "foreground": {
+    "defaultValue": "#171515",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Code colour",
+    "type": "color",
+  },
+  "size": {
+    "defaultValue": 160,
+    "group": "Appearance",
+    "id": 2,
+    "label": "Size",
+    "max": 320,
+    "min": 80,
+    "step": 1,
+    "type": "number",
+  },
+  "url": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "What a scan opens; leave it empty to use this page's own address",
+    "id": 0,
+    "label": "Link",
+    "type": "url",
+  },
+}
+`;
+
 exports[`SocialIcons > has a pinned schema snapshot 1`] = `
 {
   "align": {
