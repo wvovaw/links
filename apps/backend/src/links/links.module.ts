@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { AnalyticsModule } from "../analytics/analytics.module";
 import { AuthGuard } from "../common/auth.guard";
 import { BlockAsset } from "../storage/block-asset.entity";
 import { BlockImage } from "../storage/block-image.entity";
@@ -12,7 +13,12 @@ import { LinksController } from "./links.controller";
 import { LinksService } from "./links.service";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Link, User, BlockAsset, BlockImage]), JwtModule.register({}), StorageModule],
+  imports: [
+    TypeOrmModule.forFeature([Link, User, BlockAsset, BlockImage]),
+    JwtModule.register({}),
+    StorageModule,
+    AnalyticsModule,
+  ],
   controllers: [LinksController],
   providers: [LinksService, AuthGuard],
   exports: [LinksService, TypeOrmModule],

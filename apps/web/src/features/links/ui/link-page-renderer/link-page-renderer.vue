@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IBlock, PageTheme } from "@links/blocks";
 
-import { resolvePageStyle, useBlocksResolver, visibleBlocks } from "~shared/blocks";
+import { resolvePageStyle, trackBlockEvent, useBlocksResolver, visibleBlocks } from "~shared/blocks";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 
@@ -14,9 +14,15 @@ const props = defineProps<{
   now: Date;
   theme?: PageTheme | null;
   background?: string | null;
+  /**
+   * The page this renderer is serving. Absent where the same component draws a preview: a page its owner
+   * is still editing must not report clicks as if a visitor made them.
+   */
+  slug?: string;
 }>();
 
 const { resolve } = useBlocksResolver();
+const config = useRuntimeConfig();
 
 /**
  * Passing neither prop means the caller owns the page background (it styles an element around this
@@ -35,19 +41,30 @@ const linkAttrs = computed(() =>
  * source or reads the page without styles.
  */
 const shownBlocks = computed(() => visibleBlocks(props.blocks, props.now));
+
+/**
+ * One listener for the whole page rather than one per block, and no inline handler on any of them: a
+ * click is attributed to the nearest block wrapper it came from, and a click that lands between blocks
+ * reports nothing.
+ */
+function reportClick(event: MouseEvent) {
+  if (!props.slug) return;
+
+  const target = event.target instanceof Element ? event.target.closest("[data-block-id]") : null;
+  const blockId = target?.getAttribute("data-block-id");
+  if (!blockId) return;
+
+  trackBlockEvent({ slug: props.slug, blockId, kind: "click", origin: config.public.backendUrl });
+}
 </script>
 
 <template>
   <div class="link" v-bind="linkAttrs">
     <div class="link__container">
-      <div class="link__blocks-root">
-        <component
-          :is="resolve(block.name)"
-          v-for="block of shownBlocks"
-          :id="`block-${block.id}`"
-          :key="block.id"
-          :properties="block.properties"
-        />
+      <div class="link__blocks-root" @click="reportClick">
+        <div v-for="block of shownBlocks" :key="block.id" :data-block-id="block.id">
+          <component :is="resolve(block.name)" :id="`block-${block.id}`" :properties="block.properties" />
+        </div>
       </div>
     </div>
   </div>

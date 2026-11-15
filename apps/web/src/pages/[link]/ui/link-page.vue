@@ -64,7 +64,7 @@ if (pageData.value) {
     <Body>
       <main class="min-h-100dvh flex flex-col" :style="pageStyle">
         <NotExistPage v-if="error?.status === 404" />
-        <LinkPageRenderer v-else :blocks="blocks" :now="now" />
+        <LinkPageRenderer v-else :blocks="blocks" :now="now" :slug="link" />
         <LinkFooter />
       </main>
     </Body>

@@ -2,7 +2,7 @@ import type { IBlock } from "@links/blocks";
 
 import { createBlock, DEFAULT_PAGE_THEME } from "@links/blocks";
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { defineComponent } from "vue";
 
 import LinkPageRenderer from "./link-page-renderer.vue";
@@ -91,5 +91,50 @@ describe("LinkPageRenderer block visibility", () => {
     const wrapper = mount(LinkPageRenderer, { props: { blocks: [boundary], now } });
 
     expect(wrapper.text()).toContain("Starting text");
+  });
+});
+
+describe("LinkPageRenderer click reporting", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("marks every rendered block wrapper with the id the page stored", () => {
+    const wrapper = mount(LinkPageRenderer, {
+      props: { blocks: [paragraphWith("One"), paragraphWith("Two")], now, slug: "my-page" },
+    });
+
+    expect(wrapper.findAll("[data-block-id]").map((node) => node.attributes("data-block-id"))).toEqual([
+      "p-One",
+      "p-Two",
+    ]);
+  });
+
+  it("reports a click on the block it landed in, through the one listener", async () => {
+    const beacon = vi.fn(() => true);
+    vi.stubGlobal("navigator", { sendBeacon: beacon });
+
+    const wrapper = mount(LinkPageRenderer, {
+      props: { blocks: [paragraphWith("One"), paragraphWith("Two")], now, slug: "my-page" },
+    });
+    await wrapper.findAll("[data-block-id]")[1]!.trigger("click");
+
+    expect(beacon).toHaveBeenCalledTimes(1);
+
+    const [url, body] = beacon.mock.calls[0] as [string, Blob];
+
+    expect(url).toContain("/public/links/my-page/events");
+    expect(JSON.parse(await body.text())).toEqual({ blockId: "p-Two", kind: "click" });
+  });
+
+  /* The constructor draws the same renderer; a page its owner is editing reports nothing. */
+  it("reports nothing where no slug is passed", async () => {
+    const beacon = vi.fn(() => true);
+    vi.stubGlobal("navigator", { sendBeacon: beacon });
+
+    const wrapper = mount(LinkPageRenderer, { props: { blocks: [paragraphWith("One")], now } });
+    await wrapper.get("[data-block-id]").trigger("click");
+
+    expect(beacon).not.toHaveBeenCalled();
   });
 });

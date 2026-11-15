@@ -35,3 +35,10 @@ export enum LinkStatus {
   DRAFT = "DRAFT",
   PUBLISHED = "PUBLISHED",
 }
+
+/** What a page's blocks have earned: one row per block that saw at least one event. */
+export interface BlockStats {
+  blockId: string;
+  clicks: number;
+  views: number;
+}

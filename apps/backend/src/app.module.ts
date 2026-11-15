@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { AnalyticsModule } from "./analytics/analytics.module";
 import { AuthModule } from "./auth/auth.module";
 import { databaseConfig } from "./database/database.config";
 import { LinksModule } from "./links/links.module";
@@ -16,6 +17,7 @@ import { UsersModule } from "./users/users.module";
     LinksModule,
     PublicModule,
     StorageModule,
+    AnalyticsModule,
   ],
 })
 export class AppModule {}

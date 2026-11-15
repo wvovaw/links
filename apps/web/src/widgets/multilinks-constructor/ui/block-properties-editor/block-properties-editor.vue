@@ -6,6 +6,7 @@ import { groupBy } from "~shared/lib/utils";
 import { SpiralArrow } from "~shared/ui/doodles";
 
 import { useConstructorStore } from "../../model";
+import { BlockStats } from "../block-stats";
 import { OptionsSection } from "../options-section";
 import { fieldsMap } from "./fields";
 import BooleanField from "./fields/boolean-field.vue";
@@ -102,6 +103,10 @@ const to = computed({
       </OptionsSection>
       <UISeparator />
     </template>
+    <OptionsSection title="Statistics">
+      <BlockStats :block-id="selectedBlockId" />
+    </OptionsSection>
+    <UISeparator />
     <div class="p-3">
       <UIButton
         full-width
