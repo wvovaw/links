@@ -156,7 +156,7 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
 
 export const blocksList: readonly BlockMeta[] = BLOCK_NAMES.map((name) => ({ name, ...BLOCK_META[name] }));
 
-export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image" | "date";
+export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image" | "date" | "list";
 
 export interface IBlockPropertyCommon<T = unknown> {
   id: number;
@@ -207,6 +207,37 @@ export interface IBlockPropertyDate<T = string> extends IBlockPropertyCommon<T> 
   type: "date";
   withTime?: boolean;
 }
+/**
+ * The kinds of field a list row may contain: every property except a nested list. A row is one flat
+ * object of scalars, so the editor renders it with the same field components a block uses.
+ */
+export type BlockItemField = (
+  | IBlockPropertyText
+  | IBlockPropertyNumber
+  | IBlockPropertyBoolean
+  | IBlockPropertySelect
+  | IBlockPropertyColor
+  | IBlockPropertyUrl
+  | IBlockPropertyImage
+  | IBlockPropertyDate
+) & {
+  /**
+   * The property name each stored row keeps this value under. It is data, not presentation: a label may
+   * be reworded or translated, while the key is what the rows already saved and every renderer name.
+   */
+  key: string;
+};
+/**
+ * A repeating group of rows, each row an object keyed by its item fields' `key`. `minItems` and
+ * `maxItems` bound what the editor lets a user add or remove; what a renderer can draw is still its
+ * own question, answered by `completeRows`.
+ */
+export interface IBlockPropertyList<T = Record<string, unknown>[]> extends IBlockPropertyCommon<T> {
+  type: "list";
+  itemFields: BlockItemField[];
+  minItems?: number;
+  maxItems?: number;
+}
 export type BlockProperty =
   | IBlockPropertyText
   | IBlockPropertyNumber
@@ -215,7 +246,8 @@ export type BlockProperty =
   | IBlockPropertyUrl
   | IBlockPropertyColor
   | IBlockPropertyImage
-  | IBlockPropertyDate;
+  | IBlockPropertyDate
+  | IBlockPropertyList;
 
 /**
  * A schedule belongs to the block, not to one of its properties: it decides whether the block is on the

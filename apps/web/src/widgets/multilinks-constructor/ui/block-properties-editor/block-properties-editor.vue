@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import type {
-  BlockProperty,
-  BlockPropertyType,
-  IBlockPropertyBoolean,
-  IBlockPropertyDate,
-  IBlockVisibility,
-} from "@links/blocks";
+import type { BlockProperty, IBlockPropertyBoolean, IBlockPropertyDate, IBlockVisibility } from "@links/blocks";
 
 import { UIButton, UISeparator } from "@links/ui";
 import { groupBy } from "~shared/lib/utils";
@@ -13,32 +7,13 @@ import { SpiralArrow } from "~shared/ui/doodles";
 
 import { useConstructorStore } from "../../model";
 import { OptionsSection } from "../options-section";
+import { fieldsMap } from "./fields";
 import BooleanField from "./fields/boolean-field.vue";
-import ColorField from "./fields/color-field.vue";
 import DateField from "./fields/date-field.vue";
-import ImageField from "./fields/image-field.vue";
-import NumberField from "./fields/number-field.vue";
-import SelectField from "./fields/select-field.vue";
-import TextField from "./fields/text-field.vue";
-import UrlField from "./fields/url-field.vue";
 
 const constructorStore = useConstructorStore();
 const { selectedBlockId } = storeToRefs(constructorStore);
 const { getBlock, removeBlock } = constructorStore;
-
-const fieldsMap: Record<BlockPropertyType, Component> = {
-  text: TextField,
-  number: NumberField,
-  select: SelectField,
-  url: UrlField,
-  color: ColorField,
-  boolean: BooleanField,
-  image: ImageField,
-  date: DateField,
-};
-function resolveFieldsComponent(fieldType: BlockPropertyType) {
-  return fieldsMap[fieldType];
-}
 
 const groupByGroupName = groupBy<BlockProperty>(["group"]);
 const groupedProperties = computed(() => {
@@ -118,7 +93,7 @@ const to = computed({
       <OptionsSection :title="name ? name : 'Other'">
         <div v-for="field of group" :key="field.id">
           <component
-            :is="resolveFieldsComponent(field.type)"
+            :is="fieldsMap[field.type]"
             :id="`${name}-field-${field.id}`"
             v-model="field.value"
             :field="field"
