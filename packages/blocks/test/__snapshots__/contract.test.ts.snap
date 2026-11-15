@@ -312,6 +312,56 @@ exports[`Heading > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Map > has a pinned schema snapshot 1`] = `
+{
+  "address": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "A street address, a place name or coordinates",
+    "id": 0,
+    "label": "Address",
+    "multiline": true,
+    "required": true,
+    "type": "text",
+  },
+  "caption": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 3,
+    "label": "Caption",
+    "type": "text",
+  },
+  "height": {
+    "defaultValue": 240,
+    "group": "Appearance",
+    "id": 2,
+    "label": "Height",
+    "max": 400,
+    "min": 120,
+    "step": 1,
+    "type": "number",
+  },
+  "show-link": {
+    "defaultValue": true,
+    "group": "Content",
+    "id": 4,
+    "label": "Open in maps link",
+    "type": "boolean",
+    "variant": "switch",
+  },
+  "zoom": {
+    "defaultValue": 15,
+    "group": "Appearance",
+    "id": 1,
+    "label": "Zoom",
+    "max": 20,
+    "min": 1,
+    "step": 1,
+    "type": "number",
+  },
+}
+`;
+
 exports[`Music > has a pinned schema snapshot 1`] = `
 {
   "height": {

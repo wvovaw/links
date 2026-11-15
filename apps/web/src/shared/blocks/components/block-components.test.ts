@@ -8,6 +8,7 @@ import AvatarBlock from "./avatar-block.vue";
 import ButtonBlock from "./button-block.vue";
 import DividerBlock from "./divider-block.vue";
 import HeadingBlock from "./heading-block.vue";
+import MapBlock from "./map-block.vue";
 import MusicBlock from "./music-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
@@ -674,5 +675,87 @@ describe("SocialIconsBlock", () => {
 
     expect(style).toContain("--social-bg: var(--links-page-accent)");
     expect(style).toContain("--social-align: center");
+  });
+});
+
+describe("MapBlock", () => {
+  const moscow = { address: "Tverskaya 1, Moscow" };
+
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(MapBlock, { props: { properties: blockOf("Map", { ...moscow, ...values }).properties } });
+  }
+
+  it("embeds the mapped address lazily, through the keyless endpoint", () => {
+    const frame = wrapperOf().get("iframe");
+
+    expect(frame.attributes("src")).toBe("https://maps.google.com/maps?q=Tverskaya%201%2C%20Moscow&z=15&output=embed");
+    expect(frame.attributes("loading")).toBe("lazy");
+    expect(frame.attributes("title")).toBe("Map");
+  });
+
+  it("encodes a cyrillic address into the frame", () => {
+    const frame = wrapperOf({ address: "Москва, Красная площадь 1" }).get("iframe");
+
+    expect(frame.attributes("src")).toContain(`q=${encodeURIComponent("Москва, Красная площадь 1")}`);
+  });
+
+  it("takes the zoom from the stored property", () => {
+    expect(wrapperOf({ zoom: 12 }).get("iframe").attributes("src")).toContain("z=12");
+  });
+
+  it.each([
+    [240, "240px"],
+    [120, "120px"],
+    [400, "400px"],
+  ])("draws a %ipx height", (height, expected) => {
+    expect(wrapperOf({ height }).get(".map-block").attributes("style")).toContain(`--map-height: ${expected}`);
+  });
+
+  it("keeps the 240px height and the zoom default when none is stored", () => {
+    const block = blockOf("Map", moscow);
+    delete block.properties.height;
+    delete block.properties.zoom;
+    const wrapper = mount(MapBlock, { props: { properties: block.properties } });
+
+    expect(wrapper.get(".map-block").attributes("style")).toContain("--map-height: 240px");
+    expect(wrapper.get("iframe").attributes("src")).toContain("z=15");
+  });
+
+  it("captions the map and names the frame with the same text", () => {
+    const wrapper = wrapperOf({ caption: "Our office" });
+
+    expect(wrapper.get(".map-block__caption").text()).toBe("Our office");
+    expect(wrapper.get("iframe").attributes("title")).toBe("Our office");
+  });
+
+  it("draws no caption line for a caption of only whitespace", () => {
+    const wrapper = wrapperOf({ caption: "   " });
+
+    expect(wrapper.find(".map-block__caption").exists()).toBe(false);
+    expect(wrapper.get("iframe").attributes("title")).toBe("Map");
+  });
+
+  it("opens the same lookup in the full maps page, in a new tab without a referrer", () => {
+    const link = wrapperOf().get(".map-block__link");
+
+    expect(link.attributes("href")).toBe("https://www.google.com/maps/search/?api=1&query=Tverskaya%201%2C%20Moscow");
+    expect(link.attributes("target")).toBe("_blank");
+    expect(link.attributes("rel")).toBe("noopener noreferrer");
+    expect(link.text()).toBe("Open in maps");
+  });
+
+  it("drops the link when the switch is off", () => {
+    expect(wrapperOf({ "show-link": false }).find(".map-block__link").exists()).toBe(false);
+    expect(wrapperOf().find(".map-block__link").exists()).toBe(true);
+  });
+
+  it.each([
+    ["an empty address", ""],
+    ["a whitespace address", "   "],
+  ])("renders nothing at all for %s", (_case, address) => {
+    const wrapper = wrapperOf({ address });
+
+    expect(wrapper.find(".map-block").exists()).toBe(false);
+    expect(wrapper.find("iframe").exists()).toBe(false);
   });
 });

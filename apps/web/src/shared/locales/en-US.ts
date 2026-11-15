@@ -20,6 +20,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Divider.description": "A line or a gap that separates two blocks.",
     "blocks.Heading.label": "Heading",
     "blocks.Heading.description": "A title that starts a section of the page.",
+    "blocks.Map.label": "Map",
+    "blocks.Map.description": "A map of an address or a place, opened in place.",
     "blocks.Music.label": "Music",
     "blocks.Music.description":
       "A track, an album or a playlist from Spotify, SoundCloud, Apple Music or YouTube Music.",

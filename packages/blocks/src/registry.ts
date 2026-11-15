@@ -4,6 +4,7 @@ import AvatarModule from "./blocks/avatar";
 import ButtonModule from "./blocks/button";
 import DividerModule from "./blocks/divider";
 import HeadingModule from "./blocks/heading";
+import MapModule from "./blocks/map";
 import MusicModule from "./blocks/music";
 import ParagraphModule from "./blocks/paragraph";
 import PictureModule from "./blocks/picture";
@@ -20,6 +21,7 @@ export const registry: Registry = {
   Button: ButtonModule,
   Divider: DividerModule,
   Heading: HeadingModule,
+  Map: MapModule,
   Music: MusicModule,
   Paragraph: ParagraphModule,
   Picture: PictureModule,
