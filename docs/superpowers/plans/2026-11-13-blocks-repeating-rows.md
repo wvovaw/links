@@ -16,7 +16,8 @@
 - Selling is a link to someone else's checkout (Stripe Payment Link, Gumroad, Ko-fi, BuyMeACoffee). No cart, order, stock or fee model anywhere.
 - Every new block: schema in `packages/blocks/src/blocks/<name>.ts`, component in `apps/web/src/shared/blocks/components/<kebab>-block.vue`, name in `BLOCK_NAMES` and `registry.ts`, metadata in `BLOCK_META`.
 - Any change to a `list` item shape bumps that block's `BLOCK_VERSION` and carries a migration fixture in `packages/blocks/test/` — the contract suite from the foundation plan must stay green.
-- Outbound links carry `rel="noopener noreferrer"` when they open a new tab.
+- A list item field carries an explicit `key: string`: the property name inside a stored row. Keys are data and never derived from a label or a title — relabelling or translating a field must not change what is stored.
+- Outbound links carry `rel="noopener noreferrer"` when they open a new tab, and their href goes through `webHref` (`~shared/blocks/link-url`), so a stored non-http(s) value renders no link.
 - `apps/web` consumes `@links/blocks` from `dist`: `pnpm build` before web tests and browser checks.
 - `lint`/`fmt` read-only; write with `lint:fix`/`fmt:write`. Conventional commits, one commit per task. No version numbers in docs.
 
