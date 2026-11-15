@@ -177,6 +177,7 @@ const props = withDefaults(
       props.class,
     ]"
     :disabled="disabled"
+    :type="type"
     :as="as"
     :as-child="asChild"
     v-bind="$attrs"

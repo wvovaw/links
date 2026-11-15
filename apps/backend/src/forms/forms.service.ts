@@ -9,7 +9,7 @@ import { TooManyRequestsException } from "../common/too-many-requests.exception"
 import { toSubmissionDto } from "./form-submission.dto";
 import { FormSubmission } from "./form-submission.entity";
 
-/** One minute, per page: how many submissions a page takes before the window closes. */
+/** One minute, per block: how many submissions one form takes before its window closes. */
 const windowMs = 60_000;
 const windowLimit = 30;
 
@@ -19,8 +19,9 @@ const defaultLimit = 50;
 @Injectable()
 export class FormsService {
   /**
-   * Recent accepted submission timestamps per page. The keys are pages, not visitors — nothing about a
-   * caller is stored, so there is nothing to key a window on but the page it wrote to.
+   * Recent accepted submission timestamps per `${linkId}:${blockId}`. The keys are page blocks, not visitors —
+   * nothing about a caller is stored, so there is nothing to key a window on but the form it wrote to. A
+   * page with two forms has two budgets: a flood on one must not lock visitors out of the other.
    */
   private readonly recent = new Map<string, number[]>();
 
@@ -32,9 +33,9 @@ export class FormsService {
    * either — a robot filling the trap must not be able to spend the minute a real visitor needs.
    */
   async create(linkId: string, body: CreateSubmissionDto) {
-    if (body.website) return;
+    if (body.company) return;
 
-    this.admit(linkId);
+    this.admit(linkId, body.blockId);
 
     await this.submissions.save(
       this.submissions.create({
@@ -68,17 +69,18 @@ export class FormsService {
    * The sliding window. It runs to completion without awaiting anything, so two submissions arriving in the
    * same tick cannot both read a count below the limit and overrun it.
    */
-  private admit(linkId: string) {
+  private admit(linkId: string, blockId: string) {
+    const key = `${linkId}:${blockId}`;
     const now = Date.now();
-    const recent = (this.recent.get(linkId) ?? []).filter((at) => at > now - windowMs);
+    const recent = (this.recent.get(key) ?? []).filter((at) => at > now - windowMs);
 
     if (recent.length >= windowLimit) {
-      this.recent.set(linkId, recent);
-      throw new TooManyRequestsException("Too many submissions for this page. Try again in a minute.");
+      this.recent.set(key, recent);
+      throw new TooManyRequestsException("Too many submissions for this form. Try again in a minute.");
     }
 
     recent.push(now);
-    this.recent.set(linkId, recent);
+    this.recent.set(key, recent);
   }
 }
 

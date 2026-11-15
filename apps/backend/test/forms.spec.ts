@@ -98,7 +98,7 @@ describe("form submissions", () => {
       blockId: "b2",
       kind: "subscribe",
       email: "ada@example.com",
-      website: "",
+      company: "",
     }).expect(201);
 
     const { body } = await agent.get(`/links/${await linkId(agent, slug)}/submissions`).expect(200);
@@ -125,7 +125,7 @@ describe("form submissions", () => {
   it("answers 201 for a honeypot hit and stores nothing", async () => {
     const { id, slug } = await publishPage(app);
 
-    expect((await postSubmission(app, slug, { ...contact, website: "http://spam.example" })).status).toBe(201);
+    expect((await postSubmission(app, slug, { ...contact, company: "Spam Ltd" })).status).toBe(201);
     expect(await submissionCount(app, id)).toBe(0);
   });
 
@@ -153,6 +153,26 @@ describe("form submissions", () => {
     expect(accepted).toBe(30);
     expect(responses.some((response) => response.status === 429)).toBe(true);
     expect(await submissionCount(app, id)).toBe(accepted);
+  });
+
+  /*
+    The window belongs to the form, not the page: a page with two forms has two budgets, so a flood on one
+    must not lock visitors out of the other.
+  */
+  it("keeps one busy form from silencing the rest of the page", async () => {
+    const { id, slug } = await publishPage(app);
+
+    const first = await Promise.all(Array.from({ length: 30 }, () => postSubmission(app, slug, contact)));
+    expect(first.map((response) => response.status)).toEqual(Array<number>(30).fill(201));
+
+    const second = await Promise.all(
+      Array.from({ length: 30 }, () =>
+        postSubmission(app, slug, { blockId: "b2", kind: "subscribe", email: "ada@example.com" }),
+      ),
+    );
+    expect(second.map((response) => response.status)).toEqual(Array<number>(30).fill(201));
+
+    expect(await submissionCount(app, id)).toBe(60);
   });
 
   it("keeps another user's submissions out of reach", async () => {

@@ -63,7 +63,7 @@ const successMessage = computed(() => textOf("success-message", "Thank you, we w
 
 const emailLabel = computed(() => i18nLabel(i18n, "blocks.ContactForm.email", "Email (required)"));
 
-const form = reactive({ name: "", email: "", message: "", website: "" });
+const form = reactive({ name: "", email: "", message: "", company: "" });
 
 const sending = ref(false);
 const sent = ref(false);
@@ -89,7 +89,7 @@ async function onSubmit() {
       email: form.email,
       ...(showsName.value && { name: form.name }),
       ...(showsMessage.value && { message: form.message }),
-      website: form.website,
+      company: form.company,
     });
 
     sent.value = true;
@@ -113,13 +113,15 @@ async function onSubmit() {
     <form v-else class="contact-form-block__form" @submit.prevent="onSubmit">
       <!--
         The honeypot. It is off-screen and out of the tab order, so nobody filling this form by hand reaches
-        it; a script that fills every input it finds is answered as if the message had been stored.
+        it; a script that fills every input it finds is answered as if the message had been stored. The name
+        is `company` rather than `website` because password managers autofill the latter, which would throw a
+        real visitor's message away while thanking them for it.
       -->
       <input
-        v-model="form.website"
+        v-model="form.company"
         class="contact-form-block__trap"
         type="text"
-        name="website"
+        name="company"
         tabindex="-1"
         autocomplete="off"
         aria-hidden="true"

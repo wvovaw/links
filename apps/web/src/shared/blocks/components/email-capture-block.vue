@@ -39,7 +39,7 @@ const successMessage = computed(() => textOf("success-message", "Thank you, your
 
 const emailLabel = computed(() => i18nLabel(i18n, "blocks.EmailCapture.email", "Email (required)"));
 
-const form = reactive({ email: "", website: "" });
+const form = reactive({ email: "", company: "" });
 
 const sending = ref(false);
 const sent = ref(false);
@@ -62,7 +62,7 @@ async function onSubmit() {
       blockId,
       kind: "subscribe",
       email: form.email,
-      website: form.website,
+      company: form.company,
     });
 
     sent.value = true;
@@ -87,12 +87,15 @@ async function onSubmit() {
 
     <p v-if="sent" class="email-capture-block__success" role="status">{{ successMessage }}</p>
     <form v-else class="email-capture-block__form" @submit.prevent="onSubmit">
-      <!-- The honeypot: off-screen and out of the tab order, so only a script that fills every input sees it. -->
+      <!--
+        The honeypot: off-screen and out of the tab order, so only a script that fills every input sees it.
+        It is `company`, not `website`, because password managers autofill the latter.
+      -->
       <input
-        v-model="form.website"
+        v-model="form.company"
         class="email-capture-block__trap"
         type="text"
-        name="website"
+        name="company"
         tabindex="-1"
         autocomplete="off"
         aria-hidden="true"

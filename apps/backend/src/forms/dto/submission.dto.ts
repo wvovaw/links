@@ -37,11 +37,15 @@ export class CreateSubmissionDto {
   /**
    * The honeypot: a person never sees this field, so a submission that fills it was written by a robot.
    * It is read and then dropped — it is never part of the stored payload.
+   *
+   * The name matters: password managers autofill a field called `website` (and `email`, `url`, `address`),
+   * so a real visitor's message would be thrown away while they are thanked for it. `company` is a field a
+   * manager leaves alone and a form here never asks for, so only a script filling every input sends it.
    */
   @IsOptional()
   @IsString()
   @MaxLength(200)
-  website?: string;
+  company?: string;
 }
 
 /** `blockId` narrows the list to one form; `limit` is the page's size, newest first. */

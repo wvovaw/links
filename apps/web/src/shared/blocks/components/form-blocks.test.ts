@@ -68,6 +68,13 @@ describe("ContactFormBlock", () => {
     expect(wrapper.get("button").attributes("disabled")).toBeDefined();
   });
 
+  /* Inside a form a button defaults to submit, but the attribute says so out loud — and the UI kit drops it. */
+  it("submits through a button the browser knows is a submit", async () => {
+    const wrapper = await mountContact();
+
+    expect(wrapper.get("button").attributes("type")).toBe("submit");
+  });
+
   it("submits the filled fields under the page's slug and the block's id", async () => {
     const wrapper = await mountContact();
     await wrapper.get('input[id$="-name"]').setValue("Ada");
@@ -83,7 +90,7 @@ describe("ContactFormBlock", () => {
       name: "Ada",
       email: "ada@example.com",
       message: "Hello there",
-      website: "",
+      company: "",
     });
   });
 
@@ -139,21 +146,21 @@ describe("ContactFormBlock", () => {
 
   /*
     The honeypot is the field only a robot fills: it must exist to be filled, stay out of a person's way,
-    and reach the API as `website` — that is what the server reads to drop the submission.
+    and reach the API as `company` — that is what the server reads to drop the submission.
   */
   it("carries the honeypot out of the tab order and sends whatever filled it", async () => {
     const wrapper = await mountContact();
-    const trap = wrapper.get('input[name="website"]');
+    const trap = wrapper.get('input[name="company"]');
 
     expect(trap.attributes("tabindex")).toBe("-1");
     expect(trap.attributes("aria-hidden")).toBe("true");
 
-    await trap.setValue("http://spam.example");
+    await trap.setValue("Spam Ltd");
     await wrapper.get('input[type="email"]').setValue("robot@example.com");
     await wrapper.get("form").trigger("submit");
     await flushPromises();
 
-    expect(mocks.submitForm).toHaveBeenCalledWith(expect.objectContaining({ website: "http://spam.example" }));
+    expect(mocks.submitForm).toHaveBeenCalledWith(expect.objectContaining({ company: "Spam Ltd" }));
   });
 
   it("uses the labels and defaults the block stores", async () => {
@@ -199,9 +206,15 @@ describe("EmailCaptureBlock", () => {
       blockId: "b1",
       kind: "subscribe",
       email: "ada@example.com",
-      website: "",
+      company: "",
     });
     expect(wrapper.get('[role="status"]').text()).toBe("Thank you, your address is saved");
+  });
+
+  it("submits through a button the browser knows is a submit", async () => {
+    const wrapper = await mountCapture();
+
+    expect(wrapper.get("button").attributes("type")).toBe("submit");
   });
 
   it("shows the stored placeholder and button label", async () => {
@@ -225,7 +238,7 @@ describe("EmailCaptureBlock", () => {
   it("carries the same honeypot as the contact form", async () => {
     const wrapper = await mountCapture();
 
-    expect(wrapper.get('input[name="website"]').attributes("tabindex")).toBe("-1");
+    expect(wrapper.get('input[name="company"]').attributes("tabindex")).toBe("-1");
   });
 });
 

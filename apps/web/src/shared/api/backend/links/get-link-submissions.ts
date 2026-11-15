@@ -2,20 +2,26 @@ import type { FormSubmission } from "../types";
 
 import { useApiClient } from "../client";
 
-/**
- * The messages visitors left on one of a page's form blocks, newest first. An unreachable API, an expired
- * session and a page with no submissions all read as "nothing yet": the panel lists nothing rather than
- * showing an error over a page its owner is editing.
- */
-export async function getLinkSubmissions(id: string, blockId: string, limit = 50): Promise<FormSubmission[]> {
+export interface LinkSubmissions {
+  submissions: FormSubmission[];
+  /**
+   * True when the list could not be read at all — an unreachable API, or a session that has expired. It is
+   * not the same answer as an empty list: "nobody wrote to you" and "we could not ask" are different facts,
+   * and the owner reading their messages must not be told the wrong one.
+   */
+  failed: boolean;
+}
+
+/** The messages visitors left on one of a page's form blocks, newest first. */
+export async function getLinkSubmissions(id: string, blockId: string, limit = 50): Promise<LinkSubmissions> {
   try {
     const api = useApiClient();
     const { submissions } = await api<{ submissions: FormSubmission[] }>(`/links/${id}/submissions`, {
       query: { blockId, limit },
     });
 
-    return submissions ?? [];
+    return { submissions: submissions ?? [], failed: false };
   } catch {
-    return [];
+    return { submissions: [], failed: true };
   }
 }

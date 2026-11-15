@@ -1,4 +1,4 @@
-import type { FormSubmission } from "~shared/api/backend";
+import type { FormSubmission, LinkSubmissions } from "~shared/api/backend";
 
 import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -29,13 +29,18 @@ const stored: FormSubmission[] = [
   },
 ];
 
+/** What the API helper answers: the rows, and whether the list could be read at all. */
+function read(submissions: FormSubmission[], failed = false): LinkSubmissions {
+  return { submissions, failed };
+}
+
 describe("SubmissionsList", () => {
   beforeEach(() => {
     mocks.getLinkSubmissions.mockReset();
   });
 
   it("lists the messages a page's form block holds", async () => {
-    mocks.getLinkSubmissions.mockResolvedValue(stored);
+    mocks.getLinkSubmissions.mockResolvedValue(read(stored));
     const wrapper = mount(SubmissionsList, { props: { blockId: "b1" } });
     await flushPromises();
 
@@ -52,7 +57,7 @@ describe("SubmissionsList", () => {
 
   /* Nothing is emailed: the panel says where the messages live so the owner does not wait for one. */
   it("says where the messages are stored", async () => {
-    mocks.getLinkSubmissions.mockResolvedValue([]);
+    mocks.getLinkSubmissions.mockResolvedValue(read([]));
     const wrapper = mount(SubmissionsList, { props: { blockId: "b1" } });
     await flushPromises();
 
@@ -60,7 +65,7 @@ describe("SubmissionsList", () => {
   });
 
   it("says there are none yet when the block holds nothing", async () => {
-    mocks.getLinkSubmissions.mockResolvedValue([]);
+    mocks.getLinkSubmissions.mockResolvedValue(read([]));
     const wrapper = mount(SubmissionsList, { props: { blockId: "b1" } });
     await flushPromises();
 
@@ -70,7 +75,7 @@ describe("SubmissionsList", () => {
 
   /* The editor mounts one panel for every block, so a newly selected block must reload, not keep the old rows. */
   it("reads the messages of the block that is selected now", async () => {
-    mocks.getLinkSubmissions.mockResolvedValueOnce(stored).mockResolvedValueOnce([]);
+    mocks.getLinkSubmissions.mockResolvedValueOnce(read(stored)).mockResolvedValueOnce(read([]));
     const wrapper = mount(SubmissionsList, { props: { blockId: "b1" } });
     await flushPromises();
 
@@ -81,12 +86,16 @@ describe("SubmissionsList", () => {
     expect(wrapper.text()).toContain("No submissions yet");
   });
 
-  /* An unreachable API and an expired session are read as nothing yet, never as a spinner that never ends. */
-  it("reads as empty when the messages cannot be read at all", async () => {
-    mocks.getLinkSubmissions.mockResolvedValue([]);
-    const wrapper = mount(SubmissionsList, { props: { blockId: "b2" } });
+  /*
+    An expired session and an unreachable API are not "nobody wrote to you": the panel says the list could
+    not be read, and says it once rather than leaving a spinner that never resolves.
+  */
+  it("says the list could not be read rather than inventing an empty page", async () => {
+    mocks.getLinkSubmissions.mockResolvedValue(read([], true));
+    const wrapper = mount(SubmissionsList, { props: { blockId: "b1" } });
     await flushPromises();
 
-    expect(wrapper.text()).toContain("No submissions yet");
+    expect(wrapper.text()).toContain("Could not load submissions");
+    expect(wrapper.text()).not.toContain("No submissions yet");
   });
 });

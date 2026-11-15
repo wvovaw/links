@@ -12,8 +12,11 @@ export interface SubmitFormInput {
   /**
    * The honeypot. A person never fills it in; a robot that does is answered as if the submission were
    * stored, so nothing tells it the trap it walked into.
+   *
+   * It is called `company` on purpose: password managers autofill a `website` field, and a real visitor's
+   * message would then be dropped while they are thanked for sending it.
    */
-  website?: string;
+  company?: string;
 }
 
 /**
