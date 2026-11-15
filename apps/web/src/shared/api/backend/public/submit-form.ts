@@ -22,11 +22,25 @@ export interface SubmitFormInput {
 /**
  * Stores one filled-in form on a published page. It resolves when the submission is stored and throws
  * what the API answered, so the form can say whether it was saved rather than assume it.
+ *
+ * Only the DTO's fields are sent. The slug is a URL segment, and the endpoint runs `whitelist` +
+ * `forbidNonWhitelisted`: a body that repeats it answers 400 and the visitor's message is lost. An optional
+ * field nobody filled in is left out rather than sent as `undefined`.
  */
 export async function submitForm(input: SubmitFormInput): Promise<void> {
   const api = useApiClient();
+  const { slug, blockId, kind, email, name, message, company } = input;
 
-  await api(`/public/links/${input.slug}/submissions`, { method: "POST", body: input });
+  const body = {
+    blockId,
+    kind,
+    email,
+    ...(name !== undefined && { name }),
+    ...(message !== undefined && { message }),
+    ...(company !== undefined && { company }),
+  };
+
+  await api(`/public/links/${slug}/submissions`, { method: "POST", body });
 }
 
 /** The status a failed submission came back with, or `undefined` when the request never reached the API. */
