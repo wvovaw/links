@@ -161,8 +161,13 @@ Props: `field: IBlockPropertyList`, `id: string`; model: `IBlockPropertyList["va
 
 - [ ] **Step 7: Run the editor test to verify it passes**
 
-Run: `pnpm --filter @links/web test -- list-field`
-Expected: PASS, four tests.
+Run vitest directly, with `@links/blocks` rebuilt first:
+
+```bash
+pnpm --filter @links/blocks build && pnpm --filter @links/web exec vitest run list-field
+```
+
+Expected: PASS, four tests. The `test` script is not used here because it runs `vue-tsc` first, and the type gate still fails on the missing `list` mapping until Step 8 registers the field — the component test itself only needs the field's markup.
 
 - [ ] **Step 8: Register the field and prove the compile-time guard**
 

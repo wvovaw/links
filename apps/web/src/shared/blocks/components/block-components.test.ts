@@ -57,6 +57,20 @@ describe("AvatarBlock", () => {
     expect(plain.find("img").exists()).toBe(true);
   });
 
+  /*
+    The link property is free text the API never validates, so a stored `javascript:` href would run in
+    the page's own origin the moment a visitor clicked the avatar.
+  */
+  it("leaves the avatar unlinked for a stored script url", () => {
+    const wrapper = mount(AvatarBlock, {
+      props: { properties: blockOf("Avatar", { link: "javascript:alert(1)" }).properties },
+    });
+
+    expect(wrapper.find("a").exists()).toBe(false);
+    expect(wrapper.find("img").exists()).toBe(true);
+    expect(wrapper.html()).not.toContain("javascript:");
+  });
+
   it("applies the stored size and shape", () => {
     const stored = mount(AvatarBlock, {
       props: { properties: blockOf("Avatar", { size: 160, shape: "rounded" }).properties },
@@ -277,6 +291,17 @@ describe("PictureBlock", () => {
 
     const plain = mount(PictureBlock, { props: { properties: blockOf("Picture", { image: "file-1" }).properties } });
     expect(plain.find("a").exists()).toBe(false);
+  });
+
+  /* Same class as the avatar and the button: only a web address may become the picture's href. */
+  it("leaves the picture unlinked for a stored script url", () => {
+    const wrapper = mount(PictureBlock, {
+      props: { properties: blockOf("Picture", { image: "file-1", link: "javascript:alert(1)" }).properties },
+    });
+
+    expect(wrapper.find("a").exists()).toBe(false);
+    expect(wrapper.find("img").exists()).toBe(true);
+    expect(wrapper.html()).not.toContain("javascript:");
   });
 
   it("reserves the fallback box only while there is no image", () => {

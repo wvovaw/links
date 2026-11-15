@@ -9,6 +9,7 @@ import type {
 } from "@links/blocks";
 
 import { resolveBlockImageUrl } from "~shared/blocks";
+import { webHref } from "~shared/blocks/link-url";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -26,7 +27,12 @@ const bp = computed(() => {
         origin: config.public.backendUrl,
       }) ?? "",
     text: (p.text as IBlockPropertyText | undefined)?.value,
-    link: (p.link as IBlockPropertyUrl | undefined)?.value,
+    /*
+      The link field is free text and the API stores the block JSON unvalidated, so a `javascript:`
+      value in `href` would run in the page's own origin on click. Only a web address becomes an
+      anchor; everything else leaves the avatar unlinked.
+    */
+    link: webHref((p.link as IBlockPropertyUrl | undefined)?.value),
     /* A block stored before these properties existed renders at the size and shape it always had. */
     style: {
       "--avatar-size": `${size ?? 100}px`,

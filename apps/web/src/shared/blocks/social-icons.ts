@@ -49,6 +49,9 @@ export function socialHref(slot: { hrefPrefix: string; schemes: readonly string[
   const trimmed = value.trim();
   if (!trimmed) return null;
 
+  /* `//evil.example` is a protocol-relative url: prefixing it would only dress it up as one of ours. */
+  if (trimmed.startsWith("//")) return null;
+
   const scheme = SCHEME.exec(trimmed)?.[1]?.toLowerCase();
   if (!scheme) return `${slot.hrefPrefix}${trimmed}`;
 

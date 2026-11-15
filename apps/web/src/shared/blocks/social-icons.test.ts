@@ -75,6 +75,11 @@ describe("socialHref", () => {
     for (const key of ["telegram", "instagram", "x", "email"]) expect(socialHref(slotOf(key), value)).toBeNull();
   });
 
+  /* `//evil.example` names no scheme but is still another origin, so it never gets a slot's prefix. */
+  it("drops a protocol-relative value instead of prefixing it", () => {
+    for (const key of ["telegram", "email"]) expect(socialHref(slotOf(key), "//evil.example/x")).toBeNull();
+  });
+
   it("drops a scheme the slot does not carry, such as a mailto in a network slot", () => {
     expect(socialHref(slotOf("telegram"), "mailto:me@example.com")).toBeNull();
     expect(socialHref(slotOf("email"), "https://example.com/me")).toBeNull();

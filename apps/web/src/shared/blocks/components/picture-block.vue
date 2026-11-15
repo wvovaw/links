@@ -10,6 +10,7 @@ import type {
 
 import { resolveBlockImageUrl } from "~shared/blocks";
 import { clampNumber } from "~shared/blocks/clamp-number";
+import { webHref } from "~shared/blocks/link-url";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -39,7 +40,12 @@ const bp = computed(() => {
     /* A picture stored before these properties existed is decorative, lazy and cropped the same way. */
     alt: (p.alt as IBlockPropertyText | undefined)?.value ?? "",
     loading: (p.loading as IBlockPropertySelect<"eager" | "lazy"> | undefined)?.value ?? "lazy",
-    link: (p.link as IBlockPropertyUrl | undefined)?.value,
+    /*
+      The link field is free text and the API stores the block JSON unvalidated, so a `javascript:`
+      value in `href` would run in the page's own origin on click. Only a web address becomes an
+      anchor; everything else leaves the picture unlinked.
+    */
+    link: webHref((p.link as IBlockPropertyUrl | undefined)?.value),
     style: {
       "--picture-object-fit": (p["object-fit"] as IBlockPropertySelect | undefined)?.value ?? "cover",
       "--picture-radius": pictureRadius(radius),
