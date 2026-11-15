@@ -107,6 +107,13 @@ fresh clone must be built before anything importing the preset runs, the web tes
   `apps/backend/uploads` (gitignored): images under `IMAGES_PATH`, and the video, audio and pdf files
   the asset endpoints accept under `ASSETS_PATH`. A file's extension comes from its declared
   mimetype, never from the name the uploader gave it.
+- Accepted types are an allowlist on the server, and a picker offers exactly what that allowlist
+  stores — `image/*` would offer files the API answers 400 for:
+  - images: `image/png`, `image/jpeg` (and the legacy `image/jpg` spelling), `image/webp`, `image/gif`.
+    An svg is deliberately not stored: it is scriptable when served same-origin.
+  - assets: `video/mp4`, `video/webm`, `audio/mpeg`, `audio/ogg`, `audio/mp4`, `application/pdf`.
+
+  `image-field.vue` carries the image list as `IMAGE_ACCEPT`; a new type has to be added to both.
 
 ## blocks versioning
 

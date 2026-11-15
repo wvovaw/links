@@ -31,6 +31,12 @@ watch(model, (value) => {
 });
 
 /**
+ * Exactly the types the API stores as an image, so the picker offers nothing the server refuses. An
+ * `image/*` picker would offer an svg (or an avif, or a heic) and turn the choice into a bare 400.
+ */
+const IMAGE_ACCEPT = "image/png,image/jpeg,image/webp,image/gif";
+
+/**
  * A field whose `accept` offers no image type holds an uploaded asset instead: a video, an audio clip
  * or a pdf goes to the asset endpoint, whose allowlist decides what the server keeps.
  */
@@ -67,7 +73,7 @@ async function handleChange(payload: File | File[] | null) {
   <UIFileUpload.Root
     v-model="file"
     class="flex flex-col gap-2"
-    :accept="field.accept ?? 'image/*'"
+    :accept="field.accept ?? IMAGE_ACCEPT"
     @change="handleChange"
   >
     <UIFileUpload.Trigger

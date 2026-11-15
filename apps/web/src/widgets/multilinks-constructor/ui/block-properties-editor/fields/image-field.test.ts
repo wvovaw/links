@@ -57,6 +57,22 @@ describe("ImageField preview", () => {
   });
 });
 
+/*
+  The picker must offer what the API stores and nothing else: `image/*` would offer an svg, an avif or
+  a heic, which `local-storage.service.ts` refuses, and the picker would turn that into a bare 400.
+*/
+describe("ImageField accepted types", () => {
+  it("offers exactly the image types the API stores", () => {
+    expect(mountWithValue(field).get("input[type=file]").attributes("accept")).toBe(
+      "image/png,image/jpeg,image/webp,image/gif",
+    );
+  });
+
+  it("keeps a property's own accept", () => {
+    expect(mountWithValue(videoField).get("input[type=file]").attributes("accept")).toBe("video/mp4");
+  });
+});
+
 describe("ImageField uploads", () => {
   beforeEach(() => {
     storage.uploadImage.mockClear();

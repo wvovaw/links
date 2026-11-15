@@ -104,9 +104,7 @@ export class LocalStorageService {
   }
 
   avatarPath(fileId: string) {
-    if (fileId.includes("/") || fileId.includes("\\")) throw new NotFoundException("Avatar not found.");
-
-    return join(this.avatarRoot, fileId);
+    return this.storedFile(this.avatarRoot, fileId, "Avatar not found.");
   }
 
   async saveImage(file: Express.Multer.File) {
@@ -124,9 +122,7 @@ export class LocalStorageService {
   }
 
   imagePath(fileId: string) {
-    if (fileId.includes("/") || fileId.includes("\\")) throw new NotFoundException("Image not found.");
-
-    return join(this.imageRoot, fileId);
+    return this.storedFile(this.imageRoot, fileId, "Image not found.");
   }
 
   async saveAsset(file: Express.Multer.File) {
@@ -144,9 +140,18 @@ export class LocalStorageService {
   }
 
   assetPath(fileId: string) {
-    if (fileId.includes("/") || fileId.includes("\\")) throw new NotFoundException("Asset not found.");
+    return this.storedFile(this.assetRoot, fileId, "Asset not found.");
+  }
 
-    return join(this.assetRoot, fileId);
+  /**
+   * The absolute path of a stored file. Only a plain file name is one: a separator, or `.`/`..`,
+   * would resolve outside the root, and `rm` on the directory that comes back throws.
+   */
+  private storedFile(root: string, fileId: string, missing: string) {
+    if (!fileId || fileId === "." || fileId === ".." || fileId.includes("/") || fileId.includes("\\"))
+      throw new NotFoundException(missing);
+
+    return join(root, fileId);
   }
 
   /** The stored extension of a supported image, or a refusal: an unknown type has none here. */

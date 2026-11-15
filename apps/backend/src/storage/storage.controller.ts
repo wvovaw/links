@@ -17,11 +17,14 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { InjectRepository } from "@nestjs/typeorm";
 import { access } from "node:fs/promises";
+import { Repository } from "typeorm";
 
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { User } from "../users/user.entity";
+import { BlockAsset } from "./block-asset.entity";
 import {
   assetUploadCapBytes,
   isAssetMimeType,
@@ -33,7 +36,10 @@ import { UploadTooLargeFilter } from "./upload-too-large.filter";
 
 @Controller("storage")
 export class StorageController {
-  constructor(private readonly storage: LocalStorageService) {}
+  constructor(
+    private readonly storage: LocalStorageService,
+    @InjectRepository(BlockAsset) private readonly assets: Repository<BlockAsset>,
+  ) {}
 
   @Get("avatars/:fileId")
   async getAvatar(@Param("fileId") fileId: string, @Res() response: Response) {
@@ -70,6 +76,11 @@ export class StorageController {
     response.sendFile(path);
   }
 
+  /*
+    Authenticated but not owner-scoped, unlike the asset route below — the same hole, left as it was.
+    Scoping it the same way would refuse to delete an image that is uploaded but not yet on a saved
+    page, and closing it properly needs an ownership record at upload time. Tracked as a follow-up.
+  */
   @Delete("images/:fileId")
   @UseGuards(AuthGuard)
   @HttpCode(204)
@@ -127,10 +138,19 @@ export class StorageController {
     response.sendFile(path);
   }
 
+  /**
+   * Scoped to the owner of the link that holds the asset. Asset ids are visible on a published page
+   * and the GET above is public, so an unscoped delete would let any registered user empty another
+   * owner's page. A stranger's id answers 404 rather than 403, so the response confirms nothing; an
+   * asset no link holds yet is nobody's to delete here, and answers the same 404.
+   */
   @Delete("assets/:fileId")
   @UseGuards(AuthGuard)
   @HttpCode(204)
-  async deleteAsset(@CurrentUser() _user: User, @Param("fileId") fileId: string) {
+  async deleteAsset(@CurrentUser() user: User, @Param("fileId") fileId: string) {
+    const asset = await this.assets.findOne({ where: { fileId, link: { owner: { id: user.id } } } });
+    if (!asset) throw new NotFoundException("Asset not found.");
+
     const path = this.storage.assetPath(fileId);
 
     try {

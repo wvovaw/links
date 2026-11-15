@@ -1,11 +1,13 @@
 import type { INestApplication } from "@nestjs/common";
 
+import { NotFoundException } from "@nestjs/common";
+import { randomUUID } from "node:crypto";
 import { mkdir, readdir } from "node:fs/promises";
 import request from "supertest";
 import { DataSource } from "typeorm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { maxAssetBytes, maxImageBytes } from "../src/storage/local-storage.service";
+import { LocalStorageService, maxAssetBytes, maxImageBytes } from "../src/storage/local-storage.service";
 import { authenticate } from "./authenticate";
 import { createTestApp } from "./create-test-app";
 
@@ -198,12 +200,54 @@ describe("asset uploads", () => {
     }
   });
 
-  it("deletes a stored asset", async () => {
+  it("deletes an asset its own page names", async () => {
     const agent = await authenticate(app);
-    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "gone.mp4");
+    const { fileId, linkId } = await ownedAsset(agent);
 
-    expect((await agent.delete(`/storage/assets/${created.body.fileId}`)).status).toBe(204);
-    expect(await readdir(assetsDir())).not.toContain(created.body.fileId);
+    expect((await agent.delete(`/storage/assets/${fileId}`)).status).toBe(204);
+    expect(await readdir(assetsDir())).not.toContain(fileId);
+
+    /* Deleting the page takes the row with it, so the tests below start from an empty table. */
+    await agent.delete(`/links/${linkId}`).expect(204);
+  });
+
+  /*
+    An asset id is visible on a published page and the GET is public, so the delete has to ask who
+    owns the page. A stranger gets the same 404 an unknown id gets: the answer confirms nothing, and
+    the file and the owner's row are both still there.
+  */
+  it("keeps another owner's asset out of reach", async () => {
+    const owner = await authenticate(app);
+    const { fileId, linkId } = await ownedAsset(owner);
+    const stranger = await authenticate(app);
+
+    const response = await stranger.delete(`/storage/assets/${fileId}`);
+
+    expect(response.status).toBe(404);
+    expect(await readdir(assetsDir())).toContain(fileId);
+    expect(await assetRows(app)).toContain(fileId);
+
+    await owner.delete(`/links/${linkId}`).expect(204);
+  });
+
+  /*
+    A stored id is a plain file name. `..` would resolve to the parent directory, where `access`
+    succeeds and `rm` throws — a hostile id must answer 404, never 500.
+  */
+  it("answers 404 rather than 500 for an id that is not a file name", async () => {
+    const agent = await authenticate(app);
+
+    expect((await agent.delete("/storage/assets/%2e%2e")).status).toBe(404);
+    expect((await agent.delete("/storage/assets/a%2fb")).status).toBe(404);
+    expect((await request(app.getHttpServer()).get("/storage/images/%2e%2e")).status).toBe(404);
+  });
+
+  it.each(["..", ".", "", "a/b", "a\\b"])("refuses %j as a stored file name on every root", (fileId) => {
+    const storage = app.get(LocalStorageService);
+
+    expect(() => storage.assetPath(fileId)).toThrow(NotFoundException);
+    expect(() => storage.imagePath(fileId)).toThrow(NotFoundException);
+    expect(() => storage.avatarPath(fileId)).toThrow(NotFoundException);
   });
 
   it("removes the asset a page no longer names", async () => {
@@ -243,6 +287,28 @@ describe("asset uploads", () => {
     expect(await readdir(assetsDir())).not.toContain(fileId);
   });
 });
+
+type Agent = Awaited<ReturnType<typeof authenticate>>;
+
+/**
+ * Uploads an asset and names it on a page of the same owner. The row is what makes the file theirs:
+ * an upload on its own belongs to no link, so the delete route cannot tell whose it is.
+ */
+async function ownedAsset(agent: Agent) {
+  const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "owned.mp4");
+  const fileId = created.body.fileId as string;
+  const link = await agent
+    .post("/links")
+    .send({ slug: `asset-owner-${randomUUID()}`, title: "A page with an asset" })
+    .expect(201);
+
+  await agent
+    .patch(`/links/${link.body.id}/content`)
+    .send({ assetFileIds: [fileId] })
+    .expect(200);
+
+  return { fileId, linkId: link.body.id as string };
+}
 
 /** The `fileId` column of `block_assets`, read through the connection the app booted with. */
 async function assetRows(app: INestApplication): Promise<string[]> {
