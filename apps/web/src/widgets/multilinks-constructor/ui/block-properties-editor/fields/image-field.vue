@@ -16,6 +16,20 @@ const model = defineModel<IBlockPropertyImage["value"]>();
 const isUploading = ref(false);
 const file = ref<File | null>(model.value ? new File([], model.value) : null);
 
+/** The value this field last uploaded itself: the picked file already carries that name. */
+let lastUploaded: string | null = null;
+
+/**
+ * A list row is keyed by its position, so duplicating or deleting a row hands this instance another
+ * row's value. Seeding `file` once would then show the previous row's file name beside the new
+ * preview, so the file list follows the model — except right after an upload, where the picked file
+ * names itself and replacing it with the stored id would only lose that name.
+ */
+watch(model, (value) => {
+  if (value === lastUploaded) return;
+  file.value = value ? new File([], value) : null;
+});
+
 const config = useRuntimeConfig();
 const previewUrl = computed(() => resolveBlockImageUrl(model.value, { origin: config.public.backendUrl }));
 
@@ -28,7 +42,9 @@ async function handleChange(payload: File | File[] | null) {
 
   isUploading.value = true;
   try {
-    model.value = await StorageApi.uploadImage(picked);
+    const uploaded = await StorageApi.uploadImage(picked);
+    lastUploaded = uploaded;
+    model.value = uploaded;
   } finally {
     isUploading.value = false;
   }

@@ -385,6 +385,115 @@ exports[`Faq > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Gallery > has a pinned schema snapshot 1`] = `
+{
+  "aspect": {
+    "defaultValue": "1:1",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Image shape",
+    "options": [
+      {
+        "label": "Square",
+        "value": "1:1",
+      },
+      {
+        "label": "Landscape",
+        "value": "4:3",
+      },
+      {
+        "label": "Wide",
+        "value": "16:9",
+      },
+    ],
+    "type": "select",
+  },
+  "columns": {
+    "defaultValue": "2",
+    "group": "Appearance",
+    "hint": "How many images sit side by side in a grid",
+    "id": 2,
+    "label": "Columns",
+    "options": [
+      {
+        "label": "2",
+        "value": "2",
+      },
+      {
+        "label": "3",
+        "value": "3",
+      },
+      {
+        "label": "4",
+        "value": "4",
+      },
+    ],
+    "type": "select",
+  },
+  "items": {
+    "defaultValue": [],
+    "group": "Content",
+    "id": 0,
+    "itemFields": [
+      {
+        "defaultValue": null,
+        "id": 0,
+        "key": "image",
+        "label": "Image",
+        "required": true,
+        "type": "image",
+      },
+      {
+        "defaultValue": "",
+        "hint": "Describes the picture when it cannot be seen",
+        "id": 1,
+        "key": "alt",
+        "label": "Alt text",
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "id": 2,
+        "key": "link",
+        "label": "Link",
+        "type": "url",
+      },
+    ],
+    "label": "Images",
+    "maxItems": 30,
+    "minItems": 1,
+    "type": "list",
+  },
+  "layout": {
+    "defaultValue": "grid",
+    "group": "Appearance",
+    "id": 1,
+    "label": "Layout",
+    "options": [
+      {
+        "label": "Grid",
+        "value": "grid",
+      },
+      {
+        "label": "Strip",
+        "value": "strip",
+      },
+    ],
+    "type": "select",
+  },
+  "radius": {
+    "defaultValue": 10,
+    "group": "Appearance",
+    "id": 4,
+    "label": "Radius",
+    "max": 32,
+    "min": 0,
+    "step": 1,
+    "type": "number",
+  },
+}
+`;
+
 exports[`Heading > has a pinned schema snapshot 1`] = `
 {
   "align": {

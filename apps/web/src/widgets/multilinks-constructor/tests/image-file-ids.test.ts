@@ -1,4 +1,4 @@
-import { migrateBlock } from "@links/blocks";
+import { createBlock, migrateBlock } from "@links/blocks";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -44,5 +44,31 @@ describe("constructor store image file ids", () => {
     await store.saveCurrentState();
 
     expect(updateLink).toHaveBeenCalledWith(expect.objectContaining({ imageFileIds: ["file-123"] }));
+  });
+
+  /*
+    The API deletes every stored file it is not told about, so a block that keeps its images inside
+    rows must report them or the owner's uploads disappear on the next save.
+  */
+  it("submits the file ids a list block keeps in its rows", async () => {
+    const store = useConstructorStore();
+    store.linkId = "link-1";
+    const avatar = createBlock("Avatar", "avatar-1");
+    const gallery = createBlock("Gallery", "gallery-1");
+    store.setBlocks([avatar, gallery]);
+    store.blocks[0]!.properties.image!.value = "file-top";
+    store.blocks[1]!.properties.items!.value = [
+      { image: "file-a", alt: "A" },
+      { image: "https://cdn.example/b.png", alt: "B" },
+      /* Half-filled: no alt text yet, but the uploaded file is still stored and still the owner's. */
+      { image: "file-c", alt: "" },
+      { image: null, alt: "Nothing uploaded yet" },
+    ];
+
+    await store.saveCurrentState();
+
+    expect(updateLink).toHaveBeenCalledWith(
+      expect.objectContaining({ imageFileIds: ["file-top", "file-a", "file-c"] }),
+    );
   });
 });

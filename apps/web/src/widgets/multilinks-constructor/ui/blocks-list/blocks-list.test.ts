@@ -42,12 +42,14 @@ describe("testing BlocksList component", () => {
     expect(labels).not.toContain("Button");
   });
 
+  /* `galle` reaches the Picture, whose keywords still name the gallery it cannot draw, and the Gallery. */
   it("filters blocks by a substring of one of their keywords", async () => {
     await wrapper.find("[data-testid='blocks-search']").setValue("galle");
 
-    const items = wrapper.findAll("[data-testid='blocks-list-item']");
-    expect(items).toHaveLength(1);
-    expect(items[0]?.text()).toContain("Picture");
+    const labels = wrapper.findAll("[data-testid='blocks-list-item']").map((item) => item.text());
+    expect(labels).toContain("Picture");
+    expect(labels).toContain("Gallery");
+    expect(labels).not.toContain("Button");
   });
 
   it("groups blocks by category", () => {

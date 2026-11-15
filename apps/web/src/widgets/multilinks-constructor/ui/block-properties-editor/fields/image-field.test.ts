@@ -28,3 +28,29 @@ describe("ImageField preview", () => {
     );
   });
 });
+
+/*
+  A list row is keyed by its position, so duplicating or removing a row hands this field instance
+  another row's value: the file name beside the preview has to come from the model, not from the
+  instance's first render.
+*/
+describe("ImageField file name", () => {
+  it("names the file the model holds", () => {
+    expect(mountWithValue("file-123").text()).toContain("file-123");
+  });
+
+  it("follows the model to the file of the row it now edits", async () => {
+    const wrapper = mountWithValue("file-123");
+    await wrapper.setProps({ modelValue: "file-456" });
+
+    expect(wrapper.text()).toContain("file-456");
+    expect(wrapper.text()).not.toContain("file-123");
+  });
+
+  it("drops the file name when the model is cleared", async () => {
+    const wrapper = mountWithValue("file-123");
+    await wrapper.setProps({ modelValue: undefined });
+
+    expect(wrapper.text()).not.toContain("file-123");
+  });
+});

@@ -12,6 +12,7 @@ import ButtonBlock from "./button-block.vue";
 import CountdownBlock from "./countdown-block.vue";
 import DividerBlock from "./divider-block.vue";
 import FaqBlock from "./faq-block.vue";
+import GalleryBlock from "./gallery-block.vue";
 import HeadingBlock from "./heading-block.vue";
 import MapBlock from "./map-block.vue";
 import MusicBlock from "./music-block.vue";
@@ -1300,5 +1301,159 @@ describe("FaqBlock", () => {
 
     expect(wrapper.get(".faq-block").element.tagName).toBe("DIV");
     expect(wrapper.findAll("details")).toHaveLength(0);
+  });
+});
+
+describe("GalleryBlock", () => {
+  const three = {
+    items: [
+      { image: "file-a", alt: "A", link: "https://example.com/a" },
+      { image: "https://cdn.example/b.png", alt: "B" },
+      { image: "file-c", alt: "" },
+    ],
+  };
+
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(GalleryBlock, { props: { properties: blockOf("Gallery", values).properties } });
+  }
+
+  function styleOf(values: Record<string, unknown> = {}) {
+    return wrapperOf(values).get(".gallery-block").attributes("style") ?? "";
+  }
+
+  it("draws every complete row as a lazy image inside its own item", () => {
+    const wrapper = wrapperOf(three);
+    const items = wrapper.findAll(".gallery-block__item");
+
+    expect(items).toHaveLength(3);
+    for (const item of items) expect(item.findAll("img")).toHaveLength(1);
+    expect(wrapper.findAll("img").map((image) => image.attributes("loading"))).toEqual(["lazy", "lazy", "lazy"]);
+    expect(wrapper.findAll("img").map((image) => image.attributes("alt"))).toEqual(["A", "B", ""]);
+  });
+
+  it("resolves a stored file id and keeps a pasted url as it is", () => {
+    const sources = wrapperOf(three)
+      .findAll("img")
+      .map((image) => image.attributes("src"));
+
+    expect(sources[0]).toMatch(/\/storage\/images\/file-a$/);
+    expect(sources[1]).toBe("https://cdn.example/b.png");
+  });
+
+  it.each([
+    ["no image", { alt: "Nothing yet" }],
+    ["an empty image", { image: "" }],
+    ["a blank image", { image: "   " }],
+    ["a null image", { image: null }],
+    /* A row is unvalidated stored JSON: only a string can name an image. */
+    ["a numeric image", { image: 42 }],
+  ])("draws no image for a row with %s", (_case, row) => {
+    expect(wrapperOf({ items: [row] }).findAll("img")).toHaveLength(0);
+  });
+
+  it("draws the complete rows around a half-saved one", () => {
+    const items = [
+      { image: "file-a", alt: "A" },
+      { image: "", alt: "Half" },
+      { image: "file-b", alt: "B" },
+    ];
+
+    expect(wrapperOf({ items }).findAll("img")).toHaveLength(2);
+  });
+
+  it("is a grid of two columns unless the block says otherwise", () => {
+    const wrapper = wrapperOf(three);
+
+    expect(wrapper.get(".gallery-block").classes()).toContain("gallery-block--grid");
+    expect(wrapper.findAll("img")).toHaveLength(3);
+    expect(wrapper.get(".gallery-block").attributes("style")).toContain("--gallery-columns: 2");
+  });
+
+  it.each(["2", "3", "4"])("takes the stored %s columns", (columns) => {
+    expect(styleOf({ ...three, columns })).toContain(`--gallery-columns: ${columns}`);
+  });
+
+  /* The field offers 2–4 and the API stores the value unvalidated, so a track count is clamped whole. */
+  it.each([
+    ["over the range", "9", 4],
+    ["under the range", "1", 2],
+    ["not a number at all", "many", 2],
+  ])("keeps %s inside the column range", (_case, columns, expected) => {
+    expect(styleOf({ ...three, columns })).toContain(`--gallery-columns: ${expected}`);
+  });
+
+  it("becomes a strip when the layout says so and keeps every image", () => {
+    const wrapper = wrapperOf({ ...three, layout: "strip" });
+
+    expect(wrapper.get(".gallery-block").classes()).toContain("gallery-block--strip");
+    expect(wrapper.get(".gallery-block").classes()).not.toContain("gallery-block--grid");
+    expect(wrapper.findAll("img")).toHaveLength(3);
+  });
+
+  it("draws the grid for a layout outside the palette", () => {
+    expect(
+      wrapperOf({ ...three, layout: "masonry" })
+        .get(".gallery-block")
+        .classes(),
+    ).toContain("gallery-block--grid");
+  });
+
+  it.each([
+    ["1:1", "1 / 1"],
+    ["4:3", "4 / 3"],
+    ["16:9", "16 / 9"],
+  ])("draws the %s image shape", (aspect, ratio) => {
+    expect(styleOf({ ...three, aspect })).toContain(`--gallery-aspect: ${ratio}`);
+  });
+
+  it("draws square images for a shape outside the palette", () => {
+    expect(styleOf({ ...three, aspect: "3:2" })).toContain("--gallery-aspect: 1 / 1");
+  });
+
+  it("takes the stored radius as a length", () => {
+    expect(styleOf({ ...three, radius: 14 })).toContain("--gallery-radius: 14px");
+  });
+
+  /* A cleared number field stores `""` and an over-typed one keeps what was typed. */
+  it.each([
+    ["over the range", 100, "32px"],
+    ["under the range", -5, "0px"],
+    ["cleared", "", "10px"],
+    ["never set", undefined, "10px"],
+  ])("clamps a radius %s", (_case, radius, expected) => {
+    expect(styleOf(radius === undefined ? three : { ...three, radius })).toContain(`--gallery-radius: ${expected}`);
+  });
+
+  it("wraps the image in a link without a referrer when the row names one", () => {
+    const links = wrapperOf(three).findAll(".gallery-block__item");
+
+    expect(links[0]!.element.tagName).toBe("A");
+    expect(links[0]!.attributes("href")).toBe("https://example.com/a");
+    expect(links[0]!.attributes("rel")).toBe("noopener noreferrer");
+    expect(links[1]!.element.tagName).toBe("DIV");
+    expect(links[1]!.attributes("href")).toBeUndefined();
+  });
+
+  /*
+    Row links are free text the API never validates, so a stored `javascript:` href would run in the
+    page's own origin when a visitor clicked an image.
+  */
+  it.each(["javascript:alert(1)", "data:text/html,<script>alert(1)</script>"])(
+    "leaves the image unlinked for a stored %s",
+    (link) => {
+      const wrapper = wrapperOf({ items: [{ image: "file-a", link }] });
+
+      expect(wrapper.find("a").exists()).toBe(false);
+      expect(wrapper.find("img").exists()).toBe(true);
+      expect(wrapper.html()).not.toContain(link);
+    },
+  );
+
+  /* The constructor selects a block through an overlay as tall as the block. */
+  it("keeps the box for a block with no complete rows", () => {
+    const wrapper = wrapperOf();
+
+    expect(wrapper.get(".gallery-block").element.tagName).toBe("DIV");
+    expect(wrapper.findAll("img")).toHaveLength(0);
   });
 });

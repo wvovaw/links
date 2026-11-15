@@ -9,6 +9,7 @@ import { buttonV0 } from "./fixtures/button-v0";
 import { buttonV1 } from "./fixtures/button-v1";
 import { buttonV2 } from "./fixtures/button-v2";
 import { faqV0 } from "./fixtures/faq-v0";
+import { galleryV0 } from "./fixtures/gallery-v0";
 import { paragraphV0 } from "./fixtures/paragraph-v0";
 import { paragraphV2 } from "./fixtures/paragraph-v2";
 import { pictureV0 } from "./fixtures/picture-v0";
@@ -81,6 +82,7 @@ it.each([
   ["Button", 2, buttonV2],
   ["Picture", 0, pictureV0],
   ["Faq", 0, faqV0],
+  ["Gallery", 0, galleryV0],
 ])("migrates a stored %s block from version %i to the current schema", (name, version, fixture) => {
   const module = getBlockModule(name as BlockName);
   const migrated = migrateBlock(structuredClone(fixture));

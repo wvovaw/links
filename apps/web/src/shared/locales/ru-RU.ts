@@ -22,6 +22,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Divider.description": "Линия или отступ, разделяющие два блока.",
     "blocks.Faq.label": "Вопросы и ответы",
     "blocks.Faq.description": "Вопросы и ответы, которые раскрываются на месте.",
+    "blocks.Gallery.label": "Галерея",
+    "blocks.Gallery.description": "Набор изображений сеткой или прокручиваемой лентой.",
     "blocks.Heading.label": "Заголовок",
     "blocks.Heading.description": "Заголовок, с которого начинается раздел страницы.",
     "blocks.Map.label": "Карта",

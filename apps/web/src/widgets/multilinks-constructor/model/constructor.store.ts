@@ -1,6 +1,6 @@
 import type { BlockName, IBlock, PageTheme } from "@links/blocks";
 
-import { checkBlockUpToDate, createBlock, DEFAULT_PAGE_THEME, migrateBlock } from "@links/blocks";
+import { checkBlockUpToDate, createBlock, DEFAULT_PAGE_THEME, listRows, migrateBlock } from "@links/blocks";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useLinksStore } from "~entities/links";
@@ -95,14 +95,39 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks.value.splice(index, 0, { ...structuredClone(toRaw(block)), id: newBlockId });
     }
   }
+
+  /**
+   * A stored file id, or `null` for a value that names no stored file. A migrated Avatar may still hold
+   * a pasted url: it must never be sent as a file, or the backend would try to keep `https://…` as an
+   * existing image.
+   */
+  function storedFileId(value: unknown): string | null {
+    if (typeof value !== "string" || !value) return null;
+
+    return isAbsoluteImageUrl(value) ? null : value;
+  }
+
   function collectImageFileIds(blocksList: IBlock[]): string[] {
     const ids: string[] = [];
+    const collect = (value: unknown) => {
+      const fileId = storedFileId(value);
+      if (fileId) ids.push(fileId);
+    };
+
     for (const block of blocksList) {
       for (const prop of Object.values(block.properties)) {
-        /* A migrated Avatar may still hold a pasted url: it is not a stored file and must never be
-           sent as one, or the backend would try to keep `https://…` as an existing image. */
-        if (prop.type === "image" && prop.value && !isAbsoluteImageUrl(prop.value)) {
-          ids.push(prop.value);
+        if (prop.type === "image") collect(prop.value);
+
+        /*
+          A block that repeats images draws them from rows, not from an `image` property, and the API
+          deletes every stored file it is not told about. Every stored row counts, complete or not: a
+          half-filled row still holds the file its owner uploaded.
+        */
+        if (prop.type === "list") {
+          const imageKeys = prop.itemFields.filter((field) => field.type === "image").map((field) => field.key);
+          for (const row of listRows(prop)) {
+            for (const key of imageKeys) collect(row[key]);
+          }
         }
       }
     }

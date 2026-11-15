@@ -5,6 +5,7 @@ import ButtonModule from "./blocks/button";
 import CountdownModule from "./blocks/countdown";
 import DividerModule from "./blocks/divider";
 import FaqModule from "./blocks/faq";
+import GalleryModule from "./blocks/gallery";
 import HeadingModule from "./blocks/heading";
 import MapModule from "./blocks/map";
 import MusicModule from "./blocks/music";
@@ -25,6 +26,7 @@ export const registry: Registry = {
   Countdown: CountdownModule,
   Divider: DividerModule,
   Faq: FaqModule,
+  Gallery: GalleryModule,
   Heading: HeadingModule,
   Map: MapModule,
   Music: MusicModule,

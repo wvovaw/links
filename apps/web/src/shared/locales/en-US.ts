@@ -22,6 +22,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Divider.description": "A line or a gap that separates two blocks.",
     "blocks.Faq.label": "FAQ",
     "blocks.Faq.description": "Questions and answers that open in place.",
+    "blocks.Gallery.label": "Gallery",
+    "blocks.Gallery.description": "A set of images shown as a grid or a sliding strip.",
     "blocks.Heading.label": "Heading",
     "blocks.Heading.description": "A title that starts a section of the page.",
     "blocks.Map.label": "Map",
