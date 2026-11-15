@@ -77,25 +77,17 @@ export class StorageController {
   }
 
   /**
-   * Deletes an image only for the account that uploaded it. An image id is visible on a published page, so
-   * an unscoped route let any registered user empty another owner's page; the upload record answers that
-   * without refusing to delete an image that is uploaded but not yet on a saved page.
+   * Deletes an image only for the account that uploaded it, taking the upload record with the bytes. An image
+   * id is visible on a published page, so an unscoped route let any registered user empty another owner's
+   * page; the upload record answers that without refusing to delete an image that is uploaded but not yet on
+   * a saved page.
    */
   @Delete("images/:fileId")
   @UseGuards(AuthGuard)
   @HttpCode(204)
   async deleteImage(@CurrentUser() user: User, @Param("fileId") fileId: string) {
-    await this.assertUploader(user, "image", fileId, "Image not found.");
-
-    const path = this.storage.imagePath(fileId);
-
-    try {
-      await access(path);
-    } catch {
-      throw new NotFoundException("Image not found.");
-    }
-
-    await this.storage.removeImage(fileId);
+    const discarded = await this.uploadedFiles.discard(user.id, "image", fileId, (id) => this.storage.removeImage(id));
+    if (!discarded) throw new NotFoundException("Image not found.");
   }
 
   /**
@@ -143,31 +135,17 @@ export class StorageController {
   }
 
   /**
-   * Deletes an asset only for the account that uploaded it. Asset ids are visible on a published page and
-   * the GET above is public, so the identity of the delete has to come from the upload record rather than
-   * from a page that happens to name the file — a page can be made to name anyone's id. A stranger's answer
-   * is the same 404 an unknown id gets, so the response confirms nothing.
+   * Deletes an asset only for the account that uploaded it, taking the upload record with the bytes. Asset
+   * ids are visible on a published page and the GET above is public, so the identity of the delete has to
+   * come from the upload record rather than from a page that happens to name the file — a page can be made to
+   * name anyone's id. A stranger's answer is the same 404 an unknown id gets, so the response confirms
+   * nothing.
    */
   @Delete("assets/:fileId")
   @UseGuards(AuthGuard)
   @HttpCode(204)
   async deleteAsset(@CurrentUser() user: User, @Param("fileId") fileId: string) {
-    await this.assertUploader(user, "asset", fileId, "Asset not found.");
-
-    const path = this.storage.assetPath(fileId);
-
-    try {
-      await access(path);
-    } catch {
-      throw new NotFoundException("Asset not found.");
-    }
-
-    await this.storage.removeAsset(fileId);
-  }
-
-  /** A file belongs to the account that uploaded it; anything else answers the 404 an unknown id answers. */
-  private async assertUploader(user: User, kind: "image" | "asset", fileId: string, message: string) {
-    const uploader = await this.uploadedFiles.ownerOf(kind, fileId);
-    if (uploader !== user.id) throw new NotFoundException(message);
+    const discarded = await this.uploadedFiles.discard(user.id, "asset", fileId, (id) => this.storage.removeAsset(id));
+    if (!discarded) throw new NotFoundException("Asset not found.");
   }
 }

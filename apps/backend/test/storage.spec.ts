@@ -307,6 +307,75 @@ describe("asset uploads", () => {
   });
 
   /*
+    The compatibility rule keeps a claim made before the upload records existed, so removal is where that
+    claim must not turn into a way to delete a stranger's bytes: dropping the file from a page removes the
+    row, never what the row named.
+  */
+  it("leaves a recordless file on disk when its page drops it", async () => {
+    const victim = await authenticate(app);
+    const image = await victim.post("/storage/images").attach("file", Buffer.from(PNG_BYTES), "legacy.png").expect(201);
+    const asset = await victim.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "legacy.mp4").expect(201);
+
+    const claimant = await authenticate(app);
+    const page = await claimant
+      .post("/links")
+      .send({ slug: `legacy-drop-${randomUUID()}`, title: "A page with a legacy claim" })
+      .expect(201);
+    await seedRecordlessClaim(app, "block_images", page.body.id, image.body.fileId);
+    await seedRecordlessClaim(app, "block_assets", page.body.id, asset.body.fileId);
+
+    expect(
+      (await claimant.patch(`/links/${page.body.id}/content`).send({ imageFileIds: [], assetFileIds: [] })).status,
+    ).toBe(200);
+
+    expect(await claimedFiles(app, "block_images", page.body.id)).toEqual([]);
+    expect(await claimedFiles(app, "block_assets", page.body.id)).toEqual([]);
+    expect(await readdir(imagesDir())).toContain(image.body.fileId);
+    expect(await readdir(assetsDir())).toContain(asset.body.fileId);
+  });
+
+  /* Deleting the page takes its rows; the bytes it named but did not upload are an orphan, not a deletion. */
+  it("leaves a recordless file on disk when its page is deleted", async () => {
+    const victim = await authenticate(app);
+    const image = await victim
+      .post("/storage/images")
+      .attach("file", Buffer.from(PNG_BYTES), "legacy-cascade.png")
+      .expect(201);
+    const asset = await victim
+      .post("/storage/assets")
+      .attach("file", Buffer.from(MP4_BYTES), "legacy-cascade.mp4")
+      .expect(201);
+
+    const claimant = await authenticate(app);
+    const page = await claimant
+      .post("/links")
+      .send({ slug: `legacy-cascade-${randomUUID()}`, title: "A page with a legacy claim" })
+      .expect(201);
+    await seedRecordlessClaim(app, "block_images", page.body.id, image.body.fileId);
+    await seedRecordlessClaim(app, "block_assets", page.body.id, asset.body.fileId);
+
+    expect((await claimant.delete(`/links/${page.body.id}`)).status).toBe(204);
+
+    expect(await readdir(imagesDir())).toContain(image.body.fileId);
+    expect(await readdir(assetsDir())).toContain(asset.body.fileId);
+  });
+
+  /* The record attributes the bytes; when the bytes go, so does it. */
+  it("forgets a file's upload record when it deletes the file", async () => {
+    const agent = await authenticate(app);
+    const created = await agent
+      .post("/storage/assets")
+      .attach("file", Buffer.from(MP4_BYTES), "attributed.mp4")
+      .expect(201);
+
+    expect(await hasUploadRecord(app, created.body.fileId)).toBe(true);
+
+    await agent.delete(`/storage/assets/${created.body.fileId}`).expect(204);
+
+    expect(await hasUploadRecord(app, created.body.fileId)).toBe(false);
+  });
+
+  /*
     An asset id is visible on a published page and the GET is public, so the delete has to ask who
     uploaded the file. A stranger gets the same 404 an unknown id gets: the answer confirms nothing, and
     the file and the owner's row are both still there.
@@ -416,6 +485,32 @@ async function claimedFiles(
     .query(`SELECT fileId FROM ${table} WHERE linkId = ?`, [linkId]);
 
   return rows.map((row) => row.fileId);
+}
+
+/**
+ * Seeds what a page stored before `uploaded_files` existed: an attachment row naming a file, with no upload
+ * record behind it. The API can no longer create that state — a new claim on an unattributed file is refused —
+ * so the row is written straight into the table, which is exactly how such a claim survived the migration.
+ */
+async function seedRecordlessClaim(
+  app: INestApplication,
+  table: "block_images" | "block_assets",
+  linkId: string,
+  fileId: string,
+) {
+  const dataSource = app.get(DataSource);
+
+  await dataSource.query("DELETE FROM uploaded_files WHERE fileId = ?", [fileId]);
+  await dataSource.query(`INSERT INTO ${table} (id, fileId, linkId) VALUES (?, ?, ?)`, [randomUUID(), fileId, linkId]);
+}
+
+/** Whether anything still attributes a file to the account that uploaded it. */
+async function hasUploadRecord(app: INestApplication, fileId: string): Promise<boolean> {
+  const rows: { fileId: string }[] = await app
+    .get(DataSource)
+    .query("SELECT fileId FROM uploaded_files WHERE fileId = ?", [fileId]);
+
+  return rows.length > 0;
 }
 
 /** The `fileId` column of `block_assets`, read through the connection the app booted with. */

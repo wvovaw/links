@@ -131,7 +131,7 @@ export class LinksService {
 
   async remove(owner: User, id: string) {
     const link = await this.getOwned(owner, id);
-    await this.discardFiles(link);
+    await this.discardFiles(owner, link);
     await this.links.remove(link);
   }
 
@@ -158,7 +158,7 @@ export class LinksService {
       await diffFiles(
         stored,
         imageFileIds,
-        (fileId) => this.storage.removeImage(fileId),
+        (fileId) => this.discardFile(owner, "image", fileId),
         (image) => this.blockImages.remove(image),
         (fileId) => this.blockImages.save(this.blockImages.create({ fileId, link })),
       );
@@ -171,7 +171,7 @@ export class LinksService {
       await diffFiles(
         stored,
         assetFileIds,
-        (fileId) => this.storage.removeAsset(fileId),
+        (fileId) => this.discardFile(owner, "asset", fileId),
         (asset) => this.blockAssets.remove(asset),
         (fileId) => this.blockAssets.save(this.blockAssets.create({ fileId, link })),
       );
@@ -206,13 +206,31 @@ export class LinksService {
     }
   }
 
-  /** The rows cascade with the link; the bytes they name have no such cascade, so they go first. */
-  private async discardFiles(link: Link) {
+  /**
+   * Removes the bytes a page still names before the link (and its attachment rows) goes. The bytes go through
+   * the same uploader check every other removal does, so a page holding a file its owner did not upload —
+   * only reachable through a claim made before the upload records existed — leaves that file on disk.
+   */
+  private async discardFiles(owner: User, link: Link) {
     const images = await this.blockImages.find({ where: { link: { id: link.id } } });
-    for (const image of images) await this.storage.removeImage(image.fileId).catch(() => {});
+    for (const image of images) await this.discardFile(owner, "image", image.fileId);
 
     const assets = await this.blockAssets.find({ where: { link: { id: link.id } } });
-    for (const asset of assets) await this.storage.removeAsset(asset.fileId).catch(() => {});
+    for (const asset of assets) await this.discardFile(owner, "asset", asset.fileId);
+  }
+
+  /**
+   * Deletes one file's bytes and its upload record, for the page's owner. A file that was never uploaded
+   * through this API — or whose upload record is gone — has no uploader to compare against, so nothing is
+   * deleted: the id becomes an orphan on disk, which is the trade this rule makes in exchange for no page
+   * being able to delete another account's file by naming it.
+   */
+  private async discardFile(owner: User, kind: UploadedFileKind, fileId: string) {
+    const removeBytes = (id: string) =>
+      kind === "image" ? this.storage.removeImage(id) : this.storage.removeAsset(id);
+
+    /* A page is being saved or dropped: a failed unlink must not fail the request that no longer needs it. */
+    await this.uploadedFiles.discard(owner.id, kind, fileId, removeBytes).catch(() => {});
   }
 
   private applyStatus(link: Link, requestedStatus?: LinkStatus) {

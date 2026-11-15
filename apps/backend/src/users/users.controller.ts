@@ -54,7 +54,7 @@ export class UsersController {
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.mimetype))
       throw new BadRequestException("Only JPEG and PNG avatars are allowed.");
 
-    if (user.avatarFileId) await this.storage.removeAvatar(user.avatarFileId);
+    if (user.avatarFileId) await this.discardAvatar(user, user.avatarFileId);
 
     user.avatarFileId = await this.storage.saveAvatar(file);
     await this.uploadedFiles.record(user, "avatar", user.avatarFileId);
@@ -64,9 +64,18 @@ export class UsersController {
 
   @Delete("me/avatar")
   async removeAvatar(@CurrentUser() user: User) {
-    if (user.avatarFileId) await this.storage.removeAvatar(user.avatarFileId);
+    if (user.avatarFileId) await this.discardAvatar(user, user.avatarFileId);
 
     user.avatarFileId = null;
     return toUserDto(await this.users.save(user));
+  }
+
+  /**
+   * Removes an avatar's bytes together with the upload record that attributes it, the same way every other
+   * file removal does. An avatar stored before that record existed has no uploader to check against, so its
+   * bytes stay on disk rather than being deleted blind.
+   */
+  private async discardAvatar(user: User, fileId: string) {
+    await this.uploadedFiles.discard(user.id, "avatar", fileId, (id) => this.storage.removeAvatar(id));
   }
 }
