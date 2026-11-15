@@ -85,6 +85,26 @@ describe("musicEmbedUrl", () => {
       "soundcloud",
       "https://w.soundcloud.com/player/?url=" + encodeURIComponent("https://on.soundcloud.com/abc123"),
     ],
+    [
+      "https://music.apple.com/us/album/the-dark-side-of-the-moon/1234567890?i=1234567891",
+      "apple-music",
+      "https://embed.music.apple.com/us/album/the-dark-side-of-the-moon/1234567890?i=1234567891",
+    ],
+    [
+      "https://music.apple.com/us/song/yesterday/1234567891",
+      "apple-music",
+      "https://embed.music.apple.com/us/song/yesterday/1234567891",
+    ],
+    [
+      "https://music.apple.com/gb/playlist/all-time-hits/pl.u-abc123xyz",
+      "apple-music",
+      "https://embed.music.apple.com/gb/playlist/all-time-hits/pl.u-abc123xyz",
+    ],
+    [
+      "https://music.apple.com/us/music-video/one-more-time/1234567890",
+      "apple-music",
+      "https://embed.music.apple.com/us/music-video/one-more-time/1234567890",
+    ],
   ])("maps %s as %s", (input, provider, expected) => {
     expect(musicEmbedUrl(provider as MusicProvider, input)).toBe(expected);
   });
@@ -95,6 +115,11 @@ describe("musicEmbedUrl", () => {
     ["spotify", "not a url"],
     ["soundcloud", "https://example.com/x"],
     ["apple-music", "https://example.com/us/album/x/1234567890"],
+    ["apple-music", "https://music.apple.com/"],
+    ["apple-music", "https://music.apple.com/us/artist/artist-name/1234567890"],
+    ["apple-music", "https://music.apple.com/us/curator/curator-name/1234567890"],
+    ["apple-music", "https://music.apple.com/us/album/album-name"],
+    ["apple-music", "https://music.apple.com/us/album/album-name/1234%2A5678"],
     ["youtube-music", "https://www.youtube.com/watch?v=dQw4w9WgXcQ"],
     ["youtube-music", "https://music.youtube.com/channel/UC123"],
   ])("returns null for %s with %s", (provider, input) => {

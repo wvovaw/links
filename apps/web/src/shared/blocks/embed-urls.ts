@@ -104,10 +104,20 @@ function soundcloudEmbedUrl(url: URL): string | null {
 }
 
 /** Apple Music serves the same catalogue from an embed host; the region and the item stay in the path. */
+const APPLE_MUSIC_KINDS = new Set(["song", "album", "playlist", "music-video"]);
+/* An album or song id is numeric, a playlist's is `pl.u-…`: the dot and the hyphen belong to the id. */
+const APPLE_MUSIC_ID = /^[\w.-]+$/;
+
 function appleMusicEmbedUrl(url: URL): string | null {
   if (url.hostname !== "music.apple.com") return null;
 
-  return `https://embed.music.apple.com${url.pathname}`;
+  /* A playable item is `/<region>/<kind>/<slug>/<id>`; an artist page, a store page or the root is not. */
+  const [region, kind, slug, id] = segments(url);
+  if (!region || !kind || !slug || !id) return null;
+  if (!APPLE_MUSIC_KINDS.has(kind) || !APPLE_MUSIC_ID.test(id)) return null;
+
+  /* `?i=` names a song inside an album, and the player honours it, so the share link's query travels. */
+  return `https://embed.music.apple.com${url.pathname}${url.search}`;
 }
 
 /** YouTube Music plays through YouTube's own player: the same video id behind a different front door. */

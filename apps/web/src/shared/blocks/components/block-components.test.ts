@@ -553,4 +553,14 @@ describe("MusicBlock", () => {
     expect(wrapper.find("iframe").exists()).toBe(false);
     expect(wrapper.get(".music-block__placeholder").text()).toBe(url);
   });
+
+  it("shows the stored link for an apple music artist page, which has no player", () => {
+    const url = "https://music.apple.com/us/artist/artist-name/1234567890";
+    const wrapper = mount(MusicBlock, {
+      props: { properties: blockOf("Music", { provider: "apple-music", url }).properties },
+    });
+
+    expect(wrapper.find("iframe").exists()).toBe(false);
+    expect(wrapper.get(".music-block__placeholder").text()).toBe(url);
+  });
 });
