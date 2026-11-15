@@ -723,6 +723,7 @@ describe("TestimonialsBlock", () => {
   it.each([
     ["no avatar", { quote: "No avatar", author: "Ann" }],
     ["an empty avatar", { quote: "Empty", avatar: "", author: "Ann" }],
+    ["a whitespace-only avatar", { quote: "Blank", avatar: "   ", author: "Ann" }],
     /* A row is unvalidated stored JSON: only a string can name an image. */
     ["a numeric avatar", { quote: "Numeric", avatar: 42, author: "Ann" }],
   ])("keeps the quote and the citation for %s", (_case, row) => {
@@ -778,14 +779,18 @@ describe("TestimonialsBlock", () => {
   /*
     The field offers 1–5 with a step of one, but a stored row is unvalidated: a rating above the five
     stars must not draw a sixth, a fraction must not draw a partial star, and a value below one draws
-    none rather than a full row of them.
+    none rather than a full row of them. A numeric string is still a rating — a cleared editor input
+    round-trips through one — while a word is not.
   */
   it.each([
     ["over the range", 9, 5],
     ["a fraction", 3.4, 3],
+    ["a numeric string", "4", 4],
+    ["a numeric string in spaces", " 4 ", 4],
     ["below the range", 0, 0],
     ["negative", -4, 0],
-    ["a string that looks numeric", "4", 0],
+    ["a word", "four", 0],
+    ["an empty string", "", 0],
     ["null", null, 0],
   ])("keeps a rating of %s inside the five stars", (_case, rating, filled) => {
     const ratings = wrapperOf({ "show-rating": true, "items": [{ quote: "Rated", rating }] }).findAll(
@@ -1707,6 +1712,7 @@ describe("ProductsBlock", () => {
   it.each([
     ["no image", { title: "No image", url: "https://shop.example/a" }],
     ["an empty image", { image: "", title: "Empty", url: "https://shop.example/a" }],
+    ["a whitespace-only image", { image: "   ", title: "Blank", url: "https://shop.example/a" }],
     /* A row is unvalidated stored JSON: only a string can name an image. */
     ["a numeric image", { image: 42, title: "Numeric", url: "https://shop.example/a" }],
   ])("draws the card without an image for %s", (_case, row) => {

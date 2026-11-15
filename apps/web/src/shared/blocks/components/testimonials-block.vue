@@ -23,12 +23,15 @@ function layoutOf(value: string | undefined): TestimonialsLayout {
 }
 
 /**
- * The field offers 1–5 with a step of one, and a stored row is unvalidated JSON: `clampNumber` keeps
- * the value inside the five stars, and rounding keeps a fraction from drawing part of a star. A
- * missing or non-numeric rating reads as no stars, which is what `0` means here — not one star.
+ * The field offers 1–5 with a step of one, and a stored row is unvalidated JSON: a rating may arrive as
+ * a numeric string — a cleared editor input round-trips through one — so it is read as a number first.
+ * `clampNumber` keeps it inside the five stars and rounding keeps a fraction from drawing part of a
+ * star, while an unreadable value draws no stars, which is what `0` means here.
  */
 function starCount(value: unknown): number {
-  return Math.round(clampNumber(value, 0, MAX_RATING, 0));
+  const rating = typeof value === "string" ? Number(value.trim()) : value;
+
+  return Math.round(clampNumber(rating, 0, MAX_RATING, 0));
 }
 
 /**
@@ -58,10 +61,8 @@ const bp = computed(() => {
           quote,
           author: rowText(row.author),
           role: rowText(row.role),
-          avatar:
-            typeof row.avatar === "string"
-              ? resolveBlockImageUrl(row.avatar, { origin: config.public.backendUrl })
-              : undefined,
+          /* `rowText` also turns a whitespace-only avatar into blank, so it never reaches the storage url. */
+          avatar: resolveBlockImageUrl(rowText(row.avatar), { origin: config.public.backendUrl }),
           stars: starCount(row.rating),
         },
       ];

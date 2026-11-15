@@ -58,10 +58,8 @@ const bp = computed(() => {
 
       return [
         {
-          image:
-            typeof row.image === "string"
-              ? resolveBlockImageUrl(row.image, { origin: config.public.backendUrl })
-              : undefined,
+          /* `rowText` also turns a whitespace-only image into blank, so it never reaches the storage url. */
+          image: resolveBlockImageUrl(rowText(row.image), { origin: config.public.backendUrl }),
           title,
           subtitle: rowText(row.subtitle),
           price: rowText(row.price),
