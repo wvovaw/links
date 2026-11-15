@@ -1,4 +1,4 @@
-import { IsIn, IsISO8601, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsIn, IsISO8601, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 import type { BlockEventKind } from "../block-event.entity";
 
@@ -9,8 +9,9 @@ import { blockEventKinds } from "../block-event.entity";
  * field here is also what makes any other field — an ip, a user agent — a 400.
  */
 export class RecordBlockEventDto {
-  /** A block id is a handful of random characters; the cap keeps a public write from storing a novel. */
+  /** A block id is a handful of random characters; the bounds keep a public write from storing a novel. */
   @IsString()
+  @MinLength(1)
   @MaxLength(64)
   blockId!: string;
 

@@ -28,10 +28,10 @@ describe("BlockStats", () => {
     mocks.getLinkStats.mockReset();
   });
 
-  it("shows the counters the page collected for the selected block", async () => {
+  it("shows the clicks the page collected for the selected block", async () => {
     counted([{ blockId: "b1", clicks: 3, views: 7 }]);
 
-    expect(await countersOf("b1")).toEqual(["3", "7"]);
+    expect(await countersOf("b1")).toEqual(["3"]);
     expect(mocks.getLinkStats).toHaveBeenCalledWith("link-1");
   });
 
@@ -39,12 +39,12 @@ describe("BlockStats", () => {
   it("shows zeros for a block no event was recorded for", async () => {
     counted([]);
 
-    expect(await countersOf("b2")).toEqual(["0", "0"]);
+    expect(await countersOf("b2")).toEqual(["0"]);
   });
 
   it("shows zeros when the counters cannot be read at all", async () => {
     mocks.getLinkStats.mockResolvedValue([]);
 
-    expect(await countersOf("b1")).toEqual(["0", "0"]);
+    expect(await countersOf("b1")).toEqual(["0"]);
   });
 });

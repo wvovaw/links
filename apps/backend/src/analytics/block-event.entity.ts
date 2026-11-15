@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 import { Link } from "../links/link.entity";
 
@@ -18,6 +18,8 @@ export class BlockEvent {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
+  /** Every read of this table starts at one page, so the aggregation is an index scan, not a table scan. */
+  @Index()
   @Column({ type: "varchar" })
   linkId!: string;
 

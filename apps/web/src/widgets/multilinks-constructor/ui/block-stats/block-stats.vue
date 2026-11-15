@@ -25,21 +25,20 @@ onMounted(async () => {
 const counters = computed<BlockStats>(
   () => stats.value.find((entry) => entry.blockId === props.blockId) ?? { blockId: props.blockId, clicks: 0, views: 0 },
 );
+
+/*
+  Only clicks are shown. The API stores and aggregates views as well, but nothing in the app reports an
+  impression yet, so a Views cell could only ever read 0 — a metric that is never filled is a lie, not a
+  placeholder. Impressions need their own design: a beacon per block per visit would exhaust the per-block
+  window and answer 429 to real clicks.
+*/
 </script>
 
 <template>
-  <dl class="flex gap-6">
-    <div class="flex flex-col">
-      <dt class="text-moon-12 text-trunks">Clicks</dt>
-      <dd class="text-moon-16 font-semibold">
-        {{ counters.clicks }}
-      </dd>
-    </div>
-    <div class="flex flex-col">
-      <dt class="text-moon-12 text-trunks">Views</dt>
-      <dd class="text-moon-16 font-semibold">
-        {{ counters.views }}
-      </dd>
-    </div>
+  <dl class="flex flex-col">
+    <dt class="text-moon-12 text-trunks">Clicks</dt>
+    <dd class="text-moon-16 font-semibold">
+      {{ counters.clicks }}
+    </dd>
   </dl>
 </template>

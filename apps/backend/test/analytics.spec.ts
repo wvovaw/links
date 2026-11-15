@@ -13,6 +13,15 @@ import { createTestApp } from "./create-test-app";
 type Agent = Awaited<ReturnType<typeof authenticate>>;
 
 /**
+ * The stored page content the public endpoint reads block ids from. Only the ids matter to analytics, but a
+ * page with no blocks could report nothing at all.
+ */
+const pageBlocks = [
+  { id: "b1", name: "Paragraph", properties: {} },
+  { id: "b2", name: "Button", properties: {} },
+];
+
+/**
  * A page owned by a fresh account, already moved to `status`. Every test gets its own page, which is
  * what isolates it from the analytics window: the window is keyed by link and block.
  */
@@ -21,10 +30,14 @@ async function pageWithStatus(app: INestApplication, status: LinkStatus) {
   const slug = `page-${randomUUID().slice(0, 8)}`;
 
   const created = await agent.post("/links").send({ slug, title: "Analytics test page" }).expect(201);
-  await agent.patch(`/links/${created.body.id}/content`).send({ status }).expect(200);
+  await agent.patch(`/links/${created.body.id}/content`).send({ blocks: pageBlocks, status }).expect(200);
 
   return { agent, id: created.body.id as string, slug };
 }
+
+/** The one public write these tests exercise. */
+const postEvent = (app: INestApplication, slug: string, body: { blockId: string; kind: string }) =>
+  request(app.getHttpServer()).post(`/public/links/${slug}/events`).send(body);
 
 const publishPage = (app: INestApplication) => pageWithStatus(app, LinkStatus.PUBLISHED);
 const draftPage = (app: INestApplication) => pageWithStatus(app, LinkStatus.DRAFT);
@@ -106,12 +119,37 @@ describe("block analytics", () => {
     const responses = await Promise.all(Array.from({ length: 70 }, () => post("b1")));
     const accepted = responses.filter((response) => response.status === 201).length;
 
-    expect(accepted).toBeLessThanOrEqual(60);
+    expect(accepted).toBe(60);
     expect(responses.some((response) => response.status === 429)).toBe(true);
     expect(await eventCount(app, id)).toBe(accepted);
 
     /* The window belongs to the block: one busy block must not silence the rest of the page. */
     expect((await post("b2")).status).toBe(201);
+  });
+
+  /* The id is the window key and a row of its own: one the page does not hold may do neither. */
+  it("refuses a block the page does not hold", async () => {
+    const { id, slug } = await publishPage(app);
+
+    expect((await postEvent(app, slug, { blockId: "not-a-block", kind: "click" })).status).toBe(400);
+    expect(await eventCount(app, id)).toBe(0);
+  });
+
+  it("keeps the window bounded to the blocks the page holds", async () => {
+    const { id, slug } = await publishPage(app);
+
+    const foreign = await Promise.all(
+      Array.from({ length: 70 }, (_, index) => postEvent(app, slug, { blockId: `foreign-${index}`, kind: "click" })),
+    );
+    expect(foreign.every((response) => response.status === 400)).toBe(true);
+
+    /* A window full of invented ids would answer 429 here; the page's own block still gets its full 60. */
+    const real = await Promise.all(
+      Array.from({ length: 60 }, () => postEvent(app, slug, { blockId: "b1", kind: "click" })),
+    );
+    expect(real.every((response) => response.status === 201)).toBe(true);
+
+    expect(await eventCount(app, id)).toBe(60);
   });
 
   it("counts only the window a caller asks about", async () => {

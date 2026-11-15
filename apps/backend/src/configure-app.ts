@@ -13,6 +13,8 @@ export function configureApp(app: INestApplication) {
   app.enableCors({
     origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
     credentials: true,
+    /* A beacon posts a json blob, which is not a simple request: without this every click preflights. */
+    maxAge: 600,
   });
 
   app.use(cookieParser());

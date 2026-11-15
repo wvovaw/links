@@ -11,7 +11,7 @@ export async function getLinkStats(id: string): Promise<BlockStats[]> {
     const api = useApiClient();
     const { blocks } = await api<{ blocks: BlockStats[] }>(`/links/${id}/stats`);
 
-    return blocks;
+    return blocks ?? [];
   } catch {
     return [];
   }
