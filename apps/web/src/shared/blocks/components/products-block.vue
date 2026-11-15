@@ -93,9 +93,16 @@ const bp = computed(() => {
           <p v-if="row.subtitle" class="products-block__subtitle">{{ row.subtitle }}</p>
           <div v-if="(bp.showPrice && row.price) || row.href" class="products-block__footer">
             <p v-if="bp.showPrice && row.price" class="products-block__price">{{ row.price }}</p>
-            <a v-if="row.href" class="products-block__cta" :href="row.href" target="_blank" rel="noopener noreferrer">{{
-              bp.ctaLabel
-            }}</a>
+            <!-- A screen reader lists the buttons on their own, so each one names its own product. -->
+            <a
+              v-if="row.href"
+              class="products-block__cta"
+              :href="row.href"
+              :aria-label="`${bp.ctaLabel}: ${row.title}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ bp.ctaLabel }}</a
+            >
           </div>
         </div>
       </li>

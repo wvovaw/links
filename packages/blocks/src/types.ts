@@ -146,7 +146,7 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
   },
   Products: {
     label: "Products",
-    description: "A list or a grid of products with prices and a link to checkout.",
+    description: "A list or a grid of products with prices and a link to their checkout.",
     icon: "i-lucide:shopping-bag",
     category: "Commerce",
     keywords: ["products", "shop", "store", "price", "buy", "checkout", "payment link", "merch"],

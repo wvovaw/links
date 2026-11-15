@@ -1596,6 +1596,22 @@ describe("ProductsBlock", () => {
     ).toBe("Buy");
   });
 
+  /*
+    A block whose point is selling draws one button per card, and a screen reader lists those buttons
+    outside their cards: without a name of its own every one of them announces "Buy".
+  */
+  it("names each button after its own product, keeping the visible text", () => {
+    const ctas = wrapperOf({ ...two, "cta-label": "Купить" }).findAll(".products-block__cta");
+
+    expect(ctas.map((cta) => cta.attributes("aria-label"))).toEqual(["Купить: Кружка", "Купить: Tote bag"]);
+    /* The accessible name still opens with the visible text, so voice control keeps working. */
+    expect(ctas.map((cta) => cta.text())).toEqual(["Купить", "Купить"]);
+  });
+
+  it("names each button after its own product with the default label too", () => {
+    expect(wrapperOf(two).get(".products-block__cta").attributes("aria-label")).toBe("Buy: Кружка");
+  });
+
   it("shows the prices unless the switch is off", () => {
     expect(cardsOf({ ...two, "show-price": false })).toHaveLength(2);
     expect(
