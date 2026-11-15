@@ -1249,6 +1249,14 @@ describe("FaqBlock", () => {
     expect(wrapper.get(".faq-block__title").text()).toBe("Common questions");
   });
 
+  /* The heading is the block's own content: only the disclosure list is empty when no row is complete. */
+  it("keeps the title when every row is half-filled", () => {
+    const wrapper = wrapperOf({ title: "Common questions", items: [{ question: "No answer yet", answer: "" }] });
+
+    expect(wrapper.get(".faq-block__title").text()).toBe("Common questions");
+    expect(wrapper.findAll("details")).toHaveLength(0);
+  });
+
   it.each([
     ["not stored", {}],
     ["blank", { title: "   " }],

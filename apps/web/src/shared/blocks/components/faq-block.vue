@@ -49,13 +49,11 @@ const bp = computed(() => {
 
 <template>
   <div class="faq-block" :class="`faq-block--${bp.divider}`">
-    <template v-if="bp.rows.length">
-      <h2 v-if="bp.title" class="faq-block__title">{{ bp.title }}</h2>
-      <details v-for="(row, index) of bp.rows" :key="index" class="faq-block__item" :name="bp.group">
-        <summary class="faq-block__question">{{ row.question }}</summary>
-        <p class="faq-block__answer">{{ row.answer }}</p>
-      </details>
-    </template>
+    <h2 v-if="bp.title" class="faq-block__title">{{ bp.title }}</h2>
+    <details v-for="(row, index) of bp.rows" :key="index" class="faq-block__item" :name="bp.group">
+      <summary class="faq-block__question">{{ row.question }}</summary>
+      <p class="faq-block__answer">{{ row.answer }}</p>
+    </details>
   </div>
 </template>
 
