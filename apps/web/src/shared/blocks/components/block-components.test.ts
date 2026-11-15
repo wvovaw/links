@@ -11,6 +11,7 @@ import HeadingBlock from "./heading-block.vue";
 import MusicBlock from "./music-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
+import SocialIconsBlock from "./social-icons-block.vue";
 import SpacerBlock from "./spacer-block.vue";
 import VideoBlock from "./video-block.vue";
 
@@ -562,5 +563,116 @@ describe("MusicBlock", () => {
 
     expect(wrapper.find("iframe").exists()).toBe(false);
     expect(wrapper.get(".music-block__placeholder").text()).toBe(url);
+  });
+});
+
+describe("SocialIconsBlock", () => {
+  const filled = {
+    telegram: "https://t.me/me",
+    instagram: "instagram.com/me",
+    email: "me@example.com",
+  };
+
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(SocialIconsBlock, { props: { properties: blockOf("SocialIcons", values).properties } });
+  }
+
+  it("draws only the slots that were filled, in slot order", () => {
+    const links = wrapperOf(filled).findAll("a");
+
+    expect(links.map((link) => link.attributes("href"))).toEqual([
+      "https://t.me/me",
+      "https://instagram.com/me",
+      "mailto:me@example.com",
+    ]);
+  });
+
+  it("opens a web link in a new tab without a referrer", () => {
+    const [telegram] = wrapperOf(filled).findAll("a");
+
+    expect(telegram!.attributes("target")).toBe("_blank");
+    expect(telegram!.attributes("rel")).toBe("noopener noreferrer");
+  });
+
+  it("hands the email over in place, with neither a target nor a referrer", () => {
+    const email = wrapperOf(filled).get("a[href^='mailto:']");
+
+    expect(email.attributes("href")).toBe("mailto:me@example.com");
+    expect(email.attributes("target")).toBeUndefined();
+    expect(email.attributes("rel")).toBeUndefined();
+  });
+
+  it("draws the slot's icon and names it for a screen reader", () => {
+    const [telegram] = wrapperOf({ telegram: "t.me/me" }).findAll("a");
+
+    expect(telegram!.get(".social-icons-block__icon").classes()).toContain("i-simple-icons:telegram");
+    expect(telegram!.attributes("aria-label")).toBe("Telegram");
+  });
+
+  it("uses the mail icon for the email slot", () => {
+    const email = wrapperOf({ email: "me@example.com" }).get("a[href^='mailto:']");
+
+    expect(email.get(".social-icons-block__icon").classes()).toContain("i-lucide:mail");
+  });
+
+  it.each([
+    ["every slot empty", {}],
+    ["a whitespace-only slot", { telegram: "   " }],
+  ])("renders nothing at all for %s", (_case, values) => {
+    const wrapper = wrapperOf(values);
+
+    expect(wrapper.find(".social-icons-block").exists()).toBe(false);
+    expect(wrapper.findAll("a")).toHaveLength(0);
+  });
+
+  it.each([
+    ["filled", { "--social-bg": "var(--links-page-accent)", "--social-fg": "#fff", "--social-border": "transparent" }],
+    [
+      "outline",
+      {
+        "--social-bg": "transparent",
+        "--social-fg": "var(--links-page-accent)",
+        "--social-border": "var(--links-page-accent)",
+      },
+    ],
+    [
+      "plain",
+      { "--social-bg": "transparent", "--social-fg": "var(--links-page-fg)", "--social-border": "transparent" },
+    ],
+  ])("draws the %s variant", (variant, expected) => {
+    const style =
+      wrapperOf({ ...filled, variant })
+        .get(".social-icons-block")
+        .attributes("style") ?? "";
+
+    for (const [token, value] of Object.entries(expected)) expect(style).toContain(`${token}: ${value}`);
+  });
+
+  it("draws the filled variant, the 24px icon and the centre alignment when nothing is stored", () => {
+    const style = wrapperOf(filled).get(".social-icons-block").attributes("style") ?? "";
+
+    expect(style).toContain("--social-bg: var(--links-page-accent)");
+    expect(style).toContain("--social-size: 24px");
+    expect(style).toContain("--social-align: center");
+  });
+
+  it("takes the icon size and the alignment from the stored properties", () => {
+    const style =
+      wrapperOf({ ...filled, size: 40, align: "left" })
+        .get(".social-icons-block")
+        .attributes("style") ?? "";
+
+    expect(style).toContain("--social-size: 40px");
+    expect(style).toContain("--social-align: left");
+  });
+
+  it("falls back to the defaults for a stored style and alignment outside the palette", () => {
+    const style =
+      wrapperOf({ ...filled, variant: "square", align: "justify" })
+        .get(".social-icons-block")
+        .attributes("style") ?? "";
+
+    expect(style).toContain("--social-bg: var(--links-page-accent)");
+    expect(style).toContain("--social-align: center");
   });
 });

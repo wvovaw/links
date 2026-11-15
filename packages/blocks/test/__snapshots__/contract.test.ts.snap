@@ -506,6 +506,120 @@ exports[`Picture > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`SocialIcons > has a pinned schema snapshot 1`] = `
+{
+  "align": {
+    "defaultValue": "center",
+    "group": "Appearance",
+    "id": 10,
+    "label": "Alignment",
+    "options": [
+      {
+        "label": "Left",
+        "value": "left",
+      },
+      {
+        "label": "Center",
+        "value": "center",
+      },
+      {
+        "label": "Right",
+        "value": "right",
+      },
+    ],
+    "type": "select",
+  },
+  "email": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "An address, or a mailto: link",
+    "id": 7,
+    "label": "Email",
+    "type": "url",
+  },
+  "instagram": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 1,
+    "label": "Instagram",
+    "type": "url",
+  },
+  "size": {
+    "defaultValue": 24,
+    "group": "Appearance",
+    "id": 9,
+    "label": "Icon size",
+    "max": 48,
+    "min": 16,
+    "step": 1,
+    "type": "number",
+  },
+  "telegram": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Telegram",
+    "type": "url",
+  },
+  "tiktok": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 3,
+    "label": "TikTok",
+    "type": "url",
+  },
+  "variant": {
+    "defaultValue": "filled",
+    "group": "Appearance",
+    "id": 8,
+    "label": "Style",
+    "options": [
+      {
+        "label": "Filled",
+        "value": "filled",
+      },
+      {
+        "label": "Outline",
+        "value": "outline",
+      },
+      {
+        "label": "Plain",
+        "value": "plain",
+      },
+    ],
+    "type": "select",
+  },
+  "vk": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 5,
+    "label": "VK",
+    "type": "url",
+  },
+  "whatsapp": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 6,
+    "label": "WhatsApp",
+    "type": "url",
+  },
+  "x": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 4,
+    "label": "X",
+    "type": "url",
+  },
+  "youtube": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 2,
+    "label": "YouTube",
+    "type": "url",
+  },
+}
+`;
+
 exports[`Spacer > has a pinned schema snapshot 1`] = `
 {
   "height": {

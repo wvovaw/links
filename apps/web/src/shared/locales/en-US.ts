@@ -27,6 +27,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Paragraph.description": "A block of text for a bio, an address or a note.",
     "blocks.Picture.label": "Picture",
     "blocks.Picture.description": "A single image with an optional caption.",
+    "blocks.SocialIcons.label": "Social icons",
+    "blocks.SocialIcons.description": "A row of icons linking to your social profiles and an email address.",
     "blocks.Spacer.label": "Spacer",
     "blocks.Spacer.description": "Empty space between two blocks.",
     "blocks.Video.label": "Video",

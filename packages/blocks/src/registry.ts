@@ -7,6 +7,7 @@ import HeadingModule from "./blocks/heading";
 import MusicModule from "./blocks/music";
 import ParagraphModule from "./blocks/paragraph";
 import PictureModule from "./blocks/picture";
+import SocialIconsModule from "./blocks/social-icons";
 import SpacerModule from "./blocks/spacer";
 import VideoModule from "./blocks/video";
 
@@ -22,6 +23,7 @@ export const registry: Registry = {
   Music: MusicModule,
   Paragraph: ParagraphModule,
   Picture: PictureModule,
+  SocialIcons: SocialIconsModule,
   Spacer: SpacerModule,
   Video: VideoModule,
 };

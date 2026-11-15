@@ -6,6 +6,7 @@ export const BLOCK_NAMES = [
   "Music",
   "Paragraph",
   "Picture",
+  "SocialIcons",
   "Spacer",
   "Video",
 ] as const;
@@ -36,6 +37,7 @@ export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:align-left",
   "i-lucide:image",
   "i-lucide:move-vertical",
+  "i-lucide:share-2",
   "i-lucide:video",
 ];
 
@@ -101,6 +103,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     icon: "i-lucide:image",
     category: "Media",
     keywords: ["image", "photo", "gallery"],
+  },
+  SocialIcons: {
+    label: "Social icons",
+    description: "A row of icons linking to your social profiles and an email address.",
+    icon: "i-lucide:share-2",
+    category: "Social",
+    keywords: ["social", "telegram", "instagram", "youtube", "tiktok", "x", "vk", "whatsapp", "email", "contacts"],
   },
   Spacer: {
     label: "Spacer",

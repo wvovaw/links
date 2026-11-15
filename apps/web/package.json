@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.154",
+    "@iconify-json/simple-icons": "^1.2.102",
     "@iconify-json/vscode-icons": "^1.2.98",
     "@links/blocks": "workspace:*",
     "@links/ui": "workspace:*",

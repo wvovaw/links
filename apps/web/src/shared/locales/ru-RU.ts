@@ -26,6 +26,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Paragraph.description": "Блок текста для описания, адреса или заметки.",
     "blocks.Picture.label": "Изображение",
     "blocks.Picture.description": "Одно изображение с необязательной подписью.",
+    "blocks.SocialIcons.label": "Соцсети",
+    "blocks.SocialIcons.description": "Ряд значков со ссылками на ваши профили в соцсетях и адрес почты.",
     "blocks.Spacer.label": "Отступ",
     "blocks.Spacer.description": "Пустое пространство между двумя блоками.",
     "blocks.Video.label": "Видео",
