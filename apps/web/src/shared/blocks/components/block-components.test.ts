@@ -4,12 +4,14 @@ import type { VueWrapper } from "@vue/test-utils";
 import { createBlock } from "@links/blocks";
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
+import { renderToString } from "vue/server-renderer";
 
 import AvatarBlock from "./avatar-block.vue";
 import ButtonBlock from "./button-block.vue";
 import CountdownBlock from "./countdown-block.vue";
 import DividerBlock from "./divider-block.vue";
+import FaqBlock from "./faq-block.vue";
 import HeadingBlock from "./heading-block.vue";
 import MapBlock from "./map-block.vue";
 import MusicBlock from "./music-block.vue";
@@ -1152,5 +1154,143 @@ describe("CountdownBlock", () => {
     wrapper.unmount();
 
     expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe("FaqBlock", () => {
+  const three = {
+    items: [
+      { question: "How do I start?", answer: "Add the first block." },
+      { question: "Is it free?", answer: "Yes." },
+      { question: "Where is it?", answer: "Online." },
+    ],
+  };
+
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(FaqBlock, { props: { properties: blockOf("Faq", values).properties } });
+  }
+
+  function groupNames(values: Record<string, unknown> = {}) {
+    return wrapperOf(values)
+      .findAll("details")
+      .map((item) => item.attributes("name"));
+  }
+
+  /* The disclosure is native, so the answer ships in the HTML whether or not a visitor opens it. */
+  it("renders every answer inside a closed native details", () => {
+    const items = wrapperOf(three).findAll("details");
+
+    expect(items).toHaveLength(3);
+    expect(items.map((item) => item.get("summary").text())).toEqual(["How do I start?", "Is it free?", "Where is it?"]);
+    expect(items[0]!.attributes("open")).toBeUndefined();
+    expect(items[0]!.get(".faq-block__answer").text()).toBe("Add the first block.");
+  });
+
+  /* The page is server-rendered, so a crawler that never runs a script still reads every answer. */
+  it("ships the answers in the server-rendered markup", async () => {
+    const html = await renderToString(h(FaqBlock, { properties: blockOf("Faq", three).properties }));
+
+    expect(html).toContain("<details");
+    expect(html).toContain("Add the first block.");
+    expect(html).toContain("Yes.");
+  });
+
+  it.each([
+    ["an empty answer", { question: "No answer yet", answer: "" }],
+    ["a blank answer", { question: "Still no answer", answer: "   " }],
+    ["an empty question", { question: "", answer: "No question yet" }],
+    ["a half-saved row", { question: null, answer: null }],
+  ])("draws no details for %s", (_case, row) => {
+    const wrapper = wrapperOf({ items: [row] });
+
+    expect(wrapper.findAll("details")).toHaveLength(0);
+  });
+
+  it("draws the complete rows around a half-saved one", () => {
+    const wrapper = wrapperOf({
+      items: [{ question: "Kept?", answer: "Yes." }, { question: "Half", answer: "" }, three.items[1]],
+    });
+
+    expect(wrapper.findAll("summary").map((item) => item.text())).toEqual(["Kept?", "Is it free?"]);
+  });
+
+  it("names every details into one group, so a browser closes the others", () => {
+    const names = groupNames(three);
+
+    expect(names[0]).toBeTruthy();
+    expect(new Set(names).size).toBe(1);
+  });
+
+  /* Two FAQs on one page share the document: a constant group name would close the other block's answers. */
+  it("gives each FAQ block on a page a group of its own", () => {
+    const properties = blockOf("Faq", three).properties;
+    const Page = defineComponent({
+      render: () => h("div", [h(FaqBlock, { properties }), h(FaqBlock, { properties })]),
+    });
+
+    const names = mount(Page)
+      .findAll("details")
+      .map((item) => item.attributes("name"));
+
+    expect(names).toHaveLength(6);
+    expect(new Set(names).size).toBe(2);
+  });
+
+  it("leaves the answers independent when several may stay open", () => {
+    const names = groupNames({ ...three, "allow-multiple": true });
+
+    expect(names).toHaveLength(3);
+    for (const name of names) expect(name).toBeUndefined();
+  });
+
+  it("draws the section title above the questions", () => {
+    const wrapper = wrapperOf({ ...three, title: "Common questions" });
+
+    expect(wrapper.get(".faq-block__title").text()).toBe("Common questions");
+  });
+
+  it.each([
+    ["not stored", {}],
+    ["blank", { title: "   " }],
+  ])("draws no heading when the title is %s", (_case, values) => {
+    expect(
+      wrapperOf({ ...three, ...values })
+        .find(".faq-block__title")
+        .exists(),
+    ).toBe(false);
+  });
+
+  it.each(["line", "filled", "none"])("draws the %s divider", (divider) => {
+    expect(
+      wrapperOf({ ...three, "divider-style": divider })
+        .get(".faq-block")
+        .classes(),
+    ).toContain(`faq-block--${divider}`);
+  });
+
+  it("draws the line divider for a style outside the palette", () => {
+    expect(
+      wrapperOf({ ...three, "divider-style": "dotted" })
+        .get(".faq-block")
+        .classes(),
+    ).toContain("faq-block--line");
+  });
+
+  /* A long answer is ordinary input: the markup must carry it whole rather than a truncated copy. */
+  it("keeps a long answer and a long question in one piece", () => {
+    const question = "Why? ".repeat(60).trim();
+    const answer = "word ".repeat(60).trim();
+    const wrapper = wrapperOf({ items: [{ question, answer }] });
+
+    expect(wrapper.get("summary").text()).toBe(question);
+    expect(wrapper.get(".faq-block__answer").text()).toBe(answer);
+  });
+
+  /* An empty FAQ is one line tall so the constructor can still select it; nothing is drawn in it. */
+  it("keeps the box for a block with no complete rows", () => {
+    const wrapper = wrapperOf();
+
+    expect(wrapper.get(".faq-block").element.tagName).toBe("DIV");
+    expect(wrapper.findAll("details")).toHaveLength(0);
   });
 });

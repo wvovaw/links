@@ -20,6 +20,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Countdown.description": "Обратный отсчёт до заданной даты и времени.",
     "blocks.Divider.label": "Разделитель",
     "blocks.Divider.description": "Линия или отступ, разделяющие два блока.",
+    "blocks.Faq.label": "Вопросы и ответы",
+    "blocks.Faq.description": "Вопросы и ответы, которые раскрываются на месте.",
     "blocks.Heading.label": "Заголовок",
     "blocks.Heading.description": "Заголовок, с которого начинается раздел страницы.",
     "blocks.Map.label": "Карта",

@@ -314,6 +314,77 @@ exports[`Divider > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Faq > has a pinned schema snapshot 1`] = `
+{
+  "allow-multiple": {
+    "defaultValue": false,
+    "group": "Behaviour",
+    "hint": "When off, opening an answer closes the others.",
+    "id": 2,
+    "label": "Allow several answers open",
+    "type": "boolean",
+    "variant": "switch",
+  },
+  "divider-style": {
+    "defaultValue": "line",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Divider",
+    "options": [
+      {
+        "label": "Line",
+        "value": "line",
+      },
+      {
+        "label": "Filled",
+        "value": "filled",
+      },
+      {
+        "label": "None",
+        "value": "none",
+      },
+    ],
+    "type": "select",
+  },
+  "items": {
+    "defaultValue": [],
+    "group": "Content",
+    "id": 1,
+    "itemFields": [
+      {
+        "defaultValue": null,
+        "id": 0,
+        "key": "question",
+        "label": "Question",
+        "required": true,
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "id": 1,
+        "key": "answer",
+        "label": "Answer",
+        "multiline": true,
+        "required": true,
+        "type": "text",
+      },
+    ],
+    "label": "Questions",
+    "maxItems": 40,
+    "minItems": 1,
+    "type": "list",
+  },
+  "title": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "Shown above the questions",
+    "id": 0,
+    "label": "Section title",
+    "type": "text",
+  },
+}
+`;
+
 exports[`Heading > has a pinned schema snapshot 1`] = `
 {
   "align": {

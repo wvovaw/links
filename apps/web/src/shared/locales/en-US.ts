@@ -20,6 +20,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Countdown.description": "A live countdown to a date and time.",
     "blocks.Divider.label": "Divider",
     "blocks.Divider.description": "A line or a gap that separates two blocks.",
+    "blocks.Faq.label": "FAQ",
+    "blocks.Faq.description": "Questions and answers that open in place.",
     "blocks.Heading.label": "Heading",
     "blocks.Heading.description": "A title that starts a section of the page.",
     "blocks.Map.label": "Map",
