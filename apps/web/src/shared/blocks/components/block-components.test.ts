@@ -8,6 +8,7 @@ import AvatarBlock from "./avatar-block.vue";
 import ButtonBlock from "./button-block.vue";
 import DividerBlock from "./divider-block.vue";
 import HeadingBlock from "./heading-block.vue";
+import MusicBlock from "./music-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
 import SpacerBlock from "./spacer-block.vue";
@@ -481,5 +482,75 @@ describe("VideoBlock", () => {
 
     expect(wrapper.find("iframe").exists()).toBe(false);
     expect(wrapper.get(".video-block__placeholder").text()).toBe(url);
+  });
+});
+
+describe("MusicBlock", () => {
+  const spotify = { provider: "spotify", url: "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT" };
+
+  function frameOf(values: Record<string, unknown>) {
+    return mount(MusicBlock, { props: { properties: blockOf("Music", values).properties } }).get("iframe");
+  }
+
+  it("embeds the mapped link in the provider's own player", () => {
+    const frame = frameOf(spotify);
+
+    expect(frame.attributes("src")).toBe("https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT");
+    expect(frame.attributes("title")).toBe("Music");
+    expect(frame.attributes("loading")).toBe("lazy");
+  });
+
+  it.each([
+    [
+      "soundcloud",
+      "https://soundcloud.com/artist/track",
+      `https://w.soundcloud.com/player/?url=${encodeURIComponent("https://soundcloud.com/artist/track")}`,
+    ],
+    [
+      "apple-music",
+      "https://music.apple.com/us/album/x/1234567890",
+      "https://embed.music.apple.com/us/album/x/1234567890",
+    ],
+    ["youtube-music", "https://music.youtube.com/watch?v=dQw4w9WgXcQ", "https://www.youtube.com/embed/dQw4w9WgXcQ"],
+  ])("maps a %s link to its player", (provider, url, expected) => {
+    expect(frameOf({ provider, url }).attributes("src")).toBe(expected);
+  });
+
+  it.each([
+    ["compact", "152px"],
+    ["full", "352px"],
+  ])("draws the %s height", (height, expected) => {
+    const style = mount(MusicBlock, { props: { properties: blockOf("Music", { ...spotify, height }).properties } })
+      .get(".music-block")
+      .attributes("style");
+
+    expect(style).toContain(`--music-height: ${expected}`);
+  });
+
+  it("keeps the compact height when none is stored", () => {
+    const block = blockOf("Music", spotify);
+    delete block.properties.height;
+
+    const style = mount(MusicBlock, { props: { properties: block.properties } })
+      .get(".music-block")
+      .attributes("style");
+
+    expect(style).toContain("--music-height: 152px");
+  });
+
+  it("falls back to spotify for a provider outside the palette", () => {
+    expect(frameOf({ provider: "deezer", url: spotify.url }).attributes("src")).toBe(
+      "https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT",
+    );
+  });
+
+  it.each([
+    ["a link of another site", "https://example.com/x"],
+    ["no link at all", ""],
+  ])("shows the stored link instead of an iframe for %s", (_case, url) => {
+    const wrapper = mount(MusicBlock, { props: { properties: blockOf("Music", { ...spotify, url }).properties } });
+
+    expect(wrapper.find("iframe").exists()).toBe(false);
+    expect(wrapper.get(".music-block__placeholder").text()).toBe(url);
   });
 });

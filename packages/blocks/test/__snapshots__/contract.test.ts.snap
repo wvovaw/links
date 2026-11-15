@@ -312,6 +312,62 @@ exports[`Heading > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Music > has a pinned schema snapshot 1`] = `
+{
+  "height": {
+    "defaultValue": "compact",
+    "group": "Appearance",
+    "id": 2,
+    "label": "Height",
+    "options": [
+      {
+        "label": "Compact",
+        "value": "compact",
+      },
+      {
+        "label": "Full",
+        "value": "full",
+      },
+    ],
+    "type": "select",
+  },
+  "provider": {
+    "defaultValue": "spotify",
+    "group": "Content",
+    "id": 0,
+    "label": "Provider",
+    "options": [
+      {
+        "label": "Spotify",
+        "value": "spotify",
+      },
+      {
+        "label": "SoundCloud",
+        "value": "soundcloud",
+      },
+      {
+        "label": "Apple Music",
+        "value": "apple-music",
+      },
+      {
+        "label": "YouTube Music",
+        "value": "youtube-music",
+      },
+    ],
+    "type": "select",
+  },
+  "url": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "A share link from the provider",
+    "id": 1,
+    "label": "Music link",
+    "required": true,
+    "type": "url",
+  },
+}
+`;
+
 exports[`Paragraph > has a pinned schema snapshot 1`] = `
 {
   "align": {

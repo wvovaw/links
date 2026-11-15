@@ -20,6 +20,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Divider.description": "Линия или отступ, разделяющие два блока.",
     "blocks.Heading.label": "Заголовок",
     "blocks.Heading.description": "Заголовок, с которого начинается раздел страницы.",
+    "blocks.Music.label": "Музыка",
+    "blocks.Music.description": "Трек, альбом или плейлист из Spotify, SoundCloud, Apple Music или YouTube Music.",
     "blocks.Paragraph.label": "Параграф",
     "blocks.Paragraph.description": "Блок текста для описания, адреса или заметки.",
     "blocks.Picture.label": "Изображение",
