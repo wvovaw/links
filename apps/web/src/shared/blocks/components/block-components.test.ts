@@ -798,11 +798,11 @@ describe("CountdownBlock", () => {
     expect(wrapper.find(".countdown-block").exists()).toBe(false);
   });
 
-  it("draws the remaining hours, minutes and seconds", async () => {
+  it("draws all four parts, the days included while they are zero", async () => {
     const wrapper = await wrapperOf();
 
-    expect(valuesOf(wrapper)).toEqual(["00", "01", "00"]);
-    expect(wrapper.findAll(".countdown-block__unit-label").map((label) => label.text())).toEqual(["h", "m", "s"]);
+    expect(valuesOf(wrapper)).toEqual(["00", "00", "01", "00"]);
+    expect(wrapper.findAll(".countdown-block__unit-label").map((label) => label.text())).toEqual(["d", "h", "m", "s"]);
   });
 
   it("counts the seconds down on its own", async () => {
@@ -811,13 +811,13 @@ describe("CountdownBlock", () => {
     vi.advanceTimersByTime(1000);
     await nextTick();
 
-    expect(valuesOf(wrapper)).toEqual(["00", "00", "59"]);
+    expect(valuesOf(wrapper)).toEqual(["00", "00", "00", "59"]);
   });
 
-  it("draws the days once there is at least one", async () => {
+  it("carries a long countdown into the same four parts", async () => {
     vi.setSystemTime(new Date("2026-11-25T21:56:56.000Z"));
 
-    expect(valuesOf(await wrapperOf())).toEqual(["5", "02", "03", "04"]);
+    expect(valuesOf(await wrapperOf())).toEqual(["05", "02", "03", "04"]);
   });
 
   it("reads the whole countdown as one line for a screen reader", async () => {
@@ -881,11 +881,25 @@ describe("CountdownBlock", () => {
     );
   });
 
-  it.each([
-    ["no target", { target: "" }],
-    ["a target that is not a date", { target: "nonsense" }],
-  ])("draws nothing at all for %s", async (_case, values) => {
-    expect((await wrapperOf(values)).find(".countdown-block").exists()).toBe(false);
+  /*
+    A block nobody has pointed at a date yet has no countdown to draw — unlike a target that has passed
+    or cannot be read, which the block reports as finished rather than pretending the block is empty.
+  */
+  it("draws nothing at all while the block has no target", async () => {
+    expect((await wrapperOf({ target: "" })).find(".countdown-block").exists()).toBe(false);
+  });
+
+  it("treats a target the parser cannot read as a finished countdown", async () => {
+    const wrapper = await wrapperOf({ target: "nonsense" });
+
+    expect(wrapper.find(".countdown-block__parts").exists()).toBe(false);
+    expect(wrapper.get(".countdown-block__finished").text()).toBe("The countdown has finished");
+  });
+
+  it("draws nothing at all for an unreadable target when the switch is on", async () => {
+    expect(
+      (await wrapperOf({ "target": "nonsense", "hide-after-finish": true })).find(".countdown-block").exists(),
+    ).toBe(false);
   });
 
   it("stops its clock when the block goes away", async () => {

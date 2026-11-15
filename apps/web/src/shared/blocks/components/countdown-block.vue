@@ -47,9 +47,12 @@ onBeforeUnmount(() => {
 const bp = computed(() => {
   const p = props.properties;
   const target = (p.target as IBlockPropertyDate | undefined)?.value ?? "";
-  /* No target, or one the parser cannot read: there is nothing to count down to, so nothing is drawn. */
-  const readable = target !== "" && !Number.isNaN(Date.parse(target));
-  const parts = now.value && readable ? countdownParts(target, now.value) : null;
+  /*
+    Only an empty target draws nothing: a countdown nobody has pointed at a date has nothing to show.
+    A target the parser cannot read is a different case — `countdownParts` calls it finished — so it
+    falls through to the finished text like any target that has already passed.
+  */
+  const parts = now.value && target !== "" ? countdownParts(target, now.value) : null;
   const finished = parts?.finished ?? false;
   const hideAfterFinish = (p["hide-after-finish"] as IBlockPropertyBoolean | undefined)?.value ?? false;
 
@@ -61,10 +64,11 @@ const bp = computed(() => {
     finished,
     finishedText: (p["finished-text"] as IBlockPropertyText | undefined)?.value?.trim() || DEFAULT_FINISHED_TEXT,
     label: parts && !finished ? formatCountdown(parts) : undefined,
+    /* Always four parts: the grid keeps its shape whatever the target is, days included at zero. */
     units:
       parts && !finished
         ? [
-            ...(parts.days > 0 ? [{ key: "days", value: String(parts.days), label: "d" }] : []),
+            { key: "days", value: pad(parts.days), label: "d" },
             { key: "hours", value: pad(parts.hours), label: "h" },
             { key: "minutes", value: pad(parts.minutes), label: "m" },
             { key: "seconds", value: pad(parts.seconds), label: "s" },
