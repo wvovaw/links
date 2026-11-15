@@ -2,7 +2,7 @@ import type { INestApplication } from "@nestjs/common";
 
 import { NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import { mkdir, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import request from "supertest";
 import { DataSource } from "typeorm";
@@ -103,6 +103,32 @@ describe("image uploads", () => {
 
     expect(response.status).toBe(400);
     expect(await readdir(imagesDir())).toEqual(before);
+  });
+
+  /* The second delete removed nothing, so it answers what an unknown id answers — and the record stays gone. */
+  it("answers 404 for a second delete of an image it already removed", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/images").attach("file", Buffer.from(PNG_BYTES), "twice.png").expect(201);
+    const fileId = created.body.fileId as string;
+
+    expect((await agent.delete(`/storage/images/${fileId}`)).status).toBe(204);
+    expect(await hasUploadRecord(app, fileId)).toBe(false);
+
+    expect((await agent.delete(`/storage/images/${fileId}`)).status).toBe(404);
+    expect(await hasUploadRecord(app, fileId)).toBe(false);
+  });
+
+  /* The bytes can be gone while the record remains: a delete that removed nothing is not a 204. */
+  it("answers 404 for an owned image whose bytes are gone, and clears the stale record", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/images").attach("file", Buffer.from(PNG_BYTES), "ghost.png").expect(201);
+    const fileId = created.body.fileId as string;
+
+    await rm(join(imagesDir(), fileId));
+    expect(await hasUploadRecord(app, fileId)).toBe(true);
+
+    expect((await agent.delete(`/storage/images/${fileId}`)).status).toBe(404);
+    expect(await hasUploadRecord(app, fileId)).toBe(false);
   });
 
   /* An uploaded image belongs to its uploader before any page names it, so deleting it early still works. */
@@ -373,6 +399,36 @@ describe("asset uploads", () => {
     await agent.delete(`/storage/assets/${created.body.fileId}`).expect(204);
 
     expect(await hasUploadRecord(app, created.body.fileId)).toBe(false);
+  });
+
+  /*
+    A delete answers 204 only when it removed bytes. An owned id whose bytes are already gone is the same
+    "nothing here" a stranger's id is, so the second delete says 404 rather than telling the caller that the
+    id is attributed to them; the record it cleared the first time stays cleared.
+  */
+  it("answers 404 for a second delete of an asset it already removed", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "twice.mp4").expect(201);
+    const fileId = created.body.fileId as string;
+
+    expect((await agent.delete(`/storage/assets/${fileId}`)).status).toBe(204);
+    expect(await hasUploadRecord(app, fileId)).toBe(false);
+
+    expect((await agent.delete(`/storage/assets/${fileId}`)).status).toBe(404);
+    expect(await hasUploadRecord(app, fileId)).toBe(false);
+  });
+
+  /* The bytes can be gone while the record remains: a delete that removed nothing is not a 204. */
+  it("answers 404 for an owned asset whose bytes are gone, and clears the stale record", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "ghost.mp4").expect(201);
+    const fileId = created.body.fileId as string;
+
+    await rm(join(assetsDir(), fileId));
+    expect(await hasUploadRecord(app, fileId)).toBe(true);
+
+    expect((await agent.delete(`/storage/assets/${fileId}`)).status).toBe(404);
+    expect(await hasUploadRecord(app, fileId)).toBe(false);
   });
 
   /*

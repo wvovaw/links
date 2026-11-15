@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException, PayloadTooLargeException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { access, mkdir, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
 const DEFAULT_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -71,6 +71,23 @@ export function assetUploadCapBytes(): number {
   return Math.max(maxAssetBytes("video/mp4"), maxAssetBytes("audio/mpeg"), maxAssetBytes("application/pdf"));
 }
 
+/**
+ * Deletes a stored file and reports whether its bytes were there. `rm` with `force` succeeds on a missing file,
+ * so a delete that has to answer with the truth about what it removed cannot use it alone: a second delete of
+ * the same id, or a file taken off the disk by hand, is "nothing to remove" rather than "removed".
+ */
+async function removeStored(path: string): Promise<boolean> {
+  try {
+    await access(path);
+  } catch {
+    return false;
+  }
+
+  await rm(path, { force: true });
+
+  return true;
+}
+
 /** 413 for an upload multer refused as too large, reporting the limit it enforced. */
 export class UploadTooLargeException extends PayloadTooLargeException {
   constructor() {
@@ -100,7 +117,7 @@ export class LocalStorageService {
   }
 
   async removeAvatar(fileId: string) {
-    await rm(this.avatarPath(fileId), { force: true });
+    return removeStored(this.avatarPath(fileId));
   }
 
   avatarPath(fileId: string) {
@@ -118,7 +135,7 @@ export class LocalStorageService {
   }
 
   async removeImage(fileId: string) {
-    await rm(this.imagePath(fileId), { force: true });
+    return removeStored(this.imagePath(fileId));
   }
 
   imagePath(fileId: string) {
@@ -136,7 +153,7 @@ export class LocalStorageService {
   }
 
   async removeAsset(fileId: string) {
-    await rm(this.assetPath(fileId), { force: true });
+    return removeStored(this.assetPath(fileId));
   }
 
   assetPath(fileId: string) {

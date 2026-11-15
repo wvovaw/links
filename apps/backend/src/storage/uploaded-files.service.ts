@@ -34,20 +34,22 @@ export class UploadedFilesService {
    * when the claim goes away: a file nobody can attribute is a storage leak, and a leak is the failure this
    * rule accepts rather than one account deleting another's file.
    *
-   * Returns whether anything was removed, so a route can answer a delete it refused the way it answers an
-   * unknown id.
+   * Answers whether the bytes were really there and are now gone. The record goes either way: one that names a
+   * file whose bytes are missing is stale, and clearing it is the only thing a second delete can honestly do.
+   * A route uses the answer to keep saying 404 for an id it removed nothing for — a stranger's id, an unknown
+   * one, and one it removed a moment ago all read the same.
    */
   async discard(
     ownerId: string,
     kind: UploadedFileKind,
     fileId: string,
-    removeBytes: (fileId: string) => Promise<void>,
+    removeBytes: (fileId: string) => Promise<boolean>,
   ): Promise<boolean> {
     if ((await this.ownerOf(kind, fileId)) !== ownerId) return false;
 
-    await removeBytes(fileId);
+    const removed = await removeBytes(fileId);
     await this.files.delete({ fileId, kind });
 
-    return true;
+    return removed;
   }
 }
