@@ -6,8 +6,11 @@ import { describe, expect, it } from "vitest";
 
 import AvatarBlock from "./avatar-block.vue";
 import ButtonBlock from "./button-block.vue";
+import DividerBlock from "./divider-block.vue";
+import HeadingBlock from "./heading-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
+import SpacerBlock from "./spacer-block.vue";
 
 /** A block whose stored values are exactly the ones a page carries, as the renderer passes them. */
 function blockOf(name: BlockName, values: Record<string, unknown> = {}): IBlock {
@@ -287,5 +290,114 @@ describe("ParagraphBlock", () => {
     const style = wrapper.get(".paragraph-block").attributes("style") ?? "";
     expect(style).toContain("--paragraph-align: center");
     expect(style).toContain("--paragraph-font-size: var(--links-theme-paragraph-font-size-md)");
+  });
+});
+
+describe("HeadingBlock", () => {
+  it("renders the text as a real h2 by default", () => {
+    const wrapper = mount(HeadingBlock, { props: { properties: blockOf("Heading", { text: "Hello" }).properties } });
+
+    expect(wrapper.get("h2.heading-block__text").text()).toBe("Hello");
+  });
+
+  it.each(["h1", "h2", "h3"])("renders the stored %s level", (level) => {
+    const wrapper = mount(HeadingBlock, {
+      props: { properties: blockOf("Heading", { text: "Hello", level }).properties },
+    });
+
+    expect(wrapper.find(level).exists()).toBe(true);
+  });
+
+  it("falls back to h2 for a level outside the palette", () => {
+    const wrapper = mount(HeadingBlock, {
+      props: { properties: blockOf("Heading", { text: "Hello", level: "script" }).properties },
+    });
+
+    expect(wrapper.get("h2.heading-block__text").text()).toBe("Hello");
+  });
+
+  it("renders no heading without text, keeping only the empty box", () => {
+    const empty = mount(HeadingBlock, { props: { properties: blockOf("Heading").properties } });
+    expect(empty.find("h1, h2, h3").exists()).toBe(false);
+    expect(empty.get(".heading-block").text()).toBe("");
+
+    const blank = mount(HeadingBlock, { props: { properties: blockOf("Heading", { text: "" }).properties } });
+    expect(blank.find("h1, h2, h3").exists()).toBe(false);
+  });
+
+  it("centres the heading by default", () => {
+    const wrapper = mount(HeadingBlock, { props: { properties: blockOf("Heading", { text: "Hello" }).properties } });
+
+    expect(wrapper.get(".heading-block").attributes("style")).toContain("--heading-align: center");
+  });
+
+  it("takes the alignment from the stored property", () => {
+    const wrapper = mount(HeadingBlock, {
+      props: { properties: blockOf("Heading", { text: "Hello", align: "left" }).properties },
+    });
+
+    expect(wrapper.get(".heading-block").attributes("style")).toContain("--heading-align: left");
+  });
+});
+
+describe("DividerBlock", () => {
+  it("draws a line in the theme colour by default", () => {
+    const wrapper = mount(DividerBlock, { props: { properties: blockOf("Divider").properties } });
+
+    const line = wrapper.get("hr.divider-block");
+    expect(line.classes()).toContain("divider-block--line");
+    const style = line.attributes("style") ?? "";
+    expect(style).toContain("--divider-color: var(--links-page-fg)");
+    expect(style).toContain("--divider-spacing: 16px");
+  });
+
+  it.each(["line", "dashed", "dotted"])("draws the %s style as a line", (style) => {
+    const wrapper = mount(DividerBlock, { props: { properties: blockOf("Divider", { style }).properties } });
+
+    expect(wrapper.get("hr.divider-block").classes()).toContain(`divider-block--${style}`);
+  });
+
+  it("draws a gap instead of a line for the space style", () => {
+    const wrapper = mount(DividerBlock, {
+      props: { properties: blockOf("Divider", { style: "space", spacing: 40 }).properties },
+    });
+
+    expect(wrapper.find("hr").exists()).toBe(false);
+    const gap = wrapper.get("div.divider-block--space");
+    expect(gap.attributes("style")).toContain("--divider-spacing: 40px");
+  });
+
+  it("draws a stored colour exactly", () => {
+    const wrapper = mount(DividerBlock, {
+      props: { properties: blockOf("Divider", { color: "#ff0000" }).properties },
+    });
+
+    const style = wrapper.get("hr.divider-block").attributes("style") ?? "";
+    expect(style).toContain("--divider-color: #ff0000");
+    expect(style).toContain("--divider-opacity: 1");
+  });
+});
+
+describe("SpacerBlock", () => {
+  it("renders the default height", () => {
+    const wrapper = mount(SpacerBlock, { props: { properties: blockOf("Spacer").properties } });
+
+    expect(wrapper.get(".spacer-block").attributes("style")).toContain("height: 24px");
+  });
+
+  it("renders the stored height", () => {
+    const wrapper = mount(SpacerBlock, { props: { properties: blockOf("Spacer", { height: 120 }).properties } });
+
+    expect(wrapper.get(".spacer-block").attributes("style")).toContain("height: 120px");
+    expect(wrapper.get(".spacer-block").text()).toBe("");
+  });
+
+  it("keeps the default when a stored spacer has no height", () => {
+    const block = blockOf("Spacer");
+    delete block.properties.height;
+
+    const wrapper = mount(SpacerBlock, { props: { properties: block.properties } });
+
+    expect(wrapper.get(".spacer-block").attributes("style")).toContain("height: 24px");
   });
 });

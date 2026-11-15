@@ -31,7 +31,7 @@ describe("testing BlocksList component", () => {
   });
 
   it("filters blocks by the search query", async () => {
-    await wrapper.find("[data-testid='blocks-search']").setValue("para");
+    await wrapper.find("[data-testid='blocks-search']").setValue("paragraph");
 
     const items = wrapper.findAll("[data-testid='blocks-list-item']");
     expect(items).toHaveLength(1);

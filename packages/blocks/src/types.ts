@@ -1,4 +1,4 @@
-export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph", "Picture"] as const;
+export const BLOCK_NAMES = ["Avatar", "Button", "Divider", "Heading", "Paragraph", "Picture", "Spacer"] as const;
 export type BlockName = (typeof BLOCK_NAMES)[number];
 
 export const BLOCK_CATEGORIES = ["Content", "Media", "Links", "Social", "Commerce", "Layout"] as const;
@@ -20,8 +20,11 @@ export interface BlockMeta {
 export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:circle-user-round",
   "i-lucide:link",
+  "i-lucide:minus",
+  "i-lucide:heading",
   "i-lucide:align-left",
   "i-lucide:image",
+  "i-lucide:move-vertical",
 ];
 
 /** English fallbacks: the i18n layer overrides them through `blocks.<Name>.label` / `.description`. */
@@ -40,6 +43,20 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     category: "Links",
     keywords: ["link", "cta", "action"],
   },
+  Divider: {
+    label: "Divider",
+    description: "A line or a gap that separates two blocks.",
+    icon: "i-lucide:minus",
+    category: "Layout",
+    keywords: ["separator", "line", "rule"],
+  },
+  Heading: {
+    label: "Heading",
+    description: "A title that starts a section of the page.",
+    icon: "i-lucide:heading",
+    category: "Content",
+    keywords: ["title", "section", "h1", "h2", "h3"],
+  },
   Paragraph: {
     label: "Paragraph",
     description: "A block of text for a bio, an address or a note.",
@@ -53,6 +70,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     icon: "i-lucide:image",
     category: "Media",
     keywords: ["image", "photo", "gallery"],
+  },
+  Spacer: {
+    label: "Spacer",
+    description: "Empty space between two blocks.",
+    icon: "i-lucide:move-vertical",
+    category: "Layout",
+    keywords: ["gap", "space", "margin"],
   },
 };
 
