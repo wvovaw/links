@@ -32,6 +32,11 @@ export class UpdateContentDto {
   @IsArray()
   @IsString({ each: true })
   imageFileIds?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  assetFileIds?: string[];
 }
 
 export class UpdateMetadataDto {

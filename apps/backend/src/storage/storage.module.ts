@@ -3,12 +3,13 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { User } from "../users/user.entity";
+import { BlockAsset } from "./block-asset.entity";
 import { BlockImage } from "./block-image.entity";
 import { LocalStorageService } from "./local-storage.service";
 import { StorageController } from "./storage.controller";
 
 @Module({
-  imports: [JwtModule.register({}), TypeOrmModule.forFeature([BlockImage, User])],
+  imports: [JwtModule.register({}), TypeOrmModule.forFeature([BlockAsset, BlockImage, User])],
   controllers: [StorageController],
   providers: [LocalStorageService],
   exports: [LocalStorageService, TypeOrmModule],

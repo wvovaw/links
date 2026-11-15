@@ -22,6 +22,7 @@ export const useLinksStore = defineStore("links", () => {
     seo: Record<string, unknown>;
     status: LinkStatus;
     imageFileIds?: string[];
+    assetFileIds?: string[];
   }): Promise<boolean> {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
@@ -39,6 +40,7 @@ export const useLinksStore = defineStore("links", () => {
         blocks: params.blocks,
         status: params.status,
         imageFileIds: params.imageFileIds,
+        assetFileIds: params.assetFileIds,
       });
       await LinksApi.updateMetadata({
         id: params.id,

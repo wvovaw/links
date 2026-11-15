@@ -10,6 +10,7 @@ export interface IUpdateContentData {
   blocks?: unknown[];
   status?: LinkStatus;
   imageFileIds?: string[];
+  assetFileIds?: string[];
 }
 
 export interface IUpdateThemeData {
@@ -34,12 +35,13 @@ export async function updateContent({
   blocks,
   status,
   imageFileIds,
+  assetFileIds,
 }: IUpdateContentData): Promise<Link | undefined> {
   try {
     const api = useApiClient();
     const data = await api<Link>(`/links/${id}/content`, {
       method: "PATCH",
-      body: { blocks, status, imageFileIds },
+      body: { blocks, status, imageFileIds, assetFileIds },
     });
     return data;
   } catch {

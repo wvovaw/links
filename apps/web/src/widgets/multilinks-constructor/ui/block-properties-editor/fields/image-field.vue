@@ -3,13 +3,13 @@ import type { IBlockPropertyImage } from "@links/blocks";
 
 import { UIFileUpload, UIInputHint, UIInputLabel } from "@links/ui";
 import { StorageApi } from "~shared/api/backend";
-import { resolveBlockImageUrl } from "~shared/blocks";
+import { resolveBlockImageUrl, storesAsset } from "~shared/blocks";
 
 interface IImageFieldProps {
   field: IBlockPropertyImage;
   id: string;
 }
-defineProps<IImageFieldProps>();
+const props = defineProps<IImageFieldProps>();
 
 const model = defineModel<IBlockPropertyImage["value"]>();
 
@@ -30,8 +30,17 @@ watch(model, (value) => {
   file.value = value ? new File([], value) : null;
 });
 
+/**
+ * A field whose `accept` offers no image type holds an uploaded asset instead: a video, an audio clip
+ * or a pdf goes to the asset endpoint, whose allowlist decides what the server keeps.
+ */
+const storesAnAsset = computed(() => storesAsset(props.field.accept));
+
 const config = useRuntimeConfig();
-const previewUrl = computed(() => resolveBlockImageUrl(model.value, { origin: config.public.backendUrl }));
+/** An `<img>` cannot draw a video or a pdf, so an asset keeps its file name and no preview. */
+const previewUrl = computed(() =>
+  storesAnAsset.value ? undefined : resolveBlockImageUrl(model.value, { origin: config.public.backendUrl }),
+);
 
 async function handleChange(payload: File | File[] | null) {
   const picked = Array.isArray(payload) ? payload[0] : payload;
@@ -42,7 +51,7 @@ async function handleChange(payload: File | File[] | null) {
 
   isUploading.value = true;
   try {
-    const uploaded = await StorageApi.uploadImage(picked);
+    const uploaded = storesAnAsset.value ? await StorageApi.uploadAsset(picked) : await StorageApi.uploadImage(picked);
     lastUploaded = uploaded;
     model.value = uploaded;
   } finally {
@@ -67,7 +76,7 @@ async function handleChange(payload: File | File[] | null) {
       class="w-fit inline-flex cursor-pointer items-center gap-2 border border-beerus rounded-moon-i-sm px-3 py-1.5 text-moon-14 text-bulma transition-colors disabled:cursor-not-allowed hover:bg-gohan disabled:opacity-60"
     >
       <span class="i-lucide:upload h-4 w-4 text-trunks" />
-      <span>{{ isUploading ? "Uploading..." : "Choose image" }}</span>
+      <span>{{ isUploading ? "Uploading..." : storesAnAsset ? "Choose file" : "Choose image" }}</span>
     </UIFileUpload.Trigger>
 
     <UIFileUpload.FileList>

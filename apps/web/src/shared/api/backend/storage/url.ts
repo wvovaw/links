@@ -12,3 +12,9 @@ export function resolveImageUrl(fileId: string | undefined | null, options: Stor
   if (!fileId) return undefined;
   return `${options.origin}/storage/images/${fileId}`;
 }
+
+/** A video, an audio clip or a pdf, served from the asset endpoint. */
+export function resolveAssetUrl(fileId: string | undefined | null, options: StorageUrlOptions): string | undefined {
+  if (!fileId) return undefined;
+  return `${options.origin}/storage/assets/${fileId}`;
+}

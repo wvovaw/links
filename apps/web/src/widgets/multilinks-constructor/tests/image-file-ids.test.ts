@@ -1,3 +1,5 @@
+import type { IBlock, IBlockPropertyImage } from "@links/blocks";
+
 import { createBlock, migrateBlock } from "@links/blocks";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,6 +27,14 @@ const legacyAvatar = {
     text: { id: 1, type: "text", label: "Heading", group: "Content", defaultValue: null },
   },
 } as const;
+
+/** The `image`-typed property under a key, narrowed so a test may give it its own `accept`. */
+function imageProperty(block: IBlock, key: string): IBlockPropertyImage {
+  const property = block.properties[key];
+  if (property?.type !== "image") throw new Error(`${key} is not an image property`);
+
+  return property;
+}
 
 describe("constructor store image file ids", () => {
   beforeEach(() => {
@@ -97,6 +107,46 @@ describe("constructor store image file ids", () => {
 
     expect(updateLink).toHaveBeenCalledWith(
       expect.objectContaining({ imageFileIds: ["file-top", "file-a", "file-c"] }),
+    );
+  });
+
+  /*
+    A field that offers no image type holds a file the asset endpoint stored, so the save names it in
+    `assetFileIds`: the two kinds travel in separate lists because the backend keeps two tables.
+  */
+  it("submits a video as an asset and not as an image", async () => {
+    const store = useConstructorStore();
+    store.linkId = "link-1";
+    store.setBlocks([createBlock("Avatar", "avatar-video")]);
+    const image = imageProperty(store.blocks[0]!, "image");
+    image.accept = "video/mp4";
+    image.value = "asset-1";
+
+    await store.saveCurrentState();
+
+    expect(updateLink).toHaveBeenCalledWith(expect.objectContaining({ imageFileIds: [], assetFileIds: ["asset-1"] }));
+  });
+
+  /* The row walk is what the asset half needs too: a list whose field offers a pdf keeps assets. */
+  it("submits the assets a list block keeps in its rows", async () => {
+    const store = useConstructorStore();
+    store.linkId = "link-1";
+    store.setBlocks([createBlock("Gallery", "gallery-assets")]);
+    const items = store.blocks[0]!.properties.items!;
+    if (items.type !== "list") throw new Error("items is not a list property");
+    const [field] = items.itemFields;
+    if (field?.type !== "image") throw new Error("the first item field is not an image field");
+    field.accept = "application/pdf";
+    items.value = [
+      { image: "asset-a", alt: "A" },
+      /* Half-filled: the file is uploaded and stored even though the row is not complete. */
+      { image: "asset-b", alt: "" },
+    ];
+
+    await store.saveCurrentState();
+
+    expect(updateLink).toHaveBeenCalledWith(
+      expect.objectContaining({ imageFileIds: [], assetFileIds: ["asset-a", "asset-b"] }),
     );
   });
 

@@ -1,4 +1,4 @@
-import type { BlockName, IBlock, PageTheme } from "@links/blocks";
+import type { BlockName, IBlock, IBlockPropertyImage, PageTheme } from "@links/blocks";
 
 import {
   checkBlockUpToDate,
@@ -12,7 +12,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useLinksStore } from "~entities/links";
 import { LinkStatus, LinksApi } from "~shared/api/backend";
-import { isAbsoluteImageUrl } from "~shared/blocks";
+import { isAbsoluteImageUrl, storesAsset } from "~shared/blocks";
 import { randomString } from "~shared/lib/utils";
 
 const defaultPageTitle = "New multilinks page";
@@ -114,16 +114,23 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     return isAbsoluteImageUrl(value) ? null : value;
   }
 
-  function collectImageFileIds(blocksList: IBlock[]): string[] {
-    const ids: string[] = [];
-    const collect = (value: unknown) => {
+  /**
+   * The stored file ids a page holds, split by the endpoint that stores them. A file of an `image`
+   * property goes to the list that endpoint keeps; an `accept` that names anything but an image means
+   * the field uploaded an asset instead.
+   */
+  function collectAttachmentFileIds(blocksList: IBlock[]): { imageFileIds: string[]; assetFileIds: string[] } {
+    const imageFileIds: string[] = [];
+    const assetFileIds: string[] = [];
+    const listFor = (accept?: string) => (storesAsset(accept) ? assetFileIds : imageFileIds);
+    const collect = (value: unknown, ids: string[]) => {
       const fileId = storedFileId(value);
       if (fileId) ids.push(fileId);
     };
 
     for (const block of blocksList) {
       for (const prop of Object.values(block.properties)) {
-        if (prop.type === "image") collect(prop.value);
+        if (prop.type === "image") collect(prop.value, listFor(prop.accept));
 
         /*
           A block that repeats images draws them from rows, not from an `image` property, and the API
@@ -131,16 +138,16 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
           half-filled row still holds the file its owner uploaded.
         */
         if (prop.type === "list") {
-          const imageKeys = itemFieldsOf(prop)
-            .filter((field) => field.type === "image")
-            .map((field) => field.key);
+          const fileFields = itemFieldsOf(prop)
+            .filter((field): field is IBlockPropertyImage & { key: string } => field.type === "image")
+            .map((field) => ({ key: field.key, ids: listFor(field.accept) }));
           for (const row of listRows(prop)) {
-            for (const key of imageKeys) collect(row[key]);
+            for (const field of fileFields) collect(row[field.key], field.ids);
           }
         }
       }
     }
-    return ids;
+    return { imageFileIds, assetFileIds };
   }
 
   async function saveCurrentState() {
@@ -148,7 +155,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     const id = linkId.value;
     if (!id) return;
 
-    const imageFileIds = collectImageFileIds(blocks.value);
+    const { imageFileIds, assetFileIds } = collectAttachmentFileIds(blocks.value);
     const contentSaved = await updateLink({
       id,
       title: title.value,
@@ -156,6 +163,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       seo: seo.value,
       status: publishStatus.value,
       imageFileIds,
+      assetFileIds,
     });
     /* Cancelled or failed content update: nothing else is persisted and the page stays unsaved. */
     if (!contentSaved) return;

@@ -2,9 +2,10 @@ import type { INestApplication } from "@nestjs/common";
 
 import { mkdir, readdir } from "node:fs/promises";
 import request from "supertest";
+import { DataSource } from "typeorm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { maxImageBytes } from "../src/storage/local-storage.service";
+import { maxAssetBytes, maxImageBytes } from "../src/storage/local-storage.service";
 import { authenticate } from "./authenticate";
 import { createTestApp } from "./create-test-app";
 
@@ -14,7 +15,10 @@ const PNG_BYTES = Buffer.from(
   "base64",
 );
 
-function uploadDir(variable: "IMAGES_PATH" | "UPLOADS_PATH") {
+/** An `ftyp` box at the head of the file, which is what makes a served `.mp4` a `video/mp4`. */
+const MP4_BYTES = Buffer.from("00000018667479706d703432000000006d70343269736f6d", "hex");
+
+function uploadDir(variable: "IMAGES_PATH" | "UPLOADS_PATH" | "ASSETS_PATH") {
   const path = process.env[variable];
   if (!path) throw new Error(`${variable} is not set — test/setup.ts owns it.`);
 
@@ -23,6 +27,7 @@ function uploadDir(variable: "IMAGES_PATH" | "UPLOADS_PATH") {
 
 const imagesDir = () => uploadDir("IMAGES_PATH");
 const avatarsDir = () => uploadDir("UPLOADS_PATH");
+const assetsDir = () => uploadDir("ASSETS_PATH");
 const oversized = () => Buffer.alloc(maxImageBytes() + 1, 1);
 
 describe("image uploads", () => {
@@ -81,6 +86,22 @@ describe("image uploads", () => {
     expect(served.headers["content-type"]).toContain("image/png");
   });
 
+  /*
+    A stored file's type comes from the mimetype the client declared, never from the name it chose:
+    a name ending in `.png` does not make an svg an image this API stores.
+  */
+  it("rejects an image of an unsupported type instead of keeping its name", async () => {
+    const agent = await authenticate(app);
+    const before = await readdir(imagesDir());
+
+    const response = await agent
+      .post("/storage/images")
+      .attach("file", Buffer.from("<svg/>"), { filename: "evil.png", contentType: "image/svg+xml" });
+
+    expect(response.status).toBe(400);
+    expect(await readdir(imagesDir())).toEqual(before);
+  });
+
   it("rejects an oversized avatar with 413", async () => {
     const agent = await authenticate(app);
     const before = await readdir(avatarsDir());
@@ -91,6 +112,144 @@ describe("image uploads", () => {
     expect(await readdir(avatarsDir())).toEqual(before);
   });
 });
+
+describe("asset uploads", () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    app = await createTestApp();
+
+    await mkdir(assetsDir(), { recursive: true });
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it("stores an mp4 and serves it with range support", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "clip.mp4");
+
+    expect(created.status).toBe(201);
+
+    const ranged = await request(app.getHttpServer())
+      .get(`/storage/assets/${created.body.fileId}`)
+      .set("Range", "bytes=0-1");
+
+    expect(ranged.status).toBe(206);
+    expect(ranged.headers["content-type"]).toContain("video/mp4");
+  });
+
+  /*
+    The name is the uploader's to choose, so it proves nothing: a video declared under a `.mp4` name
+    but sent as an image is refused by the declared type, and nothing reaches the assets directory.
+  */
+  it("rejects a disallowed type even when the file name lies", async () => {
+    const agent = await authenticate(app);
+    const before = await readdir(assetsDir());
+
+    const response = await agent
+      .post("/storage/assets")
+      .attach("file", Buffer.from("<svg/>"), { filename: "evil.mp4", contentType: "image/svg+xml" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Unsupported asset type.");
+    expect(await readdir(assetsDir())).toEqual(before);
+  });
+
+  it("rejects an asset above its type limit", async () => {
+    const agent = await authenticate(app);
+    const before = await readdir(assetsDir());
+
+    const response = await agent
+      .post("/storage/assets")
+      .attach("file", Buffer.alloc(maxAssetBytes("video/mp4") + 1, 1), "big.mp4");
+
+    expect(response.status).toBe(413);
+    expect(await readdir(assetsDir())).toEqual(before);
+  });
+
+  /* Each kind of asset answers to its own variable: an audio clip over `MAX_AUDIO_BYTES` is refused
+     while a video of the same size still passes the much larger video limit. */
+  it("enforces a per-type limit set at request time", async () => {
+    const original = process.env.MAX_AUDIO_BYTES;
+    process.env.MAX_AUDIO_BYTES = "1024";
+
+    try {
+      const agent = await authenticate(app);
+      const before = await readdir(assetsDir());
+
+      const tooBig = await agent
+        .post("/storage/assets")
+        .attach("file", Buffer.alloc(2048, 1), { filename: "clip.mp3", contentType: "audio/mpeg" });
+
+      expect(tooBig.status).toBe(413);
+      expect(tooBig.body.message).toContain("1024 bytes");
+      expect(await readdir(assetsDir())).toEqual(before);
+
+      const video = await agent
+        .post("/storage/assets")
+        .attach("file", Buffer.alloc(2048, 1), { filename: "clip.mp4", contentType: "video/mp4" });
+
+      expect(video.status).toBe(201);
+    } finally {
+      if (original === undefined) delete process.env.MAX_AUDIO_BYTES;
+      else process.env.MAX_AUDIO_BYTES = original;
+    }
+  });
+
+  it("deletes a stored asset", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "gone.mp4");
+
+    expect((await agent.delete(`/storage/assets/${created.body.fileId}`)).status).toBe(204);
+    expect(await readdir(assetsDir())).not.toContain(created.body.fileId);
+  });
+
+  it("removes the asset a page no longer names", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "sync.mp4");
+    const fileId = created.body.fileId as string;
+    const id = (await agent.post("/links").send({ slug: "asset-sync-page", title: "A page with an asset" })).body
+      .id as string;
+
+    expect((await agent.patch(`/links/${id}/content`).send({ assetFileIds: [fileId] })).status).toBe(200);
+    expect(await assetRows(app)).toEqual([fileId]);
+
+    expect((await agent.patch(`/links/${id}/content`).send({ assetFileIds: [] })).status).toBe(200);
+
+    expect(await assetRows(app)).toEqual([]);
+    expect(await readdir(assetsDir())).not.toContain(fileId);
+  });
+
+  /*
+    Deleting the link is the one path that has to take its files with it: the row goes through the
+    foreign key's cascade, and the file on disk goes because the service deletes it first.
+  */
+  it("deletes the assets of a link with the link", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "cascade.mp4");
+    const fileId = created.body.fileId as string;
+    const id = (await agent.post("/links").send({ slug: "asset-cascade-page", title: "A page with an asset" })).body
+      .id as string;
+
+    await agent
+      .patch(`/links/${id}/content`)
+      .send({ assetFileIds: [fileId] })
+      .expect(200);
+    expect((await agent.delete(`/links/${id}`)).status).toBe(204);
+
+    expect(await assetRows(app)).toEqual([]);
+    expect(await readdir(assetsDir())).not.toContain(fileId);
+  });
+});
+
+/** The `fileId` column of `block_assets`, read through the connection the app booted with. */
+async function assetRows(app: INestApplication): Promise<string[]> {
+  const rows: { fileId: string }[] = await app.get(DataSource).query("SELECT fileId FROM block_assets ORDER BY fileId");
+
+  return rows.map((row) => row.fileId);
+}
 
 describe("maxImageBytes", () => {
   const original = process.env.MAX_IMAGE_BYTES;
@@ -106,5 +265,56 @@ describe("maxImageBytes", () => {
 
     process.env.MAX_IMAGE_BYTES = "1024.9";
     expect(maxImageBytes()).toBe(1024);
+  });
+
+  /*
+    multer refuses a `fileSize` that is not a positive integer while the interceptor is being set
+    up, which turns a configuration typo into a 500 on every upload. A value that cannot be a limit
+    is therefore no setting at all: the default stands.
+  */
+  it.each(["-1", "0", "0.5", "abc", "Infinity"])("falls back to the default for %s", (unusable) => {
+    process.env.MAX_IMAGE_BYTES = unusable;
+    expect(maxImageBytes()).toBe(5 * 1024 * 1024);
+  });
+});
+
+describe("maxAssetBytes", () => {
+  const original = { ...process.env };
+
+  afterEach(() => {
+    for (const variable of ["MAX_VIDEO_BYTES", "MAX_AUDIO_BYTES", "MAX_DOCUMENT_BYTES"]) {
+      if (original[variable] === undefined) delete process.env[variable];
+      else process.env[variable] = original[variable];
+    }
+  });
+
+  it("gives each kind of asset its own default", () => {
+    delete process.env.MAX_VIDEO_BYTES;
+    delete process.env.MAX_AUDIO_BYTES;
+    delete process.env.MAX_DOCUMENT_BYTES;
+
+    expect(maxAssetBytes("video/mp4")).toBe(50 * 1024 * 1024);
+    expect(maxAssetBytes("audio/mpeg")).toBe(20 * 1024 * 1024);
+    expect(maxAssetBytes("application/pdf")).toBe(20 * 1024 * 1024);
+  });
+
+  it("reads each override per call and only for its own kind", () => {
+    process.env.MAX_VIDEO_BYTES = "2048";
+    process.env.MAX_AUDIO_BYTES = "1024";
+    process.env.MAX_DOCUMENT_BYTES = "512";
+
+    expect(maxAssetBytes("video/webm")).toBe(2048);
+    expect(maxAssetBytes("audio/ogg")).toBe(1024);
+    expect(maxAssetBytes("application/pdf")).toBe(512);
+  });
+
+  it.each(["-1", "0", "0.5", "abc", "Infinity"])("falls back to the type default for %s", (zero) => {
+    process.env.MAX_VIDEO_BYTES = zero;
+    process.env.MAX_AUDIO_BYTES = zero;
+    process.env.MAX_DOCUMENT_BYTES = zero;
+
+    expect(maxAssetBytes("video/mp4")).toBe(50 * 1024 * 1024);
+    expect(maxAssetBytes("audio/mpeg")).toBe(20 * 1024 * 1024);
+    expect(maxAssetBytes("application/pdf")).toBe(20 * 1024 * 1024);
   });
 });
