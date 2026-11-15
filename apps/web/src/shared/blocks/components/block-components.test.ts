@@ -1,11 +1,14 @@
 import type { BlockName, IBlock } from "@links/blocks";
+import type { VueWrapper } from "@vue/test-utils";
 
 import { createBlock } from "@links/blocks";
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { nextTick } from "vue";
 
 import AvatarBlock from "./avatar-block.vue";
 import ButtonBlock from "./button-block.vue";
+import CountdownBlock from "./countdown-block.vue";
 import DividerBlock from "./divider-block.vue";
 import HeadingBlock from "./heading-block.vue";
 import MapBlock from "./map-block.vue";
@@ -757,5 +760,140 @@ describe("MapBlock", () => {
 
     expect(wrapper.find(".map-block").exists()).toBe(false);
     expect(wrapper.find("iframe").exists()).toBe(false);
+  });
+});
+
+describe("CountdownBlock", () => {
+  /* The block's clock is the wall clock, so every test pins it instead of waiting for real seconds. */
+  const target = "2026-12-01T00:00:00.000Z";
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-11-30T23:59:00.000Z"));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  /**
+   * The clock starts in `onMounted`, so the first render is the empty one the server sends and the
+   * digits only arrive with the render after it.
+   */
+  async function wrapperOf(values: Record<string, unknown> = {}) {
+    const wrapper = mount(CountdownBlock, {
+      props: { properties: blockOf("Countdown", { target, ...values }).properties },
+    });
+    await nextTick();
+    return wrapper;
+  }
+
+  function valuesOf(wrapper: VueWrapper) {
+    return wrapper.findAll(".countdown-block__value").map((value) => value.text());
+  }
+
+  it("draws nothing before the clock starts", () => {
+    const wrapper = mount(CountdownBlock, { props: { properties: blockOf("Countdown", { target }).properties } });
+
+    expect(wrapper.find(".countdown-block").exists()).toBe(false);
+  });
+
+  it("draws the remaining hours, minutes and seconds", async () => {
+    const wrapper = await wrapperOf();
+
+    expect(valuesOf(wrapper)).toEqual(["00", "01", "00"]);
+    expect(wrapper.findAll(".countdown-block__unit-label").map((label) => label.text())).toEqual(["h", "m", "s"]);
+  });
+
+  it("counts the seconds down on its own", async () => {
+    const wrapper = await wrapperOf();
+
+    vi.advanceTimersByTime(1000);
+    await nextTick();
+
+    expect(valuesOf(wrapper)).toEqual(["00", "00", "59"]);
+  });
+
+  it("draws the days once there is at least one", async () => {
+    vi.setSystemTime(new Date("2026-11-25T21:56:56.000Z"));
+
+    expect(valuesOf(await wrapperOf())).toEqual(["5", "02", "03", "04"]);
+  });
+
+  it("reads the whole countdown as one line for a screen reader", async () => {
+    expect((await wrapperOf()).get("[role='timer']").attributes("aria-label")).toBe("00:01:00");
+  });
+
+  it("renders the stored title above the digits", async () => {
+    expect((await wrapperOf({ title: "Launch" })).get(".countdown-block__title").text()).toBe("Launch");
+  });
+
+  it("draws no title line for a title of only whitespace", async () => {
+    expect((await wrapperOf({ title: "   " })).find(".countdown-block__title").exists()).toBe(false);
+  });
+
+  it("swaps the digits for the finished text at the target instant", async () => {
+    const wrapper = await wrapperOf();
+
+    vi.setSystemTime(new Date(target));
+    vi.advanceTimersByTime(1000);
+    await nextTick();
+
+    expect(wrapper.find(".countdown-block__parts").exists()).toBe(false);
+    expect(wrapper.get(".countdown-block__finished").text()).toBe("The countdown has finished");
+  });
+
+  it("takes the finished text from the stored property", async () => {
+    const wrapper = await wrapperOf({ "finished-text": "We are live!" });
+
+    vi.setSystemTime(new Date(target));
+    vi.advanceTimersByTime(1000);
+    await nextTick();
+
+    expect(wrapper.get(".countdown-block__finished").text()).toBe("We are live!");
+  });
+
+  it("draws nothing at all after the finish when the switch is on", async () => {
+    const wrapper = await wrapperOf({ "hide-after-finish": true });
+    expect(wrapper.find(".countdown-block").exists()).toBe(true);
+
+    vi.setSystemTime(new Date(target));
+    vi.advanceTimersByTime(1000);
+    await nextTick();
+
+    expect(wrapper.find(".countdown-block").exists()).toBe(false);
+  });
+
+  it.each([
+    ["box", "countdown-block--box"],
+    ["plain", "countdown-block--plain"],
+  ])("draws the %s style", async (variant, expected) => {
+    expect((await wrapperOf({ variant })).get(".countdown-block").classes()).toContain(expected);
+  });
+
+  it("draws the box style when none is stored", async () => {
+    expect((await wrapperOf()).get(".countdown-block").classes()).toContain("countdown-block--box");
+  });
+
+  it("falls back to the box style for a style outside the palette", async () => {
+    expect((await wrapperOf({ variant: "circle" })).get(".countdown-block").classes()).toContain(
+      "countdown-block--box",
+    );
+  });
+
+  it.each([
+    ["no target", { target: "" }],
+    ["a target that is not a date", { target: "nonsense" }],
+  ])("draws nothing at all for %s", async (_case, values) => {
+    expect((await wrapperOf(values)).find(".countdown-block").exists()).toBe(false);
+  });
+
+  it("stops its clock when the block goes away", async () => {
+    const wrapper = await wrapperOf();
+    expect(vi.getTimerCount()).toBe(1);
+
+    wrapper.unmount();
+
+    expect(vi.getTimerCount()).toBe(0);
   });
 });

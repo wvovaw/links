@@ -16,6 +16,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Avatar.description": "Круглое фото профиля с короткой подписью.",
     "blocks.Button.label": "Кнопка",
     "blocks.Button.description": "Крупная ссылка на другую страницу или сайт.",
+    "blocks.Countdown.label": "Обратный отсчёт",
+    "blocks.Countdown.description": "Обратный отсчёт до заданной даты и времени.",
     "blocks.Divider.label": "Разделитель",
     "blocks.Divider.description": "Линия или отступ, разделяющие два блока.",
     "blocks.Heading.label": "Заголовок",

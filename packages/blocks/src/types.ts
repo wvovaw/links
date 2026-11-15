@@ -1,6 +1,7 @@
 export const BLOCK_NAMES = [
   "Avatar",
   "Button",
+  "Countdown",
   "Divider",
   "Heading",
   "Map",
@@ -32,6 +33,7 @@ export interface BlockMeta {
 export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:circle-user-round",
   "i-lucide:link",
+  "i-lucide:timer",
   "i-lucide:minus",
   "i-lucide:heading",
   "i-lucide:map",
@@ -70,6 +72,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     icon: "i-lucide:link",
     category: "Links",
     keywords: ["link", "cta", "action"],
+  },
+  Countdown: {
+    label: "Countdown",
+    description: "A live countdown to a date and time.",
+    icon: "i-lucide:timer",
+    category: "Content",
+    keywords: ["countdown", "timer", "deadline", "date", "event", "launch"],
   },
   Divider: {
     label: "Divider",
@@ -138,7 +147,7 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
 
 export const blocksList: readonly BlockMeta[] = BLOCK_NAMES.map((name) => ({ name, ...BLOCK_META[name] }));
 
-export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image";
+export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image" | "date";
 
 export interface IBlockPropertyCommon<T = unknown> {
   id: number;
@@ -181,6 +190,14 @@ export interface IBlockPropertyImage<T = string> extends IBlockPropertyCommon<T>
   type: "image";
   accept?: string;
 }
+/**
+ * The value is an ISO string. `withTime` asks for an instant rather than a calendar date, so the field
+ * offers a time of day as well and the picker reads the value in the browser's timezone.
+ */
+export interface IBlockPropertyDate<T = string> extends IBlockPropertyCommon<T> {
+  type: "date";
+  withTime?: boolean;
+}
 export type BlockProperty =
   | IBlockPropertyText
   | IBlockPropertyNumber
@@ -188,7 +205,8 @@ export type BlockProperty =
   | IBlockPropertySelect
   | IBlockPropertyUrl
   | IBlockPropertyColor
-  | IBlockPropertyImage;
+  | IBlockPropertyImage
+  | IBlockPropertyDate;
 
 export interface IBlock<K extends BlockName = BlockName> {
   id: string;

@@ -16,6 +16,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Avatar.description": "A round profile photo with a short caption.",
     "blocks.Button.label": "Button",
     "blocks.Button.description": "A large clickable link to another page or site.",
+    "blocks.Countdown.label": "Countdown",
+    "blocks.Countdown.description": "A live countdown to a date and time.",
     "blocks.Divider.label": "Divider",
     "blocks.Divider.description": "A line or a gap that separates two blocks.",
     "blocks.Heading.label": "Heading",

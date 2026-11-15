@@ -9,6 +9,7 @@ import { useConstructorStore } from "../../model";
 import { OptionsSection } from "../options-section";
 import BooleanField from "./fields/boolean-field.vue";
 import ColorField from "./fields/color-field.vue";
+import DateField from "./fields/date-field.vue";
 import ImageField from "./fields/image-field.vue";
 import NumberField from "./fields/number-field.vue";
 import SelectField from "./fields/select-field.vue";
@@ -27,6 +28,7 @@ const fieldsMap: Record<BlockPropertyType, Component> = {
   color: ColorField,
   boolean: BooleanField,
   image: ImageField,
+  date: DateField,
 };
 function resolveFieldsComponent(fieldType: BlockPropertyType) {
   return fieldsMap[fieldType];

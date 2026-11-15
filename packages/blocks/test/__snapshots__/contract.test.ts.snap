@@ -209,6 +209,60 @@ exports[`Button > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Countdown > has a pinned schema snapshot 1`] = `
+{
+  "finished-text": {
+    "defaultValue": "The countdown has finished",
+    "group": "Content",
+    "id": 2,
+    "label": "Finished text",
+    "type": "text",
+  },
+  "hide-after-finish": {
+    "defaultValue": false,
+    "group": "Appearance",
+    "id": 4,
+    "label": "Hide after the countdown finishes",
+    "type": "boolean",
+    "variant": "switch",
+  },
+  "target": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "The moment the countdown reaches zero, in the browser's own timezone",
+    "id": 0,
+    "label": "Target date",
+    "required": true,
+    "type": "date",
+    "withTime": true,
+  },
+  "title": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 1,
+    "label": "Title",
+    "type": "text",
+  },
+  "variant": {
+    "defaultValue": "box",
+    "group": "Appearance",
+    "id": 3,
+    "label": "Style",
+    "options": [
+      {
+        "label": "Box",
+        "value": "box",
+      },
+      {
+        "label": "Plain",
+        "value": "plain",
+      },
+    ],
+    "type": "select",
+  },
+}
+`;
+
 exports[`Divider > has a pinned schema snapshot 1`] = `
 {
   "color": {
