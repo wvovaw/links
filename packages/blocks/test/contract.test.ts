@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { BlockName } from "../src/main";
+import type { BlockName, IBlock } from "../src/main";
 
 import { checkBlockUpToDate, migrateBlock } from "../src/main";
 import { getBlockModule, registry } from "../src/registry";
@@ -9,6 +9,7 @@ import { buttonV0 } from "./fixtures/button-v0";
 import { buttonV1 } from "./fixtures/button-v1";
 import { buttonV2 } from "./fixtures/button-v2";
 import { faqV0 } from "./fixtures/faq-v0";
+import { faqV0Rows } from "./fixtures/faq-v0-rows";
 import { galleryV0 } from "./fixtures/gallery-v0";
 import { paragraphV0 } from "./fixtures/paragraph-v0";
 import { paragraphV2 } from "./fixtures/paragraph-v2";
@@ -75,6 +76,17 @@ it("keeps a pasted avatar image url when an Avatar migrates", () => {
   expect(migrated.properties.image.value).toBe("https://example.com/avatar.png");
 });
 
+/** A block's properties without the stored `value`: what a schema is, rather than what a page holds. */
+function definitionsOf(block: IBlock): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(block.properties).map(([name, property]) => {
+      const definition: Partial<typeof property> = { ...property };
+      delete definition.value;
+      return [name, definition];
+    }),
+  );
+}
+
 it.each([
   ["Avatar", 0, avatarV0],
   ["Paragraph", 0, paragraphV0],
@@ -84,6 +96,7 @@ it.each([
   ["Button", 2, buttonV2],
   ["Picture", 0, pictureV0],
   ["Faq", 0, faqV0],
+  ["Faq", 0, faqV0Rows],
   ["Gallery", 0, galleryV0],
   ["Products", 0, productsV0],
   ["Testimonials", 0, testimonialsV0],
@@ -93,9 +106,17 @@ it.each([
 
   expect(fixture.version).toBe(version);
   expect(migrated.version).toBe(module.BLOCK_VERSION);
-  // A stored block that has been through every step must reproduce what the factory writes today:
-  // a step that bumps the version without doing its property work otherwise stays green.
-  expect(migrated.properties).toEqual(module.createBlock("b1").properties);
+  /*
+    A stored block that has been through every step must reproduce what the factory writes today: a
+    step that bumps the version without doing its property work otherwise stays green. Definitions and
+    data are compared apart, because a factory has no opinion about the rows a page carries.
+  */
+  expect(definitionsOf(migrated)).toEqual(definitionsOf(module.createBlock("b1")));
+  /*
+    A fixture that stores rows pins them: a migration step that rewrites row data, or drops every row
+    it was handed, fails here rather than in a page whose products silently disappeared.
+  */
+  expect(migrated.properties.items?.value).toEqual(fixture.properties.items?.value);
 });
 
 /**
