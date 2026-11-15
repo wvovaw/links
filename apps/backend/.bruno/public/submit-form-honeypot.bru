@@ -1,0 +1,44 @@
+meta {
+  name: Submit Form Honeypot
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/public/links/{{link_slug}}/submissions
+  body: json
+}
+
+body:json {
+  {
+    "blockId": "{{block_id}}",
+    "kind": "contact",
+    "email": "robot@example.com",
+    "message": "Posted by a script that fills every input it finds",
+    "company": "Spam Ltd"
+  }
+}
+
+tests {
+  test("should return 201 like any other submission", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should acknowledge without echoing anything", function () {
+    const body = res.getBody();
+    expect(body).to.deep.equal({ ok: true });
+  });
+}
+
+docs {
+  A submission whose honeypot is filled. The answer is the same 201 `{ ok: true }` a real visitor gets —
+  telling a robot what gave it away would only teach it — and nothing is stored: afterwards
+  `GET /links/{{link_id}}/submissions?blockId={{block_id}}` does not list this message.
+
+  `company` is the honeypot rather than `website` because password managers autofill `website`, which
+  would throw a real visitor's message away while thanking them for it.
+
+  **Set first:** `link_slug` and `block_id` (see Submit Form).
+
+  **Response:** 201 — `{ ok: true }`, with no row written
+}

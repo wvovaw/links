@@ -3,5 +3,6 @@ data.sqlite*
 uploads
 *.tsbuildinfo
 
-# Generated fixture for .bruno/storage/images/upload-oversized.bru
+# Generated fixtures for .bruno/storage/images/upload-oversized.bru and .bruno/storage/assets/upload-asset.bru
 .bruno/oversized-image.jpg
+.bruno/storage/assets/sample-asset.pdf

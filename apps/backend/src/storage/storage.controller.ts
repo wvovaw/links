@@ -17,14 +17,11 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { InjectRepository } from "@nestjs/typeorm";
 import { access } from "node:fs/promises";
-import { Repository } from "typeorm";
 
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { User } from "../users/user.entity";
-import { BlockAsset } from "./block-asset.entity";
 import {
   assetUploadCapBytes,
   isAssetMimeType,
@@ -33,12 +30,13 @@ import {
   maxImageBytes,
 } from "./local-storage.service";
 import { UploadTooLargeFilter } from "./upload-too-large.filter";
+import { UploadedFilesService } from "./uploaded-files.service";
 
 @Controller("storage")
 export class StorageController {
   constructor(
     private readonly storage: LocalStorageService,
-    @InjectRepository(BlockAsset) private readonly assets: Repository<BlockAsset>,
+    private readonly uploadedFiles: UploadedFilesService,
   ) {}
 
   @Get("avatars/:fileId")
@@ -58,8 +56,10 @@ export class StorageController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor("file", { limits: () => ({ fileSize: maxImageBytes() }) }))
   @UseFilters(UploadTooLargeFilter)
-  async uploadImage(@CurrentUser() _user: User, @UploadedFile() file: Express.Multer.File) {
+  async uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File) {
     const fileId = await this.storage.saveImage(file);
+    await this.uploadedFiles.record(user, "image", fileId);
+
     return { fileId };
   }
 
@@ -76,15 +76,17 @@ export class StorageController {
     response.sendFile(path);
   }
 
-  /*
-    Authenticated but not owner-scoped, unlike the asset route below — the same hole, left as it was.
-    Scoping it the same way would refuse to delete an image that is uploaded but not yet on a saved
-    page, and closing it properly needs an ownership record at upload time. Tracked as a follow-up.
-  */
+  /**
+   * Deletes an image only for the account that uploaded it. An image id is visible on a published page, so
+   * an unscoped route let any registered user empty another owner's page; the upload record answers that
+   * without refusing to delete an image that is uploaded but not yet on a saved page.
+   */
   @Delete("images/:fileId")
   @UseGuards(AuthGuard)
   @HttpCode(204)
-  async deleteImage(@CurrentUser() _user: User, @Param("fileId") fileId: string) {
+  async deleteImage(@CurrentUser() user: User, @Param("fileId") fileId: string) {
+    await this.assertUploader(user, "image", fileId, "Image not found.");
+
     const path = this.storage.imagePath(fileId);
 
     try {
@@ -113,7 +115,7 @@ export class StorageController {
       },
     }),
   )
-  async uploadAsset(@CurrentUser() _user: User, @UploadedFile() file: Express.Multer.File) {
+  async uploadAsset(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File) {
     if (!file) throw new BadRequestException("Asset file is required.");
     if (!isAssetMimeType(file.mimetype)) throw new BadRequestException("Unsupported asset type.");
 
@@ -121,6 +123,8 @@ export class StorageController {
     if (file.size > limit) throw new PayloadTooLargeException(`File must be ${limit} bytes or smaller.`);
 
     const fileId = await this.storage.saveAsset(file);
+    await this.uploadedFiles.record(user, "asset", fileId);
+
     return { fileId };
   }
 
@@ -139,17 +143,16 @@ export class StorageController {
   }
 
   /**
-   * Scoped to the owner of the link that holds the asset. Asset ids are visible on a published page
-   * and the GET above is public, so an unscoped delete would let any registered user empty another
-   * owner's page. A stranger's id answers 404 rather than 403, so the response confirms nothing; an
-   * asset no link holds yet is nobody's to delete here, and answers the same 404.
+   * Deletes an asset only for the account that uploaded it. Asset ids are visible on a published page and
+   * the GET above is public, so the identity of the delete has to come from the upload record rather than
+   * from a page that happens to name the file — a page can be made to name anyone's id. A stranger's answer
+   * is the same 404 an unknown id gets, so the response confirms nothing.
    */
   @Delete("assets/:fileId")
   @UseGuards(AuthGuard)
   @HttpCode(204)
   async deleteAsset(@CurrentUser() user: User, @Param("fileId") fileId: string) {
-    const asset = await this.assets.findOne({ where: { fileId, link: { owner: { id: user.id } } } });
-    if (!asset) throw new NotFoundException("Asset not found.");
+    await this.assertUploader(user, "asset", fileId, "Asset not found.");
 
     const path = this.storage.assetPath(fileId);
 
@@ -160,5 +163,11 @@ export class StorageController {
     }
 
     await this.storage.removeAsset(fileId);
+  }
+
+  /** A file belongs to the account that uploaded it; anything else answers the 404 an unknown id answers. */
+  private async assertUploader(user: User, kind: "image" | "asset", fileId: string, message: string) {
+    const uploader = await this.uploadedFiles.ownerOf(kind, fileId);
+    if (uploader !== user.id) throw new NotFoundException(message);
   }
 }

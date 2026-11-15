@@ -1,0 +1,47 @@
+meta {
+  name: Record Block Event
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/public/links/{{link_slug}}/events
+  body: json
+}
+
+body:json {
+  {
+    "blockId": "{{block_id}}",
+    "kind": "click"
+  }
+}
+
+tests {
+  test("should return 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should acknowledge without echoing anything", function () {
+    const body = res.getBody();
+    expect(body).to.deep.equal({ ok: true });
+  });
+}
+
+docs {
+  Report one click on a block of a published page. Public endpoint — no auth required.
+
+  **Set first:**
+  - `link_slug` — the slug of a **published** page
+  - `block_id` — one block id from that page's `blocks` (the id the page stores, not its `name`)
+
+  **Path params:** `slug` (string, required)
+
+  **Request body:**
+  - `blockId` (string, required) — a block of this page; any other id is 400
+  - `kind` (string, required) — `click` or `view`
+
+  **Response:** 201 — `{ ok: true }`
+  **Response:** 400 — a field the DTO does not name, or a block this page does not hold
+  **Response:** 404 — no page holds this slug as published
+  **Response:** 429 — past 60 events a minute on that block, or 300 a minute on the page
+}

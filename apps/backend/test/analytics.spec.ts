@@ -25,12 +25,12 @@ const pageBlocks = [
  * A page owned by a fresh account, already moved to `status`. Every test gets its own page, which is
  * what isolates it from the analytics window: the window is keyed by link and block.
  */
-async function pageWithStatus(app: INestApplication, status: LinkStatus) {
+async function pageWithStatus(app: INestApplication, status: LinkStatus, blocks: unknown[] = pageBlocks) {
   const agent = await authenticate(app);
   const slug = `page-${randomUUID().slice(0, 8)}`;
 
   const created = await agent.post("/links").send({ slug, title: "Analytics test page" }).expect(201);
-  await agent.patch(`/links/${created.body.id}/content`).send({ blocks: pageBlocks, status }).expect(200);
+  await agent.patch(`/links/${created.body.id}/content`).send({ blocks, status }).expect(200);
 
   return { agent, id: created.body.id as string, slug };
 }
@@ -125,6 +125,30 @@ describe("block analytics", () => {
 
     /* The window belongs to the block: one busy block must not silence the rest of the page. */
     expect((await post("b2")).status).toBe(201);
+  });
+
+  /*
+    The per-block ceiling alone says nothing about a page: a page with six blocks would take six budgets.
+    A page takes 300 events a minute whatever it is made of, so a block nobody has touched is still refused
+    once the page's five earlier blocks have spent the budget.
+  */
+  it("caps a page's events whatever its block count", async () => {
+    const blocks = Array.from({ length: 6 }, (_, index) => ({
+      id: `b${index + 1}`,
+      name: "Paragraph",
+      properties: {},
+    }));
+    const { id, slug } = await pageWithStatus(app, LinkStatus.PUBLISHED, blocks);
+
+    for (const block of blocks.slice(0, 5)) {
+      const responses = await Promise.all(
+        Array.from({ length: 60 }, () => postEvent(app, slug, { blockId: block.id, kind: "click" })),
+      );
+      expect(responses.every((response) => response.status === 201)).toBe(true);
+    }
+
+    expect((await postEvent(app, slug, { blockId: "b6", kind: "click" })).status).toBe(429);
+    expect(await eventCount(app, id)).toBe(300);
   });
 
   /* The id is the window key and a row of its own: one the page does not hold may do neither. */

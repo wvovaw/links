@@ -348,7 +348,7 @@ git commit -m "feat(backend): record and expose per-block click analytics"
 **Interfaces:**
 
 - Produces: `FormSubmission` entity — `id` uuid, `linkId` uuid, `blockId` string, `kind` (`"contact" | "subscribe"`), `payload` simple-json, `createdAt`.
-- Produces: `POST /public/links/:slug/submissions` with `CreateSubmissionDto { blockId: string; kind: "contact" | "subscribe"; name?: string (max 100); email: string (IsEmail, max 200); message?: string (max 2000); website?: string }` — `website` is the honeypot and is dropped, never stored. 201 with `{ ok: true }` for both a real submission and a honeypot hit; 400 for a bad email, a missing required field or an over-long value; 404 for an unpublished slug; 429 past the window.
+- Produces: `POST /public/links/:slug/submissions` with `CreateSubmissionDto { blockId: string; kind: "contact" | "subscribe"; name?: string (max 100); email: string (IsEmail, max 200); message?: string (max 2000); company?: string }` — `company` is the honeypot and is dropped, never stored. It is not called `website` because password managers autofill that field, which would throw a real visitor's message away while thanking them for it. 201 with `{ ok: true }` for both a real submission and a honeypot hit; 400 for a bad email, a missing required field or an over-long value; 404 for an unpublished slug; 429 past the window.
 - Produces: `GET /links/:id/submissions?blockId=&limit=` returning `{ submissions: { id, blockId, kind, payload, createdAt }[] }`, owner-scoped, newest first.
 - Produces: `ContactForm` block — `title`, `description`, `button-label` (default "Send"), `success-message` (default "Thank you, we will get back to you"), `fields` (select multiple of name | email | message, default all). `EmailCapture` block — `title`, `placeholder` (default "Your email"), `button-label` (default "Subscribe"), `success-message`.
 
@@ -363,7 +363,7 @@ Expected: FAIL — the endpoint is 404.
 
 - [ ] **Step 3: Implement entity, migration, service and endpoints**
 
-Mirror Task 3: entity + generated migration, `FormsService` with the same sliding-window limiter (30 per minute per link), `create()` inserting a row unless `website` is non-empty, `list()` verifying ownership through `getOwned` before querying. Register module and owner route.
+Mirror Task 3: entity + generated migration, `FormsService` with the shared sliding-window limiter (30 per minute per block, and 300 per minute per page across all its blocks), `create()` inserting a row unless `company` is non-empty, `list()` verifying ownership through `getOwned` before querying. Register module and owner route.
 
 - [ ] **Step 4: Run the API suite to verify it passes**
 
@@ -376,7 +376,7 @@ Schemas as in **Interfaces**, metadata (`Commerce`, `i-lucide:mail` and `i-lucid
 
 - [ ] **Step 6: Build the form components**
 
-Each renders a `<form>` with a hidden honeypot input named `website`, a `UILabel`/`UIInput` per configured field, and a `UIButton` submit. Submit posts through `submitForm({ slug, blockId, kind, ...values })`, disables the button while in flight, and swaps the form for `success-message` on success or an inline error on failure. The slug comes from `useRoute().params.link`.
+Each renders a `<form>` with a hidden honeypot input named `company`, a `UILabel`/`UIInput` per configured field, and a `UIButton` submit. Submit posts through `submitForm({ slug, blockId, kind, ...values })`, disables the button while in flight, and swaps the form for `success-message` on success or an inline error on failure. The slug comes from `useRoute().params.link`.
 
 - [ ] **Step 7: Show submissions in the constructor**
 

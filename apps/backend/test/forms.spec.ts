@@ -29,12 +29,12 @@ const pageBlocks = [
 ];
 
 /** A page owned by a fresh account, already moved to `status`. Each test gets its own page. */
-async function pageWithStatus(app: INestApplication, status: LinkStatus) {
+async function pageWithStatus(app: INestApplication, status: LinkStatus, blocks: unknown[] = pageBlocks) {
   const agent = await authenticate(app);
   const slug = `page-${randomUUID().slice(0, 8)}`;
 
   const created = await agent.post("/links").send({ slug, title: "Forms test page" }).expect(201);
-  await agent.patch(`/links/${created.body.id}/content`).send({ blocks: pageBlocks, status }).expect(200);
+  await agent.patch(`/links/${created.body.id}/content`).send({ blocks, status }).expect(200);
 
   return { agent, id: created.body.id as string, slug };
 }
@@ -173,6 +173,29 @@ describe("form submissions", () => {
     expect(second.map((response) => response.status)).toEqual(Array<number>(30).fill(201));
 
     expect(await submissionCount(app, id)).toBe(60);
+  });
+
+  /*
+    A form's own budget says nothing about a page built from many forms: without a page ceiling, eleven
+    forms would take eleven budgets, and nothing prunes the table they write.
+  */
+  it("caps a page's submissions whatever its form count", async () => {
+    const forms = Array.from({ length: 11 }, (_, index) => ({
+      id: `b${index + 1}`,
+      name: "ContactForm",
+      properties: {},
+    }));
+    const { id, slug } = await pageWithStatus(app, LinkStatus.PUBLISHED, forms);
+
+    for (const block of forms.slice(0, 10)) {
+      const responses = await Promise.all(
+        Array.from({ length: 30 }, () => postSubmission(app, slug, { ...contact, blockId: block.id })),
+      );
+      expect(responses.every((response) => response.status === 201)).toBe(true);
+    }
+
+    expect((await postSubmission(app, slug, { ...contact, blockId: "b11" })).status).toBe(429);
+    expect(await submissionCount(app, id)).toBe(300);
   });
 
   it("keeps another user's submissions out of reach", async () => {

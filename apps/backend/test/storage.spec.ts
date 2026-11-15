@@ -2,7 +2,8 @@ import type { INestApplication } from "@nestjs/common";
 
 import { NotFoundException } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import { mkdir, readdir } from "node:fs/promises";
+import { mkdir, readdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import request from "supertest";
 import { DataSource } from "typeorm";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
@@ -102,6 +103,57 @@ describe("image uploads", () => {
 
     expect(response.status).toBe(400);
     expect(await readdir(imagesDir())).toEqual(before);
+  });
+
+  /* An uploaded image belongs to its uploader before any page names it, so deleting it early still works. */
+  it("deletes an image its uploader uploaded, before a page names it", async () => {
+    const agent = await authenticate(app);
+    const created = await agent.post("/storage/images").attach("file", Buffer.from(PNG_BYTES), "mine.png").expect(201);
+
+    expect((await agent.delete(`/storage/images/${created.body.fileId}`)).status).toBe(204);
+    expect(await readdir(imagesDir())).not.toContain(created.body.fileId);
+  });
+
+  /*
+    An image id is visible on a published page and the GET is public, so an unscoped delete let any
+    registered user empty another owner's page. The stranger gets the same 404 an unknown id gets.
+  */
+  it("keeps another owner's image out of reach", async () => {
+    const owner = await authenticate(app);
+    const created = await owner
+      .post("/storage/images")
+      .attach("file", Buffer.from(PNG_BYTES), "theirs.png")
+      .expect(201);
+    const stranger = await authenticate(app);
+
+    expect((await stranger.delete(`/storage/images/${created.body.fileId}`)).status).toBe(404);
+    expect(await readdir(imagesDir())).toContain(created.body.fileId);
+
+    await owner.delete(`/storage/images/${created.body.fileId}`).expect(204);
+  });
+
+  /*
+    The attack the upload record closes: a stranger reads a published page's image id and names it on
+    their own page. Naming a file is what lets the delete paths reach its bytes.
+  */
+  it("refuses an image id its page's owner did not upload", async () => {
+    const owner = await authenticate(app);
+    const victim = await owner.post("/storage/images").attach("file", Buffer.from(PNG_BYTES), "victim.png").expect(201);
+    const stranger = await authenticate(app);
+    const page = await stranger
+      .post("/links")
+      .send({ slug: `image-claim-${randomUUID()}`, title: "A page for a claim" })
+      .expect(201);
+
+    const response = await stranger
+      .patch(`/links/${page.body.id}/content`)
+      .send({ imageFileIds: [victim.body.fileId] });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("You can only attach files you uploaded.");
+    expect(await claimedFiles(app, "block_images", page.body.id)).toEqual([]);
+
+    await owner.delete(`/storage/images/${victim.body.fileId}`).expect(204);
   });
 
   it("rejects an oversized avatar with 413", async () => {
@@ -212,8 +264,51 @@ describe("asset uploads", () => {
   });
 
   /*
+    The attack the upload record closes: a stranger reads a published page's asset id, names it on their
+    own page, and then deletes it through the page that now holds it. The claim is refused, so the delete
+    has nothing to reach.
+  */
+  it("refuses an asset id its page's owner did not upload", async () => {
+    const owner = await authenticate(app);
+    const { fileId, linkId } = await ownedAsset(owner);
+    const stranger = await authenticate(app);
+    const page = await stranger
+      .post("/links")
+      .send({ slug: `asset-claim-${randomUUID()}`, title: "A page for a claim" })
+      .expect(201);
+
+    const response = await stranger.patch(`/links/${page.body.id}/content`).send({ assetFileIds: [fileId] });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("You can only attach files you uploaded.");
+    expect(await claimedFiles(app, "block_assets", page.body.id)).toEqual([]);
+    expect(await assetRows(app)).toContain(fileId);
+
+    await owner.delete(`/links/${linkId}`).expect(204);
+  });
+
+  /*
+    A stored file with no upload record predates the table, and nothing can say whose it is: it may keep
+    the claim a page already holds, but no page may newly claim it.
+  */
+  it("refuses an id nothing recorded as uploaded", async () => {
+    const agent = await authenticate(app);
+    const fileId = `${randomUUID()}.mp4`;
+    await writeFile(join(assetsDir(), fileId), Buffer.from(MP4_BYTES));
+    const page = await agent
+      .post("/links")
+      .send({ slug: `unrecorded-${randomUUID()}`, title: "A page for a claim" })
+      .expect(201);
+
+    const response = await agent.patch(`/links/${page.body.id}/content`).send({ assetFileIds: [fileId] });
+
+    expect(response.status).toBe(400);
+    expect(await claimedFiles(app, "block_assets", page.body.id)).toEqual([]);
+  });
+
+  /*
     An asset id is visible on a published page and the GET is public, so the delete has to ask who
-    owns the page. A stranger gets the same 404 an unknown id gets: the answer confirms nothing, and
+    uploaded the file. A stranger gets the same 404 an unknown id gets: the answer confirms nothing, and
     the file and the owner's row are both still there.
   */
   it("keeps another owner's asset out of reach", async () => {
@@ -291,8 +386,8 @@ describe("asset uploads", () => {
 type Agent = Awaited<ReturnType<typeof authenticate>>;
 
 /**
- * Uploads an asset and names it on a page of the same owner. The row is what makes the file theirs:
- * an upload on its own belongs to no link, so the delete route cannot tell whose it is.
+ * Uploads an asset and names it on a page of the same owner, which is the flow a page builder takes:
+ * the upload records who uploaded it, and the page claims it because its owner is that account.
  */
 async function ownedAsset(agent: Agent) {
   const created = await agent.post("/storage/assets").attach("file", Buffer.from(MP4_BYTES), "owned.mp4");
@@ -308,6 +403,19 @@ async function ownedAsset(agent: Agent) {
     .expect(200);
 
   return { fileId, linkId: link.body.id as string };
+}
+
+/** The file ids one page's attachment table names, read through the connection the app booted with. */
+async function claimedFiles(
+  app: INestApplication,
+  table: "block_images" | "block_assets",
+  linkId: string,
+): Promise<string[]> {
+  const rows: { fileId: string }[] = await app
+    .get(DataSource)
+    .query(`SELECT fileId FROM ${table} WHERE linkId = ?`, [linkId]);
+
+  return rows.map((row) => row.fileId);
 }
 
 /** The `fileId` column of `block_assets`, read through the connection the app booted with. */

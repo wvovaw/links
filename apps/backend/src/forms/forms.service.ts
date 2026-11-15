@@ -5,25 +5,26 @@ import { Repository } from "typeorm";
 import type { CreateSubmissionDto, SubmissionsQueryDto } from "./dto/submission.dto";
 import type { FormSubmissionPayload } from "./form-submission.entity";
 
-import { TooManyRequestsException } from "../common/too-many-requests.exception";
+import { SlidingWindow } from "../common/sliding-window";
 import { toSubmissionDto } from "./form-submission.dto";
 import { FormSubmission } from "./form-submission.entity";
-
-/** One minute, per block: how many submissions one form takes before its window closes. */
-const windowMs = 60_000;
-const windowLimit = 30;
 
 /** A list without an explicit `limit` is one screen of rows, not the page's whole history. */
 const defaultLimit = 50;
 
+/** What a visitor is told when one of the two windows refuses a submission. */
+const refusedSubmission = {
+  key: "Too many submissions for this form. Try again in a minute.",
+  scope: "Too many submissions on this page. Try again in a minute.",
+};
+
 @Injectable()
 export class FormsService {
   /**
-   * Recent accepted submission timestamps per `${linkId}:${blockId}`. The keys are page blocks, not visitors —
-   * nothing about a caller is stored, so there is nothing to key a window on but the form it wrote to. A
-   * page with two forms has two budgets: a flood on one must not lock visitors out of the other.
+   * A form takes 30 submissions a minute and a page takes 300 across all its forms. One busy form must not
+   * lock visitors out of the other, and a page must not multiply its budget by the number of forms it holds.
    */
-  private readonly recent = new Map<string, number[]>();
+  private readonly window = new SlidingWindow({ perKey: 30, perScope: 300 });
 
   constructor(@InjectRepository(FormSubmission) private readonly submissions: Repository<FormSubmission>) {}
 
@@ -35,7 +36,7 @@ export class FormsService {
   async create(linkId: string, body: CreateSubmissionDto) {
     if (body.company) return;
 
-    this.admit(linkId, body.blockId);
+    this.window.admit(linkId, `${linkId}:${body.blockId}`, refusedSubmission);
 
     await this.submissions.save(
       this.submissions.create({
@@ -63,24 +64,6 @@ export class FormsService {
     if (query.blockId) submissions.andWhere("submission.blockId = :blockId", { blockId: query.blockId });
 
     return (await submissions.getMany()).map(toSubmissionDto);
-  }
-
-  /**
-   * The sliding window. It runs to completion without awaiting anything, so two submissions arriving in the
-   * same tick cannot both read a count below the limit and overrun it.
-   */
-  private admit(linkId: string, blockId: string) {
-    const key = `${linkId}:${blockId}`;
-    const now = Date.now();
-    const recent = (this.recent.get(key) ?? []).filter((at) => at > now - windowMs);
-
-    if (recent.length >= windowLimit) {
-      this.recent.set(key, recent);
-      throw new TooManyRequestsException("Too many submissions for this form. Try again in a minute.");
-    }
-
-    recent.push(now);
-    this.recent.set(key, recent);
   }
 }
 

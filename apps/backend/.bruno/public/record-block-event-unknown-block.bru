@@ -1,0 +1,37 @@
+meta {
+  name: Record Block Event Unknown Block
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/public/links/{{link_slug}}/events
+  body: json
+}
+
+body:json {
+  {
+    "blockId": "not-a-block",
+    "kind": "click"
+  }
+}
+
+tests {
+  test("should return 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("should say the page has no such block", function () {
+    const body = res.getBody();
+    expect(body.message).to.equal("This page has no such block.");
+  });
+}
+
+docs {
+  Report an event for a block the page does not hold. The id becomes a stored row and a window key, so it
+  is read from the page the server loads rather than trusted from the body.
+
+  **Set first:** `link_slug` — the slug of a published page (see Record Block Event).
+
+  **Response:** 400 — `{ message: "This page has no such block." }`
+}

@@ -5,12 +5,8 @@ import { Repository } from "typeorm";
 import type { BlockEventKind } from "./block-event.entity";
 import type { BlockStatsQueryDto } from "./dto/block-event.dto";
 
-import { TooManyRequestsException } from "../common/too-many-requests.exception";
+import { SlidingWindow } from "../common/sliding-window";
 import { BlockEvent } from "./block-event.entity";
-
-/** One minute, per block: how many events a single block may report before the window closes. */
-const windowMs = 60_000;
-const windowLimit = 60;
 
 export interface BlockStats {
   blockId: string;
@@ -18,14 +14,19 @@ export interface BlockStats {
   views: number;
 }
 
+/** What a visitor is told when one of the two windows refuses an event. */
+const refusedEvent = {
+  key: "Too many events for this block. Try again in a minute.",
+  scope: "Too many events on this page. Try again in a minute.",
+};
+
 @Injectable()
 export class AnalyticsService {
   /**
-   * Recent accepted event timestamps per `${linkId}:${blockId}`. The keys are page blocks, not visitors,
-   * so the map grows with the content rather than with traffic; an entry whose timestamps have all aged
-   * out is replaced by the next event on that block.
+   * A block takes 60 events a minute and a page takes 300 across all its blocks: without the second
+   * ceiling a page with ten blocks would accept ten times the stream, and nothing prunes that table yet.
    */
-  private readonly recent = new Map<string, number[]>();
+  private readonly window = new SlidingWindow({ perKey: 60, perScope: 300 });
 
   constructor(@InjectRepository(BlockEvent) private readonly events: Repository<BlockEvent>) {}
 
@@ -34,7 +35,8 @@ export class AnalyticsService {
    * behind, or the window would not be the only thing it changed.
    */
   async record(linkId: string, blockId: string, kind: BlockEventKind) {
-    this.admit(linkId, blockId);
+    this.window.admit(linkId, `${linkId}:${blockId}`, refusedEvent);
+
     await this.events.save(this.events.create({ linkId, blockId, kind }));
   }
 
@@ -57,23 +59,5 @@ export class AnalyticsService {
     const rows = await query.getRawMany<{ blockId: string; clicks: number; views: number }>();
 
     return rows.map((row) => ({ blockId: String(row.blockId), clicks: Number(row.clicks), views: Number(row.views) }));
-  }
-
-  /**
-   * The sliding window. It runs to completion without awaiting anything, so two clicks arriving in the
-   * same tick cannot both read a count below the limit and overrun it.
-   */
-  private admit(linkId: string, blockId: string) {
-    const key = `${linkId}:${blockId}`;
-    const now = Date.now();
-    const recent = (this.recent.get(key) ?? []).filter((at) => at > now - windowMs);
-
-    if (recent.length >= windowLimit) {
-      this.recent.set(key, recent);
-      throw new TooManyRequestsException("Too many events for this block. Try again in a minute.");
-    }
-
-    recent.push(now);
-    this.recent.set(key, recent);
   }
 }

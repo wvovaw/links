@@ -1,10 +1,13 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+
+import type { UploadedFileKind } from "../storage/uploaded-file.entity";
 
 import { BlockAsset } from "../storage/block-asset.entity";
 import { BlockImage } from "../storage/block-image.entity";
 import { LocalStorageService } from "../storage/local-storage.service";
+import { UploadedFilesService } from "../storage/uploaded-files.service";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, defaultBackground, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
 import { UpdateThemeDto } from "./dto/theme.dto";
@@ -45,6 +48,7 @@ export class LinksService {
     @InjectRepository(BlockImage) private readonly blockImages: Repository<BlockImage>,
     @InjectRepository(BlockAsset) private readonly blockAssets: Repository<BlockAsset>,
     private readonly storage: LocalStorageService,
+    private readonly uploadedFiles: UploadedFilesService,
   ) {}
 
   async create(owner: User, body: CreateLinkDto) {
@@ -91,7 +95,7 @@ export class LinksService {
     const saved = await this.links.save(link);
 
     if (body.imageFileIds !== undefined || body.assetFileIds !== undefined)
-      await this.syncAttachments(link, body.imageFileIds, body.assetFileIds);
+      await this.syncAttachments(owner, link, body.imageFileIds, body.assetFileIds);
 
     return saved;
   }
@@ -146,10 +150,13 @@ export class LinksService {
    * Each kind of file is optional: an update that does not report one leaves that kind alone rather
    * than deleting it, and `undefined` is not the same answer as an empty list.
    */
-  private async syncAttachments(link: Link, imageFileIds?: string[], assetFileIds?: string[]) {
+  private async syncAttachments(owner: User, link: Link, imageFileIds?: string[], assetFileIds?: string[]) {
     if (imageFileIds) {
+      const stored = await this.blockImages.find({ where: { link: { id: link.id } } });
+      await this.assertClaimable(owner, "image", stored, imageFileIds);
+
       await diffFiles(
-        await this.blockImages.find({ where: { link: { id: link.id } } }),
+        stored,
         imageFileIds,
         (fileId) => this.storage.removeImage(fileId),
         (image) => this.blockImages.remove(image),
@@ -158,13 +165,44 @@ export class LinksService {
     }
 
     if (assetFileIds) {
+      const stored = await this.blockAssets.find({ where: { link: { id: link.id } } });
+      await this.assertClaimable(owner, "asset", stored, assetFileIds);
+
       await diffFiles(
-        await this.blockAssets.find({ where: { link: { id: link.id } } }),
+        stored,
         assetFileIds,
         (fileId) => this.storage.removeAsset(fileId),
         (asset) => this.blockAssets.remove(asset),
         (fileId) => this.blockAssets.save(this.blockAssets.create({ fileId, link })),
       );
+    }
+  }
+
+  /**
+   * A page may name only files its owner uploaded. A file id is visible on a published page, so without this
+   * rule any registered user could attach another owner's file to their own page — and a page that names a
+   * file is enough to delete it, on the paths that delete what a page drops.
+   *
+   * A file with no upload record predates the table, and nothing can say whose it is: it may keep the claim a
+   * page already holds, so pages that were working stay working, but no page may newly claim it. A file whose
+   * record names a different owner is refused even when the page already holds it — that is a stale claim
+   * made before this rule, and a save is where it stops.
+   */
+  private async assertClaimable(
+    owner: User,
+    kind: UploadedFileKind,
+    stored: { fileId: string }[],
+    requested: string[],
+  ) {
+    const alreadyNamed = new Set(stored.map((row) => row.fileId));
+
+    for (const fileId of requested) {
+      const uploader = await this.uploadedFiles.ownerOf(kind, fileId);
+
+      if (uploader === owner.id) continue;
+      if (uploader === null && alreadyNamed.has(fileId)) continue;
+
+      throw new BadRequestException("You can only attach files you uploaded.");
     }
   }
 

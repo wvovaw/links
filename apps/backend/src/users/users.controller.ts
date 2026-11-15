@@ -19,6 +19,7 @@ import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { LocalStorageService, maxImageBytes } from "../storage/local-storage.service";
 import { UploadTooLargeFilter } from "../storage/upload-too-large.filter";
+import { UploadedFilesService } from "../storage/uploaded-files.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { toUserDto } from "./user.dto";
 import { User } from "./user.entity";
@@ -29,6 +30,7 @@ export class UsersController {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     private readonly storage: LocalStorageService,
+    private readonly uploadedFiles: UploadedFilesService,
   ) {}
 
   @Get("me")
@@ -55,6 +57,8 @@ export class UsersController {
     if (user.avatarFileId) await this.storage.removeAvatar(user.avatarFileId);
 
     user.avatarFileId = await this.storage.saveAvatar(file);
+    await this.uploadedFiles.record(user, "avatar", user.avatarFileId);
+
     return toUserDto(await this.users.save(user));
   }
 

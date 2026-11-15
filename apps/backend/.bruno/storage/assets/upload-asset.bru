@@ -1,0 +1,58 @@
+meta {
+  name: Upload Asset
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/storage/assets
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:multipart-form {
+  file: @file(sample-asset.pdf) @contentType(application/pdf)
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status === 200 || status === 201) {
+    const body = res.getBody();
+    if (body.fileId) {
+      bru.setVar("asset_file_id", body.fileId);
+    }
+  }
+}
+
+tests {
+  test("should return 200 or 201", function () {
+    expect(res.getStatus()).to.be.oneOf([200, 201]);
+  });
+
+  test("should return fileId", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("fileId");
+    expect(body.fileId).to.be.a("string").and.to.not.be.empty;
+  });
+}
+
+docs {
+  Upload a video, an audio clip or a pdf. The declared type decides both the allowlist and the size
+  limit: `video/*` answers to `MAX_VIDEO_BYTES`, `audio/*` to `MAX_AUDIO_BYTES`, a pdf to
+  `MAX_DOCUMENT_BYTES`. An `image/*` or any other type is refused with 400.
+
+  **Fixture:** `sample-asset.pdf` is generated, not committed — create it once in this folder (where
+  `@file` paths resolve from) before running the request:
+
+  `printf '%%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 0/Kids[]>>endobj\ntrailer<</Root 1 0 R>>\n%%%%EOF\n' > sample-asset.pdf`
+
+  **Auth:** Bearer token (required)
+
+  **Request body:** `multipart/form-data` — `file` (pdf, video or audio)
+
+  **Response:** 201 — `{ fileId: string }`; the id is saved as `asset_file_id`
+}
