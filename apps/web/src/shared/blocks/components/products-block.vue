@@ -51,7 +51,7 @@ const bp = computed(() => {
 
   return {
     layout: layoutOf((p.layout as IBlockPropertySelect | undefined)?.value),
-    rows: completeRows(p.items as IBlockPropertyList | undefined, ["title", "url"]).flatMap((row): ProductRow[] => {
+    rows: completeRows(p.items as IBlockPropertyList | undefined).flatMap((row): ProductRow[] => {
       const title = rowText(row.title);
       /* A card with no name sells nothing, whatever else the row holds. */
       if (!title) return [];

@@ -1,6 +1,13 @@
 import type { BlockName, IBlock, PageTheme } from "@links/blocks";
 
-import { checkBlockUpToDate, createBlock, DEFAULT_PAGE_THEME, listRows, migrateBlock } from "@links/blocks";
+import {
+  checkBlockUpToDate,
+  createBlock,
+  DEFAULT_PAGE_THEME,
+  itemFieldsOf,
+  listRows,
+  migrateBlock,
+} from "@links/blocks";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useLinksStore } from "~entities/links";
@@ -124,7 +131,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
           half-filled row still holds the file its owner uploaded.
         */
         if (prop.type === "list") {
-          const imageKeys = prop.itemFields.filter((field) => field.type === "image").map((field) => field.key);
+          const imageKeys = itemFieldsOf(prop)
+            .filter((field) => field.type === "image")
+            .map((field) => field.key);
           for (const row of listRows(prop)) {
             for (const key of imageKeys) collect(row[key]);
           }

@@ -51,7 +51,7 @@ const bp = computed(() => {
   return {
     layout: layoutOf((p.layout as IBlockPropertySelect | undefined)?.value),
     showRating: (p["show-rating"] as IBlockPropertyBoolean | undefined)?.value === true,
-    rows: completeRows(p.items as IBlockPropertyList | undefined, ["quote"]).flatMap((row): TestimonialRow[] => {
+    rows: completeRows(p.items as IBlockPropertyList | undefined).flatMap((row): TestimonialRow[] => {
       const quote = rowText(row.quote);
       /* A testimonial without the words is not one, whatever else the row holds. */
       if (!quote) return [];

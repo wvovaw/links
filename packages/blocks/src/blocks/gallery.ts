@@ -61,7 +61,8 @@ function createBlock(id: string): IBlock<"Gallery"> {
         id: 2,
         type: "select",
         label: "Columns",
-        hint: "How many images sit side by side in a grid",
+        hint: "How many images sit side by side in a grid; the strip layout shows one row instead",
+
         options: [
           { label: "2", value: "2" },
           { label: "3", value: "3" },

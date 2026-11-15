@@ -198,6 +198,8 @@ Expected: PASS, including the existing `app.spec.ts` smoke test.
 
 Generalise `syncImages` in `links.service.ts` into one `syncAttachments(link, imageFileIds, assetFileIds)` covering both tables, with the same add/remove diff it does today. Extend the web store's `collectImageFileIds` into `collectAttachmentFileIds(blocks)` returning `{ imageFileIds, assetFileIds }` by property `type`, and send `assetFileIds` on save. Extend `UpdateContentDto` with `@IsOptional() @IsArray() @IsString({ each: true }) assetFileIds?: string[]`.
 
+The rewrite must keep the **list-row walk** the store does today: a `list` block keeps its files inside rows, not on an `image` property, so a per-property-`type` switch that only reads a property's own `value` would stop reporting every upload in a Gallery, Products or Testimonials row and the link save would delete them. Read the item fields through `itemFieldsOf(property)` and walk every stored row (`listRows`), exactly as `collectImageFileIds` does now; the existing test `apps/web/src/widgets/multilinks-constructor/tests/image-file-ids.test.ts` — "submits the file ids a list block keeps in its rows" — pins it, and the same walk is what the asset half needs for a `video` or `pdf` item field.
+
 - [ ] **Step 7: Verify deletion cascades**
 
 Upload an asset, attach it to a block, save, then delete the link. Expected: the row in `block_assets` is gone and the file is missing from the assets directory. Prove it in the test file, not by hand only.

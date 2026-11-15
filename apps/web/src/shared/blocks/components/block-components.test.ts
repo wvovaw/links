@@ -1,4 +1,4 @@
-import type { BlockName, IBlock } from "@links/blocks";
+import type { BlockName, IBlock, IBlockPropertyList } from "@links/blocks";
 import type { VueWrapper } from "@vue/test-utils";
 
 import { createBlock } from "@links/blocks";
@@ -1730,6 +1730,21 @@ describe("ProductsBlock", () => {
     ["a null checkout link", { title: "Null link", url: null }],
   ])("draws no card for %s", (_case, row) => {
     expect(cardsOf({ items: [row] })).toHaveLength(0);
+  });
+
+  /*
+    The filter reads the schema, not a second hand-written list of keys: a block that declares its
+    checkout link optional draws the row without one, and no renderer changes are involved.
+  */
+  it("filters rows by the required item fields its own schema declares", () => {
+    /* The build reuses one block literal per factory call, so the test edits its own copy. */
+    const block = structuredClone(blockOf("Products", { items: [{ title: "No checkout link", url: "" }] }));
+    const items = block.properties.items as IBlockPropertyList;
+    items.itemFields = items.itemFields.map((field) => (field.key === "url" ? { ...field, required: false } : field));
+
+    const wrapper = mount(ProductsBlock, { props: { properties: block.properties } });
+
+    expect(wrapper.findAll(".products-block__item")).toHaveLength(1);
   });
 
   it("draws the complete rows around a half-saved one", () => {

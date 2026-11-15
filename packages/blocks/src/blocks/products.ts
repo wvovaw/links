@@ -56,7 +56,8 @@ function createBlock(id: string): IBlock<"Products"> {
             id: 4,
             type: "url",
             label: "Checkout link",
-            hint: "Where the button leads: a payment link from Stripe, Gumroad, Ko-fi or Buy Me a Coffee",
+            hint: "Where the button leads: a payment link from Stripe, Gumroad, Ko-fi or Buy Me a Coffee, starting with http:// or https://",
+
             required: true,
             defaultValue: null,
           },

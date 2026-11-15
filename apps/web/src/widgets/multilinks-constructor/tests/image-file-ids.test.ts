@@ -47,6 +47,34 @@ describe("constructor store image file ids", () => {
   });
 
   /*
+    Property definitions are stored JSON too, and the API takes `blocks` as unknown: a list saved
+    without usable item fields must not throw inside the save and leave the owner unable to persist
+    the page at all. The files the other properties name are still reported.
+  */
+  it.each([
+    ["has no item fields", (items: Record<string, unknown>) => delete items.itemFields],
+    ["has item fields that are not a list", (items: Record<string, unknown>) => (items.itemFields = "image")],
+  ])("saves a page whose list property %s", async (_case, breakItemFields) => {
+    const store = useConstructorStore();
+    store.linkId = "link-1";
+    /*
+      The store starts from one module-level blocks array and `setBlocks` returns early when the ids
+      match, so this test names its own blocks; the build also reuses one literal per factory call, so
+      it breaks a copy.
+    */
+    const avatar = structuredClone(createBlock("Avatar", "avatar-no-fields"));
+    const gallery = structuredClone(createBlock("Gallery", "gallery-no-fields"));
+    store.setBlocks([avatar, gallery]);
+    store.blocks[0]!.properties.image!.value = "file-top";
+    store.blocks[1]!.properties.items!.value = [{ image: "file-a", alt: "A" }];
+    breakItemFields(store.blocks[1]!.properties.items as unknown as Record<string, unknown>);
+
+    await store.saveCurrentState();
+
+    expect(updateLink).toHaveBeenCalledWith(expect.objectContaining({ imageFileIds: ["file-top"] }));
+  });
+
+  /*
     The API deletes every stored file it is not told about, so a block that keeps its images inside
     rows must report them or the owner's uploads disappear on the next save.
   */

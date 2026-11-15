@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { IBlockPropertyList, ListRow } from "@links/blocks";
+import type { BlockItemField, IBlockPropertyList, ListRow } from "@links/blocks";
 
 import { animations, dragAndDrop, tearDown } from "@formkit/drag-and-drop";
-import { listRows } from "@links/blocks";
+import { itemFieldsOf, listRows } from "@links/blocks";
 import { UIButton, UIInputHint, UIInputLabel } from "@links/ui";
 
 import { scalarFields } from "./scalars";
@@ -15,12 +15,21 @@ const props = defineProps<IListFieldProps>();
 const model = defineModel<IBlockPropertyList["value"]>();
 
 const rows = computed(() => listRows({ ...props.field, value: model.value }));
+const itemFields = computed(() => itemFieldsOf(props.field));
 const minimumItems = computed(() => props.field.minItems ?? 0);
 const maximumItems = computed(() => props.field.maxItems ?? Number.POSITIVE_INFINITY);
 
+/**
+ * A required item field says so in its label: a row that leaves it blank is one no renderer draws, so
+ * the reason a card went missing is visible where the row is filled in.
+ */
+function markedField(itemField: BlockItemField): BlockItemField {
+  return itemField.required ? { ...itemField, label: `${itemField.label} (required)` } : itemField;
+}
+
 /** A new row is the declared defaults under the item fields' keys, nothing invented. */
 function defaultRow(): ListRow {
-  const entries = props.field.itemFields.map((item): [string, unknown] => [item.key, item.defaultValue]);
+  const entries = itemFields.value.map((item): [string, unknown] => [item.key, item.defaultValue]);
   return Object.fromEntries(entries);
 }
 
@@ -108,10 +117,10 @@ onBeforeUnmount(() => {
       </div>
       <component
         :is="scalarFields[itemField.type]"
-        v-for="itemField of field.itemFields"
+        v-for="itemField of itemFields"
         :key="itemField.key"
         :id="`${id}-row-${index}-${itemField.key}`"
-        :field="itemField"
+        :field="markedField(itemField)"
         :model-value="row[itemField.key]"
         @update:model-value="(value: unknown) => setRowValue(index, itemField.key, value)"
       />

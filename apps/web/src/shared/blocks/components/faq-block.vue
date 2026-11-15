@@ -36,7 +36,7 @@ const bp = computed(() => {
   return {
     title: (p.title as IBlockPropertyText | undefined)?.value?.trim(),
     /* A row holding half a question is not an answer yet, so it is not painted. */
-    rows: completeRows(p.items as IBlockPropertyList | undefined, ["question", "answer"]) as FaqRow[],
+    rows: completeRows(p.items as IBlockPropertyList | undefined) as FaqRow[],
     divider: dividerStyle((p["divider-style"] as IBlockPropertySelect | undefined)?.value),
     /*
       Off by default: the answers behave as one accordion. On, every `<details>` stands alone, because a

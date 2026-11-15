@@ -46,7 +46,7 @@ const bp = computed(() => {
       stored block is unvalidated JSON, so `image: 42` is a row `completeRows` keeps and
       `resolveBlockImageUrl` has no url for. Both are dropped rather than painted as a broken image.
     */
-    rows: completeRows(p.items as IBlockPropertyList | undefined, ["image"]).flatMap((row): GalleryRow[] => {
+    rows: completeRows(p.items as IBlockPropertyList | undefined).flatMap((row): GalleryRow[] => {
       const image =
         typeof row.image === "string"
           ? resolveBlockImageUrl(row.image, { origin: config.public.backendUrl })

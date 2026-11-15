@@ -411,7 +411,7 @@ exports[`Gallery > has a pinned schema snapshot 1`] = `
   "columns": {
     "defaultValue": "2",
     "group": "Appearance",
-    "hint": "How many images sit side by side in a grid",
+    "hint": "How many images sit side by side in a grid; the strip layout shows one row instead",
     "id": 2,
     "label": "Columns",
     "options": [
@@ -867,7 +867,7 @@ exports[`Products > has a pinned schema snapshot 1`] = `
       },
       {
         "defaultValue": null,
-        "hint": "Where the button leads: a payment link from Stripe, Gumroad, Ko-fi or Buy Me a Coffee",
+        "hint": "Where the button leads: a payment link from Stripe, Gumroad, Ko-fi or Buy Me a Coffee, starting with http:// or https://",
         "id": 4,
         "key": "url",
         "label": "Checkout link",
