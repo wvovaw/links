@@ -794,6 +794,121 @@ exports[`Picture > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Products > has a pinned schema snapshot 1`] = `
+{
+  "columns": {
+    "defaultValue": "2",
+    "group": "Appearance",
+    "hint": "How many products sit side by side in a grid",
+    "id": 2,
+    "label": "Columns",
+    "options": [
+      {
+        "label": "2",
+        "value": "2",
+      },
+      {
+        "label": "3",
+        "value": "3",
+      },
+    ],
+    "type": "select",
+  },
+  "cta-label": {
+    "defaultValue": "Buy",
+    "group": "Content",
+    "hint": "The button opens the product's checkout in a new tab",
+    "id": 4,
+    "label": "Button text",
+    "type": "text",
+  },
+  "disclaimer": {
+    "defaultValue": null,
+    "group": "Content",
+    "hint": "Small text under the products, for delivery or refund terms",
+    "id": 5,
+    "label": "Footnote",
+    "type": "text",
+  },
+  "items": {
+    "defaultValue": [],
+    "group": "Content",
+    "id": 0,
+    "itemFields": [
+      {
+        "defaultValue": null,
+        "id": 0,
+        "key": "image",
+        "label": "Image",
+        "type": "image",
+      },
+      {
+        "defaultValue": null,
+        "id": 1,
+        "key": "title",
+        "label": "Name",
+        "required": true,
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "id": 2,
+        "key": "subtitle",
+        "label": "Description",
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "hint": "Shown exactly as typed, for example от 1 999 ₽",
+        "id": 3,
+        "key": "price",
+        "label": "Price",
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "hint": "Where the button leads: a payment link from Stripe, Gumroad, Ko-fi or Buy Me a Coffee",
+        "id": 4,
+        "key": "url",
+        "label": "Checkout link",
+        "required": true,
+        "type": "url",
+      },
+    ],
+    "label": "Products",
+    "maxItems": 30,
+    "minItems": 1,
+    "type": "list",
+  },
+  "layout": {
+    "defaultValue": "list",
+    "group": "Appearance",
+    "id": 1,
+    "label": "Layout",
+    "options": [
+      {
+        "label": "List",
+        "value": "list",
+      },
+      {
+        "label": "Grid",
+        "value": "grid",
+      },
+    ],
+    "type": "select",
+  },
+  "show-price": {
+    "defaultValue": true,
+    "group": "Content",
+    "hint": "When off, a card keeps everything but its price",
+    "id": 3,
+    "label": "Show prices",
+    "type": "boolean",
+    "variant": "switch",
+  },
+}
+`;
+
 exports[`QrCode > has a pinned schema snapshot 1`] = `
 {
   "background": {

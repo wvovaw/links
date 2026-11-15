@@ -11,6 +11,7 @@ import MapModule from "./blocks/map";
 import MusicModule from "./blocks/music";
 import ParagraphModule from "./blocks/paragraph";
 import PictureModule from "./blocks/picture";
+import ProductsModule from "./blocks/products";
 import QrCodeModule from "./blocks/qr-code";
 import SocialIconsModule from "./blocks/social-icons";
 import SpacerModule from "./blocks/spacer";
@@ -32,6 +33,7 @@ export const registry: Registry = {
   Music: MusicModule,
   Paragraph: ParagraphModule,
   Picture: PictureModule,
+  Products: ProductsModule,
   QrCode: QrCodeModule,
   SocialIcons: SocialIconsModule,
   Spacer: SpacerModule,

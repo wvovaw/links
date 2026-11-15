@@ -13,6 +13,7 @@ import { galleryV0 } from "./fixtures/gallery-v0";
 import { paragraphV0 } from "./fixtures/paragraph-v0";
 import { paragraphV2 } from "./fixtures/paragraph-v2";
 import { pictureV0 } from "./fixtures/picture-v0";
+import { productsV0 } from "./fixtures/products-v0";
 
 describe.each(Object.values(registry))("$name", (module) => {
   it("creates a block matching its own version and name", () => {
@@ -83,6 +84,7 @@ it.each([
   ["Picture", 0, pictureV0],
   ["Faq", 0, faqV0],
   ["Gallery", 0, galleryV0],
+  ["Products", 0, productsV0],
 ])("migrates a stored %s block from version %i to the current schema", (name, version, fixture) => {
   const module = getBlockModule(name as BlockName);
   const migrated = migrateBlock(structuredClone(fixture));

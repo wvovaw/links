@@ -18,6 +18,7 @@ import MapBlock from "./map-block.vue";
 import MusicBlock from "./music-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
+import ProductsBlock from "./products-block.vue";
 import QrCodeBlock from "./qr-code-block.vue";
 import SocialIconsBlock from "./social-icons-block.vue";
 import SpacerBlock from "./spacer-block.vue";
@@ -1455,5 +1456,223 @@ describe("GalleryBlock", () => {
 
     expect(wrapper.get(".gallery-block").element.tagName).toBe("DIV");
     expect(wrapper.findAll("img")).toHaveLength(0);
+  });
+});
+
+describe("ProductsBlock", () => {
+  const two = {
+    items: [
+      {
+        image: "file-a",
+        title: "Кружка",
+        subtitle: "Керамика, 350 мл",
+        price: "от 1 999 ₽",
+        url: "https://shop.example/mug",
+      },
+      { title: "Tote bag", subtitle: "", price: "900 ₽", url: "https://shop.example/tote" },
+    ],
+  };
+
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(ProductsBlock, { props: { properties: blockOf("Products", values).properties } });
+  }
+
+  function styleOf(values: Record<string, unknown> = {}) {
+    return wrapperOf(values).get(".products-block").attributes("style") ?? "";
+  }
+
+  function cardsOf(values: Record<string, unknown> = {}) {
+    return wrapperOf(values).findAll(".products-block__item");
+  }
+
+  it("draws a card per complete row with its name, description, price and checkout link", () => {
+    const cards = cardsOf(two);
+
+    expect(cards).toHaveLength(2);
+    expect(cards[0]!.get(".products-block__title").text()).toBe("Кружка");
+    expect(cards[0]!.get(".products-block__subtitle").text()).toBe("Керамика, 350 мл");
+    /* A price is somebody else's copy, so the block prints it exactly as typed. */
+    expect(cards[0]!.get(".products-block__price").text()).toBe("от 1 999 ₽");
+    expect(cards[0]!.get(".products-block__cta").attributes("href")).toBe("https://shop.example/mug");
+    expect(cards[1]!.get(".products-block__price").text()).toBe("900 ₽");
+  });
+
+  it("opens the checkout in a new tab without a referrer", () => {
+    const cta = wrapperOf(two).get(".products-block__cta");
+
+    expect(cta.attributes("target")).toBe("_blank");
+    expect(cta.attributes("rel")).toBe("noopener noreferrer");
+    expect(cta.text()).toBe("Buy");
+  });
+
+  it("resolves a stored file id and leaves a pasted url as it is", () => {
+    const sources = wrapperOf({
+      items: [
+        { image: "file-a", title: "A", url: "https://shop.example/a" },
+        { image: "https://cdn.example/b.png", title: "B", url: "https://shop.example/b" },
+        { title: "C", url: "https://shop.example/c" },
+      ],
+    })
+      .findAll(".products-block__image")
+      .map((image) => image.attributes("src"));
+
+    expect(sources[0]).toMatch(/\/storage\/images\/file-a$/);
+    expect(sources[1]).toBe("https://cdn.example/b.png");
+    expect(sources).toHaveLength(2);
+  });
+
+  it.each([
+    ["no image", { title: "No image", url: "https://shop.example/a" }],
+    ["an empty image", { image: "", title: "Empty", url: "https://shop.example/a" }],
+    /* A row is unvalidated stored JSON: only a string can name an image. */
+    ["a numeric image", { image: 42, title: "Numeric", url: "https://shop.example/a" }],
+  ])("draws the card without an image for %s", (_case, row) => {
+    const wrapper = wrapperOf({ items: [row] });
+
+    expect(wrapper.findAll(".products-block__item")).toHaveLength(1);
+    expect(wrapper.find(".products-block__image").exists()).toBe(false);
+  });
+
+  /* Named and priced but with no checkout link, a row is not a product the block can sell. */
+  it.each([
+    ["a blank name", { title: "   ", url: "https://shop.example/a" }],
+    ["no name", { url: "https://shop.example/a" }],
+    ["no checkout link", { title: "Nameless link", url: "" }],
+    ["a null checkout link", { title: "Null link", url: null }],
+  ])("draws no card for %s", (_case, row) => {
+    expect(cardsOf({ items: [row] })).toHaveLength(0);
+  });
+
+  it("draws the complete rows around a half-saved one", () => {
+    const items = [two.items[0], { image: "file-b", title: "", url: "https://shop.example/blank" }, two.items[1]];
+
+    expect(cardsOf({ items }).map((card) => card.get(".products-block__title").text())).toEqual(["Кружка", "Tote bag"]);
+  });
+
+  it("draws the list layout unless the block says otherwise", () => {
+    const wrapper = wrapperOf(two);
+
+    expect(wrapper.get(".products-block").classes()).toContain("products-block--list");
+    expect(wrapper.get(".products-block").attributes("style")).toContain("--products-columns: 2");
+  });
+
+  it("becomes a grid of the stored column count and keeps every card", () => {
+    const wrapper = wrapperOf({ ...two, layout: "grid", columns: "3" });
+
+    expect(wrapper.get(".products-block").classes()).toContain("products-block--grid");
+    expect(wrapper.get(".products-block").classes()).not.toContain("products-block--list");
+    expect(styleOf({ ...two, columns: "3" })).toContain("--products-columns: 3");
+    expect(wrapper.findAll(".products-block__item")).toHaveLength(2);
+  });
+
+  /* The field offers 2–3 and the API stores the value unvalidated, so a track count is clamped whole. */
+  it.each([
+    ["over the range", "9", 3],
+    ["under the range", "1", 2],
+    ["not a number at all", "many", 2],
+    ["never set", undefined, 2],
+  ])("keeps %s inside the column range", (_case, columns, expected) => {
+    expect(styleOf(columns === undefined ? two : { ...two, columns })).toContain(`--products-columns: ${expected}`);
+  });
+
+  it("draws the list for a layout outside the palette", () => {
+    expect(
+      wrapperOf({ ...two, layout: "carousel" })
+        .get(".products-block")
+        .classes(),
+    ).toContain("products-block--list");
+  });
+
+  it("takes the button text from the block and falls back to Buy for a blank one", () => {
+    expect(
+      wrapperOf({ ...two, "cta-label": "Купить" })
+        .get(".products-block__cta")
+        .text(),
+    ).toBe("Купить");
+    expect(
+      wrapperOf({ ...two, "cta-label": "   " })
+        .get(".products-block__cta")
+        .text(),
+    ).toBe("Buy");
+  });
+
+  it("shows the prices unless the switch is off", () => {
+    expect(cardsOf({ ...two, "show-price": false })).toHaveLength(2);
+    expect(
+      wrapperOf({ ...two, "show-price": false })
+        .find(".products-block__price")
+        .exists(),
+    ).toBe(false);
+    expect(wrapperOf(two).findAll(".products-block__price")).toHaveLength(2);
+  });
+
+  /* The switch is the only way to hide a price, so a card still carries its name and its button. */
+  it("keeps the card and its button when prices are hidden", () => {
+    const card = cardsOf({ ...two, "show-price": false })[0]!;
+
+    expect(card.get(".products-block__title").text()).toBe("Кружка");
+    expect(card.get(".products-block__cta").attributes("href")).toBe("https://shop.example/mug");
+  });
+
+  /*
+    Row links are free text the API never validates, so a stored `javascript:` href would run in the
+    page's own origin when a visitor clicked the button. The card itself holds no url, so it stays —
+    without the button, the way a gallery keeps its image and drops the link.
+  */
+  it.each(["javascript:alert(1)", "data:text/html,<script>alert(1)</script>"])(
+    "draws the card without a button for a stored %s",
+    (url) => {
+      const wrapper = wrapperOf({ items: [{ title: "Mug", price: "900 ₽", url }] });
+
+      expect(wrapper.findAll(".products-block__item")).toHaveLength(1);
+      expect(wrapper.get(".products-block__title").text()).toBe("Mug");
+      expect(wrapper.find("a").exists()).toBe(false);
+      expect(wrapper.get(".products-block__price").text()).toBe("900 ₽");
+      expect(wrapper.html()).not.toContain(url);
+    },
+  );
+
+  it("prints the footnote as small text below the cards", () => {
+    const wrapper = wrapperOf({ ...two, disclaimer: "Доставка по России — 3–5 дней" });
+
+    expect(wrapper.get(".products-block__disclaimer").text()).toBe("Доставка по России — 3–5 дней");
+  });
+
+  it.each([
+    ["not stored", {}],
+    ["blank", { disclaimer: "   " }],
+  ])("draws no footnote when it is %s", (_case, values) => {
+    expect(
+      wrapperOf({ ...two, ...values })
+        .find(".products-block__disclaimer")
+        .exists(),
+    ).toBe(false);
+  });
+
+  /* A long Cyrillic name and a long price are ordinary input: the card must carry both whole. */
+  it("keeps a long name and a long price in one piece", () => {
+    const title = "Кружка ".repeat(20).trim();
+    const price = "от 1 999 ₽ за штуку при заказе от десяти штук ".repeat(3).trim();
+    const card = cardsOf({ items: [{ title, price, url: "https://shop.example/mug" }] })[0]!;
+
+    expect(card.get(".products-block__title").text()).toBe(title);
+    expect(card.get(".products-block__price").text()).toBe(price);
+  });
+
+  /* The page is server-rendered, so a crawler that never runs a script still reads the catalogue. */
+  it("ships the products in the server-rendered markup", async () => {
+    const html = await renderToString(h(ProductsBlock, { properties: blockOf("Products", two).properties }));
+
+    expect(html).toContain("Кружка");
+    expect(html).toContain("от 1 999 ₽");
+    expect(html).toContain("https://shop.example/tote");
+  });
+
+  /* The constructor selects a block through an overlay as tall as the block. */
+  it("keeps the box for a block with no complete rows", () => {
+    const wrapper = wrapperOf();
+
+    expect(wrapper.get(".products-block").element.tagName).toBe("DIV");
+    expect(wrapper.findAll(".products-block__item")).toHaveLength(0);
   });
 });

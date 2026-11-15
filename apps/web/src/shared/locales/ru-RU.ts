@@ -37,6 +37,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Paragraph.description": "Блок текста для описания, адреса или заметки.",
     "blocks.Picture.label": "Изображение",
     "blocks.Picture.description": "Одно изображение с необязательной подписью.",
+    "blocks.Products.label": "Товары",
+    "blocks.Products.description": "Список или сетка товаров с ценами и ссылкой на оплату.",
     "blocks.QrCode.label": "QR-код",
     "blocks.QrCode.description": "QR-код, который открывает ссылку при сканировании.",
     "blocks.QrCode.code": "QR-код",

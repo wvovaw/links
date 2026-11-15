@@ -71,4 +71,24 @@ describe("constructor store image file ids", () => {
       expect.objectContaining({ imageFileIds: ["file-top", "file-a", "file-c"] }),
     );
   });
+
+  /*
+    Products needs a name and a checkout link in every row, so a row can hold an uploaded image and
+    still be one a page never draws. The save names the file anyway: it is already on the server, and a
+    row that is deleted while half-filled would otherwise have its file cleaned up behind the owner's
+    back. This distinguishes "every stored row" from "every complete row", which a Gallery cannot —
+    its single required key is the image itself.
+  */
+  it("submits the image of a products row that is not complete yet", async () => {
+    const store = useConstructorStore();
+    store.linkId = "link-1";
+    store.setBlocks([createBlock("Products", "products-1")]);
+    store.blocks[0]!.properties.items!.value = [
+      { image: "file-kept", title: "", price: "900 ₽", url: "https://shop.example/mug" },
+    ];
+
+    await store.saveCurrentState();
+
+    expect(updateLink).toHaveBeenCalledWith(expect.objectContaining({ imageFileIds: ["file-kept"] }));
+  });
 });

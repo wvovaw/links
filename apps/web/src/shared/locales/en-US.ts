@@ -38,6 +38,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Paragraph.description": "A block of text for a bio, an address or a note.",
     "blocks.Picture.label": "Picture",
     "blocks.Picture.description": "A single image with an optional caption.",
+    "blocks.Products.label": "Products",
+    "blocks.Products.description": "A list or a grid of products with prices and a link to their checkout.",
     "blocks.QrCode.label": "QR code",
     "blocks.QrCode.description": "A QR code that opens a link when scanned.",
     "blocks.QrCode.code": "QR code",
