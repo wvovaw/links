@@ -5,6 +5,7 @@ import type { PublicLink } from "~shared/api/backend";
 import { LinkPageRenderer } from "~features/links";
 import { BackendApi } from "~shared/api";
 import { resolvePageStyle } from "~shared/blocks";
+import { isBlockVisible } from "~shared/blocks/visibility";
 import { LinkFooter } from "~widgets/link-footer";
 
 import NotExistPage from "./not-exist-page.vue";
@@ -16,9 +17,18 @@ const props = defineProps<{
 const { locale } = useI18n();
 const config = useRuntimeConfig();
 
-const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${props.link}`, () =>
-  BackendApi.PublicApi.getPublicLink(props.link),
-);
+/**
+ * A block its schedule hides is dropped before the data is serialized into the hydrated payload: the
+ * whole answer becomes part of the served HTML, so filtering at render time alone would still ship a
+ * hidden block's text to every visitor.
+ */
+const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${props.link}`, async () => {
+  const link = await BackendApi.PublicApi.getPublicLink(props.link);
+  if (!link) return link;
+
+  const now = new Date();
+  return { ...link, blocks: (link.blocks as IBlock[]).filter((block) => isBlockVisible(block.visibility, now)) };
+});
 
 const blocks = ref<IBlock[]>([]);
 const seo = ref<Record<string, unknown>>({});

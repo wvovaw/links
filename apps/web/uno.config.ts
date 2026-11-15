@@ -21,7 +21,15 @@ import { SOCIAL_SLOTS } from "./src/shared/blocks/social-icons";
 const SOCIAL_ICONS = SOCIAL_SLOTS.map((slot) => slot.icon);
 
 export default defineConfig({
-  safelist: ["i-lucide:sun-medium", "i-lucide:moon", "i-lucide:monitor", ...BLOCK_ICONS, ...SOCIAL_ICONS],
+  /* `eye-off` marks a block the constructor shows dimmed: it is not block metadata, so no list has it. */
+  safelist: [
+    "i-lucide:sun-medium",
+    "i-lucide:moon",
+    "i-lucide:monitor",
+    "i-lucide:eye-off",
+    ...BLOCK_ICONS,
+    ...SOCIAL_ICONS,
+  ],
   theme: {},
   shortcuts: {},
   presets: [

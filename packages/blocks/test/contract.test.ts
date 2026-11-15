@@ -89,3 +89,17 @@ it.each([
   // a step that bumps the version without doing its property work otherwise stays green.
   expect(migrated.properties).toEqual(module.createBlock("b1").properties);
 });
+
+/**
+ * A schedule sits on the block rather than in `properties`, so no migration step owns it: migrating a
+ * stored page must hand every block back with the visibility it was saved with.
+ */
+it("keeps a stored visibility schedule when a block migrates", () => {
+  const stored = structuredClone(buttonV0);
+  const schedule = { hidden: true, from: "2026-01-01T00:00:00.000Z", to: "2026-02-01T00:00:00.000Z" };
+  stored.visibility = schedule;
+
+  const migrated = migrateBlock(stored);
+
+  expect(migrated.visibility).toEqual(schedule);
+});

@@ -217,11 +217,24 @@ export type BlockProperty =
   | IBlockPropertyImage
   | IBlockPropertyDate;
 
+/**
+ * A schedule belongs to the block, not to one of its properties: it decides whether the block is on the
+ * page at all. `from` and `to` are ISO instants — `from` is inclusive and `to` is exclusive, so a block
+ * scheduled to end at 12:00 is gone at 12:00 exactly. A bound the parser cannot read is ignored rather
+ * than hiding the block forever.
+ */
+export interface IBlockVisibility {
+  hidden?: boolean;
+  from?: string;
+  to?: string;
+}
+
 export interface IBlock<K extends BlockName = BlockName> {
   id: string;
   name: K;
   properties: Record<string, BlockProperty>;
   version: number;
+  visibility?: IBlockVisibility;
 }
 
 export interface BlockModuleSchema {

@@ -40,4 +40,31 @@ describe("testing constructor store ordering", () => {
     store.redo();
     expect(store.blocks.map((block) => block.id)).toEqual([originalOrder[1], originalOrder[0]]);
   });
+
+  it("records a visibility toggle and keeps the block content through undo and redo", async () => {
+    const store = useConstructorStore();
+    store.addBlock("Paragraph");
+    const id = store.blocks[0]?.id ?? "";
+    /* History restores a parsed copy, so every read after undo or redo goes through the store again. */
+    const visibility = () => store.getBlock(id)?.visibility;
+    const text = () => store.getBlock(id)?.properties.text?.value;
+
+    const created = store.getBlock(id);
+    if (!created) throw new Error("the block was not added");
+    created.properties.text!.value = "Kept text";
+    await vi.advanceTimersByTimeAsync(400);
+    store.clearHistory();
+
+    created.visibility = { hidden: true };
+    await vi.advanceTimersByTimeAsync(400);
+    expect(store.canUndo).toBe(true);
+
+    store.undo();
+    expect(visibility()).toBeUndefined();
+    expect(text()).toBe("Kept text");
+
+    store.redo();
+    expect(visibility()).toEqual({ hidden: true });
+    expect(text()).toBe("Kept text");
+  });
 });

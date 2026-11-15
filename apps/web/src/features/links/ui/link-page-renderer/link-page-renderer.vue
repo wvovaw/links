@@ -2,6 +2,7 @@
 import type { IBlock, PageTheme } from "@links/blocks";
 
 import { resolvePageStyle, useBlocksResolver } from "~shared/blocks";
+import { isBlockVisible } from "~shared/blocks/visibility";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 
@@ -23,6 +24,13 @@ const linkAttrs = computed(() =>
     ? {}
     : { style: resolvePageStyle(props.theme ?? null, props.background ?? null) },
 );
+
+/**
+ * A block its schedule hides is dropped before rendering rather than hidden with CSS: the served HTML
+ * carries neither the hidden block's text nor its markup, so nothing leaks to a visitor who views the
+ * source or reads the page without styles. The clock is read once per render of a given block list.
+ */
+const visibleBlocks = computed(() => props.blocks.filter((block) => isBlockVisible(block.visibility, new Date())));
 </script>
 
 <template>
@@ -31,7 +39,7 @@ const linkAttrs = computed(() =>
       <div class="link__blocks-root">
         <component
           :is="resolve(block.name)"
-          v-for="block of blocks"
+          v-for="block of visibleBlocks"
           :id="`block-${block.id}`"
           :key="block.id"
           :properties="block.properties"

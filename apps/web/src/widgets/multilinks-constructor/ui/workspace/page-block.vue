@@ -3,6 +3,8 @@ import PageBlockActions from "./page-block-actions/page-block-actions.vue";
 
 interface IPageBlockProps {
   isSelected: boolean;
+  /** A block its schedule hides stays in the constructor — dimmed and badged — so it can be edited. */
+  isHidden: boolean;
 }
 defineProps<IPageBlockProps>();
 
@@ -12,7 +14,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="relative flex" :data-block-selected="isSelected">
+  <div class="relative flex" :data-block-selected="isSelected" :data-block-hidden="isHidden">
     <Transition
       appear
       enter-from-class="opacity-0"
@@ -32,7 +34,17 @@ defineEmits<{
       }"
       data-testid="page-block"
       @click.stop="$emit('select')"
-    />
-    <slot />
+    >
+      <span
+        v-if="isHidden"
+        class="i-lucide:eye-off absolute right-1 top-1 text-moon-16 text-trunks"
+        data-testid="page-block-hidden-badge"
+        role="img"
+        aria-label="Hidden"
+      />
+    </div>
+    <div class="w-full" :class="{ 'opacity-40': isHidden }">
+      <slot />
+    </div>
   </div>
 </template>

@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import type { BlockProperty, BlockPropertyType } from "@links/blocks";
+import type {
+  BlockProperty,
+  BlockPropertyType,
+  IBlockPropertyBoolean,
+  IBlockPropertyDate,
+  IBlockVisibility,
+} from "@links/blocks";
 
 import { UIButton, UISeparator } from "@links/ui";
 import { groupBy } from "~shared/lib/utils";
@@ -40,10 +46,74 @@ const groupedProperties = computed(() => {
   const gp = groupByGroupName(Object.values(block?.properties ?? {}));
   return gp;
 });
+
+const selectedBlock = computed(() => (selectedBlockId.value ? getBlock(selectedBlockId.value) : undefined));
+
+/**
+ * The visibility controls reuse the property fields, so each needs a descriptor: only the label and
+ * `withTime` are read. A schedule is not a property, which is why these are not part of the block.
+ */
+const hiddenField: IBlockPropertyBoolean = {
+  id: 0,
+  type: "boolean",
+  label: "Hide this block",
+  variant: "switch",
+  defaultValue: false,
+};
+const fromField: IBlockPropertyDate = {
+  id: 0,
+  type: "date",
+  label: "Show from",
+  withTime: true,
+  defaultValue: null,
+};
+const toField: IBlockPropertyDate = {
+  id: 0,
+  type: "date",
+  label: "Show until",
+  withTime: true,
+  defaultValue: null,
+};
+
+/**
+ * A schedule lives on the block, so it is written there rather than through a property. A cleared
+ * bound is deleted instead of stored as an empty string, which `isBlockVisible` would ignore anyway.
+ */
+function setVisibilityBound(bound: "from" | "to", value: string | undefined) {
+  const block = selectedBlock.value;
+  if (!block) return;
+
+  const visibility: IBlockVisibility = { ...block.visibility };
+  if (value) visibility[bound] = value;
+  else delete visibility[bound];
+  block.visibility = visibility;
+}
+
+const hidden = computed({
+  get: () => selectedBlock.value?.visibility?.hidden ?? false,
+  set: (value: boolean) => {
+    const block = selectedBlock.value;
+    if (block) block.visibility = { ...block.visibility, hidden: value };
+  },
+});
+const from = computed({
+  get: () => selectedBlock.value?.visibility?.from,
+  set: (value: string | undefined) => setVisibilityBound("from", value),
+});
+const to = computed({
+  get: () => selectedBlock.value?.visibility?.to,
+  set: (value: string | undefined) => setVisibilityBound("to", value),
+});
 </script>
 
 <template>
   <template v-if="selectedBlockId">
+    <OptionsSection title="Visibility">
+      <BooleanField id="visibility-hidden" v-model="hidden" :field="hiddenField" />
+      <DateField id="visibility-from" v-model="from" :field="fromField" />
+      <DateField id="visibility-to" v-model="to" :field="toField" />
+    </OptionsSection>
+    <UISeparator />
     <template v-for="(group, name) of groupedProperties" :key="name">
       <OptionsSection :title="name ? name : 'Other'">
         <div v-for="field of group" :key="field.id">

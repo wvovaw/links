@@ -5,6 +5,7 @@ import { animations, dragAndDrop, tearDown } from "@formkit/drag-and-drop";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 import { resolvePageStyle, useBlocksResolver } from "~shared/blocks";
+import { isBlockVisible } from "~shared/blocks/visibility";
 
 import { useConstructorStore } from "../../model";
 import PageBlock from "./page-block.vue";
@@ -20,6 +21,11 @@ const pageStyle = computed(() => resolvePageStyle(theme.value, background.value)
 function isSelectedBlock(blockId: string) {
   const isit = selectedBlockId.value === blockId;
   return isit;
+}
+
+/** The constructor keeps every block in the flow: one its schedule hides is dimmed, not removed. */
+function isHiddenBlock(block: IBlock) {
+  return !isBlockVisible(block.visibility, new Date());
 }
 
 const draggableRoot = ref<HTMLElement>();
@@ -70,6 +76,7 @@ onBeforeUnmount(() => {
           v-for="block of blocks"
           :key="block.id"
           :is-selected="isSelectedBlock(block.id)"
+          :is-hidden="isHiddenBlock(block)"
           @select="selectBlock(block.id)"
         >
           <component :is="resolve(block.name)" :id="`block-${block.id}`" :properties="block.properties" />
