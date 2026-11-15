@@ -26,5 +26,7 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Picture.description": "Одно изображение с необязательной подписью.",
     "blocks.Spacer.label": "Отступ",
     "blocks.Spacer.description": "Пустое пространство между двумя блоками.",
+    "blocks.Video.label": "Видео",
+    "blocks.Video.description": "Видео с YouTube, Vimeo или TikTok, которое играет прямо на странице.",
   };
 });

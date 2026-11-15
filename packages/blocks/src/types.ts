@@ -1,4 +1,13 @@
-export const BLOCK_NAMES = ["Avatar", "Button", "Divider", "Heading", "Paragraph", "Picture", "Spacer"] as const;
+export const BLOCK_NAMES = [
+  "Avatar",
+  "Button",
+  "Divider",
+  "Heading",
+  "Paragraph",
+  "Picture",
+  "Spacer",
+  "Video",
+] as const;
 export type BlockName = (typeof BLOCK_NAMES)[number];
 
 export const BLOCK_CATEGORIES = ["Content", "Media", "Links", "Social", "Commerce", "Layout"] as const;
@@ -25,6 +34,7 @@ export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:align-left",
   "i-lucide:image",
   "i-lucide:move-vertical",
+  "i-lucide:video",
 ];
 
 /**
@@ -89,6 +99,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     icon: "i-lucide:move-vertical",
     category: "Layout",
     keywords: ["gap", "space", "margin"],
+  },
+  Video: {
+    label: "Video",
+    description: "A video from YouTube, Vimeo or TikTok, played in place.",
+    icon: "i-lucide:video",
+    category: "Media",
+    keywords: ["youtube", "vimeo", "tiktok", "clip", "embed"],
   },
 };
 

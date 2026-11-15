@@ -11,6 +11,7 @@ import HeadingBlock from "./heading-block.vue";
 import ParagraphBlock from "./paragraph-block.vue";
 import PictureBlock from "./picture-block.vue";
 import SpacerBlock from "./spacer-block.vue";
+import VideoBlock from "./video-block.vue";
 
 /** A block whose stored values are exactly the ones a page carries, as the renderer passes them. */
 function blockOf(name: BlockName, values: Record<string, unknown> = {}): IBlock {
@@ -399,5 +400,86 @@ describe("SpacerBlock", () => {
     const wrapper = mount(SpacerBlock, { props: { properties: block.properties } });
 
     expect(wrapper.get(".spacer-block").attributes("style")).toContain("height: 24px");
+  });
+});
+
+describe("VideoBlock", () => {
+  const youtube = { provider: "youtube", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" };
+
+  function frameOf(values: Record<string, unknown>) {
+    return mount(VideoBlock, { props: { properties: blockOf("Video", values).properties } }).get("iframe");
+  }
+
+  it("embeds the mapped link in the provider's own player", () => {
+    const frame = frameOf(youtube);
+
+    expect(frame.attributes("src")).toBe("https://www.youtube.com/embed/dQw4w9WgXcQ");
+    expect(frame.attributes("title")).toBe("Video");
+    expect(frame.attributes("loading")).toBe("lazy");
+    expect(frame.attributes("allow")).toBe("autoplay; encrypted-media; picture-in-picture; fullscreen");
+    expect(frame.attributes("allowfullscreen")).toBe("");
+  });
+
+  it("maps a tiktok share link to its player", () => {
+    const frame = frameOf({ provider: "tiktok", url: "https://www.tiktok.com/@user/video/7312345678901234567" });
+
+    expect(frame.attributes("src")).toBe("https://www.tiktok.com/player/v1/7312345678901234567");
+  });
+
+  it("starts autoplay muted, because a browser blocks a noisy one", () => {
+    expect(frameOf({ ...youtube, autoplay: true }).attributes("src")).toBe(
+      "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1",
+    );
+  });
+
+  it.each([
+    ["youtube", { ...youtube, muted: true }, "https://www.youtube.com/embed/dQw4w9WgXcQ?mute=1"],
+    [
+      "vimeo",
+      { provider: "vimeo", url: "https://vimeo.com/123456789", loop: true, muted: true },
+      "https://player.vimeo.com/video/123456789?loop=1&muted=1",
+    ],
+    [
+      "tiktok",
+      { provider: "tiktok", url: "https://www.tiktok.com/@user/video/7312345678901234567", muted: true },
+      "https://www.tiktok.com/player/v1/7312345678901234567?muted=1",
+    ],
+  ])("spells the %s playback flags the way the provider does", (_provider, values, expected) => {
+    expect(frameOf(values).attributes("src")).toBe(expected);
+  });
+
+  it("gives youtube loop the playlist that names the single video", () => {
+    expect(frameOf({ ...youtube, loop: true }).attributes("src")).toBe(
+      "https://www.youtube.com/embed/dQw4w9WgXcQ?loop=1&playlist=dQw4w9WgXcQ",
+    );
+  });
+
+  it("draws the stored aspect and radius", () => {
+    const wrapper = mount(VideoBlock, {
+      props: { properties: blockOf("Video", { ...youtube, aspect: "9:16", radius: 16 }).properties },
+    });
+
+    const style = wrapper.get(".video-block").attributes("style") ?? "";
+    expect(style).toContain("--video-aspect: 9 / 16");
+    expect(style).toContain("--video-radius: 16px");
+  });
+
+  it("keeps the 16:9 frame and the default radius when they are not stored", () => {
+    const style = mount(VideoBlock, { props: { properties: blockOf("Video", youtube).properties } })
+      .get(".video-block")
+      .attributes("style");
+
+    expect(style).toContain("--video-aspect: 16 / 9");
+    expect(style).toContain("--video-radius: 8px");
+  });
+
+  it.each([
+    ["a link of another site", "https://example.com/watch?v=1"],
+    ["no link at all", ""],
+  ])("shows the stored link instead of an iframe for %s", (_case, url) => {
+    const wrapper = mount(VideoBlock, { props: { properties: blockOf("Video", { ...youtube, url }).properties } });
+
+    expect(wrapper.find("iframe").exists()).toBe(false);
+    expect(wrapper.get(".video-block__placeholder").text()).toBe(url);
   });
 });

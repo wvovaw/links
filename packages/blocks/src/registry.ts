@@ -7,6 +7,7 @@ import HeadingModule from "./blocks/heading";
 import ParagraphModule from "./blocks/paragraph";
 import PictureModule from "./blocks/picture";
 import SpacerModule from "./blocks/spacer";
+import VideoModule from "./blocks/video";
 
 type Registry = {
   readonly [K in BlockName]: BlockModuleSchema;
@@ -20,6 +21,7 @@ export const registry: Registry = {
   Paragraph: ParagraphModule,
   Picture: PictureModule,
   Spacer: SpacerModule,
+  Video: VideoModule,
 };
 
 export function getBlockModule(name: BlockName): Registry[BlockName] {

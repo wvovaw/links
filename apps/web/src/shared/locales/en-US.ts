@@ -26,5 +26,7 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Picture.description": "A single image with an optional caption.",
     "blocks.Spacer.label": "Spacer",
     "blocks.Spacer.description": "Empty space between two blocks.",
+    "blocks.Video.label": "Video",
+    "blocks.Video.description": "A video from YouTube, Vimeo or TikTok, played in place.",
   };
 });
