@@ -157,7 +157,7 @@ Expected: FAIL — the new property type has no `list` mapping in the field map 
 
 - [ ] **Step 6: Write `list-field.vue`**
 
-Props: `field: IBlockPropertyList`, `id: string`; model: `IBlockPropertyList["value"]`. Mark the parts the test looks for: `data-testid="list-row"` on each row, `list-add`, `list-duplicate`, `list-remove` on the buttons. Render one card per row: the row's `itemFields` resolved through the same components object the editor uses (lift `fieldsMap` out of `block-properties-editor.vue` into `fields/index.ts` and import it in both places, so a new property type still fails to compile until a field exists). Controls per row: drag handle (wire `dragAndDrop` from `@formkit/drag-and-drop` on the rows container), duplicate, remove. A footer button adds a row using each item field's `defaultValue`; it is disabled at `maxItems`, and remove is disabled at `minItems`. Empty state: a sentence and the add button.
+Props: `field: IBlockPropertyList`, `id: string`; model: `IBlockPropertyList["value"]`. Mark the parts the test looks for: `data-testid="list-row"` on each row, `list-add`, `list-duplicate`, `list-remove` on the buttons. Render one card per row: the row's `itemFields` resolved through the same components object the editor uses. Lift `fieldsMap` out of `block-properties-editor.vue` into `fields/index.ts` and import it in both places, so a new property type still fails to compile until a field exists — but keep the map in `fields/index.ts` and the row's own field module separate: `list-field.vue` must not import the map that imports `list-field.vue`. Resolve the row's `itemFields` through a map imported by the row, or have the editor pass the resolved components down as a prop; either way there is no cycle. Controls per row: drag handle (wire `dragAndDrop` from `@formkit/drag-and-drop` on the rows container), duplicate, remove. A footer button adds a row using each item field's `defaultValue`; it is disabled at `maxItems`, and remove is disabled at `minItems`. Empty state: a sentence and the add button.
 
 - [ ] **Step 7: Run the editor test to verify it passes**
 
@@ -236,7 +236,7 @@ git commit -m "feat(blocks): add an FAQ accordion block"
 
 - [ ] **Step 2: Write the component**
 
-Rows without an `image` are dropped by `completeRows(items, ["image"])`. `grid` is a CSS grid with `grid-template-columns: repeat(var(--cols), 1fr)`; `strip` is `display: flex` with `overflow-x: auto` and `scroll-snap-type: x mandatory`, each item `scroll-snap-align: start`. Every image gets `loading="lazy"`, `alt` from the row, `aspect-ratio` from the property, `object-fit: cover`, and is wrapped in an anchor with `rel="noopener noreferrer"` when `link` is set.
+Rows without an `image` are dropped by `completeRows(items, ["image"])`. `grid` is a CSS grid with `grid-template-columns: repeat(var(--cols), 1fr)`; `strip` is `display: flex` with `overflow-x: auto` and `scroll-snap-type: x mandatory`, each item `scroll-snap-align: start`. Every image gets `loading="lazy"`, `alt` from the row, `aspect-ratio` from the property, `object-fit: cover`, and is wrapped in an anchor with `rel="noopener noreferrer"` when `link` is set. The href goes through `webHref` from `~shared/blocks/link-url` (as Picture, Avatar, Button and the social slots already do), so a stored `javascript:`/`data:` value renders the image with no link instead of an executable one.
 
 - [ ] **Step 3: Verify in the browser**
 
@@ -267,7 +267,7 @@ git commit -m "feat(blocks): add an image gallery block"
 
 - [ ] **Step 2: Write the component**
 
-`completeRows(items, ["title", "url"])`; each card shows the image (when set), title, subtitle, `price` verbatim when `show-price`, and a CTA anchor carrying `cta-label`, `target="_blank"`, `rel="noopener noreferrer"`. A card without `url` is dropped by the filter rather than rendered inert. `disclaimer` renders as small text below the list.
+`completeRows(items, ["title", "url"])`; each card shows the image (when set), title, subtitle, `price` verbatim when `show-price`, and a CTA anchor carrying `cta-label`, `target="_blank"`, `rel="noopener noreferrer"`. A card without `url` is dropped by the filter rather than rendered inert, and the href goes through `webHref` from `~shared/blocks/link-url` so only `http:`/`https:` becomes a link. `disclaimer` renders as small text below the list.
 
 - [ ] **Step 3: Verify in the browser**
 
