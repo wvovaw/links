@@ -16,9 +16,15 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Avatar.description": "Круглое фото профиля с короткой подписью.",
     "blocks.Button.label": "Кнопка",
     "blocks.Button.description": "Крупная ссылка на другую страницу или сайт.",
+    "blocks.Divider.label": "Разделитель",
+    "blocks.Divider.description": "Линия или отступ, разделяющие два блока.",
+    "blocks.Heading.label": "Заголовок",
+    "blocks.Heading.description": "Заголовок, с которого начинается раздел страницы.",
     "blocks.Paragraph.label": "Параграф",
     "blocks.Paragraph.description": "Блок текста для описания, адреса или заметки.",
     "blocks.Picture.label": "Изображение",
     "blocks.Picture.description": "Одно изображение с необязательной подписью.",
+    "blocks.Spacer.label": "Отступ",
+    "blocks.Spacer.description": "Пустое пространство между двумя блоками.",
   };
 });

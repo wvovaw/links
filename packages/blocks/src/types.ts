@@ -27,6 +27,18 @@ export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:move-vertical",
 ];
 
+/**
+ * The icons a link card may show. A subset of `BLOCK_ICONS`, because the two lists answer different
+ * questions: `BLOCK_ICONS` is what the palette needs drawn, while this is what reads as a decoration
+ * on a link — a structural icon such as `minus` has no business in every button's icon picker.
+ */
+export const LINK_ICONS: readonly string[] = [
+  "i-lucide:circle-user-round",
+  "i-lucide:link",
+  "i-lucide:align-left",
+  "i-lucide:image",
+];
+
 /** English fallbacks: the i18n layer overrides them through `blocks.<Name>.label` / `.description`. */
 export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
   Avatar: {

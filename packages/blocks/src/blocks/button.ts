@@ -1,6 +1,6 @@
 import type { BlockModuleSchema, BlockProperty, IBlock, IBlockPropertyColor, IBlockPropertySelect } from "../types";
 
-import { BLOCK_ICONS } from "../types";
+import { LINK_ICONS } from "../types";
 
 const BLOCK_VERSION = 3;
 
@@ -69,11 +69,12 @@ function cardProperties(): Record<string, BlockProperty> {
 }
 
 /**
- * Only the icons the palette safelists are offered: UnoCSS emits no class for any other name, so a
- * wider list would render an empty box with no error.
+ * Only safelisted link icons are offered: UnoCSS emits no class for any name outside `BLOCK_ICONS`, so
+ * a wider list would render an empty box with no error. `LINK_ICONS` keeps that safelist from deciding
+ * which icons belong on a link card.
  */
 function linkIconOptions(): IBlockPropertySelect["options"] {
-  return BLOCK_ICONS.map((icon) => {
+  return LINK_ICONS.map((icon) => {
     const name = icon.slice(icon.indexOf(":") + 1).replaceAll("-", " ");
 
     return { label: name.charAt(0).toUpperCase() + name.slice(1), value: icon };

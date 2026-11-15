@@ -35,7 +35,11 @@ const bp = computed(() => {
 </template>
 
 <style>
-/* The box stays as tall as one line without text, so an empty heading is still selectable. */
+/*
+  A heading without text renders no heading element on purpose, and this box is what stays: the
+  constructor selects a block through an overlay as tall as the block, so a zero-height heading could
+  never be selected again. Keeping one line of height is the decision, not a leftover.
+*/
 .heading-block {
   width: 100%;
   min-height: 2rem;

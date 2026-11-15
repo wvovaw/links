@@ -123,24 +123,12 @@ exports[`Button > has a pinned schema snapshot 1`] = `
         "value": "i-lucide:link",
       },
       {
-        "label": "Minus",
-        "value": "i-lucide:minus",
-      },
-      {
-        "label": "Heading",
-        "value": "i-lucide:heading",
-      },
-      {
         "label": "Align left",
         "value": "i-lucide:align-left",
       },
       {
         "label": "Image",
         "value": "i-lucide:image",
-      },
-      {
-        "label": "Move vertical",
-        "value": "i-lucide:move-vertical",
       },
     ],
     "type": "select",

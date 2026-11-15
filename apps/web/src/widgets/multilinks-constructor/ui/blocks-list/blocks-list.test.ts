@@ -1,6 +1,6 @@
 import type { VueWrapper } from "@vue/test-utils";
 
-import { BLOCK_ICONS, BLOCK_META } from "@links/blocks";
+import { BLOCK_ICONS, BLOCK_META, LINK_ICONS } from "@links/blocks";
 import { mount } from "@vue/test-utils";
 import { createPinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -72,5 +72,9 @@ describe("testing BlocksList component", () => {
 describe("testing the block palette metadata", () => {
   it("pins every metadata icon into the safelist", () => {
     for (const meta of Object.values(BLOCK_META)) expect(BLOCK_ICONS).toContain(meta.icon);
+  });
+
+  it("keeps the link-card icon subset inside the safelist", () => {
+    for (const icon of LINK_ICONS) expect(BLOCK_ICONS).toContain(icon);
   });
 });
