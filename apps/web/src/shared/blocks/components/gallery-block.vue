@@ -105,6 +105,16 @@ const bp = computed(() => {
   gap: 0.5rem;
 }
 /*
+  The same cap as a product card, for the same reason: the owner picks 2–4 tracks, but the page
+  container is 640px wide at most, and below that four images at 320px leave 66px each. A phone keeps
+  the two tracks the strip layout already fits there; a wider screen draws the stored count.
+*/
+@media (max-width: 639px) {
+  .gallery-block--grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/*
   The strip scrolls on its own: capping the width and containing the scroll keeps a sideways swipe from
   reaching the page behind it, so a gallery never makes the page scroll horizontally.
 */

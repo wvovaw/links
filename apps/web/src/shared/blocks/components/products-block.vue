@@ -137,6 +137,17 @@ const bp = computed(() => {
   display: grid;
   grid-template-columns: repeat(var(--products-columns, 2), minmax(0, 1fr));
 }
+/*
+  The column count is the owner's setting, so it is drawn only where a column can hold a card: the page
+  container is 640px wide at most, and once it narrows with the viewport three cards came out 88px wide
+  at 320px — no horizontal scroll, just unreadable cards. A phone therefore gets one column, and an
+  explicit breakpoint rather than `auto-fit`: the count is a setting and must not drift on a wide screen.
+*/
+@media (max-width: 639px) {
+  .products-block--grid .products-block__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 /* The card is a surface of its own, so a product reads as one item among the page's blocks. */
 .products-block__item {
   display: flex;
