@@ -10,6 +10,7 @@ import {
   Post,
   Res,
   UploadedFile,
+  UseFilters,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
@@ -19,7 +20,8 @@ import { access } from "node:fs/promises";
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { User } from "../users/user.entity";
-import { LocalStorageService } from "./local-storage.service";
+import { LocalStorageService, maxImageBytes } from "./local-storage.service";
+import { UploadTooLargeFilter } from "./upload-too-large.filter";
 
 @Controller("storage")
 export class StorageController {
@@ -35,12 +37,13 @@ export class StorageController {
       throw new NotFoundException("Avatar not found.");
     }
 
-    response.sendFile(path, { root: process.cwd() });
+    response.sendFile(path);
   }
 
   @Post("images")
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor("file"))
+  @UseInterceptors(FileInterceptor("file", { limits: () => ({ fileSize: maxImageBytes() }) }))
+  @UseFilters(UploadTooLargeFilter)
   async uploadImage(@CurrentUser() _user: User, @UploadedFile() file: Express.Multer.File) {
     const fileId = await this.storage.saveImage(file);
     return { fileId };
@@ -56,7 +59,7 @@ export class StorageController {
       throw new NotFoundException("Image not found.");
     }
 
-    response.sendFile(path, { root: process.cwd() });
+    response.sendFile(path);
   }
 
   @Delete("images/:fileId")

@@ -88,15 +88,16 @@ fresh clone must be built before anything importing the preset runs, the web tes
   delete the file and let migrations rebuild it.
 - Env is read straight from `process.env`, each variable at its point of use with an inline default.
 
-| Variable        | Read in                                                     |
-| --------------- | ----------------------------------------------------------- |
-| `PORT`          | `main.ts`                                                   |
-| `FRONTEND_URL`  | `main.ts` (CORS origin)                                     |
-| `DATABASE_PATH` | `database/database.config.ts`                               |
-| `UPLOADS_PATH`  | `storage/local-storage.service.ts`                          |
-| `IMAGES_PATH`   | `storage/local-storage.service.ts`                          |
-| `JWT_SECRET`    | `auth/auth.tokens.ts` — required in production              |
-| `NODE_ENV`      | `auth/auth.controller.ts` — gates the secure refresh cookie |
+| Variable          | Read in                                                     |
+| ----------------- | ----------------------------------------------------------- |
+| `PORT`            | `main.ts`                                                   |
+| `FRONTEND_URL`    | `main.ts` (CORS origin)                                     |
+| `DATABASE_PATH`   | `database/database.config.ts`                               |
+| `UPLOADS_PATH`    | `storage/local-storage.service.ts`                          |
+| `IMAGES_PATH`     | `storage/local-storage.service.ts`                          |
+| `MAX_IMAGE_BYTES` | `storage/local-storage.service.ts` — multer's upload limit  |
+| `JWT_SECRET`      | `auth/auth.tokens.ts` — required in production              |
+| `NODE_ENV`        | `auth/auth.controller.ts` — gates the secure refresh cookie |
 
 - Auth: JWT access tokens plus cookie-based refresh sessions. Uploads go through multer into
   `apps/backend/uploads` (gitignored).

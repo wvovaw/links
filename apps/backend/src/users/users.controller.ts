@@ -7,6 +7,7 @@ import {
   Patch,
   Put,
   UploadedFile,
+  UseFilters,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
@@ -16,7 +17,8 @@ import { Repository } from "typeorm";
 
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
-import { LocalStorageService } from "../storage/local-storage.service";
+import { LocalStorageService, maxImageBytes } from "../storage/local-storage.service";
+import { UploadTooLargeFilter } from "../storage/upload-too-large.filter";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { toUserDto } from "./user.dto";
 import { User } from "./user.entity";
@@ -42,14 +44,13 @@ export class UsersController {
   }
 
   @Put("me/avatar")
-  @UseInterceptors(FileInterceptor("avatar"))
+  @UseInterceptors(FileInterceptor("avatar", { limits: () => ({ fileSize: maxImageBytes() }) }))
+  @UseFilters(UploadTooLargeFilter)
   async updateAvatar(@CurrentUser() user: User, @UploadedFile() file?: Express.Multer.File) {
     if (!file) throw new BadRequestException("Avatar file is required.");
 
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.mimetype))
       throw new BadRequestException("Only JPEG and PNG avatars are allowed.");
-
-    if (file.size > 5 * 1024 * 1024) throw new BadRequestException("Avatar must be 5 MB or smaller.");
 
     if (user.avatarFileId) await this.storage.removeAvatar(user.avatarFileId);
 
