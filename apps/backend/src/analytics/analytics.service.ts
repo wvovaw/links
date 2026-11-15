@@ -1,10 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import type { BlockEventKind } from "./block-event.entity";
 import type { BlockStatsQueryDto } from "./dto/block-event.dto";
 
+import { TooManyRequestsException } from "../common/too-many-requests.exception";
 import { BlockEvent } from "./block-event.entity";
 
 /** One minute, per block: how many events a single block may report before the window closes. */
@@ -15,17 +16,6 @@ export interface BlockStats {
   blockId: string;
   clicks: number;
   views: number;
-}
-
-/**
- * `@nestjs/throttler`'s `ThrottlerException` is not a dependency of this app, and the window below is a
- * dozen lines that key on the page rather than the visitor — which is the point: the plan forbids
- * storing anything that could identify a caller, so there is nothing to spend a per-visitor key on.
- */
-export class TooManyRequestsException extends HttpException {
-  constructor() {
-    super("Too many events for this block. Try again in a minute.", HttpStatus.TOO_MANY_REQUESTS);
-  }
 }
 
 @Injectable()
@@ -80,7 +70,7 @@ export class AnalyticsService {
 
     if (recent.length >= windowLimit) {
       this.recent.set(key, recent);
-      throw new TooManyRequestsException();
+      throw new TooManyRequestsException("Too many events for this block. Try again in a minute.");
     }
 
     recent.push(now);

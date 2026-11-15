@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AnalyticsModule } from "./analytics/analytics.module";
 import { AuthModule } from "./auth/auth.module";
 import { databaseConfig } from "./database/database.config";
+import { FormsModule } from "./forms/forms.module";
 import { LinksModule } from "./links/links.module";
 import { PublicModule } from "./public/public.module";
 import { StorageModule } from "./storage/storage.module";
@@ -18,6 +19,7 @@ import { UsersModule } from "./users/users.module";
     PublicModule,
     StorageModule,
     AnalyticsModule,
+    FormsModule,
   ],
 })
 export class AppModule {}

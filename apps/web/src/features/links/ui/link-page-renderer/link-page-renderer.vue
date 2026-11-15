@@ -63,7 +63,12 @@ function reportClick(event: MouseEvent) {
     <div class="link__container">
       <div class="link__blocks-root" @click="reportClick">
         <div v-for="block of shownBlocks" :key="block.id" :data-block-id="block.id">
-          <component :is="resolve(block.name)" :id="`block-${block.id}`" :properties="block.properties" />
+          <component
+            :is="resolve(block.name)"
+            :id="`block-${block.id}`"
+            :block-id="block.id"
+            :properties="block.properties"
+          />
         </div>
       </div>
     </div>

@@ -1,8 +1,10 @@
 export const BLOCK_NAMES = [
   "Avatar",
   "Button",
+  "ContactForm",
   "Countdown",
   "Divider",
+  "EmailCapture",
   "Faq",
   "Gallery",
   "Heading",
@@ -38,8 +40,10 @@ export interface BlockMeta {
 export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:circle-user-round",
   "i-lucide:link",
+  "i-lucide:mail",
   "i-lucide:timer",
   "i-lucide:minus",
+  "i-lucide:at-sign",
   "i-lucide:heading",
   "i-lucide:circle-help",
   "i-lucide:images",
@@ -83,6 +87,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     category: "Links",
     keywords: ["link", "cta", "action"],
   },
+  ContactForm: {
+    label: "Contact form",
+    description: "A form that stores a name, an address and a message on the page.",
+    icon: "i-lucide:mail",
+    category: "Commerce",
+    keywords: ["contact", "form", "message", "email", "feedback", "inquiry"],
+  },
   Countdown: {
     label: "Countdown",
     description: "A live countdown to a date and time.",
@@ -96,6 +107,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     icon: "i-lucide:minus",
     category: "Layout",
     keywords: ["separator", "line", "rule"],
+  },
+  EmailCapture: {
+    label: "Email capture",
+    description: "A one-field form that stores a visitor's email address.",
+    icon: "i-lucide:at-sign",
+    category: "Commerce",
+    keywords: ["email", "subscribe", "newsletter", "signup", "capture"],
   },
   Faq: {
     label: "FAQ",
@@ -231,6 +249,15 @@ export interface IBlockPropertySelect<T = string> extends IBlockPropertyCommon<T
   options: { value: T; label: string }[];
   isMultiple?: boolean;
 }
+/**
+ * A select that holds several of its options at once: the same `options`, but the stored value is the
+ * list of the ones chosen. A single select keeps one value, which is what the interface above describes.
+ */
+export interface IBlockPropertySelectMultiple extends IBlockPropertyCommon<string[]> {
+  type: "select";
+  options: { value: string; label: string }[];
+  isMultiple: true;
+}
 export interface IBlockPropertyImage<T = string> extends IBlockPropertyCommon<T> {
   type: "image";
   accept?: string;
@@ -279,6 +306,7 @@ export type BlockProperty =
   | IBlockPropertyNumber
   | IBlockPropertyBoolean
   | IBlockPropertySelect
+  | IBlockPropertySelectMultiple
   | IBlockPropertyUrl
   | IBlockPropertyColor
   | IBlockPropertyImage

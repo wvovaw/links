@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { AnalyticsModule } from "../analytics/analytics.module";
 import { AuthGuard } from "../common/auth.guard";
+import { FormsModule } from "../forms/forms.module";
 import { BlockAsset } from "../storage/block-asset.entity";
 import { BlockImage } from "../storage/block-image.entity";
 import { StorageModule } from "../storage/storage.module";
@@ -18,6 +19,7 @@ import { LinksService } from "./links.service";
     JwtModule.register({}),
     StorageModule,
     AnalyticsModule,
+    FormsModule,
   ],
   controllers: [LinksController],
   providers: [LinksService, AuthGuard],

@@ -4,6 +4,8 @@ import { AnalyticsService } from "../analytics/analytics.service";
 import { BlockStatsQueryDto } from "../analytics/dto/block-event.dto";
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
+import { SubmissionsQueryDto } from "../forms/dto/submission.dto";
+import { FormsService } from "../forms/forms.service";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
 import { UpdateThemeDto } from "./dto/theme.dto";
@@ -15,6 +17,7 @@ export class LinksController {
   constructor(
     private readonly linksService: LinksService,
     private readonly analytics: AnalyticsService,
+    private readonly forms: FormsService,
   ) {}
 
   @Post()
@@ -50,6 +53,18 @@ export class LinksController {
     const link = await this.linksService.getOwned(user, id);
 
     return { blocks: await this.analytics.blockStats(link.id, query) };
+  }
+
+  /**
+   * Ownership is settled before any query runs: `getOwned` answers 404 for a link the caller does not own,
+   * so one owner cannot read the messages visitors left on another page.
+   */
+  @Get(":id/submissions")
+  @UseGuards(AuthGuard)
+  async submissions(@CurrentUser() user: User, @Param("id") id: string, @Query() query: SubmissionsQueryDto) {
+    const link = await this.linksService.getOwned(user, id);
+
+    return { submissions: await this.forms.list(link.id, query) };
   }
 
   @Patch(":id/content")

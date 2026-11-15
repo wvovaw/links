@@ -1,19 +1,9 @@
 import { BadRequestException, Body, Controller, Param, Post } from "@nestjs/common";
 
-import type { Link } from "../links/link.entity";
-
 import { AnalyticsService } from "../analytics/analytics.service";
 import { RecordBlockEventDto } from "../analytics/dto/block-event.dto";
+import { blockIdsOf } from "../links/block-ids";
 import { LinksService } from "../links/links.service";
-
-/** The block ids a stored page holds. `Link.blocks` is `unknown[]`, so the shape is read defensively. */
-function blockIdsOf(link: Link) {
-  const stored = link.blocks.map((block) =>
-    typeof block === "object" && block !== null ? (block as { id?: unknown }).id : undefined,
-  );
-
-  return new Set(stored.filter((id): id is string => typeof id === "string"));
-}
 
 /**
  * The one unauthenticated write of the analytics feature: a page in front of a visitor reporting that a

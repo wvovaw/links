@@ -2,8 +2,10 @@ import type { BlockModuleSchema, BlockName, IBlock } from "./types";
 
 import AvatarModule from "./blocks/avatar";
 import ButtonModule from "./blocks/button";
+import ContactFormModule from "./blocks/contact-form";
 import CountdownModule from "./blocks/countdown";
 import DividerModule from "./blocks/divider";
+import EmailCaptureModule from "./blocks/email-capture";
 import FaqModule from "./blocks/faq";
 import GalleryModule from "./blocks/gallery";
 import HeadingModule from "./blocks/heading";
@@ -25,8 +27,10 @@ type Registry = {
 export const registry: Registry = {
   Avatar: AvatarModule,
   Button: ButtonModule,
+  ContactForm: ContactFormModule,
   Countdown: CountdownModule,
   Divider: DividerModule,
+  EmailCapture: EmailCaptureModule,
   Faq: FaqModule,
   Gallery: GalleryModule,
   Heading: HeadingModule,

@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { BlockEvent } from "../analytics/block-event.entity";
 import { RefreshSession } from "../auth/refresh-session.entity";
+import { FormSubmission } from "../forms/form-submission.entity";
 import { Link } from "../links/link.entity";
 import { BlockAsset } from "../storage/block-asset.entity";
 import { BlockImage } from "../storage/block-image.entity";
@@ -21,7 +22,7 @@ import { User } from "../users/user.entity";
 export const databaseConfig = {
   type: "better-sqlite3",
   database: process.env.DATABASE_PATH ?? "data.sqlite",
-  entities: [User, RefreshSession, Link, BlockImage, BlockAsset, BlockEvent],
+  entities: [User, RefreshSession, Link, BlockImage, BlockAsset, BlockEvent, FormSubmission],
   migrations: [join(__dirname, "..", "migrations", "*.{ts,js}")],
   synchronize: false,
 } satisfies DataSourceOptions;

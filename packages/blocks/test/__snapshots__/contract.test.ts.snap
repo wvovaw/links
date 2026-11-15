@@ -213,6 +213,63 @@ exports[`Button > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`ContactForm > has a pinned schema snapshot 1`] = `
+{
+  "button-label": {
+    "defaultValue": "Send",
+    "group": "Form",
+    "id": 3,
+    "label": "Button label",
+    "type": "text",
+  },
+  "description": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 1,
+    "label": "Description",
+    "multiline": true,
+    "type": "text",
+  },
+  "fields": {
+    "defaultValue": [
+      "name",
+      "message",
+    ],
+    "group": "Content",
+    "hint": "The optional fields a visitor fills in. The email address is always asked for, so the owner can answer.",
+    "id": 2,
+    "isMultiple": true,
+    "label": "Fields",
+    "options": [
+      {
+        "label": "Name",
+        "value": "name",
+      },
+      {
+        "label": "Message",
+        "value": "message",
+      },
+    ],
+    "type": "select",
+  },
+  "success-message": {
+    "defaultValue": "Thank you, we will get back to you",
+    "group": "Form",
+    "hint": "Shown instead of the form once a message is stored",
+    "id": 4,
+    "label": "Success message",
+    "type": "text",
+  },
+  "title": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Title",
+    "type": "text",
+  },
+}
+`;
+
 exports[`Countdown > has a pinned schema snapshot 1`] = `
 {
   "finished-text": {
@@ -310,6 +367,40 @@ exports[`Divider > has a pinned schema snapshot 1`] = `
       },
     ],
     "type": "select",
+  },
+}
+`;
+
+exports[`EmailCapture > has a pinned schema snapshot 1`] = `
+{
+  "button-label": {
+    "defaultValue": "Subscribe",
+    "group": "Form",
+    "id": 2,
+    "label": "Button label",
+    "type": "text",
+  },
+  "placeholder": {
+    "defaultValue": "Your email",
+    "group": "Content",
+    "id": 1,
+    "label": "Placeholder",
+    "type": "text",
+  },
+  "success-message": {
+    "defaultValue": "Thank you, your address is saved",
+    "group": "Form",
+    "hint": "Shown instead of the form once an address is stored",
+    "id": 3,
+    "label": "Success message",
+    "type": "text",
+  },
+  "title": {
+    "defaultValue": null,
+    "group": "Content",
+    "id": 0,
+    "label": "Title",
+    "type": "text",
   },
 }
 `;

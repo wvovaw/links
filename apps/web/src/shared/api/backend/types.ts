@@ -42,3 +42,19 @@ export interface BlockStats {
   clicks: number;
   views: number;
 }
+
+/** What a visitor filled in: the fields their form asked for, and nothing else. */
+export interface FormSubmissionPayload {
+  email: string;
+  name?: string;
+  message?: string;
+}
+
+/** One row of a page's form submissions, as its owner reads them. */
+export interface FormSubmission {
+  id: string;
+  blockId: string;
+  kind: "contact" | "subscribe";
+  payload: FormSubmissionPayload;
+  createdAt: string;
+}

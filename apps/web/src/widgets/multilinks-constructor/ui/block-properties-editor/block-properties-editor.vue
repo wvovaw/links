@@ -8,6 +8,7 @@ import { SpiralArrow } from "~shared/ui/doodles";
 import { useConstructorStore } from "../../model";
 import { BlockStats } from "../block-stats";
 import { OptionsSection } from "../options-section";
+import { SubmissionsList } from "../submissions-list";
 import { fieldsMap } from "./fields";
 import BooleanField from "./fields/boolean-field.vue";
 import DateField from "./fields/date-field.vue";
@@ -24,6 +25,10 @@ const groupedProperties = computed(() => {
 });
 
 const selectedBlock = computed(() => (selectedBlockId.value ? getBlock(selectedBlockId.value) : undefined));
+
+/** The two blocks a visitor writes into: their messages are read here, in the editor of a page's block. */
+const formBlockNames = ["ContactForm", "EmailCapture"];
+const isFormBlock = computed(() => formBlockNames.includes(selectedBlock.value?.name ?? ""));
 
 /**
  * The visibility controls reuse the property fields, so each needs a descriptor: only the label and
@@ -100,6 +105,12 @@ const to = computed({
             :field="field"
           />
         </div>
+      </OptionsSection>
+      <UISeparator />
+    </template>
+    <template v-if="isFormBlock && selectedBlockId">
+      <OptionsSection title="Submissions">
+        <SubmissionsList :block-id="selectedBlockId" />
       </OptionsSection>
       <UISeparator />
     </template>
