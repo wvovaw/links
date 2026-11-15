@@ -71,14 +71,18 @@ function cardProperties(): Record<string, BlockProperty> {
 /**
  * Only safelisted link icons are offered: UnoCSS emits no class for any name outside `BLOCK_ICONS`, so
  * a wider list would render an empty box with no error. `LINK_ICONS` keeps that safelist from deciding
- * which icons belong on a link card.
+ * which icons belong on a link card. `none` is the option that clears the icon, the same way `Page
+ * default` clears the variant — a select cannot carry the empty string as a value.
  */
 function linkIconOptions(): IBlockPropertySelect["options"] {
-  return LINK_ICONS.map((icon) => {
-    const name = icon.slice(icon.indexOf(":") + 1).replaceAll("-", " ");
+  return [
+    { label: "None", value: "none" },
+    ...LINK_ICONS.map((icon) => {
+      const name = icon.slice(icon.indexOf(":") + 1).replaceAll("-", " ");
 
-    return { label: name.charAt(0).toUpperCase() + name.slice(1), value: icon };
-  });
+      return { label: name.charAt(0).toUpperCase() + name.slice(1), value: icon };
+    }),
+  ];
 }
 
 function createBlock(id: string): IBlock<"Button"> {

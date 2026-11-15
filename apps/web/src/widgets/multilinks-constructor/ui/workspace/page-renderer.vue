@@ -4,8 +4,7 @@ import type { IBlock } from "@links/blocks";
 import { animations, dragAndDrop, tearDown } from "@formkit/drag-and-drop";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
-import { resolvePageStyle, useBlocksResolver } from "~shared/blocks";
-import { isBlockVisible } from "~shared/blocks/visibility";
+import { resolvePageStyle, useBlocksResolver, visibleBlocks } from "~shared/blocks";
 
 import { useConstructorStore } from "../../model";
 import PageBlock from "./page-block.vue";
@@ -23,9 +22,14 @@ function isSelectedBlock(blockId: string) {
   return isit;
 }
 
-/** The constructor keeps every block in the flow: one its schedule hides is dimmed, not removed. */
+/**
+ * The constructor keeps every block in the flow: one its schedule hides is dimmed, not removed. One
+ * clock decides the whole list, so reading it per block cannot dim two neighbours against two instants.
+ */
+const visibleIds = computed(() => new Set(visibleBlocks(blocks.value, new Date()).map((block) => block.id)));
+
 function isHiddenBlock(block: IBlock) {
-  return !isBlockVisible(block.visibility, new Date());
+  return !visibleIds.value.has(block.id);
 }
 
 const draggableRoot = ref<HTMLElement>();

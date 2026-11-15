@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { IBlock, PageTheme } from "@links/blocks";
 
-import { resolvePageStyle, useBlocksResolver } from "~shared/blocks";
-import { isBlockVisible } from "~shared/blocks/visibility";
+import { resolvePageStyle, useBlocksResolver, visibleBlocks } from "~shared/blocks";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 
 const props = defineProps<{
   blocks: IBlock[];
+  /**
+   * The request's one clock, so this filter and the payload filter agree on a boundary. It is idempotent
+   * on an already-filtered list: a block the page dropped is not here to be dropped again.
+   */
+  now: Date;
   theme?: PageTheme | null;
   background?: string | null;
 }>();
@@ -28,9 +32,9 @@ const linkAttrs = computed(() =>
 /**
  * A block its schedule hides is dropped before rendering rather than hidden with CSS: the served HTML
  * carries neither the hidden block's text nor its markup, so nothing leaks to a visitor who views the
- * source or reads the page without styles. The clock is read once per render of a given block list.
+ * source or reads the page without styles.
  */
-const visibleBlocks = computed(() => props.blocks.filter((block) => isBlockVisible(block.visibility, new Date())));
+const shownBlocks = computed(() => visibleBlocks(props.blocks, props.now));
 </script>
 
 <template>
@@ -39,7 +43,7 @@ const visibleBlocks = computed(() => props.blocks.filter((block) => isBlockVisib
       <div class="link__blocks-root">
         <component
           :is="resolve(block.name)"
-          v-for="block of visibleBlocks"
+          v-for="block of shownBlocks"
           :id="`block-${block.id}`"
           :key="block.id"
           :properties="block.properties"

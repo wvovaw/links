@@ -41,7 +41,7 @@
 **Interfaces:**
 
 - Consumes: `Button` v2 from the foundation plan.
-- Produces: `Button` v3 with `thumbnail` (image, optional), `subtitle` (text, optional), `icon` (select, `BLOCK_ICONS` subset, optional), `variant` (select solid | outline | ghost, default solid), `height` (number, 40–96, default 56), `radius` (number, 0–32, default 8).
+- Produces: `Button` v3 with `thumbnail` (image, optional), `subtitle` (text, optional), `icon` (select `none` | `BLOCK_ICONS` subset, optional), `variant` (select `inherit` | solid | outline | ghost, default `null` — `inherit` keeps the page theme), `height` (number, 40–96, default 56), `radius` (number, 0–32, default 8).
 
 - [ ] **Step 1: Write the failing migration fixture**
 
@@ -49,7 +49,7 @@ Add `button-v2.ts` reproducing a stored v2 block (text, link, colours, `font-siz
 
 - [ ] **Step 2: Extend the schema**
 
-Add the six properties, bump `BLOCK_VERSION` to 3, and add a migration step filling defaults (`variant: "solid"`, `height: 56`, `radius: 8`, `thumbnail: null`, `subtitle: null`, `icon: null`) while leaving stored values alone.
+Add the six properties, bump `BLOCK_VERSION` to 3, and add a migration step filling defaults (`variant: null`, `height: 56`, `radius: 8`, `thumbnail: null`, `subtitle: null`, `icon: null`) while leaving stored values alone.
 
 - [ ] **Step 3: Run the fixture to verify it passes**
 
@@ -460,7 +460,7 @@ git commit -m "feat(blocks): add a date property type and a countdown block"
 
 **Interfaces:**
 
-- Produces, in `qr.ts`: `export function qrSvg(value: string, options: { size: number; foreground?: string; background?: string }): string` — SVG markup produced by `uqr`'s `renderSVG`, with the foreground and background applied.
+- Produces, in `qr.ts`: `export function qrSvg(value: string, options: { size: number; foreground?: string; background?: string }): string | null` — SVG markup produced by `uqr`'s `renderSVG`, with the foreground and background applied; `null` when the value does not fit a qr code at all (the library throws over capacity, and a block must not take the page down with it).
 - Produces: `QrCode` block — `url` (url, optional — empty means the page's own address, resolved by the component from `useRequestURL()`), `caption` (text, optional), `size` (number 80–320, default 160), `foreground`/`background` (colour, defaults `#171515` / `#ffffff`).
 
 - [ ] **Step 1: Write the failing test**

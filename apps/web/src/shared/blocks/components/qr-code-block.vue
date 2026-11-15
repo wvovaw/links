@@ -8,10 +8,16 @@ import type {
 } from "@links/blocks";
 
 import { pageAddress, qrSvg } from "~shared/blocks/qr";
+import { i18nLabel } from "~shared/lib/i18n-label";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
 }>();
+
+const i18n = useI18n();
+
+/** The figure's own English name stays the fallback, so a locale that lost the key never blanks it. */
+const codeLabel = computed(() => i18nLabel(i18n, "blocks.QrCode.code", "QR code"));
 
 const SIZE_MIN = 80;
 const SIZE_MAX = 320;
@@ -54,7 +60,7 @@ const bp = computed(() => {
     svg,
     caption,
     /* A code cannot be scanned by a screen reader, so the figure is named for it instead. */
-    label: caption ?? "QR code",
+    label: caption ?? codeLabel.value,
   };
 });
 </script>

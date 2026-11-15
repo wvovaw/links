@@ -147,8 +147,13 @@ it("blocks adding past maxItems and removing past minItems", async () => {
 });
 ```
 
-Run: `pnpm --filter @links/web test -- list-field`
-Expected: FAIL — the component does not exist.
+Run, with `@links/blocks` rebuilt first because `apps/web` reads it from `dist`:
+
+```bash
+pnpm --filter @links/blocks build && pnpm --filter @links/web typecheck
+```
+
+Expected: FAIL — the new property type has no `list` mapping in the field map (and `list-field.vue` does not exist yet). `typecheck` is the guard here because `pnpm --filter @links/web build` strips types and never sees the missing mapping.
 
 - [ ] **Step 6: Write `list-field.vue`**
 
@@ -161,12 +166,12 @@ Expected: PASS, four tests.
 
 - [ ] **Step 8: Register the field and prove the compile-time guard**
 
-Add `list: ListField` to the lifted `fieldsMap`. Then temporarily change a property type name in `types.ts` and run `pnpm --filter @links/web build` — expected: a type error naming the missing mapping. Revert.
+Add `list: ListField` to the lifted `fieldsMap`. Then temporarily change a property type name in `types.ts`, rebuild `@links/blocks` (`pnpm --filter @links/blocks build`) and run `pnpm --filter @links/web typecheck` — expected: an error naming the missing mapping in `fieldsMap`. Revert and rebuild `@links/blocks`.
 
 - [ ] **Step 9: Run the whole gate for the two packages**
 
 Run: `pnpm --filter @links/blocks test && pnpm build && pnpm --filter @links/web test`
-Expected: all exit 0. The browser check of the editor belongs to Task 2, which is where the first block with a `list` appears.
+Expected: all exit 0. `pnpm build` is what puts the new `list` export into `@links/blocks/dist`, and `pnpm --filter @links/web test` runs `vue-tsc` before vitest, so the same compile-time guard holds here. The browser check of the editor belongs to Task 2, which is where the first block with a `list` appears.
 
 - [ ] **Step 10: Commit**
 

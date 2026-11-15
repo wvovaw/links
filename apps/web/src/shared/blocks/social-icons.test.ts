@@ -61,6 +61,31 @@ describe("socialHref", () => {
   ])("keeps the %s value's own scheme instead of prefixing it twice", (key, value) => {
     expect(socialHref(slotOf(key), value)).toBe(value);
   });
+
+  /*
+    The field is free text and the API stores the block JSON unvalidated, so a stored `javascript:`
+    value would run in the page's own origin the moment a visitor clicked the icon.
+  */
+  it.each([
+    ["javascript:alert(1)"],
+    ["data:text/html,<script>alert(1)</script>"],
+    ["vbscript:msgbox(1)"],
+    ["JavaScript:alert(1)"],
+  ])("drops the value %s instead of drawing it as an href", (value) => {
+    for (const key of ["telegram", "instagram", "x", "email"]) expect(socialHref(slotOf(key), value)).toBeNull();
+  });
+
+  it("drops a scheme the slot does not carry, such as a mailto in a network slot", () => {
+    expect(socialHref(slotOf("telegram"), "mailto:me@example.com")).toBeNull();
+    expect(socialHref(slotOf("email"), "https://example.com/me")).toBeNull();
+  });
+
+  it.each([
+    ["an empty string", ""],
+    ["a number", 42],
+  ])("returns null for %s", (_case, value) => {
+    expect(socialHref(SOCIAL_SLOTS[0]!, value)).toBeNull();
+  });
 });
 
 describe("the uno safelist", () => {

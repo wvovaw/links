@@ -30,12 +30,24 @@ describe("testing BlocksList component", () => {
     expect(store.selectedBlockId).toBe(store.blocks[0]?.id);
   });
 
-  it("filters blocks by the search query", async () => {
-    await wrapper.find("[data-testid='blocks-search']").setValue("paragraph");
+  /*
+    A substring is enough: `para` also lands in "separates" in the divider's description, so the test
+    asserts the intended block is offered rather than counting every block the word reaches.
+  */
+  it("filters blocks by a substring of the label or description", async () => {
+    await wrapper.find("[data-testid='blocks-search']").setValue("para");
+
+    const labels = wrapper.findAll("[data-testid='blocks-list-item']").map((item) => item.text());
+    expect(labels).toContain("Paragraph");
+    expect(labels).not.toContain("Button");
+  });
+
+  it("filters blocks by a substring of one of their keywords", async () => {
+    await wrapper.find("[data-testid='blocks-search']").setValue("galle");
 
     const items = wrapper.findAll("[data-testid='blocks-list-item']");
     expect(items).toHaveLength(1);
-    expect(items[0]?.text()).toContain("Paragraph");
+    expect(items[0]?.text()).toContain("Picture");
   });
 
   it("groups blocks by category", () => {

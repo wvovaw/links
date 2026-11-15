@@ -44,15 +44,16 @@ describe("countdownParts", () => {
 });
 
 describe("formatCountdown", () => {
-  it("pads the clock parts and drops the days while there are none", () => {
-    expect(formatCountdown({ days: 0, hours: 0, minutes: 1, seconds: 0, finished: false })).toBe("00:01:00");
+  /* The grid always shows a days box, so the label always names its unit too. */
+  it("pads the clock parts and names the days even while they are zero", () => {
+    expect(formatCountdown({ days: 0, hours: 0, minutes: 1, seconds: 0, finished: false })).toBe("0d 00:01:00");
   });
 
-  it("names the days once there is at least one", () => {
+  it("names a day count above one", () => {
     expect(formatCountdown({ days: 5, hours: 2, minutes: 3, seconds: 4, finished: false })).toBe("5d 02:03:04");
   });
 
   it("formats a finished countdown as a zero clock", () => {
-    expect(formatCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0, finished: true })).toBe("00:00:00");
+    expect(formatCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0, finished: true })).toBe("0d 00:00:00");
   });
 });

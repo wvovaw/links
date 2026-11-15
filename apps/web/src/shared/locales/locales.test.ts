@@ -21,4 +21,19 @@ describe.each([
       expect(messages[`blocks.${name}.description`]).toBeTruthy();
     }
   });
+
+  /* The chrome a block draws around its content: an iframe title, a link text, a figure name. */
+  it("carries the chrome labels the public page draws", async () => {
+    const messages = (await loadMessages(locale)) as Record<string, string>;
+
+    for (const key of [
+      "blocks.Map.frameTitle",
+      "blocks.Map.openInMaps",
+      "blocks.Music.frameTitle",
+      "blocks.QrCode.code",
+      "blocks.Video.frameTitle",
+    ]) {
+      expect(messages[key]).toBeTruthy();
+    }
+  });
 });

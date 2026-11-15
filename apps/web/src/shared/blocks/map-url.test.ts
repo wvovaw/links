@@ -19,6 +19,20 @@ describe("mapEmbedUrl", () => {
     expect(mapEmbedUrl("Moscow", 0)).toContain("z=1");
   });
 
+  /* Stored JSON is unvalidated, so a level that is not a number keeps the block's default. */
+  it.each([
+    ["a string", "12"],
+    ["the empty string", ""],
+    ["NaN", Number.NaN],
+  ])("falls back to the default zoom for %s", (_case, zoom) => {
+    expect(mapEmbedUrl("Moscow", zoom)).toContain("z=15");
+    expect(mapEmbedUrl("Moscow", zoom)).not.toContain("NaN");
+  });
+
+  it("rounds a fractional zoom, so the query carries a level the provider accepts", () => {
+    expect(mapEmbedUrl("Moscow", 12.6)).toContain("z=13");
+  });
+
   it("trims the address before it goes into the query", () => {
     expect(mapEmbedUrl("  Moscow\n", 12)).toBe("https://maps.google.com/maps?q=Moscow&z=12&output=embed");
   });

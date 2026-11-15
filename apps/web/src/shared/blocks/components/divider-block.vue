@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { BlockProperty, IBlockPropertyColor, IBlockPropertyNumber, IBlockPropertySelect } from "@links/blocks";
 
+import { clampNumber } from "~shared/blocks/clamp-number";
+
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
 }>();
@@ -23,7 +25,7 @@ const bp = computed(() => {
     space: style === "space",
     style,
     vars: {
-      "--divider-spacing": `${(p.spacing as IBlockPropertyNumber | undefined)?.value ?? 16}px`,
+      "--divider-spacing": `${clampNumber((p.spacing as IBlockPropertyNumber | undefined)?.value, 0, 64, 16)}px`,
       /* A chosen colour is drawn exactly; the theme colour is faded to a line that does not shout. */
       "--divider-color": color || "var(--links-page-fg)",
       "--divider-opacity": color ? "1" : "0.25",

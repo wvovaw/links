@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import type { BlockProperty, IBlockPropertyNumber } from "@links/blocks";
 
+import { clampNumber } from "~shared/blocks/clamp-number";
+
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
 }>();
 
-const height = computed(() => (props.properties.height as IBlockPropertyNumber | undefined)?.value ?? 24);
+/* The field offers 0–200, but only the input enforces it, so a stored value is clamped here. */
+const height = computed(() =>
+  clampNumber((props.properties.height as IBlockPropertyNumber | undefined)?.value, 0, 200, 24),
+);
 </script>
 
 <template>

@@ -9,12 +9,23 @@ import type {
 } from "@links/blocks";
 
 import { resolveBlockImageUrl } from "~shared/blocks";
+import { clampNumber } from "~shared/blocks/clamp-number";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
 }>();
 
 const config = useRuntimeConfig();
+
+/**
+ * A stored radius is a length and is clamped into the field's 0–40. A picture stored without one — or
+ * with a value the field cannot have produced — keeps the theme radius, which is what it always drew.
+ */
+function pictureRadius(value: unknown): string {
+  return typeof value === "number" && Number.isFinite(value)
+    ? `${clampNumber(value, 0, 40, 10)}px`
+    : "var(--links-theme-picture-radius)";
+}
 
 const bp = computed(() => {
   const p = props.properties;
@@ -31,7 +42,7 @@ const bp = computed(() => {
     link: (p.link as IBlockPropertyUrl | undefined)?.value,
     style: {
       "--picture-object-fit": (p["object-fit"] as IBlockPropertySelect | undefined)?.value ?? "cover",
-      "--picture-radius": radius === undefined ? "var(--links-theme-picture-radius)" : `${radius}px`,
+      "--picture-radius": pictureRadius(radius),
     },
   };
 });

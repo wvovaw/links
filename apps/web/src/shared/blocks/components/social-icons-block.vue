@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BlockProperty, IBlockPropertyNumber, IBlockPropertySelect, IBlockPropertyUrl } from "@links/blocks";
 
+import { clampNumber } from "~shared/blocks/clamp-number";
 import { socialHref, SOCIAL_SLOTS } from "~shared/blocks/social-icons";
 
 const props = defineProps<{
@@ -68,7 +69,7 @@ const bp = computed(() => {
   return {
     links,
     style: {
-      "--social-size": `${(p.size as IBlockPropertyNumber | undefined)?.value ?? 24}px`,
+      "--social-size": `${clampNumber((p.size as IBlockPropertyNumber | undefined)?.value, 16, 48, 24)}px`,
       "--social-align": socialAlign((p.align as IBlockPropertySelect | undefined)?.value),
       ...VARIANT_TOKENS[socialVariant((p.variant as IBlockPropertySelect | undefined)?.value)],
     },

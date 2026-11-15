@@ -105,12 +105,13 @@ describe("ButtonBlock", () => {
     expect(style).toContain("--button-border: var(--links-theme-button-border, #eee)");
   });
 
-  it("keeps the height and radius a stored button already rendered at", () => {
+  /* A legacy button stored neither property, so the stylesheet's rem default stays in charge. */
+  it("emits no height or radius variable for a button that stores neither", () => {
     const wrapper = mount(ButtonBlock, { props: { properties: blockOf("Button", base).properties } });
 
     const style = wrapper.get(".button-block").attributes("style") ?? "";
-    expect(style).toContain("--button-height: 56px");
-    expect(style).toContain("--button-radius: 8px");
+    expect(style).not.toContain("--button-height");
+    expect(style).not.toContain("--button-radius");
   });
 
   it("takes the height and radius from the stored properties", () => {
@@ -121,6 +122,41 @@ describe("ButtonBlock", () => {
     const style = wrapper.get(".button-block").attributes("style") ?? "";
     expect(style).toContain("--button-height: 72px");
     expect(style).toContain("--button-radius: 16px");
+  });
+
+  /* The field's min/max are HTML attributes, so an over-typed or cleared value still reaches the page. */
+  it.each([
+    ["", "56"],
+    [5000, "96"],
+  ])("clamps a stored height of %s to %spx", (height, expected) => {
+    const wrapper = mount(ButtonBlock, { props: { properties: blockOf("Button", { ...base, height }).properties } });
+
+    const style = wrapper.get(".button-block").attributes("style") ?? "";
+    expect(style).toContain(`--button-height: ${expected}px`);
+  });
+
+  /*
+    The link field is free text and the API stores the block JSON unvalidated, so a stored `javascript:`
+    href would run in the page's own origin the moment a visitor clicked the button.
+  */
+  it.each([["javascript:alert(1)"], ["data:text/html,<script>alert(1)</script>"], ["vbscript:msgbox(1)"]])(
+    "keeps only the text for the stored link %s",
+    (link) => {
+      const wrapper = mount(ButtonBlock, { props: { properties: blockOf("Button", { ...base, link }).properties } });
+
+      expect(wrapper.get("a").attributes("href")).toBeUndefined();
+      expect(wrapper.get("a").text()).toBe("Go");
+    },
+  );
+
+  /* `None` is the option that clears the icon; the schema cannot carry the empty string as a value. */
+  it("draws no icon when the icon option is None", () => {
+    const wrapper = mount(ButtonBlock, {
+      props: { properties: blockOf("Button", { ...base, icon: "none" }).properties },
+    });
+
+    expect(wrapper.find(".button-block__icon").exists()).toBe(false);
+    expect(wrapper.get(".button-block__text").text()).toBe("Go");
   });
 
   it("renders a plain link exactly as before, with no card parts", () => {
@@ -260,6 +296,17 @@ describe("PictureBlock", () => {
     expect(style).toContain("--picture-radius: var(--links-theme-picture-radius)");
   });
 
+  it.each([
+    ["", "var(--links-theme-picture-radius)"],
+    [5000, "40px"],
+  ])("clamps a stored radius of %s to %s", (radius, expected) => {
+    const wrapper = mount(PictureBlock, {
+      props: { properties: blockOf("Picture", { image: "file-1", radius: radius }).properties },
+    });
+
+    expect(wrapper.get(".picture-block").attributes("style")).toContain(`--picture-radius: ${expected}`);
+  });
+
   it("applies the stored object-fit and radius", () => {
     const wrapper = mount(PictureBlock, {
       props: { properties: blockOf("Picture", { "image": "file-1", "object-fit": "contain", "radius": 4 }).properties },
@@ -365,6 +412,15 @@ describe("DividerBlock", () => {
     expect(wrapper.get("hr.divider-block").classes()).toContain(`divider-block--${style}`);
   });
 
+  it.each([
+    ["", "16px"],
+    [5000, "64px"],
+  ])("clamps a stored spacing of %s to %s", (spacing, expected) => {
+    const wrapper = mount(DividerBlock, { props: { properties: blockOf("Divider", { spacing }).properties } });
+
+    expect(wrapper.get("hr.divider-block").attributes("style")).toContain(`--divider-spacing: ${expected}`);
+  });
+
   it("draws a gap instead of a line for the space style", () => {
     const wrapper = mount(DividerBlock, {
       props: { properties: blockOf("Divider", { style: "space", spacing: 40 }).properties },
@@ -398,6 +454,15 @@ describe("SpacerBlock", () => {
 
     expect(wrapper.get(".spacer-block").attributes("style")).toContain("height: 120px");
     expect(wrapper.get(".spacer-block").text()).toBe("");
+  });
+
+  it.each([
+    ["", "24px"],
+    [5000, "200px"],
+  ])("clamps a stored height of %s to %s", (height, expected) => {
+    const wrapper = mount(SpacerBlock, { props: { properties: blockOf("Spacer", { height }).properties } });
+
+    expect(wrapper.get(".spacer-block").attributes("style")).toContain(`height: ${expected}`);
   });
 
   it("keeps the default when a stored spacer has no height", () => {
@@ -469,6 +534,17 @@ describe("VideoBlock", () => {
     const style = wrapper.get(".video-block").attributes("style") ?? "";
     expect(style).toContain("--video-aspect: 9 / 16");
     expect(style).toContain("--video-radius: 16px");
+  });
+
+  it.each([
+    ["", "8px"],
+    [5000, "32px"],
+  ])("clamps a stored radius of %s to %s", (radius, expected) => {
+    const style = mount(VideoBlock, { props: { properties: blockOf("Video", { ...youtube, radius }).properties } })
+      .get(".video-block")
+      .attributes("style");
+
+    expect(style).toContain(`--video-radius: ${expected}`);
   });
 
   it("keeps the 16:9 frame and the default radius when they are not stored", () => {
@@ -772,6 +848,29 @@ describe("SocialIconsBlock", () => {
     expect(style).toContain("--social-align: center");
   });
 
+  it.each([
+    ["", "24px"],
+    [5000, "48px"],
+  ])("clamps a stored icon size of %s to %s", (size, expected) => {
+    const style =
+      wrapperOf({ ...filled, size })
+        .get(".social-icons-block")
+        .attributes("style") ?? "";
+
+    expect(style).toContain(`--social-size: ${expected}`);
+  });
+
+  /*
+    The slot is a free-text url the API never validates, so a stored `javascript:` value would execute
+    in the page's own origin when a visitor clicked the icon.
+  */
+  it.each([["telegram"], ["email"]])("drops the %s slot when its stored value is a script url", (key) => {
+    const wrapper = wrapperOf({ [key]: "javascript:alert(1)" });
+
+    expect(wrapper.find(".social-icons-block").exists()).toBe(false);
+    expect(wrapper.html()).not.toContain("javascript:");
+  });
+
   it("takes the icon size and the alignment from the stored properties", () => {
     const style =
       wrapperOf({ ...filled, size: 40, align: "left" })
@@ -823,6 +922,13 @@ describe("MapBlock", () => {
     [120, "120px"],
     [400, "400px"],
   ])("draws a %ipx height", (height, expected) => {
+    expect(wrapperOf({ height }).get(".map-block").attributes("style")).toContain(`--map-height: ${expected}`);
+  });
+
+  it.each([
+    ["", "240px"],
+    [5000, "400px"],
+  ])("clamps a stored height of %s to %s", (height, expected) => {
     expect(wrapperOf({ height }).get(".map-block").attributes("style")).toContain(`--map-height: ${expected}`);
   });
 
@@ -933,7 +1039,7 @@ describe("CountdownBlock", () => {
   });
 
   it("reads the whole countdown as one line for a screen reader", async () => {
-    expect((await wrapperOf()).get("[role='timer']").attributes("aria-label")).toBe("00:01:00");
+    expect((await wrapperOf()).get("[role='timer']").attributes("aria-label")).toBe("0d 00:01:00");
   });
 
   it("renders the stored title above the digits", async () => {

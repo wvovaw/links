@@ -115,6 +115,10 @@ exports[`Button > has a pinned schema snapshot 1`] = `
     "label": "Icon",
     "options": [
       {
+        "label": "None",
+        "value": "none",
+      },
+      {
         "label": "Circle user round",
         "value": "i-lucide:circle-user-round",
       },

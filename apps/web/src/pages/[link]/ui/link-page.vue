@@ -4,8 +4,7 @@ import type { PublicLink } from "~shared/api/backend";
 
 import { LinkPageRenderer } from "~features/links";
 import { BackendApi } from "~shared/api";
-import { resolvePageStyle } from "~shared/blocks";
-import { isBlockVisible } from "~shared/blocks/visibility";
+import { resolvePageStyle, visibleBlocks } from "~shared/blocks";
 import { LinkFooter } from "~widgets/link-footer";
 
 import NotExistPage from "./not-exist-page.vue";
@@ -18,16 +17,16 @@ const { locale } = useI18n();
 const config = useRuntimeConfig();
 
 /**
- * A block its schedule hides is dropped before the data is serialized into the hydrated payload: the
- * whole answer becomes part of the served HTML, so filtering at render time alone would still ship a
- * hidden block's text to every visitor.
+ * One clock decides the whole request: a block its schedule hides is dropped from the payload with the
+ * same instant the renderer filters the markup with. The whole answer becomes part of the served HTML,
+ * so filtering at render time alone would still ship a hidden block's text to every visitor.
  */
+const now = new Date();
 const { data: pageData, error } = await useAsyncData<PublicLink | null>(`link:${props.link}`, async () => {
   const link = await BackendApi.PublicApi.getPublicLink(props.link);
   if (!link) return link;
 
-  const now = new Date();
-  return { ...link, blocks: (link.blocks as IBlock[]).filter((block) => isBlockVisible(block.visibility, now)) };
+  return { ...link, blocks: visibleBlocks(link.blocks as IBlock[], now) };
 });
 
 const blocks = ref<IBlock[]>([]);
@@ -65,7 +64,7 @@ if (pageData.value) {
     <Body>
       <main class="min-h-100dvh flex flex-col" :style="pageStyle">
         <NotExistPage v-if="error?.status === 404" />
-        <LinkPageRenderer v-else :blocks="blocks" />
+        <LinkPageRenderer v-else :blocks="blocks" :now="now" />
         <LinkFooter />
       </main>
     </Body>

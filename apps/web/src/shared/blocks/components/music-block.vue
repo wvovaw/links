@@ -3,10 +3,16 @@ import type { BlockProperty, IBlockPropertySelect, IBlockPropertyUrl } from "@li
 import type { MusicProvider } from "~shared/blocks/embed-urls";
 
 import { musicEmbedUrl } from "~shared/blocks/embed-urls";
+import { i18nLabel } from "~shared/lib/i18n-label";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
 }>();
+
+const i18n = useI18n();
+
+/** The block's own English text stays the fallback, so a locale that lost the key never blanks a label. */
+const frameTitle = computed(() => i18nLabel(i18n, "blocks.Music.frameTitle", "Music"));
 
 const MUSIC_PROVIDERS = ["spotify", "soundcloud", "apple-music", "youtube-music"] as const;
 
@@ -50,7 +56,7 @@ const bp = computed(() => {
       v-if="bp.src"
       class="music-block__frame"
       :src="bp.src"
-      title="Music"
+      :title="frameTitle"
       loading="lazy"
       allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
     />

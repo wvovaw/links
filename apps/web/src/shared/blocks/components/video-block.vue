@@ -8,11 +8,18 @@ import type {
 } from "@links/blocks";
 import type { VideoProvider } from "~shared/blocks/embed-urls";
 
+import { clampNumber } from "~shared/blocks/clamp-number";
 import { videoEmbedUrl } from "~shared/blocks/embed-urls";
+import { i18nLabel } from "~shared/lib/i18n-label";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
 }>();
+
+const i18n = useI18n();
+
+/** The block's own English text stays the fallback, so a locale that lost the key never blanks a label. */
+const frameTitle = computed(() => i18nLabel(i18n, "blocks.Video.frameTitle", "Video"));
 
 const VIDEO_PROVIDERS = ["youtube", "vimeo", "tiktok"] as const;
 
@@ -75,7 +82,7 @@ const bp = computed(() => {
       }),
     vars: {
       "--video-aspect": aspectRatio((p.aspect as IBlockPropertySelect | undefined)?.value),
-      "--video-radius": `${(p.radius as IBlockPropertyNumber | undefined)?.value ?? 8}px`,
+      "--video-radius": `${clampNumber((p.radius as IBlockPropertyNumber | undefined)?.value, 0, 32, 8)}px`,
     },
   };
 });
@@ -87,7 +94,7 @@ const bp = computed(() => {
       v-if="bp.src"
       class="video-block__frame"
       :src="bp.src"
-      title="Video"
+      :title="frameTitle"
       loading="lazy"
       allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
       allowfullscreen

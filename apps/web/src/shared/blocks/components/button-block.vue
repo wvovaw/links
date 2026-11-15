@@ -11,6 +11,8 @@ import type {
 } from "@links/blocks";
 
 import { resolveBlockImageUrl } from "~shared/blocks";
+import { clampNumber } from "~shared/blocks/clamp-number";
+import { webHref } from "~shared/blocks/link-url";
 
 const props = defineProps<{
   properties: Record<string, BlockProperty>;
@@ -65,20 +67,38 @@ function variantTokens(
   }
 }
 
+/**
+ * A length from a stored number, or `undefined` while nothing is stored. Only a stored value emits its
+ * variable: a button from before the property existed keeps the stylesheet's rem default, which scales
+ * with the visitor's font size. The stored value still goes through `clampNumber`, because the field's
+ * `min`/`max` are HTML attributes and a cleared input stores `""`.
+ */
+function storedLength(value: unknown, min: number, max: number, fallback: number): string | undefined {
+  return value === undefined || value === null ? undefined : `${clampNumber(value, min, max, fallback)}px`;
+}
+
 const bp = computed(() => {
   const p = props.properties;
   const foreground = (p.foreground as IBlockPropertyColor | undefined)?.value;
   const background = (p.background as IBlockPropertyColor | undefined)?.value;
   const fontSize = (p["font-size"] as IBlockPropertySelect | undefined)?.value;
   const border = (p.border as IBlockPropertyColor | undefined)?.value;
-  const height = (p.height as IBlockPropertyNumber | undefined)?.value;
-  const radius = (p.radius as IBlockPropertyNumber | undefined)?.value;
+  const height = storedLength((p.height as IBlockPropertyNumber | undefined)?.value, 40, 96, 56);
+  const radius = storedLength((p.radius as IBlockPropertyNumber | undefined)?.value, 0, 32, 8);
   const subtitle = (p.subtitle as IBlockPropertyText | undefined)?.value;
   const variant = cardVariant((p.variant as IBlockPropertySelect | undefined)?.value);
+  /* `None` is the option that clears the icon, exactly as `Page default` clears the variant. */
+  const icon = (p.icon as IBlockPropertySelect | undefined)?.value;
+  const link = (p.link as IBlockPropertyUrl | undefined)?.value;
 
   return {
     text: (p.text! as IBlockPropertyText).value,
-    link: p.link!.value ? (p.link as IBlockPropertyUrl).value : "#",
+    /*
+      A stored link is drawn into `href`, which the API never validates: a `javascript:` value would run
+      in the page's own origin on click, so only a web address becomes a link (`undefined` renders no
+      href at all). An empty link keeps the legacy `#` anchor and no text is lost either way.
+    */
+    link: link ? (webHref(link) ?? undefined) : "#",
     /* Buttons stored before the switch existed always opened in a new tab. */
     newTab: (p["new-tab"] as IBlockPropertyBoolean | undefined)?.value ?? true,
     thumbnail:
@@ -86,7 +106,7 @@ const bp = computed(() => {
         origin: config.public.backendUrl,
       }) ?? "",
     subtitle,
-    icon: (p.icon as IBlockPropertySelect | undefined)?.value ?? "",
+    icon: icon && icon !== "none" ? icon : "",
     /* Only a thumbnail or a subtitle turns the link into a text column worth aligning to the start. */
     card: Boolean(subtitle || (p.thumbnail as IBlockPropertyImage | undefined)?.value),
     style: {
@@ -94,8 +114,8 @@ const bp = computed(() => {
       "--button-bg": background || "var(--links-theme-button-bg)",
       "--button-font-size": fontSize || "var(--links-theme-button-font-size-md)",
       "--button-border": border || "var(--links-theme-button-border, #eee)",
-      "--button-height": `${height ?? 56}px`,
-      "--button-radius": `${radius ?? 8}px`,
+      ...(height ? { "--button-height": height } : {}),
+      ...(radius ? { "--button-radius": radius } : {}),
       ...variantTokens(variant, { background, foreground, border }),
     },
   };

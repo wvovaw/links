@@ -33,10 +33,11 @@ export function countdownParts(targetIso: string, now: Date): CountdownParts {
 }
 
 /**
- * The parts as the one line a screen reader reads instead of four stray numbers: `5d 02:03:04`, or
- * `02:03:04` while there are no days. The visible grid splits the same parts into boxes.
+ * The parts as the one line a screen reader reads instead of four stray numbers: `5d 02:03:04`. The
+ * days are always named, because the visible grid always shows their box — a label that dropped them
+ * would read a different countdown from the one on screen.
  */
 export function formatCountdown(parts: CountdownParts): string {
   const clock = [parts.hours, parts.minutes, parts.seconds].map((part) => String(part).padStart(2, "0")).join(":");
-  return parts.days > 0 ? `${parts.days}d ${clock}` : clock;
+  return `${parts.days}d ${clock}`;
 }
