@@ -572,12 +572,18 @@ describe("MusicBlock", () => {
 });
 
 describe("QrCodeBlock", () => {
+  const me = "https://links.example/me";
+
   function wrapperOf(values: Record<string, unknown> = {}) {
     return mount(QrCodeBlock, { props: { properties: blockOf("QrCode", values).properties } });
   }
 
+  function codeOf(values: Record<string, unknown> = {}) {
+    return wrapperOf(values).get(".qr-code-block__code");
+  }
+
   it("draws the stored address at the default size", () => {
-    const code = wrapperOf({ url: "https://links.example/me" }).get(".qr-code-block__code");
+    const code = codeOf({ url: me });
 
     expect(code.html()).toContain("<svg");
     expect(code.html()).toContain('width="160"');
@@ -585,21 +591,18 @@ describe("QrCodeBlock", () => {
   });
 
   it("draws the page's own address when no link is stored", () => {
-    const own = wrapperOf().get(".qr-code-block__code").html();
-    const stored = wrapperOf({ url: "https://links.example/me" }).get(".qr-code-block__code").html();
+    const own = codeOf().html();
 
     expect(own).toContain("<svg");
-    expect(own).not.toBe(stored);
+    expect(own).not.toBe(codeOf({ url: me }).html());
+  });
+
+  it("falls back to the page address for a stored link that is not a string", () => {
+    expect(codeOf({ url: 42 }).html()).toBe(codeOf().html());
   });
 
   it("draws the stored size and colours", () => {
-    const code = wrapperOf({
-      url: "https://links.example/me",
-      size: 320,
-      foreground: "#112233",
-      background: "#ffeeee",
-    }).get(".qr-code-block__code");
-    const html = code.html();
+    const html = codeOf({ url: me, size: 320, foreground: "#112233", background: "#ffeeee" }).html();
 
     expect(html).toContain('width="320"');
     expect(html).toContain("#112233");
@@ -607,7 +610,7 @@ describe("QrCodeBlock", () => {
   });
 
   it("keeps the default size and colours for a code stored without them", () => {
-    const block = blockOf("QrCode", { url: "https://links.example/me" });
+    const block = blockOf("QrCode", { url: me });
     delete block.properties.size;
     delete block.properties.foreground;
     delete block.properties.background;
@@ -621,15 +624,58 @@ describe("QrCodeBlock", () => {
     expect(html).toContain("#ffffff");
   });
 
+  /* The schema offers 80–320, but the API stores block JSON unvalidated, so the render clamps it. */
+  it.each([
+    [5000, "320"],
+    [1, "80"],
+  ])("clamps a stored size of %i into the block's range", (size, expected) => {
+    expect(codeOf({ url: me, size }).html()).toContain(`width="${expected}"`);
+  });
+
+  it("falls back to the default size for a stored size that is not a number", () => {
+    const html = codeOf({ url: me, size: '1" onload="alert(1)' }).html();
+
+    expect(html).toContain('width="160"');
+    expect(html).not.toContain("onload");
+  });
+
+  it("draws the default colours for a stored colour that is not a colour", () => {
+    const html = codeOf({ url: me, foreground: "url(https://third-party.example/paint)" }).html();
+
+    expect(html).toContain("#171515");
+    expect(html).not.toContain("url(");
+    expect(html).not.toContain("href");
+  });
+
+  it("draws nothing at all for an address too long to be a code", () => {
+    const wrapper = wrapperOf({ url: `https://links.example/${"x".repeat(5000)}` });
+
+    expect(wrapper.find(".qr-code-block").exists()).toBe(false);
+    expect(wrapper.find("svg").exists()).toBe(false);
+  });
+
+  /* The fragment is the one part of the address only the browser has, so it never reaches the code. */
+  it("draws the same code with or without a fragment in the page address", () => {
+    window.location.hash = "";
+    const plain = codeOf().html();
+
+    window.location.hash = "#links";
+    const withFragment = codeOf().html();
+
+    window.location.hash = "";
+
+    expect(withFragment).toBe(plain);
+  });
+
   it("prints the caption below the code and names the figure with it", () => {
-    const wrapper = wrapperOf({ url: "https://links.example/me", caption: "Scan me" });
+    const wrapper = wrapperOf({ url: me, caption: "Scan me" });
 
     expect(wrapper.get(".qr-code-block__caption").text()).toBe("Scan me");
     expect(wrapper.get(".qr-code-block__code").attributes("aria-label")).toBe("Scan me");
   });
 
   it("draws no caption line for a caption of only whitespace", () => {
-    const wrapper = wrapperOf({ url: "https://links.example/me", caption: "   " });
+    const wrapper = wrapperOf({ url: me, caption: "   " });
 
     expect(wrapper.find(".qr-code-block__caption").exists()).toBe(false);
     expect(wrapper.get(".qr-code-block__code").attributes("aria-label")).toBe("QR code");
