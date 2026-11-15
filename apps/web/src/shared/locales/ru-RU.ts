@@ -46,6 +46,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.SocialIcons.description": "Ряд значков со ссылками на ваши профили в соцсетях и адрес почты.",
     "blocks.Spacer.label": "Отступ",
     "blocks.Spacer.description": "Пустое пространство между двумя блоками.",
+    "blocks.Testimonials.label": "Отзывы",
+    "blocks.Testimonials.description": "Цитаты клиентов списком или сеткой.",
     "blocks.Video.label": "Видео",
     "blocks.Video.description": "Видео с YouTube, Vimeo или TikTok, которое играет прямо на странице.",
     "blocks.Video.frameTitle": "Видео",

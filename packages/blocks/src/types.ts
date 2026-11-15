@@ -14,6 +14,7 @@ export const BLOCK_NAMES = [
   "QrCode",
   "SocialIcons",
   "Spacer",
+  "Testimonials",
   "Video",
 ] as const;
 export type BlockName = (typeof BLOCK_NAMES)[number];
@@ -50,6 +51,7 @@ export const BLOCK_ICONS: readonly string[] = [
   "i-lucide:qr-code",
   "i-lucide:move-vertical",
   "i-lucide:share-2",
+  "i-lucide:quote",
   "i-lucide:video",
 ];
 
@@ -171,6 +173,13 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
     icon: "i-lucide:move-vertical",
     category: "Layout",
     keywords: ["gap", "space", "margin"],
+  },
+  Testimonials: {
+    label: "Testimonials",
+    description: "Quotes from customers, shown as a list or a grid.",
+    icon: "i-lucide:quote",
+    category: "Content",
+    keywords: ["testimonials", "reviews", "quotes", "feedback", "praise", "clients"],
   },
   Video: {
     label: "Video",

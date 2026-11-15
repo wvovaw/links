@@ -15,6 +15,7 @@ import ProductsModule from "./blocks/products";
 import QrCodeModule from "./blocks/qr-code";
 import SocialIconsModule from "./blocks/social-icons";
 import SpacerModule from "./blocks/spacer";
+import TestimonialsModule from "./blocks/testimonials";
 import VideoModule from "./blocks/video";
 
 type Registry = {
@@ -37,6 +38,7 @@ export const registry: Registry = {
   QrCode: QrCodeModule,
   SocialIcons: SocialIconsModule,
   Spacer: SpacerModule,
+  Testimonials: TestimonialsModule,
   Video: VideoModule,
 };
 

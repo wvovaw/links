@@ -22,6 +22,7 @@ import ProductsBlock from "./products-block.vue";
 import QrCodeBlock from "./qr-code-block.vue";
 import SocialIconsBlock from "./social-icons-block.vue";
 import SpacerBlock from "./spacer-block.vue";
+import TestimonialsBlock from "./testimonials-block.vue";
 import VideoBlock from "./video-block.vue";
 
 /** A block whose stored values are exactly the ones a page carries, as the renderer passes them. */
@@ -673,6 +674,188 @@ describe("MusicBlock", () => {
 
     expect(wrapper.find("iframe").exists()).toBe(false);
     expect(wrapper.get(".music-block__placeholder").text()).toBe(url);
+  });
+});
+
+describe("TestimonialsBlock", () => {
+  const three = {
+    items: [
+      {
+        quote: "They rebuilt my page in an afternoon and it finally looks like the product.",
+        author: "Анна Петрова",
+        role: "Founder, Studio One",
+        avatar: "file-anna",
+        rating: 5,
+      },
+      { quote: "Cheap, fast, and it works.", author: "Mark", role: "Designer", rating: 4 },
+      { quote: "No avatar and no stars here.", author: "Olga" },
+    ],
+  };
+
+  function wrapperOf(values: Record<string, unknown> = {}) {
+    return mount(TestimonialsBlock, { props: { properties: blockOf("Testimonials", values).properties } });
+  }
+
+  function quotesOf(values: Record<string, unknown> = {}) {
+    return wrapperOf(values).findAll(".testimonials-block__item");
+  }
+
+  it("draws a blockquote per complete row with its quote and a cite", () => {
+    const quotes = quotesOf(three);
+
+    expect(quotes).toHaveLength(3);
+    expect(quotes[0]!.element.tagName).toBe("BLOCKQUOTE");
+    expect(quotes[0]!.get(".testimonials-block__quote").text()).toBe(three.items[0]!.quote);
+    expect(quotes[0]!.get("cite").text()).toContain("Анна Петрова");
+    expect(quotes[0]!.get("cite").text()).toContain("Founder, Studio One");
+  });
+
+  it("resolves a stored avatar file id and leaves a pasted url as it is", () => {
+    const avatars = wrapperOf({
+      items: [{ quote: "A", avatar: "file-a" }, { quote: "B", avatar: "https://cdn.example/b.png" }, { quote: "C" }],
+    }).findAll(".testimonials-block__avatar");
+
+    expect(avatars[0]!.attributes("src")).toMatch(/\/storage\/images\/file-a$/);
+    expect(avatars[1]!.attributes("src")).toBe("https://cdn.example/b.png");
+    expect(avatars).toHaveLength(2);
+  });
+
+  it.each([
+    ["no avatar", { quote: "No avatar", author: "Ann" }],
+    ["an empty avatar", { quote: "Empty", avatar: "", author: "Ann" }],
+    /* A row is unvalidated stored JSON: only a string can name an image. */
+    ["a numeric avatar", { quote: "Numeric", avatar: 42, author: "Ann" }],
+  ])("keeps the quote and the citation for %s", (_case, row) => {
+    const quote = quotesOf({ items: [row] })[0]!;
+
+    expect(quote.find(".testimonials-block__avatar").exists()).toBe(false);
+    expect(quote.get(".testimonials-block__quote").text()).toBe(row.quote);
+    expect(quote.get(".testimonials-block__author").text()).toBe("Ann");
+  });
+
+  /* An anonymous quote has nothing to attribute, so it draws no citation line at all. */
+  it("draws no author line when the row names nobody", () => {
+    const quote = quotesOf({ items: [{ quote: "Anonymous praise" }] })[0]!;
+
+    expect(quote.find(".testimonials-block__author").exists()).toBe(false);
+    expect(quote.get(".testimonials-block__quote").text()).toBe("Anonymous praise");
+  });
+
+  it.each([
+    ["a blank quote", { quote: "   ", author: "Ann" }],
+    ["no quote", { author: "Ann" }],
+    ["a null quote", { quote: null, author: "Ann" }],
+    ["a numeric quote", { quote: 42, author: "Ann" }],
+  ])("draws no quote for %s", (_case, row) => {
+    expect(quotesOf({ items: [row] })).toHaveLength(0);
+  });
+
+  it("draws the complete rows around a half-saved one", () => {
+    const items = [three.items[0], { quote: "", author: "Half" }, three.items[1]];
+
+    expect(quotesOf({ items }).map((quote) => quote.get(".testimonials-block__quote").text())).toEqual([
+      three.items[0]!.quote,
+      "Cheap, fast, and it works.",
+    ]);
+  });
+
+  it("hides the stars unless the switch is on", () => {
+    expect(wrapperOf(three).find(".testimonials-block__rating").exists()).toBe(false);
+    expect(wrapperOf({ "show-rating": false, "items": three.items }).find(".testimonials-block__rating").exists()).toBe(
+      false,
+    );
+  });
+
+  it("fills as many of the five stars as the row rates", () => {
+    const ratings = wrapperOf({ ...three, "show-rating": true }).findAll(".testimonials-block__rating");
+
+    expect(ratings).toHaveLength(2);
+    expect(ratings[0]!.findAll(".i-lucide\\:star")).toHaveLength(5);
+    expect(ratings[0]!.findAll(".testimonials-block__star--on")).toHaveLength(5);
+    expect(ratings[1]!.findAll(".testimonials-block__star--on")).toHaveLength(4);
+  });
+
+  /*
+    The field offers 1–5 with a step of one, but a stored row is unvalidated: a rating above the five
+    stars must not draw a sixth, a fraction must not draw a partial star, and a value below one draws
+    none rather than a full row of them.
+  */
+  it.each([
+    ["over the range", 9, 5],
+    ["a fraction", 3.4, 3],
+    ["below the range", 0, 0],
+    ["negative", -4, 0],
+    ["a string that looks numeric", "4", 0],
+    ["null", null, 0],
+  ])("keeps a rating of %s inside the five stars", (_case, rating, filled) => {
+    const ratings = wrapperOf({ "show-rating": true, "items": [{ quote: "Rated", rating }] }).findAll(
+      ".testimonials-block__rating",
+    );
+
+    if (filled === 0) {
+      expect(ratings).toHaveLength(0);
+      return;
+    }
+    expect(ratings[0]!.findAll(".testimonials-block__star")).toHaveLength(5);
+    expect(ratings[0]!.findAll(".testimonials-block__star--on")).toHaveLength(filled);
+  });
+
+  it("names the rating for a screen reader instead of leaving empty icons", () => {
+    const rating = wrapperOf({ "show-rating": true, "items": [{ quote: "Rated", rating: 4 }] }).get(
+      ".testimonials-block__rating",
+    );
+
+    expect(rating.attributes("role")).toBe("img");
+    expect(rating.attributes("aria-label")).toBe("4 / 5");
+  });
+
+  it("draws the list layout unless the block says otherwise", () => {
+    const wrapper = wrapperOf(three);
+
+    expect(wrapper.get(".testimonials-block").classes()).toContain("testimonials-block--list");
+    expect(quotesOf(three)).toHaveLength(3);
+  });
+
+  it("becomes a grid and keeps every quote", () => {
+    const wrapper = wrapperOf({ ...three, layout: "grid" });
+
+    expect(wrapper.get(".testimonials-block").classes()).toContain("testimonials-block--grid");
+    expect(wrapper.findAll(".testimonials-block__item")).toHaveLength(3);
+  });
+
+  it("draws the list for a layout outside the palette", () => {
+    expect(
+      wrapperOf({ ...three, layout: "carousel" })
+        .get(".testimonials-block")
+        .classes(),
+    ).toContain("testimonials-block--list");
+  });
+
+  /* A customer writes three hundred characters; the quote is the block's content, not an error. */
+  it("keeps a long quote in one piece", () => {
+    const quote = "Отзыв ".repeat(51).trim();
+    const blockquote = quotesOf({ items: [{ quote, author: "Ann" }] })[0]!;
+
+    expect(quote.length).toBeGreaterThan(300);
+    expect(blockquote.get(".testimonials-block__quote").text()).toBe(quote);
+  });
+
+  /* The page is server-rendered, so a crawler that never runs a script still reads the praise. */
+  it("ships the quotes in the server-rendered markup", async () => {
+    const html = await renderToString(h(TestimonialsBlock, { properties: blockOf("Testimonials", three).properties }));
+
+    expect(html).toContain("<blockquote");
+    expect(html).toContain("<cite");
+    expect(html).toContain("Анна Петрова");
+    expect(html).toContain("Cheap, fast, and it works.");
+  });
+
+  /* The constructor selects a block through an overlay as tall as the block. */
+  it("keeps the box for a block with no complete rows", () => {
+    const wrapper = wrapperOf();
+
+    expect(wrapper.get(".testimonials-block").element.tagName).toBe("DIV");
+    expect(wrapper.findAll(".testimonials-block__item")).toHaveLength(0);
   });
 });
 

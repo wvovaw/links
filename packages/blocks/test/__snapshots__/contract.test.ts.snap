@@ -1082,6 +1082,89 @@ exports[`Spacer > has a pinned schema snapshot 1`] = `
 }
 `;
 
+exports[`Testimonials > has a pinned schema snapshot 1`] = `
+{
+  "items": {
+    "defaultValue": [],
+    "group": "Content",
+    "id": 0,
+    "itemFields": [
+      {
+        "defaultValue": null,
+        "id": 0,
+        "key": "quote",
+        "label": "Quote",
+        "multiline": true,
+        "required": true,
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "id": 1,
+        "key": "author",
+        "label": "Author",
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "id": 2,
+        "key": "role",
+        "label": "Role",
+        "type": "text",
+      },
+      {
+        "defaultValue": null,
+        "id": 3,
+        "key": "avatar",
+        "label": "Avatar",
+        "type": "image",
+      },
+      {
+        "defaultValue": null,
+        "hint": "Stars out of five",
+        "id": 4,
+        "key": "rating",
+        "label": "Rating",
+        "max": 5,
+        "min": 1,
+        "step": 1,
+        "type": "number",
+      },
+    ],
+    "label": "Testimonials",
+    "maxItems": 20,
+    "minItems": 1,
+    "type": "list",
+  },
+  "layout": {
+    "defaultValue": "list",
+    "group": "Appearance",
+    "id": 1,
+    "label": "Layout",
+    "options": [
+      {
+        "label": "List",
+        "value": "list",
+      },
+      {
+        "label": "Grid",
+        "value": "grid",
+      },
+    ],
+    "type": "select",
+  },
+  "show-rating": {
+    "defaultValue": false,
+    "group": "Content",
+    "hint": "When off, a quote keeps everything but its stars",
+    "id": 2,
+    "label": "Show ratings",
+    "type": "boolean",
+    "variant": "switch",
+  },
+}
+`;
+
 exports[`Video > has a pinned schema snapshot 1`] = `
 {
   "aspect": {

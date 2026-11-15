@@ -47,6 +47,8 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.SocialIcons.description": "A row of icons linking to your social profiles and an email address.",
     "blocks.Spacer.label": "Spacer",
     "blocks.Spacer.description": "Empty space between two blocks.",
+    "blocks.Testimonials.label": "Testimonials",
+    "blocks.Testimonials.description": "Quotes from customers, shown as a list or a grid.",
     "blocks.Video.label": "Video",
     "blocks.Video.description": "A video from YouTube, Vimeo or TikTok, played in place.",
     "blocks.Video.frameTitle": "Video",
