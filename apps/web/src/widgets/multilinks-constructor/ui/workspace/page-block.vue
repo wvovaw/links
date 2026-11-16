@@ -17,10 +17,23 @@ defineEmits<{
   select: [];
   insert: [index: number];
 }>();
+
+/**
+ * The constructor shows the page, it never follows it: a stored link must not navigate the editor away
+ * with unsaved changes. A block whose content rises above the overlay is what makes this necessary.
+ */
+function cancelLinkNavigation(event: MouseEvent) {
+  if ((event.target as HTMLElement | null)?.closest("a")) event.preventDefault();
+}
 </script>
 
 <template>
-  <div class="group relative flex" :data-block-selected="isSelected" :data-block-hidden="isHidden">
+  <div
+    class="group relative flex"
+    :data-block-selected="isSelected"
+    :data-block-hidden="isHidden"
+    @click.capture="cancelLinkNavigation"
+  >
     <InsertBlockButton edge="top" @insert="$emit('insert', index)" />
     <InsertBlockButton v-if="isLast" edge="bottom" @insert="$emit('insert', index + 1)" />
     <Transition
