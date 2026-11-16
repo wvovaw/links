@@ -23,6 +23,10 @@ const SOCIAL_ICONS = SOCIAL_SLOTS.map((slot) => slot.icon);
 export default defineConfig({
   /* `eye-off` marks a block the constructor shows dimmed: it is not block metadata, so no list has it. */
   safelist: [
+    /* The properties panel's view icons arrive as data, so the extractor never sees them. */
+    "i-lucide:layout-list",
+    "i-lucide:file-text",
+    "i-lucide:palette",
     "i-lucide:sun-medium",
     "i-lucide:moon",
     "i-lucide:monitor",
