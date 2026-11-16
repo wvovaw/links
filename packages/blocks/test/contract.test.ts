@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { BlockName, IBlock, IBlockPropertyList, IBlockPropertySelect } from "../src/main";
+import type { BlockName, IBlock, IBlockPropertyList, IBlockPropertyNumber, IBlockPropertySelect } from "../src/main";
 
 import { checkBlockUpToDate, migrateBlock } from "../src/main";
 import { getBlockModule, registry } from "../src/registry";
@@ -141,6 +141,25 @@ it.each([
   expect(migrated.version).toBe(getBlockModule("Gallery").BLOCK_VERSION);
   expect((migrated.properties.layout as IBlockPropertySelect).value).toBe(expected);
   expect((migrated.properties.items as IBlockPropertyList).value).toEqual(rows);
+});
+
+/**
+ * The image corners take the page theme's radius, so a stored gallery's own radius goes; and every
+ * row carries its own `new-tab` switch, added beside the link it applies to.
+ */
+it("drops a stored gallery radius and gives each row a new-tab switch", () => {
+  const block = structuredClone(galleryV0);
+  (block.properties.radius as IBlockPropertyNumber).value = 4;
+
+  const migrated = migrateBlock(block);
+
+  expect(migrated.properties.radius).toBeUndefined();
+  expect((migrated.properties.items as IBlockPropertyList).itemFields.map((field) => field.key)).toEqual([
+    "image",
+    "alt",
+    "link",
+    "new-tab",
+  ]);
 });
 
 /**

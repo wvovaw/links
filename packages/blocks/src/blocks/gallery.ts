@@ -1,6 +1,48 @@
-import type { BlockModuleSchema, IBlock } from "../types";
+import type { BlockItemField, BlockModuleSchema, IBlock } from "../types";
 
-const BLOCK_VERSION = 1;
+const BLOCK_VERSION = 2;
+
+/**
+ * The row fields. One list serves the factory and the migration step that adds a field, so a stored
+ * Gallery ends up with exactly the shape `createBlock` writes today. `new-tab` belongs to the row
+ * rather than the block: every image carries its own link, and one may stay on the site while the
+ * next leaves it.
+ */
+function itemFields(): BlockItemField[] {
+  return [
+    {
+      key: "image",
+      id: 0,
+      type: "image",
+      label: "Image",
+      required: true,
+      defaultValue: null,
+    },
+    {
+      key: "alt",
+      id: 1,
+      type: "text",
+      label: "Alt text",
+      hint: "Describes the picture when it cannot be seen",
+      defaultValue: "",
+    },
+    {
+      key: "link",
+      id: 2,
+      type: "url",
+      label: "Link",
+      defaultValue: null,
+    },
+    {
+      key: "new-tab",
+      id: 3,
+      type: "boolean",
+      label: "Open in a new tab",
+      variant: "switch",
+      defaultValue: true,
+    },
+  ];
+}
 
 function createBlock(id: string): IBlock<"Gallery"> {
   return {
@@ -16,31 +58,7 @@ function createBlock(id: string): IBlock<"Gallery"> {
         minItems: 1,
         maxItems: 30,
         defaultValue: [],
-        itemFields: [
-          {
-            key: "image",
-            id: 0,
-            type: "image",
-            label: "Image",
-            required: true,
-            defaultValue: null,
-          },
-          {
-            key: "alt",
-            id: 1,
-            type: "text",
-            label: "Alt text",
-            hint: "Describes the picture when it cannot be seen",
-            defaultValue: "",
-          },
-          {
-            key: "link",
-            id: 2,
-            type: "url",
-            label: "Link",
-            defaultValue: null,
-          },
-        ],
+        itemFields: itemFields(),
       },
       layout: {
         id: 1,
@@ -84,16 +102,6 @@ function createBlock(id: string): IBlock<"Gallery"> {
         group: "Appearance",
         defaultValue: "1:1",
       },
-      radius: {
-        id: 4,
-        type: "number",
-        label: "Radius",
-        min: 0,
-        max: 32,
-        step: 1,
-        group: "Appearance",
-        defaultValue: 10,
-      },
     },
   };
 }
@@ -102,6 +110,9 @@ function createBlock(id: string): IBlock<"Gallery"> {
  * Version 1 renames the horizontal layout: the strip scrolled a row of two-image frames, and the
  * carousel that replaced it steps one image at a time. The options are rewritten in place on the
  * stored property, so a page keeps the layout it chose — `strip` moving to the value that replaced it.
+ *
+ * Version 2 gives each row its own `new-tab` switch and lets the image corners fall back to the page
+ * theme's radius. An owner-set radius is dropped: the block has no radius of its own any more.
  */
 function migrateBlock(block: IBlock): IBlock {
   if (!block.version) block.version = 0;
@@ -128,6 +139,15 @@ function migrateBlock(block: IBlock): IBlock {
     }
 
     block.version = 1;
+  }
+
+  if (block.version === 1) {
+    const items = block.properties.items;
+    if (items?.type === "list") items.itemFields = itemFields();
+
+    delete block.properties.radius;
+
+    block.version = 2;
   }
 
   return block;

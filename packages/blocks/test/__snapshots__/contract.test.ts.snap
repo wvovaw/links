@@ -553,6 +553,14 @@ exports[`Gallery > has a pinned schema snapshot 1`] = `
         "label": "Link",
         "type": "url",
       },
+      {
+        "defaultValue": true,
+        "id": 3,
+        "key": "new-tab",
+        "label": "Open in a new tab",
+        "type": "boolean",
+        "variant": "switch",
+      },
     ],
     "label": "Images",
     "maxItems": 30,
@@ -575,16 +583,6 @@ exports[`Gallery > has a pinned schema snapshot 1`] = `
       },
     ],
     "type": "select",
-  },
-  "radius": {
-    "defaultValue": 10,
-    "group": "Appearance",
-    "id": 4,
-    "label": "Radius",
-    "max": 32,
-    "min": 0,
-    "step": 1,
-    "type": "number",
   },
 }
 `;
