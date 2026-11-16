@@ -78,7 +78,7 @@ scrolls internally — and is otherwise unchanged. `controls/set-background.vue`
 - `PageBlock` renders an insertion control on its top edge (`index` of that block), and the last block
   also renders one on its bottom edge (`index === blocks.length`). Each one shows on hover of the block,
   and on mobile it is always visible.
-- The control lives *inside* the `PageBlock` wrapper, not as a sibling: `dragAndDrop` takes every direct
+- The control lives _inside_ the `PageBlock` wrapper, not as a sibling: `dragAndDrop` takes every direct
   child of `link__blocks-root` as a drag node, so an extra sibling would become a draggable "block".
 - An empty page renders a dashed "Add your first block" area in place of the list, inserting at `0`.
 - Clicking a control records the index and opens the palette sheet (`BlocksList`, unchanged); picking a

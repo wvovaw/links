@@ -1,7 +1,7 @@
-import { createTestingPinia } from "@pinia/testing";
 import { DEFAULT_PAGE_THEME } from "@links/blocks";
 import { UITooltipProvider } from "@links/ui";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { createTestingPinia } from "@pinia/testing";
 import { describe, expect, it, vi } from "vitest";
 import { defineComponent } from "vue";
 

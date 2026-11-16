@@ -33,10 +33,12 @@
 ### Task 1: Insert a block at an index (store)
 
 **Files:**
+
 - Modify: `apps/web/src/widgets/multilinks-constructor/model/constructor.store.ts:87-91`
 - Test: `apps/web/src/widgets/multilinks-constructor/tests/constructor.store.test.ts`
 
 **Interfaces:**
+
 - Consumes: `createBlock(name: BlockName, id: string): IBlock` and `generateBlockId()` from the same file, `selectBlock(id: string): void`.
 - Produces: `addBlock(name: BlockName, index?: number): void` — inserts at `index`, appends when it is omitted, and selects the new block. Tasks 2 and 5 call it.
 
@@ -117,11 +119,13 @@ git commit -m "feat(web): insert a constructor block at a given index"
 `BlocksList` currently calls `addBlock` itself, so it cannot be reused by a palette that must insert at a remembered index. It reports the picked name instead; its one caller keeps adding (at the end) until Task 5 replaces it.
 
 **Files:**
+
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/blocks-list/blocks-list.vue`
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/blocks-list/blocks-list.test.ts`
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/toolbar/controls/add-block.vue`
 
 **Interfaces:**
+
 - Consumes: `addBlock(name: BlockName, index?: number)` from Task 1.
 - Produces: `BlocksList` emits `select` with a `BlockName` payload (`defineEmits<{ select: [name: BlockName] }>`). Task 5 consumes it.
 
@@ -169,7 +173,14 @@ function selectBlock(block: BlockMeta) {
 In `ui/toolbar/controls/add-block.vue`, the sheet's palette no longer adds on its own, so it adds at the end here:
 
 ```vue
-<BlocksList @select="(name) => { addBlock(name); setShow(false); }" />
+<BlocksList
+  @select="
+    (name) => {
+      addBlock(name);
+      setShow(false);
+    }
+  "
+/>
 ```
 
 with `import { useConstructorStore } from "../../../model";` and `const { addBlock } = useConstructorStore();` in its script block. This file is deleted in Task 5.
@@ -191,6 +202,7 @@ git commit -m "refactor(web): let the block palette report its pick"
 ### Task 3: Insert markers in the page
 
 **Files:**
+
 - Create: `apps/web/src/widgets/multilinks-constructor/ui/workspace/insert-block-button.vue`
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/workspace/page-block.vue`
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/workspace/page-renderer.vue`
@@ -198,6 +210,7 @@ git commit -m "refactor(web): let the block palette report its pick"
 - Test: `apps/web/src/widgets/multilinks-constructor/tests/insert-block.test.ts`
 
 **Interfaces:**
+
 - Consumes: `blocks` from the store; nothing from Tasks 1-2.
 - Produces: `PageBlock` props `{ isSelected: boolean; isHidden: boolean; index: number; isLast: boolean }` and event `insert(index: number)`; `PageRenderer` event `insert(index: number)`. Task 5 listens to `PageRenderer`'s `insert`.
 
@@ -365,6 +378,7 @@ git commit -m "feat(web): offer block insertion points in the constructor page"
 ### Task 4: One panel, three views, a toolbar switcher
 
 **Files:**
+
 - Create: `apps/web/src/widgets/multilinks-constructor/ui/properties-panel/views.ts`
 - Modify: `apps/web/src/widgets/multilinks-constructor/model/provider.ts`
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/toolbar/toolbar.vue`
@@ -375,6 +389,7 @@ git commit -m "feat(web): offer block insertion points in the constructor page"
 - Delete: `apps/web/src/widgets/multilinks-constructor/ui/toolbar/controls/set-background.vue`
 
 **Interfaces:**
+
 - Consumes: the three editors' barrels (`BlockPropertiesEditor`, `PagePropertiesEditor`, `ThemeEditor`).
 - Produces: `PanelViewId = "blocks" | "page" | "theme"` and `PROPERTY_VIEWS: PropertyView[]` from `views.ts`; `ConstructorData { isMobile: Ref<boolean>; selectView(view: PanelViewId): void }`; `Toolbar` props `{ activeViewId: PanelViewId }` and event `select(view: PanelViewId)`. Task 5 calls `selectView` from `useConstructorData()`.
 
@@ -433,6 +448,7 @@ Create `ui/properties-panel/views.ts`:
 import type { Component } from "vue";
 
 import type { PanelViewId } from "../../model/provider";
+
 import { BlockPropertiesEditor } from "../block-properties-editor";
 import { PagePropertiesEditor } from "../page-properties-editor";
 import { ThemeEditor } from "../theme-editor";
@@ -472,8 +488,9 @@ interface ConstructorData {
 In `toolbar.vue`, replace `AddBlock` and `SetBackground` with the view buttons, delete their imports, and add:
 
 ```ts
-import { PROPERTY_VIEWS } from "../properties-panel/views";
 import type { PanelViewId } from "../../model/provider";
+
+import { PROPERTY_VIEWS } from "../properties-panel/views";
 
 defineProps<{ activeViewId: PanelViewId }>();
 const emit = defineEmits<{ select: [view: PanelViewId] }>();
@@ -505,9 +522,7 @@ In `multilinks-constructor.vue`: drop the four `UITabs*` names from the `@links/
 
 ```ts
 const activeViewId = ref<PanelViewId>(DEFAULT_VIEW_ID);
-const activeView = computed(
-  () => PROPERTY_VIEWS.find((view) => view.id === activeViewId.value) ?? PROPERTY_VIEWS[0]!,
-);
+const activeView = computed(() => PROPERTY_VIEWS.find((view) => view.id === activeViewId.value) ?? PROPERTY_VIEWS[0]!);
 const isPanelOpen = ref(false);
 
 /* Switching the view is not the same as asking to see it: inserting a block switches silently. */
@@ -526,7 +541,13 @@ provide(CONSTRUCTOR_INJECTION_KEY, { isMobile, selectView });
 with `import { DEFAULT_VIEW_ID, PROPERTY_VIEWS } from "./ui/properties-panel/views";` and `import type { PanelViewId } from "./model/provider";`. Template, replacing the tabs:
 
 ```vue
-<UIScrollArea v-if="!isMobile" orientation="vertical" class="border-(x beerus) bg-gohan p-2 lg:max-w-sm lg:min-w-sm" bar-class="rounded-none" thumb-class="bg-trunks">
+<UIScrollArea
+  v-if="!isMobile"
+  orientation="vertical"
+  class="border-(x beerus) bg-gohan p-2 lg:max-w-sm lg:min-w-sm"
+  bar-class="rounded-none"
+  thumb-class="bg-trunks"
+>
   <component :is="activeView.component" />
 </UIScrollArea>
 <UISheet.Root v-else v-model:open="isPanelOpen">
@@ -582,10 +603,12 @@ git commit -m "feat(web): switch constructor properties with the toolbar, theme 
 ### Task 5: The palette moves into the workspace
 
 **Files:**
+
 - Modify: `apps/web/src/widgets/multilinks-constructor/ui/workspace/workspace.vue`
 - Delete: `apps/web/src/widgets/multilinks-constructor/ui/toolbar/controls/add-block.vue`
 
 **Interfaces:**
+
 - Consumes: `PageRenderer`'s `insert(index)` (Task 3), `BlocksList`'s `select(name)` (Task 2), `addBlock(name, index)` (Task 1), `selectView("blocks")` (Task 4).
 - Produces: nothing later tasks use.
 
@@ -595,6 +618,7 @@ In `workspace.vue`:
 
 ```ts
 import type { BlockName } from "@links/blocks";
+
 import { UISheet } from "@links/ui";
 
 import { useConstructorStore } from "../../model";

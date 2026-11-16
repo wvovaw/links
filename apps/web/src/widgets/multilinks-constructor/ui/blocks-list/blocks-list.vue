@@ -6,7 +6,6 @@ import { UIInput, UIMenu } from "@links/ui";
 import { computed, ref } from "vue";
 import { groupBy } from "~shared/lib/utils";
 
-
 const emit = defineEmits<{ select: [name: BlockName] }>();
 
 const { t, te } = useI18n();
