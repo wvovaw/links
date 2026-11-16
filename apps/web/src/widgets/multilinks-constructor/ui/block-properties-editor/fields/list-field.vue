@@ -113,6 +113,17 @@ function removeRow(index: number) {
   remapOpen((position) => (position === index ? undefined : position > index ? position - 1 : position));
 }
 
+/** The moved row keeps its open state: the two positions swap their entries. */
+function moveRow(index: number, offset: -1 | 1) {
+  const target = index + offset;
+  if (target < 0 || target >= rows.value.length) return;
+
+  const next = [...rows.value];
+  [next[index], next[target]] = [next[target]!, next[index]!];
+  setRows(next);
+  remapOpen((position) => (position === index ? target : position === target ? index : position));
+}
+
 /** Always a new array and a new row object, so the stored block is replaced rather than mutated. */
 function setRowValue(index: number, key: string, value: unknown) {
   setRows(rows.value.map((row, position) => (position === index ? { ...row, [key]: value } : row)));
@@ -156,6 +167,24 @@ function setRowValue(index: number, key: string, value: unknown) {
             </AccordionTrigger>
           </AccordionHeader>
           <div class="ml-auto flex items-center gap-1 shrink-0">
+            <UIButton
+              data-testid="list-move-up"
+              variant="ghost"
+              size="sm"
+              icon="i-lucide:arrow-up"
+              aria-label="Move row up"
+              :disabled="index === 0"
+              @click="moveRow(index, -1)"
+            />
+            <UIButton
+              data-testid="list-move-down"
+              variant="ghost"
+              size="sm"
+              icon="i-lucide:arrow-down"
+              aria-label="Move row down"
+              :disabled="index === rows.length - 1"
+              @click="moveRow(index, 1)"
+            />
             <UIButton
               data-testid="list-duplicate"
               variant="ghost"

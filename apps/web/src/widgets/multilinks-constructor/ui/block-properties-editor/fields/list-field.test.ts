@@ -226,3 +226,57 @@ describe("ListField rows", () => {
     expect(wrapper.find("#field-0-row-0-title").exists()).toBe(true);
   });
 });
+
+describe("ListField row order", () => {
+  it("moves a row up past its neighbour", async () => {
+    const { wrapper, model } = mountField([one, two]);
+
+    await wrapper.findAll("[data-testid='list-move-up']")[1]!.trigger("click");
+
+    expect(model.value).toEqual([two, one]);
+  });
+
+  it("moves a row down past its neighbour", async () => {
+    const { wrapper, model } = mountField([one, two]);
+
+    await wrapper.findAll("[data-testid='list-move-down']")[0]!.trigger("click");
+
+    expect(model.value).toEqual([two, one]);
+  });
+
+  it("stops at the ends", () => {
+    const { wrapper } = mountField([one, two]);
+
+    expect(wrapper.findAll("[data-testid='list-move-up']")[0]!.attributes("disabled")).toBeDefined();
+    expect(wrapper.findAll("[data-testid='list-move-down']")[1]!.attributes("disabled")).toBeDefined();
+  });
+
+  /* Moving is about position, not count, so the floor and the ceiling do not touch it. */
+  it("moves rows at minItems and at maxItems alike", async () => {
+    const smallest = mountField([one]);
+    await smallest.wrapper.findAll("[data-testid='list-move-down']")[0]!.trigger("click");
+    expect(smallest.model.value).toEqual([one]);
+
+    const largest = mountField([one, two, three]);
+    expect(largest.wrapper.get("[data-testid='list-add']").attributes("disabled")).toBeDefined();
+    await largest.wrapper.findAll("[data-testid='list-move-up']")[2]!.trigger("click");
+    expect(largest.model.value).toEqual([one, three, two]);
+  });
+
+  it("keeps a moved row open and the row it passed as it was", async () => {
+    const { wrapper } = mountField([one, two]);
+    await openRows(wrapper, 1);
+
+    await wrapper.findAll("[data-testid='list-move-up']")[1]!.trigger("click");
+    await flushPromises();
+
+    expect(wrapper.find("#field-0-row-0-title").exists()).toBe(true);
+    expect(wrapper.find("#field-0-row-1-title").exists()).toBe(false);
+  });
+
+  it("draws no drag handle", () => {
+    const { wrapper } = mountField([one]);
+
+    expect(wrapper.find("[data-testid='list-drag']").exists()).toBe(false);
+  });
+});
