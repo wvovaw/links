@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { BlockName, IBlock } from "../src/main";
+import type { BlockName, IBlock, IBlockPropertyList, IBlockPropertySelect } from "../src/main";
 
 import { checkBlockUpToDate, migrateBlock } from "../src/main";
 import { getBlockModule, registry } from "../src/registry";
@@ -121,6 +121,26 @@ it.each([
     it was handed, fails here rather than in a page whose products silently disappeared.
   */
   expect(migrated.properties.items?.value).toEqual(fixture.properties.items?.value);
+});
+
+/**
+ * The strip layout is gone: a page that chose it moves to the carousel that replaced it, and a page
+ * that chose the grid keeps its choice. The step rewrites the option set, so a step that swaps the
+ * whole property object would drop the stored `value` and silently publish a grid.
+ */
+it.each([
+  ["strip", "carousel"],
+  ["grid", "grid"],
+])("moves a stored %s gallery layout to %s", (stored, expected) => {
+  const block = structuredClone(galleryV0);
+  (block.properties.layout as IBlockPropertySelect).value = stored;
+  const rows = (block.properties.items as IBlockPropertyList).value;
+
+  const migrated = migrateBlock(block);
+
+  expect(migrated.version).toBe(getBlockModule("Gallery").BLOCK_VERSION);
+  expect((migrated.properties.layout as IBlockPropertySelect).value).toBe(expected);
+  expect((migrated.properties.items as IBlockPropertyList).value).toEqual(rows);
 });
 
 /**

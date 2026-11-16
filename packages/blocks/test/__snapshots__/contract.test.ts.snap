@@ -502,10 +502,14 @@ exports[`Gallery > has a pinned schema snapshot 1`] = `
   "columns": {
     "defaultValue": "2",
     "group": "Appearance",
-    "hint": "How many images sit side by side in a grid; the strip layout shows one row instead",
+    "hint": "How many images sit side by side in a grid; the carousel shows one at a time",
     "id": 2,
     "label": "Columns",
     "options": [
+      {
+        "label": "1",
+        "value": "1",
+      },
       {
         "label": "2",
         "value": "2",
@@ -566,8 +570,8 @@ exports[`Gallery > has a pinned schema snapshot 1`] = `
         "value": "grid",
       },
       {
-        "label": "Strip",
-        "value": "strip",
+        "label": "Carousel",
+        "value": "carousel",
       },
     ],
     "type": "select",

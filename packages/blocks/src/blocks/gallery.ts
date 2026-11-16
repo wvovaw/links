@@ -1,6 +1,6 @@
 import type { BlockModuleSchema, IBlock } from "../types";
 
-const BLOCK_VERSION = 0;
+const BLOCK_VERSION = 1;
 
 function createBlock(id: string): IBlock<"Gallery"> {
   return {
@@ -48,22 +48,23 @@ function createBlock(id: string): IBlock<"Gallery"> {
         label: "Layout",
         options: [
           { label: "Grid", value: "grid" },
-          { label: "Strip", value: "strip" },
+          { label: "Carousel", value: "carousel" },
         ],
         group: "Appearance",
         defaultValue: "grid",
       },
       /*
         A select holds a string, so the count is stored as text and parsed by the renderer. The field
-        offers exactly 2, 3 and 4; anything else a stored block carries is clamped to a whole track.
+        offers exactly 1, 2, 3 and 4; anything else a stored block carries is clamped to a whole track.
       */
       columns: {
         id: 2,
         type: "select",
         label: "Columns",
-        hint: "How many images sit side by side in a grid; the strip layout shows one row instead",
+        hint: "How many images sit side by side in a grid; the carousel shows one at a time",
 
         options: [
+          { label: "1", value: "1" },
           { label: "2", value: "2" },
           { label: "3", value: "3" },
           { label: "4", value: "4" },
@@ -97,8 +98,38 @@ function createBlock(id: string): IBlock<"Gallery"> {
   };
 }
 
-/** Version 0 is the schema the block ships with: there is no older shape to upgrade. */
+/**
+ * Version 1 renames the horizontal layout: the strip scrolled a row of two-image frames, and the
+ * carousel that replaced it steps one image at a time. The options are rewritten in place on the
+ * stored property, so a page keeps the layout it chose — `strip` moving to the value that replaced it.
+ */
 function migrateBlock(block: IBlock): IBlock {
+  if (!block.version) block.version = 0;
+
+  if (block.version === 0) {
+    const layout = block.properties.layout;
+    if (layout?.type === "select") {
+      layout.options = [
+        { label: "Grid", value: "grid" },
+        { label: "Carousel", value: "carousel" },
+      ];
+      if (layout.value === "strip") layout.value = "carousel";
+    }
+
+    const columns = block.properties.columns;
+    if (columns?.type === "select") {
+      columns.hint = "How many images sit side by side in a grid; the carousel shows one at a time";
+      columns.options = [
+        { label: "1", value: "1" },
+        { label: "2", value: "2" },
+        { label: "3", value: "3" },
+        { label: "4", value: "4" },
+      ];
+    }
+
+    block.version = 1;
+  }
+
   return block;
 }
 

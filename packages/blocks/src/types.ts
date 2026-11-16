@@ -124,7 +124,7 @@ export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
   },
   Gallery: {
     label: "Gallery",
-    description: "A set of images shown as a grid or a sliding strip.",
+    description: "A set of images shown as a grid or one at a time in a carousel.",
     icon: "i-lucide:images",
     category: "Media",
     keywords: ["gallery", "images", "photos", "grid", "strip", "carousel", "album"],
