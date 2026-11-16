@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { BlockProperty, IBlockPropertySelectMultiple } from "@links/blocks";
 
-import { UIButton, UIInput, UIInputLabel, UITextArea } from "@links/ui";
 import { PublicApi } from "~shared/api/backend";
+import ThemeButton from "~shared/blocks/components/controls/theme-button.vue";
+import ThemeInput from "~shared/blocks/components/controls/theme-input.vue";
+import ThemeLabel from "~shared/blocks/components/controls/theme-label.vue";
+import ThemeTextarea from "~shared/blocks/components/controls/theme-textarea.vue";
 import { i18nLabel } from "~shared/lib/i18n-label";
 
 const props = defineProps<{
@@ -128,25 +131,25 @@ async function onSubmit() {
       />
 
       <div v-if="showsName" class="contact-form-block__field">
-        <UIInputLabel :for="`${idPrefix}-name`">{{ labelOf("name") }}</UIInputLabel>
-        <UIInput :id="`${idPrefix}-name`" v-model="form.name" type="text" full-width />
+        <ThemeLabel :html-for="`${idPrefix}-name`">{{ labelOf("name") }}</ThemeLabel>
+        <ThemeInput :id="`${idPrefix}-name`" v-model="form.name" type="text" />
       </div>
 
       <div class="contact-form-block__field">
-        <UIInputLabel :for="`${idPrefix}-email`">{{ emailLabel }}</UIInputLabel>
-        <UIInput :id="`${idPrefix}-email`" v-model="form.email" type="email" required full-width />
+        <ThemeLabel :html-for="`${idPrefix}-email`">{{ emailLabel }}</ThemeLabel>
+        <ThemeInput :id="`${idPrefix}-email`" v-model="form.email" type="email" required />
       </div>
 
       <div v-if="showsMessage" class="contact-form-block__field">
-        <UIInputLabel :for="`${idPrefix}-message`">{{ labelOf("message") }}</UIInputLabel>
-        <UITextArea :id="`${idPrefix}-message`" v-model="form.message" :rows="3" resize="vertical" />
+        <ThemeLabel :html-for="`${idPrefix}-message`">{{ labelOf("message") }}</ThemeLabel>
+        <ThemeTextarea :id="`${idPrefix}-message`" v-model="form.message" :rows="3" />
       </div>
 
-      <UIButton type="submit" full-width :loading="sending" :disabled="!canSubmit">
+      <ThemeButton type="submit" :loading="sending" :disabled="!canSubmit">
         {{ buttonLabel }}
-      </UIButton>
+      </ThemeButton>
 
-      <p v-if="error" class="contact-form-block__error text-chichi" role="alert">{{ error }}</p>
+      <p v-if="error" class="contact-form-block__error" role="alert">{{ error }}</p>
     </form>
   </div>
 </template>
@@ -178,6 +181,7 @@ async function onSubmit() {
 }
 .contact-form-block__error {
   font-size: var(--links-theme-paragraph-font-size-sm);
+  color: var(--links-theme-error);
   text-align: center;
 }
 /* Both traps: out of sight, out of the layout, but still an input a script will fill in. */

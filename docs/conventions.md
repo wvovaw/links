@@ -72,6 +72,12 @@ fresh clone must be built before anything importing the preset runs, the web tes
 - Blocks render by resolving a component per block name
   (`src/shared/blocks/use-blocks-resolver.ts`); a block receives `properties` and falls back to theme
   CSS variables for unset values.
+- **A Vue component under `src/shared/blocks/components/` never uses `@links/ui`** — not its
+  components, not its UnoCSS preset utilities (the `text-*`/`bg-*` palette tokens). The page a
+  visitor reads belongs to the link, not to the constructor: its look comes from the page theme
+  variables in `src/shared/blocks/theme.css` and `page-theme.ts`, and
+  `src/shared/blocks/components/no-ui-kit.test.ts` enforces the rule. Native controls that read
+  those variables live in `src/shared/blocks/components/controls/` (input, textarea, button, label).
 - Content (MDC docs) lives in `apps/web/content/`; `packages/ui/docs/` is a separate Nuxt site.
 
 ## apps/backend — data and migrations

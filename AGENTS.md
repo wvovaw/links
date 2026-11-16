@@ -55,6 +55,9 @@ not define them.
 3. Block schema changes follow the backward-compatibility flow in `packages/blocks/README.md`.
 4. `lint` / `fmt` never write. When you mean to change files, use `lint:fix` / `fmt:write`.
 5. One documentation directory: lowercase `docs/` at the root. Docs contain no version numbers.
+6. No Vue component under `apps/web/src/shared/blocks/components/` uses `@links/ui` — neither its
+   components nor its UnoCSS preset utilities. A visitor's page is styled only by the page theme
+   variables; controls meant for blocks live in `src/shared/blocks/components/controls/`.
 
 ## Working rules
 

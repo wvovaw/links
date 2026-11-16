@@ -16,9 +16,9 @@ export function resolvePageStyle(
 ): Record<string, string> | string {
   if (!theme) return legacyBackground ?? themeStyle(DEFAULT_PAGE_THEME);
 
-  /* The button tokens belong to a stored theme alone: a page without one keeps the defaults in
-     `theme.css`, which is the look it had before the theme control existed. */
-  return { ...themeStyle(theme), ...buttonTokens(theme) };
+  /* The button and field tokens belong to a stored theme alone: a page without one keeps the
+     defaults in `theme.css`, which is the look it had before the theme control existed. */
+  return { ...themeStyle(theme), ...buttonTokens(theme), ...fieldTokens(theme) };
 }
 
 function themeStyle(theme: PageTheme): Record<string, string> {
@@ -56,6 +56,20 @@ function buttonTokens(theme: PageTheme): Record<string, string> {
   };
 }
 
+/**
+ * The form fields read on any preset: a wash of the page's text colour over its background, with the
+ * accent for focus and a red that flips with the page's scheme.
+ */
+function fieldTokens(theme: PageTheme): Record<string, string> {
+  return {
+    "--links-theme-field-fg": theme.text,
+    "--links-theme-field-bg": withAlpha(theme.text, 0.08),
+    "--links-theme-field-border": withAlpha(theme.text, 0.28),
+    "--links-theme-field-placeholder": withAlpha(theme.text, 0.56),
+    "--links-theme-error": theme.colorScheme === "dark" ? "#ff9a9a" : "#c0242b",
+  };
+}
+
 function fontStack(preset: PageTheme["fontPreset"]): string {
   const systemStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif';
 
@@ -64,9 +78,14 @@ function fontStack(preset: PageTheme["fontPreset"]): string {
 
 /** The scrim over the background: the accent at the chosen strength, so one colour drives both. */
 function overlayColor(accent: string, opacity: number): string {
-  const red = Number.parseInt(accent.slice(1, 3), 16);
-  const green = Number.parseInt(accent.slice(3, 5), 16);
-  const blue = Number.parseInt(accent.slice(5, 7), 16);
+  return withAlpha(accent, opacity);
+}
+
+/** A stored theme colour is a `#rrggbb` the API validated, so its channels are always six hex digits. */
+function withAlpha(color: string, opacity: number): string {
+  const red = Number.parseInt(color.slice(1, 3), 16);
+  const green = Number.parseInt(color.slice(3, 5), 16);
+  const blue = Number.parseInt(color.slice(5, 7), 16);
 
   return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
 }

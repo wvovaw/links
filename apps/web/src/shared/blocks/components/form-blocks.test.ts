@@ -68,7 +68,7 @@ describe("ContactFormBlock", () => {
     expect(wrapper.get("button").attributes("disabled")).toBeDefined();
   });
 
-  /* Inside a form a button defaults to submit, but the attribute says so out loud — and the UI kit drops it. */
+  /* Inside a form a button defaults to submit, but the attribute says so out loud. */
   it("submits through a button the browser knows is a submit", async () => {
     const wrapper = await mountContact();
 

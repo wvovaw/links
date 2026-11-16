@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { BlockProperty } from "@links/blocks";
 
-import { UIButton, UIInput, UIInputLabel } from "@links/ui";
 import { PublicApi } from "~shared/api/backend";
+import ThemeButton from "~shared/blocks/components/controls/theme-button.vue";
+import ThemeInput from "~shared/blocks/components/controls/theme-input.vue";
+import ThemeLabel from "~shared/blocks/components/controls/theme-label.vue";
 import { i18nLabel } from "~shared/lib/i18n-label";
 
 const props = defineProps<{
@@ -102,15 +104,15 @@ async function onSubmit() {
       />
 
       <div class="email-capture-block__field">
-        <UIInputLabel :for="emailId">{{ emailLabel }}</UIInputLabel>
-        <UIInput :id="emailId" v-model="form.email" type="email" :placeholder="placeholder" required full-width />
+        <ThemeLabel :html-for="emailId">{{ emailLabel }}</ThemeLabel>
+        <ThemeInput :id="emailId" v-model="form.email" type="email" :placeholder="placeholder" required />
       </div>
 
-      <UIButton type="submit" full-width :loading="sending" :disabled="!canSubmit">
+      <ThemeButton type="submit" :loading="sending" :disabled="!canSubmit">
         {{ buttonLabel }}
-      </UIButton>
+      </ThemeButton>
 
-      <p v-if="error" class="email-capture-block__error text-chichi" role="alert">{{ error }}</p>
+      <p v-if="error" class="email-capture-block__error" role="alert">{{ error }}</p>
     </form>
   </div>
 </template>
@@ -137,6 +139,7 @@ async function onSubmit() {
 }
 .email-capture-block__error {
   font-size: var(--links-theme-paragraph-font-size-sm);
+  color: var(--links-theme-error);
   text-align: center;
 }
 .email-capture-block__trap {

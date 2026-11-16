@@ -36,6 +36,28 @@ describe("resolvePageStyle", () => {
   it("leaves the button tokens to theme.css when no theme is stored", () => {
     expect(resolvePageStyle(null, null)).not.toHaveProperty("--links-theme-button-bg");
   });
+
+  it("derives the field tokens from the page's text colour", () => {
+    const style = resolvePageStyle({ ...DEFAULT_PAGE_THEME, text: "#112233" }, null) as Record<string, string>;
+
+    expect(style["--links-theme-field-fg"]).toBe("#112233");
+    expect(style["--links-theme-field-bg"]).toBe("rgba(17, 34, 51, 0.08)");
+    expect(style["--links-theme-field-border"]).toBe("rgba(17, 34, 51, 0.28)");
+    expect(style["--links-theme-field-placeholder"]).toBe("rgba(17, 34, 51, 0.56)");
+  });
+
+  it.each([
+    ["light", "#c0242b"],
+    ["dark", "#ff9a9a"],
+  ] as const)("picks a %s error colour that reads on the page", (colorScheme, expected) => {
+    const style = resolvePageStyle({ ...DEFAULT_PAGE_THEME, colorScheme }, null) as Record<string, string>;
+
+    expect(style["--links-theme-error"]).toBe(expected);
+  });
+
+  it("leaves the field tokens to theme.css when no theme is stored", () => {
+    expect(resolvePageStyle(null, null)).not.toHaveProperty("--links-theme-field-fg");
+  });
 });
 
 describe.each([

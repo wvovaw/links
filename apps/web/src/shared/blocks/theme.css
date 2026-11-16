@@ -24,6 +24,16 @@
   --links-theme-button-font-size-md: 1rem;
   --links-theme-button-font-size-lg: 1.2rem;
 
+  /*
+    Form fields: the page's own text colour at low strength, so a field reads on any preset. A themed
+    page replaces these inline from its text colour (see `shared/blocks/page-theme.ts`).
+  */
+  --links-theme-field-fg: var(--links-page-fg);
+  --links-theme-field-bg: rgba(23, 21, 21, 0.08);
+  --links-theme-field-border: rgba(23, 21, 21, 0.28);
+  --links-theme-field-placeholder: rgba(23, 21, 21, 0.56);
+  --links-theme-error: #c0242b;
+
   /* Paragraph */
   --links-theme-paragraph-fg: var(--links-page-fg);
   --links-theme-paragraph-inline-padding: 0px;
