@@ -48,4 +48,13 @@ describe("PageBlock insertion points", () => {
 
     expect(wrapper.emitted("insert")).toEqual([[2], [3]]);
   });
+
+  /* The wrapper spans the block's full width: without this, an invisible strip eats the block's edge. */
+  it("catches pointer events only on the marker button", () => {
+    const wrapper = mount(PageBlock, { props: { ...props, isLast: false }, slots: { default: "<p />" } });
+    const marker = wrapper.get("[data-testid='insert-block']");
+
+    expect(marker.classes()).toContain("pointer-events-auto");
+    expect(marker.element.parentElement?.className).toContain("pointer-events-none");
+  });
 });
