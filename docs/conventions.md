@@ -147,9 +147,6 @@ into an expensive one for the whole run. If a task seems to need a stronger mode
 never override it from inside a session. The same holds for role guidance that asks for "the most
 capable available model": use `reviewer` as pinned.
 
-Prompt bodies are copied from the bundled `pi-subagents` agents (`worker` is our `implementer`), so
-upstream fixes arrive by re-copying the body and keeping the frontmatter. Only frontmatter is ours.
-
 `implementer` and `reviewer` name the project skills they can load (`skills:`), because
 `inheritSkills: false` is what keeps every other skill out. An agent with no `skills:` line sees none
 of them, and a skill it was not given cannot be invoked.

@@ -62,6 +62,11 @@ not define them.
 - Before saying something works, run it. `pnpm verify` is the floor for anything touching packages;
   runtime behaviour also gets exercised — the API through its Bruno collection
   (`apps/backend/.bruno`), the constructor and a public page in a browser.
+- Browser verification reports text, not pixels: a selector, a computed style, a value read back. Never
+  `read` a screenshot into the session — it stays in the context and is re-sent with every later
+  request. Take it inside a subagent whose context ends with the run, or leave it for the user to open.
+- A subagent's returned result is what you act on. Open its run output file only to get evidence for a
+  finding you are fixing right now — not to re-read a verdict you already have.
 - Docs describe the repo as it is: a behaviour change and its doc change are one commit.
 - Conventional commits — enforced by husky + commitlint.
 
