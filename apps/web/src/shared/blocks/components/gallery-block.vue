@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BlockProperty, IBlockPropertyList, IBlockPropertyNumber, IBlockPropertySelect } from "@links/blocks";
+import type { BlockProperty, IBlockPropertyList, IBlockPropertySelect } from "@links/blocks";
 
 import { completeRows } from "@links/blocks";
 import { resolveBlockImageUrl } from "~shared/blocks";
@@ -41,7 +41,7 @@ function columnCount(value: string | undefined): number {
   return Math.round(clampNumber(Number(value), 1, 4, 2));
 }
 
-type GalleryRow = { image: string; alt: string; link: string | null };
+type GalleryRow = { image: string; alt: string; link: string | null; newTab: boolean };
 
 const bp = computed(() => {
   const p = props.properties;
@@ -61,15 +61,20 @@ const bp = computed(() => {
           : undefined;
       if (!image) return [];
 
+      /*
+        The row's link is free text the API never validates, so a `javascript:` value in `href` would
+        run in the page's own origin on click: only a web address becomes an anchor. The `new-tab`
+        switch belongs to the row, and a row stored before it existed opens in a new tab, which is
+        what the button block has always done.
+      */
+      const link = webHref(row.link);
+
       return [
         {
           image,
           alt: typeof row.alt === "string" ? row.alt : "",
-          /*
-            The row's link is free text the API never validates, so a `javascript:` value in `href`
-            would run in the page's own origin on click: only a web address becomes an anchor.
-          */
-          link: webHref(row.link),
+          link,
+          newTab: link !== null && row["new-tab"] !== false,
         },
       ];
     }),
@@ -82,12 +87,16 @@ const bp = computed(() => {
       */
       "--gallery-columns-narrow": `${Math.min(columns, 2)}`,
       "--gallery-aspect": aspectOf((p.aspect as IBlockPropertySelect | undefined)?.value),
-      "--gallery-radius": `${clampNumber((p.radius as IBlockPropertyNumber | undefined)?.value, 0, 32, 10)}px`,
     },
   };
 });
 
-/** The carousel's slide. `current` clamps, so deleting the shown row lands on the last one left. */
+/**
+ * The carousel's slide. The scroller is the source of truth: a swipe moves it natively, the dots
+ * follow where it stopped, and a button only asks it to go somewhere. `current` clamps, so deleting
+ * the shown row lands on the last one left instead of on an empty slide.
+ */
+const viewport = ref<HTMLElement | null>(null);
 const index = ref(0);
 
 const current = computed(() => slideOf(index.value));
@@ -96,64 +105,76 @@ function slideOf(next: number): number {
   return clampNumber(next, 0, Math.max(bp.value.rows.length - 1, 0), 0);
 }
 
+function syncIndex(event: Event) {
+  const scroller = event.currentTarget as HTMLElement;
+  /* Before layout — and under a test DOM — the width is zero, and the division would be no advice. */
+  if (!scroller.clientWidth) return;
+
+  index.value = slideOf(Math.round(scroller.scrollLeft / scroller.clientWidth));
+}
+
 function show(next: number) {
   index.value = slideOf(next);
+
+  const scroller = viewport.value;
+  scroller?.scrollTo?.({ left: index.value * scroller.clientWidth, behavior: "smooth" });
 }
 </script>
 
 <template>
   <div class="gallery-block" :class="`gallery-block--${bp.layout}`" :style="bp.style">
-    <div class="gallery-block__viewport">
-      <div class="gallery-block__track" :style="{ '--gallery-index': current }">
+    <div ref="viewport" class="gallery-block__viewport" @scroll="syncIndex">
+      <div class="gallery-block__track">
         <component
           :is="row.link ? 'a' : 'div'"
-          v-for="(row, index) of bp.rows"
-          :key="index"
+          v-for="(row, position) of bp.rows"
+          :key="position"
           class="gallery-block__item"
           :href="row.link || undefined"
-          :rel="row.link ? 'noopener noreferrer' : undefined"
+          :target="row.newTab ? '_blank' : undefined"
+          :rel="row.newTab ? 'noopener noreferrer' : undefined"
         >
           <img class="gallery-block__image" :src="row.image" :alt="row.alt" loading="lazy" />
         </component>
       </div>
-      <!-- One image has nowhere to step to, so the controls would lead nowhere. -->
-      <template v-if="bp.layout === 'carousel' && bp.rows.length > 1">
-        <button
-          type="button"
-          class="gallery-block__nav gallery-block__nav--prev"
-          aria-label="Previous image"
-          :disabled="current === 0"
-          @click="show(current - 1)"
-        >
-          <svg class="gallery-block__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="m15 6-6 6 6 6" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          class="gallery-block__nav gallery-block__nav--next"
-          aria-label="Next image"
-          :disabled="current === bp.rows.length - 1"
-          @click="show(current + 1)"
-        >
-          <svg class="gallery-block__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="m9 6 6 6-6 6" />
-          </svg>
-        </button>
-      </template>
     </div>
-    <div v-if="bp.layout === 'carousel' && bp.rows.length > 1" class="gallery-block__dots">
+    <!-- One image has nowhere to step to, so the controls would lead nowhere. -->
+    <template v-if="bp.layout === 'carousel' && bp.rows.length > 1">
       <button
-        v-for="(row, dot) of bp.rows"
-        :key="dot"
         type="button"
-        class="gallery-block__dot"
-        :class="{ 'gallery-block__dot--current': dot === current }"
-        :aria-current="dot === current ? 'true' : undefined"
-        :aria-label="`Image ${dot + 1}`"
-        @click="show(dot)"
-      />
-    </div>
+        class="gallery-block__nav gallery-block__nav--prev"
+        aria-label="Previous image"
+        :disabled="current === 0"
+        @click="show(current - 1)"
+      >
+        <svg class="gallery-block__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m15 6-6 6 6 6" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="gallery-block__nav gallery-block__nav--next"
+        aria-label="Next image"
+        :disabled="current === bp.rows.length - 1"
+        @click="show(current + 1)"
+      >
+        <svg class="gallery-block__chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m9 6 6 6-6 6" />
+        </svg>
+      </button>
+      <div class="gallery-block__dots">
+        <button
+          v-for="(row, dot) of bp.rows"
+          :key="dot"
+          type="button"
+          class="gallery-block__dot"
+          :class="{ 'gallery-block__dot--current': dot === current }"
+          :aria-current="dot === current ? 'true' : undefined"
+          :aria-label="`Image ${dot + 1}`"
+          @click="show(dot)"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -166,9 +187,6 @@ function show(next: number) {
   width: 100%;
   min-height: 2rem;
   color: var(--links-page-fg);
-}
-.gallery-block__viewport {
-  position: relative;
 }
 
 /*
@@ -188,21 +206,49 @@ function show(next: number) {
 }
 
 /*
-  The carousel shows one image: the track is exactly the viewport's width, the items overflow it at
-  one viewport each with no gap, so a step of `-100%` of the track lands on the next image exactly.
-  Clipping the viewport also keeps the row of slides from scrolling the page sideways.
+  The carousel is one grid cell holding the scroller, with the arrows layered on top of it in the same
+  cell: a swipe drags a real scroll container, so a phone gets the platform's own scrolling, momentum
+  and snapping. `minmax(0, 1fr)` keeps the column from growing to the widest slide, and one full-width
+  slide with no gap is what puts exactly one image in the viewport.
 */
+.gallery-block--carousel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
 .gallery-block--carousel .gallery-block__viewport {
-  overflow: hidden;
+  display: flex;
+  grid-area: 1 / 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.gallery-block--carousel .gallery-block__viewport::-webkit-scrollbar {
+  display: none;
 }
 .gallery-block--carousel .gallery-block__track {
-  display: flex;
-  transition: transform 250ms ease;
-  transform: translateX(calc(var(--gallery-index, 0) * -100%));
+  display: contents;
 }
 .gallery-block--carousel .gallery-block__item {
   flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+.gallery-block--carousel .gallery-block__nav {
+  grid-area: 1 / 1;
+  align-self: center;
+}
+.gallery-block--carousel .gallery-block__nav--prev {
+  justify-self: start;
+  margin-inline-start: 0.5rem;
+}
+.gallery-block--carousel .gallery-block__nav--next {
+  justify-self: end;
+  margin-inline-end: 0.5rem;
+}
+.gallery-block--carousel .gallery-block__dots {
+  grid-area: 2 / 1;
 }
 
 /* The rounding and the crop belong to the item, so the image cannot paint outside it. */
@@ -210,7 +256,7 @@ function show(next: number) {
   display: block;
   line-height: 0;
   overflow: hidden;
-  border-radius: var(--gallery-radius, 10px);
+  border-radius: var(--links-page-radius, 10px);
 }
 /* The ratio reserves the box before the file arrives, so a slow image does not shift the page. */
 .gallery-block__image {
@@ -222,11 +268,10 @@ function show(next: number) {
 
 /*
   The arrows wear the page's button look, so the theme's variant reaches them: a solid page draws a
-  filled arrow, an outline page a hollow one, and the radius is the page's own.
+  filled arrow, an outline page a hollow one, and the radius is the page's own. They sit half
+  transparent over the image so the picture stays the loudest thing in the frame.
 */
 .gallery-block__nav {
-  position: absolute;
-  top: 50%;
   display: flex;
   width: 2.25rem;
   height: 2.25rem;
@@ -238,22 +283,20 @@ function show(next: number) {
   border: var(--links-theme-button-border-width, 0) solid var(--links-theme-button-border, transparent);
   border-radius: var(--links-page-radius, 10px);
   cursor: pointer;
-  transform: translateY(-50%);
+  opacity: 0.72;
   transition: opacity 150ms ease;
 }
-.gallery-block__nav--prev {
-  inset-inline-start: 0.5rem;
-}
-.gallery-block__nav--next {
-  inset-inline-end: 0.5rem;
-}
-.gallery-block__nav:disabled {
-  opacity: 0.4;
-  cursor: default;
+.gallery-block__nav:hover:not(:disabled) {
+  opacity: 1;
 }
 .gallery-block__nav:focus-visible {
   outline: 2px solid var(--links-page-accent);
   outline-offset: 2px;
+  opacity: 1;
+}
+.gallery-block__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 .gallery-block__chevron {
   width: 1.25rem;

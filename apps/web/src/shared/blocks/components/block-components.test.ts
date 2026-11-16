@@ -1510,6 +1510,13 @@ describe("GalleryBlock", () => {
     return wrapperOf(values).get(".gallery-block").attributes("style") ?? "";
   }
 
+  /** The dot the carousel says it is on, which is the state a visitor can see. */
+  function currentDotOf(values: Record<string, unknown> = {}) {
+    return wrapperOf({ ...three, layout: "carousel", ...values })
+      .findAll(".gallery-block__dot")
+      .findIndex((dot) => dot.attributes("aria-current") === "true");
+  }
+
   it("draws every complete row as a lazy image inside its own item", () => {
     const wrapper = wrapperOf(three);
     const items = wrapper.findAll(".gallery-block__item");
@@ -1605,7 +1612,7 @@ describe("GalleryBlock", () => {
   it("starts on the first image with the previous arrow disabled", () => {
     const wrapper = wrapperOf({ ...three, layout: "carousel" });
 
-    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 0");
+    expect(currentDotOf()).toBe(0);
     expect(wrapper.get(".gallery-block__nav--prev").attributes("disabled")).toBeDefined();
     expect(wrapper.get(".gallery-block__nav--next").attributes("disabled")).toBeUndefined();
   });
@@ -1615,12 +1622,51 @@ describe("GalleryBlock", () => {
     const next = wrapper.get(".gallery-block__nav--next");
 
     await next.trigger("click");
-    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 1");
+    expect(wrapper.findAll(".gallery-block__dot").findIndex((dot) => dot.attributes("aria-current") === "true")).toBe(
+      1,
+    );
 
     await next.trigger("click");
-    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 2");
+    expect(wrapper.findAll(".gallery-block__dot").findIndex((dot) => dot.attributes("aria-current") === "true")).toBe(
+      2,
+    );
     expect(wrapper.get(".gallery-block__nav--next").attributes("disabled")).toBeDefined();
     expect(wrapper.get(".gallery-block__nav--prev").attributes("disabled")).toBeUndefined();
+  });
+
+  it("asks the scroller for the slide the arrow leads to", async () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+    const scroller = wrapper.get(".gallery-block__viewport").element as HTMLElement;
+    const scrollTo = vi.fn();
+    Object.defineProperty(scroller, "clientWidth", { value: 608, configurable: true });
+    Object.defineProperty(scroller, "scrollTo", { value: scrollTo, configurable: true });
+
+    await wrapper.get(".gallery-block__nav--next").trigger("click");
+
+    expect(scrollTo).toHaveBeenCalledWith({ left: 608, behavior: "smooth" });
+  });
+
+  /*
+    A swipe is the platform scrolling the viewport, so the dots read the scroll position rather than
+    owning it: without this the arrows and a finger would disagree about where the carousel is.
+  */
+  it("follows the scroll position a swipe leaves behind", async () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+    const scroller = wrapper.get(".gallery-block__viewport");
+    Object.defineProperty(scroller.element, "clientWidth", { value: 608, configurable: true });
+
+    Object.defineProperty(scroller.element, "scrollLeft", { value: 1216, configurable: true });
+    await scroller.trigger("scroll");
+    expect(wrapper.findAll(".gallery-block__dot").findIndex((dot) => dot.attributes("aria-current") === "true")).toBe(
+      2,
+    );
+    expect(wrapper.get(".gallery-block__nav--next").attributes("disabled")).toBeDefined();
+
+    Object.defineProperty(scroller.element, "scrollLeft", { value: 0, configurable: true });
+    await scroller.trigger("scroll");
+    expect(wrapper.findAll(".gallery-block__dot").findIndex((dot) => dot.attributes("aria-current") === "true")).toBe(
+      0,
+    );
   });
 
   it("names the arrows for a screen reader", () => {
@@ -1642,7 +1688,6 @@ describe("GalleryBlock", () => {
 
     await dots[2]!.trigger("click");
 
-    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 2");
     expect(wrapper.findAll(".gallery-block__dot")[2]!.attributes("aria-current")).toBe("true");
     expect(wrapper.get(".gallery-block__nav--prev").attributes("disabled")).toBeUndefined();
   });
@@ -1662,10 +1707,13 @@ describe("GalleryBlock", () => {
     await wrapper.get(".gallery-block__nav--next").trigger("click");
     await wrapper.get(".gallery-block__nav--next").trigger("click");
     await wrapper.setProps({
-      properties: blockOf("Gallery", { items: [three.items[0]], layout: "carousel" }).properties,
+      properties: blockOf("Gallery", { items: three.items.slice(0, 2), layout: "carousel" }).properties,
     });
 
-    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 0");
+    const dots = wrapper.findAll(".gallery-block__dot");
+    expect(dots).toHaveLength(2);
+    expect(dots[1]!.attributes("aria-current")).toBe("true");
+    expect(wrapper.get(".gallery-block__nav--next").attributes("disabled")).toBeDefined();
   });
 
   it("draws the grid for a layout outside the palette", () => {
@@ -1688,28 +1736,39 @@ describe("GalleryBlock", () => {
     expect(styleOf({ ...three, aspect: "3:2" })).toContain("--gallery-aspect: 1 / 1");
   });
 
-  it("takes the stored radius as a length", () => {
-    expect(styleOf({ ...three, radius: 14 })).toContain("--gallery-radius: 14px");
+  /*
+    The corners belong to the page: a block of its own radius would disagree with every other block on
+    a themed page, and the theme already carries one.
+  */
+  it("leaves the image corners to the page theme's radius", () => {
+    expect(styleOf({ ...three, radius: 14 })).not.toContain("--gallery-radius");
   });
 
-  /* A cleared number field stores `""` and an over-typed one keeps what was typed. */
-  it.each([
-    ["over the range", 100, "32px"],
-    ["under the range", -5, "0px"],
-    ["cleared", "", "10px"],
-    ["never set", undefined, "10px"],
-  ])("clamps a radius %s", (_case, radius, expected) => {
-    expect(styleOf(radius === undefined ? three : { ...three, radius })).toContain(`--gallery-radius: ${expected}`);
-  });
-
-  it("wraps the image in a link without a referrer when the row names one", () => {
+  it("wraps the image in a link that opens in a new tab without a referrer", () => {
     const links = wrapperOf(three).findAll(".gallery-block__item");
 
     expect(links[0]!.element.tagName).toBe("A");
     expect(links[0]!.attributes("href")).toBe("https://example.com/a");
+    expect(links[0]!.attributes("target")).toBe("_blank");
     expect(links[0]!.attributes("rel")).toBe("noopener noreferrer");
     expect(links[1]!.element.tagName).toBe("DIV");
     expect(links[1]!.attributes("href")).toBeUndefined();
+  });
+
+  /* The switch belongs to the row: one image may stay on the site while the next leaves it. */
+  it("keeps a row in the current tab when its switch is off", () => {
+    const wrapper = wrapperOf({
+      items: [
+        { "image": "file-a", "link": "https://example.com/a", "new-tab": false },
+        { image: "file-b", link: "https://example.com/b" },
+      ],
+    });
+    const links = wrapper.findAll(".gallery-block__item");
+
+    expect(links[0]!.attributes("href")).toBe("https://example.com/a");
+    expect(links[0]!.attributes("target")).toBeUndefined();
+    expect(links[0]!.attributes("rel")).toBeUndefined();
+    expect(links[1]!.attributes("target")).toBe("_blank");
   });
 
   /*
@@ -1726,6 +1785,13 @@ describe("GalleryBlock", () => {
       expect(wrapper.html()).not.toContain(link);
     },
   );
+
+  /* Nothing to link to means no target, even when the stored switch says a new tab. */
+  it("asks for no new tab for an image with no link", () => {
+    const wrapper = wrapperOf({ items: [{ "image": "file-a", "new-tab": true }] });
+
+    expect(wrapper.get(".gallery-block__item").attributes("target")).toBeUndefined();
+  });
 
   /* The constructor selects a block through an overlay as tall as the block. */
   it("keeps the box for a block with no complete rows", () => {
