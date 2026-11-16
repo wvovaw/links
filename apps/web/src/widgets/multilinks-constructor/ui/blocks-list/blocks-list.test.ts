@@ -1,6 +1,6 @@
 import type { VueWrapper } from "@vue/test-utils";
 
-import { BLOCK_ICONS, BLOCK_META, LINK_ICONS } from "@links/blocks";
+import { BLOCK_ICONS, BLOCK_META, blocksList, LINK_ICONS } from "@links/blocks";
 import { mount } from "@vue/test-utils";
 import { createPinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -23,11 +23,14 @@ describe("testing BlocksList component", () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("can add a block on click", async () => {
-    await wrapper.find("[data-testid='blocks-list-item']").trigger("click");
+  it("emits the picked block's name and leaves adding to the owner", async () => {
     const store = useConstructorStore();
-    expect(store.blocks.length).toBeGreaterThan(0);
-    expect(store.selectedBlockId).toBe(store.blocks[0]?.id);
+    store.blocks.length = 0;
+
+    await wrapper.find("[data-testid='blocks-list-item']").trigger("click");
+
+    expect(wrapper.emitted("select")?.[0]).toEqual([blocksList[0]?.name]);
+    expect(store.blocks.length).toBe(0);
   });
 
   /*

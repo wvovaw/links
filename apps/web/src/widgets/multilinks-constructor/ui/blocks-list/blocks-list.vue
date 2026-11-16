@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import type { BlockMeta } from "@links/blocks";
+import type { BlockMeta, BlockName } from "@links/blocks";
 
 import { blocksList } from "@links/blocks";
 import { UIInput, UIMenu } from "@links/ui";
 import { computed, ref } from "vue";
 import { groupBy } from "~shared/lib/utils";
 
-import { useConstructorStore } from "../../model";
 
-const emit = defineEmits<{ select: [] }>();
+const emit = defineEmits<{ select: [name: BlockName] }>();
 
-const { addBlock } = useConstructorStore();
 const { t, te } = useI18n();
 
 const query = ref("");
@@ -33,8 +31,7 @@ const filteredBlocks = computed(() => {
 const groupedBlocks = computed(() => Object.entries(groupBy<BlockMeta>(["category"])([...filteredBlocks.value])));
 
 function selectBlock(block: BlockMeta) {
-  addBlock(block.name);
-  emit("select");
+  emit("select", block.name);
 }
 </script>
 
