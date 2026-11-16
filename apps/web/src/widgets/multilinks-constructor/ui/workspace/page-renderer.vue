@@ -15,6 +15,8 @@ const constructorStore = useConstructorStore();
 const { selectedBlockId, blocks, theme, background } = storeToRefs(constructorStore);
 const { selectBlock, setBlocks, clearHistory, pauseHistory, resumeHistory } = constructorStore;
 
+const emit = defineEmits<{ insert: [index: number] }>();
+
 const pageStyle = computed(() => resolvePageStyle(theme.value, background.value));
 
 function isSelectedBlock(blockId: string) {
@@ -75,13 +77,24 @@ onBeforeUnmount(() => {
 <template>
   <div class="link" :style="pageStyle">
     <div class="link__container">
+      <button
+        v-if="!blocks.length"
+        class="w-full border-(2 dashed) border-beerus rounded-moon-i-sm p-6 text-trunks transition-colors hover:(border-piccolo text-bulma)"
+        data-testid="empty-page-add-block"
+        @click="emit('insert', 0)"
+      >
+        Add your first block
+      </button>
       <div ref="draggableRoot" class="link__blocks-root">
         <PageBlock
-          v-for="block of blocks"
+          v-for="(block, index) of blocks"
           :key="block.id"
           :is-selected="isSelectedBlock(block.id)"
           :is-hidden="isHiddenBlock(block)"
+          :index="index"
+          :is-last="index === blocks.length - 1"
           @select="selectBlock(block.id)"
+          @insert="(at) => emit('insert', at)"
         >
           <component :is="resolve(block.name)" :id="`block-${block.id}`" :properties="block.properties" />
         </PageBlock>

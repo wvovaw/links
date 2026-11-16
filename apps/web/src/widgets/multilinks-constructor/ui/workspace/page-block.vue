@@ -1,20 +1,28 @@
 <script setup lang="ts">
+import InsertBlockButton from "./insert-block-button.vue";
 import PageBlockActions from "./page-block-actions/page-block-actions.vue";
 
 interface IPageBlockProps {
   isSelected: boolean;
   /** A block its schedule hides stays in the constructor — dimmed and badged — so it can be edited. */
   isHidden: boolean;
+  /** The position this block has in the page: the insert marker above it inserts here. */
+  index: number;
+  /** Only the last block offers a marker below itself, which is how a page is appended to. */
+  isLast: boolean;
 }
 defineProps<IPageBlockProps>();
 
 defineEmits<{
   select: [];
+  insert: [index: number];
 }>();
 </script>
 
 <template>
-  <div class="relative flex" :data-block-selected="isSelected" :data-block-hidden="isHidden">
+  <div class="group relative flex" :data-block-selected="isSelected" :data-block-hidden="isHidden">
+    <InsertBlockButton edge="top" @insert="$emit('insert', index)" />
+    <InsertBlockButton v-if="isLast" edge="bottom" @insert="$emit('insert', index + 1)" />
     <Transition
       appear
       enter-from-class="opacity-0"
