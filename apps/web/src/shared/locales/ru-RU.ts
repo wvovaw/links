@@ -33,7 +33,7 @@ export default defineI18nLocale(async (_locale) => {
     "blocks.Faq.label": "Вопросы и ответы",
     "blocks.Faq.description": "Вопросы и ответы, которые раскрываются на месте.",
     "blocks.Gallery.label": "Галерея",
-    "blocks.Gallery.description": "Набор изображений сеткой или прокручиваемой лентой.",
+    "blocks.Gallery.description": "Набор изображений сеткой или по одному в карусели.",
     "blocks.Heading.label": "Заголовок",
     "blocks.Heading.description": "Заголовок, с которого начинается раздел страницы.",
     "blocks.Map.label": "Карта",

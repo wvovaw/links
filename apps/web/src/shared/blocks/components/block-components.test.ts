@@ -1562,21 +1562,110 @@ describe("GalleryBlock", () => {
     expect(styleOf({ ...three, columns })).toContain(`--gallery-columns: ${columns}`);
   });
 
-  /* The field offers 2–4 and the API stores the value unvalidated, so a track count is clamped whole. */
+  /* The field offers 1–4 and the API stores the value unvalidated, so a track count is clamped whole. */
   it.each([
     ["over the range", "9", 4],
-    ["under the range", "1", 2],
+    ["under the range", "0", 1],
     ["not a number at all", "many", 2],
   ])("keeps %s inside the column range", (_case, columns, expected) => {
     expect(styleOf({ ...three, columns })).toContain(`--gallery-columns: ${expected}`);
   });
 
-  it("becomes a strip when the layout says so and keeps every image", () => {
-    const wrapper = wrapperOf({ ...three, layout: "strip" });
+  /*
+    Four tracks leave 66px each on a phone, so the narrow screen draws two; one track is already the
+    narrowest grid there is and keeps its single image. `repeat()` takes an integer, so the cap cannot
+    clamp the variable with `min()`: the block ships the capped count beside the stored one.
+  */
+  it("caps a wide grid at two tracks on a narrow screen and keeps one as one", () => {
+    expect(styleOf({ ...three, columns: "4" })).toContain("--gallery-columns-narrow: 2");
+    expect(styleOf({ ...three, columns: "1" })).toContain("--gallery-columns-narrow: 1");
+  });
 
-    expect(wrapper.get(".gallery-block").classes()).toContain("gallery-block--strip");
+  it("becomes a carousel when the layout says so and keeps every image", () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+
+    expect(wrapper.get(".gallery-block").classes()).toContain("gallery-block--carousel");
     expect(wrapper.get(".gallery-block").classes()).not.toContain("gallery-block--grid");
+    expect(wrapper.findAll(".gallery-block__item")).toHaveLength(3);
     expect(wrapper.findAll("img")).toHaveLength(3);
+  });
+
+  /*
+    Public pages never run `migrateBlock`, so a page published with the old strip keeps a sideways
+    layout because the renderer reads the retired id as the carousel that replaced it.
+  */
+  it("draws the carousel for a strip stored by an older page", () => {
+    expect(
+      wrapperOf({ ...three, layout: "strip" })
+        .get(".gallery-block")
+        .classes(),
+    ).toContain("gallery-block--carousel");
+  });
+
+  it("starts on the first image with the previous arrow disabled", () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+
+    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 0");
+    expect(wrapper.get(".gallery-block__nav--prev").attributes("disabled")).toBeDefined();
+    expect(wrapper.get(".gallery-block__nav--next").attributes("disabled")).toBeUndefined();
+  });
+
+  it("steps one image at a time with the arrows and stops at the last", async () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+    const next = wrapper.get(".gallery-block__nav--next");
+
+    await next.trigger("click");
+    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 1");
+
+    await next.trigger("click");
+    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 2");
+    expect(wrapper.get(".gallery-block__nav--next").attributes("disabled")).toBeDefined();
+    expect(wrapper.get(".gallery-block__nav--prev").attributes("disabled")).toBeUndefined();
+  });
+
+  it("names the arrows for a screen reader", () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+
+    expect(wrapper.get(".gallery-block__nav--prev").attributes("aria-label")).toBe("Previous image");
+    expect(wrapper.get(".gallery-block__nav--next").attributes("aria-label")).toBe("Next image");
+    expect(wrapper.get(".gallery-block__nav--next").attributes("type")).toBe("button");
+  });
+
+  it("draws a dot per image and jumps to the one clicked", async () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+    const dots = wrapper.findAll(".gallery-block__dot");
+
+    expect(dots).toHaveLength(3);
+    expect(dots[0]!.attributes("aria-current")).toBe("true");
+    expect(dots[1]!.attributes("aria-current")).toBeUndefined();
+    expect(dots.map((dot) => dot.attributes("aria-label"))).toEqual(["Image 1", "Image 2", "Image 3"]);
+
+    await dots[2]!.trigger("click");
+
+    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 2");
+    expect(wrapper.findAll(".gallery-block__dot")[2]!.attributes("aria-current")).toBe("true");
+    expect(wrapper.get(".gallery-block__nav--prev").attributes("disabled")).toBeUndefined();
+  });
+
+  /* One image has nowhere to step to, so the controls would lead nowhere. */
+  it("draws no controls for a single image", () => {
+    const wrapper = wrapperOf({ items: [{ image: "file-a" }], layout: "carousel" });
+
+    expect(wrapper.find(".gallery-block__nav").exists()).toBe(false);
+    expect(wrapper.find(".gallery-block__dot").exists()).toBe(false);
+  });
+
+  /* A row deleted while the constructor shows the last slide must not leave an empty one. */
+  it("keeps the index inside the remaining rows", async () => {
+    const wrapper = wrapperOf({ ...three, layout: "carousel" });
+
+    await wrapper.get(".gallery-block__nav--next").trigger("click");
+    await wrapper.get(".gallery-block__nav--next").trigger("click");
+    await wrapper.setProps({
+      properties: blockOf("Gallery", { items: [three.items[0]], layout: "carousel" }).properties,
+    });
+
+    expect(wrapper.get(".gallery-block__track").attributes("style")).toContain("--gallery-index: 0");
   });
 
   it("draws the grid for a layout outside the palette", () => {

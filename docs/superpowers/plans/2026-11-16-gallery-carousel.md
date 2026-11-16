@@ -125,9 +125,11 @@ it("becomes a carousel when the layout says so and keeps every image", () => {
 });
 
 it("draws the carousel for a strip stored by an older page", () => {
-  expect(wrapperOf({ ...three, layout: "strip" }).get(".gallery-block").classes()).toContain(
-    "gallery-block--carousel",
-  );
+  expect(
+    wrapperOf({ ...three, layout: "strip" })
+      .get(".gallery-block")
+      .classes(),
+  ).toContain("gallery-block--carousel");
 });
 
 it("starts on the first image with the previous arrow disabled", () => {
