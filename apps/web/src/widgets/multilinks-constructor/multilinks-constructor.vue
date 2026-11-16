@@ -83,6 +83,6 @@ provide(CONSTRUCTOR_INJECTION_KEY, {
         <component :is="activeView.component" />
       </UISheet.Content>
     </UISheet.Root>
-    <Workspace class="flex-auto" />
+    <Workspace />
   </div>
 </template>
