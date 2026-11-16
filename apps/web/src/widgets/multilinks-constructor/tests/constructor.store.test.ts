@@ -68,3 +68,40 @@ describe("testing constructor store ordering", () => {
     expect(text()).toBe("Kept text");
   });
 });
+
+describe("testing constructor store insertion", () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+    /* The store's state array is module-level and mutated in place, so it carries blocks between tests. */
+    useConstructorStore().blocks.length = 0;
+  });
+
+  it("inserts a block at the given index and selects it", () => {
+    const store = useConstructorStore();
+    store.addBlock("Avatar");
+    store.addBlock("Button");
+    const tailId = store.blocks[1]?.id;
+
+    store.addBlock("Paragraph", 1);
+
+    expect(store.blocks.map((block) => block.name)).toEqual(["Avatar", "Paragraph", "Button"]);
+    expect(store.blocks[2]?.id).toBe(tailId);
+    expect(store.selectedBlockId).toBe(store.blocks[1]?.id);
+  });
+
+  it("appends when no index is given", () => {
+    const store = useConstructorStore();
+    store.addBlock("Avatar");
+    store.addBlock("Button", 1);
+
+    expect(store.blocks.map((block) => block.name)).toEqual(["Avatar", "Button"]);
+  });
+
+  it("inserts into an empty page at index zero", () => {
+    const store = useConstructorStore();
+    store.addBlock("Paragraph", 0);
+
+    expect(store.blocks).toHaveLength(1);
+    expect(store.selectedBlockId).toBe(store.blocks[0]?.id);
+  });
+});

@@ -84,9 +84,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   function getBlock(id: string): IBlock | undefined {
     return blocks.value.find((b) => b.id === id);
   }
-  function addBlock(name: BlockName) {
+  function addBlock(name: BlockName, index: number = blocks.value.length) {
     const id = generateBlockId();
-    blocks.value.push(createBlock(name, id));
+    blocks.value.splice(index, 0, createBlock(name, id));
     selectBlock(id);
   }
   function removeBlock(id: string | null) {
