@@ -431,8 +431,24 @@ function moveRow(index: number, offset: -1 | 1) {
 In the template, add the two buttons as the first children of the row's button group:
 
 ```vue
-<UIButton data-testid="list-move-up" variant="ghost" size="sm" icon="i-lucide:arrow-up" aria-label="Move row up" :disabled="index === 0" @click="moveRow(index, -1)" />
-<UIButton data-testid="list-move-down" variant="ghost" size="sm" icon="i-lucide:arrow-down" aria-label="Move row down" :disabled="index === rows.length - 1" @click="moveRow(index, 1)" />
+<UIButton
+  data-testid="list-move-up"
+  variant="ghost"
+  size="sm"
+  icon="i-lucide:arrow-up"
+  aria-label="Move row up"
+  :disabled="index === 0"
+  @click="moveRow(index, -1)"
+/>
+<UIButton
+  data-testid="list-move-down"
+  variant="ghost"
+  size="sm"
+  icon="i-lucide:arrow-down"
+  aria-label="Move row down"
+  :disabled="index === rows.length - 1"
+  @click="moveRow(index, 1)"
+/>
 ```
 
 Then remove the drag machinery entirely: the `import { animations, dragAndDrop, tearDown } from
@@ -479,7 +495,7 @@ Gallery block, read back and report:
 - after clicking `O:…` on row 2, which row's fields are in the document;
 - after clicking `Move row down` on row 1, the order of the header texts, and that the public page (or
   the page preview) draws the FAQ entries in the new order;
-- that dragging a *block* in the same panel still works.
+- that dragging a _block_ in the same panel still works.
 
 Expected: the collapsed list draws no inputs, the open row does, the order changes by one step per
 click and the published page follows it, and block dragging is unaffected.
