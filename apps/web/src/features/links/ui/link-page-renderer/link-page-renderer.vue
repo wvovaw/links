@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IBlock, PageTheme } from "@links/blocks";
 
-import { resolvePageStyle, trackBlockEvent, useBlocksResolver, visibleBlocks } from "~shared/blocks";
+import { resolvePageStyle, trackBlockEvent, trackPageView, useBlocksResolver, visibleBlocks } from "~shared/blocks";
 // oxlint-disable-next-line import/no-unassigned-import
 import "~shared/blocks/theme.css";
 
@@ -41,6 +41,15 @@ const linkAttrs = computed(() =>
  * source or reads the page without styles.
  */
 const shownBlocks = computed(() => visibleBlocks(props.blocks, props.now));
+
+/**
+ * One visit per document, reported once the page is in front of a visitor. `onMounted` is client-only, so
+ * server rendering never counts a request a browser has not run, and the `slug` guard is the same one the
+ * click listener uses: the constructor and the preview draw this component too, and neither is a visitor.
+ */
+onMounted(() => {
+  if (props.slug) trackPageView({ slug: props.slug, origin: config.public.backendUrl });
+});
 
 /**
  * One listener for the whole page rather than one per block, and no inline handler on any of them: a

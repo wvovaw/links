@@ -60,7 +60,7 @@ onMounted(() => {
               </UITag>
             </UITable.Cell>
             <UITable.Cell>
-              <LinkActions :link-id="link.id" />
+              <LinkActions :link-id="link.id" :slug="link.slug" />
             </UITable.Cell>
           </UITable.Row>
         </UITable.Body>

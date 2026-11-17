@@ -26,6 +26,11 @@ export interface WindowMessages {
  * It runs to completion without awaiting anything, so two requests arriving in the same tick cannot both
  * read a count below a limit and overrun it. The keys are content, never a caller: this app stores nothing
  * that identifies a visitor, so there is no per-visitor key to spend a window on.
+ *
+ * Nothing here is content-bounded any more, so the window sweeps itself: a key whose timestamps have all
+ * aged out is dropped on the next `admit()`. Without that, every key ever seen would stay for the life of
+ * the process. The sweep is the only place the maps shrink, and it costs one pass over them per request —
+ * affordable at the size this app reaches, and the price of not leaking.
  */
 export class SlidingWindow {
   private readonly keys = new Map<string, number[]>();
@@ -39,6 +44,9 @@ export class SlidingWindow {
    */
   admit(scope: string, key: string, messages: WindowMessages): void {
     const now = Date.now();
+
+    this.sweep(now);
+
     const keyTimes = this.recent(this.keys, key, now);
     const scopeTimes = this.recent(this.scopes, scope, now);
 
@@ -54,5 +62,24 @@ export class SlidingWindow {
   /** The timestamps still inside the window; an entry whose timestamps have all aged out is replaced. */
   private recent(map: Map<string, number[]>, key: string, now: number) {
     return (map.get(key) ?? []).filter((at) => at > now - windowMs);
+  }
+
+  /** Drops every entry no future request could be counted against, keys and scopes alike. */
+  private sweep(now: number): void {
+    this.dropEmptied(this.keys, now);
+    this.dropEmptied(this.scopes, now);
+  }
+
+  private dropEmptied(map: Map<string, number[]>, now: number): void {
+    for (const [key, times] of map) if (!times.some((at) => at > now - windowMs)) map.delete(key);
+  }
+
+  /** How many entries each map holds right now — the window's memory, and what proves the sweep works. */
+  get keyCount(): number {
+    return this.keys.size;
+  }
+
+  get scopeCount(): number {
+    return this.scopes.size;
   }
 }

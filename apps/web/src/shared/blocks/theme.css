@@ -53,6 +53,7 @@
   flex-grow: 1;
   width: 100%;
   font-family: var(--links-font, inherit);
+  overflow: hidden;
 }
 
 /* The scrim sits under the blocks, so an overlay of 0 leaves the gradient untouched. */

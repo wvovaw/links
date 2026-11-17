@@ -6,6 +6,7 @@ import type { PanelViewId } from "../../model/provider";
 import { PROPERTY_VIEWS } from "../properties-panel/views";
 import GoBack from "./controls/go-back.vue";
 import Save from "./controls/save.vue";
+import Stats from "./controls/stats.vue";
 import UndoRedo from "./controls/undo-redo.vue";
 
 defineProps<{ activeViewId: PanelViewId }>();
@@ -43,6 +44,7 @@ const Separator = defineComponent(() => {
       <div class="flex items-center justify-center gap-1 md:flex-col">
         <UndoRedo />
         <Save />
+        <Stats />
         <GoBack />
       </div>
     </div>

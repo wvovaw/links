@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { AnalyticsController } from "../analytics/analytics.controller";
 import { AnalyticsModule } from "../analytics/analytics.module";
 import { AuthGuard } from "../common/auth.guard";
 import { FormsModule } from "../forms/forms.module";
@@ -21,7 +22,7 @@ import { LinksService } from "./links.service";
     AnalyticsModule,
     FormsModule,
   ],
-  controllers: [LinksController],
+  controllers: [LinksController, AnalyticsController],
   providers: [LinksService, AuthGuard],
   exports: [LinksService, TypeOrmModule],
 })

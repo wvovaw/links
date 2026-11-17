@@ -1,0 +1,51 @@
+meta {
+  name: Link Stats
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/analytics/links/{{link_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:query {
+  from: 
+  to: 
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should carry the totals, the series, the sources and the blocks", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("totals");
+    expect(body).to.have.property("timeseries");
+    expect(body).to.have.property("sources");
+    expect(body.blocks).to.be.an("array");
+  });
+}
+
+docs {
+  One page's statistics: the same shape the home dashboard shows, minus the page list, plus the per-block
+  clicks.
+
+  **Set first:** `link_id` — run `Create Link` and `Update Link Content` (published) first
+
+  **Query params:** `from`, `to` — ISO-8601; absent means unbounded on that side
+
+  **Response:** 200 — `{ totals, timeseries, sources, blocks }`
+  **Response:** 400 — a bound that is not ISO-8601
+  **Response:** 401 — no session
+  **Response:** 404 — the page does not exist, or belongs to someone else
+
+  `sources[].visitors` counts the views behind a source, not the clickers: a person who opened the page and
+  clicked a block is one visitor and one click. `blocks[]` therefore reports clicks and distinct clickers.
+}

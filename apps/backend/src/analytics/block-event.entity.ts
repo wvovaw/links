@@ -14,6 +14,8 @@ export type BlockEventKind = (typeof blockEventKinds)[number];
  * when, and nothing else.
  */
 @Entity("block_events")
+@Index(["linkId", "createdAt"])
+@Index(["linkId", "visitorHash"])
 export class BlockEvent {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
@@ -32,6 +34,31 @@ export class BlockEvent {
 
   @Column({ type: "varchar" })
   kind!: BlockEventKind;
+
+  /** Set when the address carried utm tags: the dashboard prefers them over any referrer. */
+  @Column({ type: "varchar", nullable: true })
+  utmSource!: string | null;
+
+  @Column({ type: "varchar", nullable: true })
+  utmMedium!: string | null;
+
+  @Column({ type: "varchar", nullable: true })
+  utmCampaign!: string | null;
+
+  /** The external host the visitor came from, or nothing — a click with no referrer is `direct`. */
+  @Column({ type: "varchar", nullable: true })
+  referrerHost!: string | null;
+
+  /** The referrer was this site's own address: a real click, but not one this page acquired. */
+  @Column({ type: "boolean", default: false })
+  referrerInternal!: boolean;
+
+  /**
+   * Nullable, unlike the same column on `page_views`: this table has history. A click recorded before the
+   * source existed counts as a click and as zero distinct clickers, and no hash is invented for it.
+   */
+  @Column({ type: "varchar", nullable: true })
+  visitorHash!: string | null;
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -36,11 +36,67 @@ export enum LinkStatus {
   PUBLISHED = "PUBLISHED",
 }
 
-/** What a page's blocks have earned: one row per block that saw at least one event. */
+/** One page's totals over the window the caller asked about. */
+export interface StatsTotals {
+  views: number;
+  visitors: number;
+  clicks: number;
+}
+
+/** One day of a series. Days with no events are absent here; the client fills the range it asked for. */
+export interface StatsPoint {
+  date: string;
+  views: number;
+  visitors: number;
+  clicks: number;
+}
+
+/** One traffic source, as the dashboard prints it: a utm tag, a host, or nothing at all. */
+export interface StatsSource {
+  source: string;
+  medium: string;
+  views: number;
+  visitors: number;
+  clicks: number;
+}
+
+/** What a page's blocks have earned: one row per block that saw at least one click. */
 export interface BlockStats {
   blockId: string;
   clicks: number;
+  visitors: number;
+}
+
+/** One page's statistics. */
+export interface LinkStats {
+  totals: StatsTotals;
+  timeseries: StatsPoint[];
+  sources: StatsSource[];
+  blocks: BlockStats[];
+}
+
+/** One page's row on the home dashboard. */
+export interface OverviewLinkRow {
+  id: string;
+  slug: string;
+  title: string;
   views: number;
+  visitors: number;
+  clicks: number;
+}
+
+/** Everything the home dashboard shows: the owner's pages together, and one row each. */
+export interface OverviewStats {
+  totals: StatsTotals;
+  timeseries: StatsPoint[];
+  sources: StatsSource[];
+  links: OverviewLinkRow[];
+}
+
+/** The window a caller asks about; an absent bound is unbounded on that side. */
+export interface StatsRange {
+  from?: string;
+  to?: string;
 }
 
 /** What a visitor filled in: the fields their form asked for, and nothing else. */
