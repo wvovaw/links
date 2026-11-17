@@ -3,10 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import type { BlockEventKind } from "./block-event.entity";
+import type { SourceColumns } from "./source";
 import type { StatsQueryDto } from "./dto/block-event.dto";
 
 import { SlidingWindow } from "../common/sliding-window";
 import { BlockEvent } from "./block-event.entity";
+import { PageView } from "./page-view.entity";
 
 export interface BlockStats {
   blockId: string;
@@ -20,6 +22,12 @@ const refusedEvent = {
   scope: "Too many events on this page. Try again in a minute.",
 };
 
+/** A reload is the visitor's own doing, and the two view windows say so rather than blaming the page. */
+const refusedView = {
+  key: "This page counted a visit from you a moment ago. Try again in a minute.",
+  scope: "Too many visits to this page. Try again in a minute.",
+};
+
 @Injectable()
 export class AnalyticsService {
   /**
@@ -28,7 +36,28 @@ export class AnalyticsService {
    */
   private readonly window = new SlidingWindow({ perKey: 60, perScope: 300 });
 
-  constructor(@InjectRepository(BlockEvent) private readonly events: Repository<BlockEvent>) {}
+  /**
+   * Views get their own window, so neither kind of event can spend the other's budget and a busy page's
+   * clicks never silence its visits. A page load is one event, so the per-key limit is a reload guard —
+   * keyed by the visitor's rotating hash, the one place a window is not keyed by content — and the page
+   * ceiling is what bounds a page's traffic.
+   */
+  private readonly viewWindow = new SlidingWindow({ perKey: 10, perScope: 300 });
+
+  constructor(
+    @InjectRepository(BlockEvent) private readonly events: Repository<BlockEvent>,
+    @InjectRepository(PageView) private readonly views: Repository<PageView>,
+  ) {}
+
+  /**
+   * Stores one page load, or refuses before touching the table: a rejected request must leave no row behind,
+   * or the window would not be the only thing it changed.
+   */
+  async recordView(linkId: string, visitorHash: string, source: SourceColumns) {
+    this.viewWindow.admit(linkId, visitorHash, refusedView);
+
+    await this.views.save(this.views.create({ linkId, visitorHash, ...source }));
+  }
 
   /**
    * Stores an accepted event, or refuses before touching the table: a rejected request must leave no row

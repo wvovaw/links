@@ -7,6 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { BlockEvent } from "../src/analytics/block-event.entity";
 import { PageView } from "../src/analytics/page-view.entity";
+import { visitorHashOf } from "../src/analytics/visitor-hash";
 import { LinkStatus } from "../src/links/link-status";
 import { authenticate } from "./authenticate";
 import { createTestApp } from "./create-test-app";
@@ -42,6 +43,22 @@ const postEvent = (app: INestApplication, slug: string, body: { blockId: string;
 
 const publishPage = (app: INestApplication) => pageWithStatus(app, LinkStatus.PUBLISHED);
 const draftPage = (app: INestApplication) => pageWithStatus(app, LinkStatus.DRAFT);
+
+/**
+ * The one public view write. Every view test sends its own `User-Agent`: the window is keyed by the visitor
+ * hash, so a shared agent would spend one visitor's budget across tests.
+ */
+const postView = (
+  app: INestApplication,
+  slug: string,
+  body: Record<string, unknown> = {},
+  headers: Record<string, string> = {},
+) => request(app.getHttpServer()).post(`/public/links/${slug}/views`).set(headers).send(body);
+
+/** How many visits one page stored: the suite shares a database, so a bare count would see other pages’ rows. */
+async function viewCount(app: INestApplication, id: string) {
+  return app.get(DataSource).getRepository(PageView).count({ where: { linkId: id } });
+}
 
 /** The id the owner's list reports for a slug, which is how a page is addressed from the public side. */
 async function linkId(agent: Agent, slug: string) {
@@ -224,5 +241,86 @@ describe("block analytics", () => {
     await agent.delete(`/links/${id}`).expect(204);
 
     expect(await eventCount(app, id)).toBe(0);
+  });
+
+  describe("page views", () => {
+    it("stores a view with its source", async () => {
+      const { id, slug } = await publishPage(app);
+
+      const response = await postView(
+        app,
+        slug,
+        { utmSource: "Telegram", utmMedium: "social" },
+        { "User-Agent": "view-source-agent" },
+      );
+
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual({ ok: true });
+
+      const [row] = await app.get(DataSource).getRepository(PageView).find({ where: { linkId: id } });
+
+      expect(row.utmSource).toBe("telegram");
+      expect(row.utmMedium).toBe("social");
+      expect(row.referrerInternal).toBe(false);
+    });
+
+    /* A slug nobody published answers like one nobody holds: the public side never says which. */
+    it("refuses a view for a draft page", async () => {
+      const { id, slug } = await draftPage(app);
+
+      expect((await postView(app, slug, {}, { "User-Agent": "draft-agent" })).status).toBe(404);
+      expect(await viewCount(app, id)).toBe(0);
+    });
+
+    it("refuses a view body that carries visitor data", async () => {
+      const { id, slug } = await publishPage(app);
+
+      expect(
+        (await postView(app, slug, { utmSource: "x", userAgent: "y" }, { "User-Agent": "hostile-agent" })).status,
+      ).toBe(400);
+      expect(await viewCount(app, id)).toBe(0);
+    });
+
+    /*
+      A page load is one event, so the per-key limit is a reload guard rather than a traffic ceiling: ten
+      reloads a minute from one visitor are accepted, the eleventh is not, and none of them stores a row.
+    */
+    it("counts a reload against the same visitor", async () => {
+      const { id, slug } = await publishPage(app);
+      const reload = () => postView(app, slug, {}, { "User-Agent": "reload-agent" });
+
+      for (let attempt = 0; attempt < 10; attempt += 1) expect((await reload()).status).toBe(201);
+
+      expect((await reload()).status).toBe(429);
+      expect(await viewCount(app, id)).toBe(10);
+    });
+
+    it("leaves another visitor's budget alone", async () => {
+      const { slug } = await publishPage(app);
+
+      for (let attempt = 0; attempt < 10; attempt += 1) {
+        expect((await postView(app, slug, {}, { "User-Agent": "budget-agent-a" })).status).toBe(201);
+      }
+
+      expect((await postView(app, slug, {}, { "User-Agent": "budget-agent-b" })).status).toBe(201);
+    });
+
+    /* The address is the only thing the server can add to what the page sent, and it must reach the hash. */
+    it("reads the visitor from the forwarded address", async () => {
+      const { id, slug } = await publishPage(app);
+
+      await postView(
+        app,
+        slug,
+        {},
+        { "User-Agent": "forwarded-agent", "X-Forwarded-For": "198.51.100.9" },
+      ).expect(201);
+
+      const [row] = await app.get(DataSource).getRepository(PageView).find({ where: { linkId: id } });
+
+      expect(row.visitorHash).toBe(
+        visitorHashOf({ ip: "198.51.100.9", userAgent: "forwarded-agent", at: new Date() }),
+      );
+    });
   });
 });

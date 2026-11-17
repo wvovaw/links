@@ -10,6 +10,13 @@ import cookieParser from "cookie-parser";
  * server would reject.
  */
 export function configureApp(app: INestApplication) {
+  /*
+    Exactly one hop in front (nginx/traefik). Without it `req.ip` is the proxy's address for every visitor,
+    the analytics visitor hash collapses to a single value, and every page reports one unique visitor no
+    matter how much traffic it gets.
+  */
+  app.getHttpAdapter().getInstance().set("trust proxy", 1);
+
   app.enableCors({
     origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
     credentials: true,
