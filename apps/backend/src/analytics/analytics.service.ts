@@ -1,8 +1,16 @@
 import type { ObjectLiteral, SelectQueryBuilder } from "typeorm";
+import type { BlockEventKind } from "./block-event.entity";
 import type { StatsQueryDto } from "./dto/block-event.dto";
 import type { SourceColumns } from "./source";
-import type { BlockClicks, LinkStats, SourceLabel, StatsPoint, StatsSource } from "./stats";
-import type { BlockEventKind } from "./block-event.entity";
+import type {
+  BlockClicks,
+  LinkStats,
+  OverviewStats,
+  SourceLabel,
+  StatsPoint,
+  StatsSource,
+  StatsTotals,
+} from "./stats";
 
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -25,6 +33,13 @@ const refusedView = {
   scope: "Too many visits to this page. Try again in a minute.",
 };
 
+/**
+ * Which pages a read covers: one page's own screen asks about one, the home dashboard about all of the
+ * owner's. Every aggregate takes this instead of a link id, so the two endpoints share one set of queries
+ * rather than each owning a copy.
+ */
+type Scope = { linkId: string } | { ids: string[] };
+
 /** One grouped row of stored source facts, before a label is derived from it. */
 interface SourceGroup {
   utmSource: string | null;
@@ -36,6 +51,16 @@ interface SourceGroup {
   visitors?: number;
   clicks?: number;
 }
+
+/** One page's row in a set of per-page totals; a page with no events has no row. */
+interface LinkGroup {
+  linkId: string;
+  views?: number;
+  visitors?: number;
+  clicks?: number;
+}
+
+const emptyTotals = (): StatsTotals => ({ views: 0, visitors: 0, clicks: 0 });
 
 @Injectable()
 export class AnalyticsService {
@@ -68,9 +93,7 @@ export class AnalyticsService {
     await this.views.save(this.views.create({ linkId, visitorHash, ...source }));
   }
 
-  /**
-   * Stores an accepted event, or refuses before touching the table for the same reason a view is refused.
-   */
+  /** Stores an accepted event, or refuses before touching the table for the same reason a view is refused. */
   async record(linkId: string, blockId: string, kind: BlockEventKind, visitorHash: string, source: SourceColumns) {
     this.window.admit(linkId, `${linkId}:${blockId}`, refusedEvent);
 
@@ -78,110 +101,133 @@ export class AnalyticsService {
   }
 
   /**
-   * One page's traffic. Every number comes from a grouped scan — two tables, and the database counts, so a
-   * block or a source with no rows simply has no row — merged here by date and by label.
+   * One page's traffic — totals, a daily series, its sources and its blocks. Every number comes from a
+   * grouped scan, so a block or a source with no rows simply has no row.
    *
    * Visitors count views only. A person who opened the page and clicked a block is one visitor and one
-   * click, not two of either; the source table's visitors therefore sum to `totals.visitors` and its clicks
-   * do not.
+   * click, not two of either.
    */
   async linkStats(linkId: string, range: StatsQueryDto): Promise<LinkStats> {
-    const [viewTotals, clickTotals, viewDays, clickDays, viewSources, clickSources, blocks] = await Promise.all([
-      this.inRange(
-        this.views
-          .createQueryBuilder("v")
-          .select("COUNT(*)", "views")
-          .addSelect("COUNT(DISTINCT v.visitorHash)", "visitors")
-          .where("v.linkId = :linkId", { linkId }),
-        "v",
-        range,
-      ).getRawOne<{ views: number; visitors: number }>(),
-      this.inRange(
-        this.events
-          .createQueryBuilder("e")
-          .select("COUNT(*)", "clicks")
-          .where("e.linkId = :linkId", { linkId })
-          .andWhere("e.kind = :click", { click: "click" }),
-        "e",
-        range,
-      ).getRawOne<{ clicks: number }>(),
-      this.inRange(
-        this.views
-          .createQueryBuilder("v")
-          .select("date(v.createdAt)", "date")
-          .addSelect("COUNT(*)", "views")
-          .addSelect("COUNT(DISTINCT v.visitorHash)", "visitors")
-          .where("v.linkId = :linkId", { linkId })
-          .groupBy("date(v.createdAt)"),
-        "v",
-        range,
-      ).getRawMany<StatsPoint>(),
-      this.inRange(
-        this.events
-          .createQueryBuilder("e")
-          .select("date(e.createdAt)", "date")
-          .addSelect("COUNT(*)", "clicks")
-          .where("e.linkId = :linkId", { linkId })
-          .andWhere("e.kind = :click", { click: "click" })
-          .groupBy("date(e.createdAt)"),
-        "e",
-        range,
-      ).getRawMany<StatsPoint>(),
-      this.viewSources(linkId, range),
-      this.clickSources(linkId, range),
-      this.inRange(
-        this.events
-          .createQueryBuilder("e")
-          .select("e.blockId", "blockId")
-          .addSelect("COUNT(*)", "clicks")
-          .addSelect("COUNT(DISTINCT e.visitorHash)", "visitors")
-          .where("e.linkId = :linkId", { linkId })
-          .andWhere("e.kind = :click", { click: "click" })
-          .groupBy("e.blockId")
-          .orderBy("e.blockId", "ASC"),
-        "e",
-        range,
-      ).getRawMany<BlockClicks>(),
+    const scope = { linkId };
+    const [views, clicks, viewDays, clickDays, viewSources, clickSources, blocks] = await Promise.all([
+      this.viewTotals(scope, range),
+      this.clickTotals(scope, range),
+      this.viewDays(scope, range),
+      this.clickDays(scope, range),
+      this.viewSources(scope, range),
+      this.clickSources(scope, range),
+      this.blockClicks(scope, range),
     ]);
 
     return {
-      totals: {
-        views: Number(viewTotals?.views ?? 0),
-        visitors: Number(viewTotals?.visitors ?? 0),
-        clicks: Number(clickTotals?.clicks ?? 0),
-      },
+      totals: this.totalOf(views, clicks),
       timeseries: this.mergeSeries(viewDays, clickDays),
       sources: this.mergeSources(viewSources, clickSources),
-      blocks: blocks.map((block) => ({
-        blockId: String(block.blockId),
-        clicks: Number(block.clicks),
-        visitors: Number(block.visitors),
-      })),
+      blocks,
     };
   }
 
   /**
-   * Both bounds are optional, and an absent one leaves that side unbounded. `createdAt` is stored in
-   * SQLite's own format, so both sides go through `datetime()` to compare.
+   * The owner's whole portfolio. It starts from the pages, not from the events: a page nobody opened is a
+   * row of zeros, because "this page got nothing" is the thing the owner needs to see.
    */
-  private inRange<Entity extends ObjectLiteral>(
-    query: SelectQueryBuilder<Entity>,
-    alias: string,
+  async overview(
+    links: { id: string; slug: string; title: string }[],
     range: StatsQueryDto,
-  ): SelectQueryBuilder<Entity> {
-    if (range.from) query.andWhere(`datetime(${alias}.createdAt) >= datetime(:from)`, { from: range.from });
-    if (range.to) query.andWhere(`datetime(${alias}.createdAt) <= datetime(:to)`, { to: range.to });
+  ): Promise<OverviewStats> {
+    /* An empty `IN ()` is not valid SQL, and an owner with no pages has nothing to aggregate anyway. */
+    if (!links.length) return { totals: emptyTotals(), timeseries: [], sources: [], links: [] };
 
-    return query;
+    const scope = { ids: links.map((link) => link.id) };
+    const [views, clicks, viewDays, clickDays, viewSources, clickSources] = await Promise.all([
+      this.viewTotals(scope, range),
+      this.clickTotals(scope, range),
+      this.viewDays(scope, range),
+      this.clickDays(scope, range),
+      this.viewSources(scope, range),
+      this.clickSources(scope, range),
+    ]);
+
+    const perLink = new Map<string, StatsTotals>();
+    for (const row of [...views, ...clicks]) {
+      const totals = perLink.get(row.linkId) ?? emptyTotals();
+
+      totals.views += Number(row.views ?? 0);
+      totals.visitors += Number(row.visitors ?? 0);
+      totals.clicks += Number(row.clicks ?? 0);
+      perLink.set(row.linkId, totals);
+    }
+
+    return {
+      totals: this.totalOf(views, clicks),
+      timeseries: this.mergeSeries(viewDays, clickDays),
+      sources: this.mergeSources(viewSources, clickSources),
+      links: links.map((link) => ({
+        id: link.id,
+        slug: link.slug,
+        title: link.title,
+        ...(perLink.get(link.id) ?? emptyTotals()),
+      })),
+    };
+  }
+
+  /** Every row of the two per-page scans adds up to one number each. */
+  private totalOf(views: LinkGroup[], clicks: LinkGroup[]): StatsTotals {
+    return {
+      views: views.reduce((sum, row) => sum + Number(row.views ?? 0), 0),
+      visitors: views.reduce((sum, row) => sum + Number(row.visitors ?? 0), 0),
+      clicks: clicks.reduce((sum, row) => sum + Number(row.clicks ?? 0), 0),
+    };
+  }
+
+  /** Views per page, with the distinct visitors behind them. */
+  private viewTotals(scope: Scope, range: StatsQueryDto): Promise<LinkGroup[]> {
+    const query = this.scoped("v", scope, this.views.createQueryBuilder("v"))
+      .select("v.linkId", "linkId")
+      .addSelect("COUNT(*)", "views")
+      .addSelect("COUNT(DISTINCT v.visitorHash)", "visitors")
+      .groupBy("v.linkId");
+
+    return this.inRange(query, "v", range).getRawMany<LinkGroup>();
+  }
+
+  private clickTotals(scope: Scope, range: StatsQueryDto): Promise<LinkGroup[]> {
+    const query = this.scoped("e", scope, this.events.createQueryBuilder("e"))
+      .select("e.linkId", "linkId")
+      .addSelect("COUNT(*)", "clicks")
+      .andWhere("e.kind = :kind", { kind: "click" })
+      .groupBy("e.linkId");
+
+    return this.inRange(query, "e", range).getRawMany<LinkGroup>();
+  }
+
+  private viewDays(scope: Scope, range: StatsQueryDto): Promise<Partial<StatsPoint>[]> {
+    const query = this.scoped("v", scope, this.views.createQueryBuilder("v"))
+      .select("date(v.createdAt)", "date")
+      .addSelect("COUNT(*)", "views")
+      /* Distinct within the day, which is the day the salt rotates on: the series' visitors add up. */
+      .addSelect("COUNT(DISTINCT v.visitorHash)", "visitors")
+      .groupBy("date(v.createdAt)");
+
+    return this.inRange(query, "v", range).getRawMany<Partial<StatsPoint>>();
+  }
+
+  private clickDays(scope: Scope, range: StatsQueryDto): Promise<Partial<StatsPoint>[]> {
+    const query = this.scoped("e", scope, this.events.createQueryBuilder("e"))
+      .select("date(e.createdAt)", "date")
+      .addSelect("COUNT(*)", "clicks")
+      .andWhere("e.kind = :kind", { kind: "click" })
+      .groupBy("date(e.createdAt)");
+
+    return this.inRange(query, "e", range).getRawMany<Partial<StatsPoint>>();
   }
 
   /**
-   * One table's source breakdown, grouped by the raw facts rather than by the label the dashboard prints:
-   * the label is derived in memory, so no SQL has to know what a search engine is.
+   * Views grouped by the raw source facts rather than by the label the dashboard prints: the label is
+   * derived in memory, so no SQL has to know what a search engine is.
    */
-  private viewSources(linkId: string, range: StatsQueryDto): Promise<SourceGroup[]> {
-    const query = this.views
-      .createQueryBuilder("v")
+  private viewSources(scope: Scope, range: StatsQueryDto): Promise<SourceGroup[]> {
+    const query = this.scoped("v", scope, this.views.createQueryBuilder("v"))
       .select("v.utmSource", "utmSource")
       .addSelect("v.utmMedium", "utmMedium")
       .addSelect("v.utmCampaign", "utmCampaign")
@@ -189,7 +235,6 @@ export class AnalyticsService {
       .addSelect("v.referrerInternal", "referrerInternal")
       .addSelect("COUNT(*)", "views")
       .addSelect("COUNT(DISTINCT v.visitorHash)", "visitors")
-      .where("v.linkId = :linkId", { linkId })
       .groupBy("v.utmSource")
       .addGroupBy("v.utmMedium")
       .addGroupBy("v.utmCampaign")
@@ -200,16 +245,14 @@ export class AnalyticsService {
   }
 
   /** The same breakdown for clicks. No visitor count: visitors are a view metric, clickers are clicks. */
-  private clickSources(linkId: string, range: StatsQueryDto): Promise<SourceGroup[]> {
-    const query = this.events
-      .createQueryBuilder("e")
+  private clickSources(scope: Scope, range: StatsQueryDto): Promise<SourceGroup[]> {
+    const query = this.scoped("e", scope, this.events.createQueryBuilder("e"))
       .select("e.utmSource", "utmSource")
       .addSelect("e.utmMedium", "utmMedium")
       .addSelect("e.utmCampaign", "utmCampaign")
       .addSelect("e.referrerHost", "referrerHost")
       .addSelect("e.referrerInternal", "referrerInternal")
       .addSelect("COUNT(*)", "clicks")
-      .where("e.linkId = :linkId", { linkId })
       .andWhere("e.kind = :kind", { kind: "click" })
       .groupBy("e.utmSource")
       .addGroupBy("e.utmMedium")
@@ -218,6 +261,50 @@ export class AnalyticsService {
       .addGroupBy("e.referrerInternal");
 
     return this.inRange(query, "e", range).getRawMany<SourceGroup>();
+  }
+
+  private blockClicks(scope: Scope, range: StatsQueryDto): Promise<BlockClicks[]> {
+    const query = this.scoped("e", scope, this.events.createQueryBuilder("e"))
+      .select("e.blockId", "blockId")
+      .addSelect("COUNT(*)", "clicks")
+      .addSelect("COUNT(DISTINCT e.visitorHash)", "visitors")
+      .andWhere("e.kind = :kind", { kind: "click" })
+      .groupBy("e.blockId")
+      .orderBy("e.blockId", "ASC");
+
+    return this.inRange(query, "e", range)
+      .getRawMany<BlockClicks>()
+      .then((rows) =>
+        rows.map((row) => ({
+          blockId: String(row.blockId),
+          clicks: Number(row.clicks),
+          visitors: Number(row.visitors),
+        })),
+      );
+  }
+
+  /** One page, or every page the caller owns: the only difference between the two screens' reads. */
+  private scoped<Entity extends ObjectLiteral>(
+    alias: string,
+    scope: Scope,
+    query: SelectQueryBuilder<Entity>,
+  ): SelectQueryBuilder<Entity> {
+    return "linkId" in scope
+      ? query.where(`${alias}.linkId = :linkId`, { linkId: scope.linkId })
+      : query.where(`${alias}.linkId IN (:...ids)`, { ids: scope.ids });
+  }
+
+  /** Both bounds are optional, and an absent one leaves that side unbounded. */
+  private inRange<Entity extends ObjectLiteral>(
+    query: SelectQueryBuilder<Entity>,
+    alias: string,
+    range: StatsQueryDto,
+  ): SelectQueryBuilder<Entity> {
+    /* `createdAt` is stored in SQLite's own format, so both sides go through `datetime()` to compare. */
+    if (range.from) query.andWhere(`datetime(${alias}.createdAt) >= datetime(:from)`, { from: range.from });
+    if (range.to) query.andWhere(`datetime(${alias}.createdAt) <= datetime(:to)`, { to: range.to });
+
+    return query;
   }
 
   /** Days with no rows in either table stay absent; the client fills the range it asked for. */

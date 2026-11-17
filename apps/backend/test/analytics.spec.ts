@@ -70,6 +70,9 @@ async function linkId(agent: Agent, slug: string) {
   return link.id;
 }
 
+/** Today in the UTC the queries group by, which is the day every event written now lands on. */
+const today = () => new Date().toISOString().slice(0, 10);
+
 /** Rows one page holds: the suite shares a database, so a bare count would see other tests' events. */
 async function eventCount(app: INestApplication, id: string) {
   return app
@@ -97,7 +100,7 @@ describe("block analytics", () => {
         .status,
     ).toBe(201);
 
-    const stats = await agent.get(`/links/${await linkId(agent, slug)}/stats`);
+    const stats = await agent.get(`/analytics/links/${await linkId(agent, slug)}`);
 
     expect(stats.body.blocks).toEqual([{ blockId: "b1", clicks: 1, visitors: 1 }]);
   });
@@ -201,7 +204,7 @@ describe("block analytics", () => {
     const hourAgo = new Date(Date.now() - 3_600_000).toISOString();
     const hourAhead = new Date(Date.now() + 3_600_000).toISOString();
     const statsIn = (from?: string, to?: string) =>
-      agent.get(`/links/${id}/stats`).query({ ...(from && { from }), ...(to && { to }) });
+      agent.get(`/analytics/links/${id}`).query({ ...(from && { from }), ...(to && { to }) });
 
     expect((await statsIn(hourAgo)).body.blocks).toEqual([{ blockId: "b1", clicks: 1, visitors: 1 }]);
     expect((await statsIn(undefined, hourAgo)).body.blocks).toEqual([]);
@@ -213,7 +216,7 @@ describe("block analytics", () => {
     const owner = await publishPage(app);
     const stranger = await authenticate(app);
 
-    expect((await stranger.get(`/links/${await linkId(owner.agent, owner.slug)}/stats`)).status).toBe(404);
+    expect((await stranger.get(`/analytics/links/${await linkId(owner.agent, owner.slug)}`)).status).toBe(404);
   });
 
   it("deletes views with the page", async () => {
@@ -280,9 +283,6 @@ describe("block analytics", () => {
   });
 
   describe("aggregation", () => {
-    /** Today in the UTC the queries group by, which is the day every event written now lands on. */
-    const today = () => new Date().toISOString().slice(0, 10);
-
     const click = (server: INestApplication, slug: string, userAgent: string) =>
       request(server.getHttpServer())
         .post(`/public/links/${slug}/events`)
@@ -301,7 +301,7 @@ describe("block analytics", () => {
       await click(app, slug, "agg-a").expect(201);
       await click(app, slug, "agg-b").expect(201);
 
-      const { body } = await agent.get(`/links/${id}/stats`).expect(200);
+      const { body } = await agent.get(`/analytics/links/${id}`).expect(200);
 
       expect(body.totals).toEqual({ views: 3, visitors: 3, clicks: 2 });
       expect(body.blocks).toEqual([{ blockId: "b1", clicks: 2, visitors: 2 }]);
@@ -321,14 +321,14 @@ describe("block analytics", () => {
       await postView(app, slug, {}, { "User-Agent": "same-visitor" }).expect(201);
       await postView(app, slug, {}, { "User-Agent": "same-visitor" }).expect(201);
 
-      expect((await agent.get(`/links/${id}/stats`)).body.totals).toEqual({ views: 2, visitors: 1, clicks: 0 });
+      expect((await agent.get(`/analytics/links/${id}`)).body.totals).toEqual({ views: 2, visitors: 1, clicks: 0 });
     });
 
     /* A page nobody opened is the number the owner most needs: zeros, not a 404 and not a blank. */
     it("answers zeros for a page with no traffic", async () => {
       const { agent, slug } = await publishPage(app);
 
-      const { body } = await agent.get(`/links/${await linkId(agent, slug)}/stats`).expect(200);
+      const { body } = await agent.get(`/analytics/links/${await linkId(agent, slug)}`).expect(200);
 
       expect(body).toEqual({
         totals: { views: 0, visitors: 0, clicks: 0 },
@@ -336,6 +336,86 @@ describe("block analytics", () => {
         sources: [],
         blocks: [],
       });
+    });
+  });
+
+  describe("overview", () => {
+    /** Two published pages under one account, which is what an overview is a summary of. */
+    async function twoPages(server: INestApplication) {
+      const agent = await authenticate(server);
+      const pages: { id: string; slug: string }[] = [];
+
+      for (let index = 0; index < 2; index += 1) {
+        const slug = `overview-${randomUUID().slice(0, 8)}`;
+        const created = await agent.post("/links").send({ slug, title: slug }).expect(201);
+
+        await agent.patch(`/links/${created.body.id}/content`).send({ blocks: pageBlocks, status: LinkStatus.PUBLISHED }).expect(200);
+        pages.push({ id: created.body.id as string, slug });
+      }
+
+      return { agent, pages };
+    }
+
+    /* The old address is gone on purpose: one home for analytics reads, with no route-order trap. */
+    it("answers the aggregation on the analytics route and nothing on the old one", async () => {
+      const { agent, slug } = await publishPage(app);
+      const id = await linkId(agent, slug);
+
+      expect((await agent.get(`/analytics/links/${id}`)).status).toBe(200);
+      expect((await agent.get(`/links/${id}/stats`)).status).toBe(404);
+    });
+
+    it("lists every owned page, including the quiet ones", async () => {
+      const { agent, pages } = await twoPages(app);
+
+      await postView(app, pages[0].slug, {}, { "User-Agent": "overview-quiet" }).expect(201);
+
+      const { body } = await agent.get("/analytics/overview").expect(200);
+
+      expect(body.links).toHaveLength(2);
+      expect(body.links.find((row: { slug: string }) => row.slug === pages[1].slug)).toEqual({
+        id: pages[1].id,
+        slug: pages[1].slug,
+        title: pages[1].slug,
+        views: 0,
+        visitors: 0,
+        clicks: 0,
+      });
+      expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
+    });
+
+    it("sums the owner's pages", async () => {
+      const { agent, pages } = await twoPages(app);
+
+      await postView(app, pages[0].slug, { utmSource: "tg", utmMedium: "social" }, { "User-Agent": "overview-a" }).expect(201);
+      await postView(app, pages[1].slug, {}, { "User-Agent": "overview-b" }).expect(201);
+
+      const { body } = await agent.get("/analytics/overview").expect(200);
+
+      expect(body.totals).toEqual({ views: 2, visitors: 2, clicks: 0 });
+      expect(body.sources).toEqual([
+        { source: "direct", medium: "direct", views: 1, visitors: 1, clicks: 0 },
+        { source: "tg", medium: "social", views: 1, visitors: 1, clicks: 0 },
+      ]);
+      expect(body.timeseries).toEqual([{ date: today(), views: 2, visitors: 2, clicks: 0 }]);
+    });
+
+    it("keeps another user's pages out", async () => {
+      const owner = await twoPages(app);
+      const stranger = await authenticate(app);
+
+      await postView(app, owner.pages[0].slug, {}, { "User-Agent": "overview-stranger" }).expect(201);
+
+      const { body } = await stranger.get("/analytics/overview").expect(200);
+
+      expect(body.links).toEqual([]);
+      expect(body.totals).toEqual({ views: 0, visitors: 0, clicks: 0 });
+      expect((await stranger.get(`/analytics/links/${owner.pages[0].id}`)).status).toBe(404);
+    });
+
+    it("answers 401 without a session", async () => {
+      expect((await request(app.getHttpServer()).get("/analytics/overview")).status).toBe(401);
+      expect((await request(app.getHttpServer()).get("/analytics/links/anything")).status).toBe(401);
     });
   });
 
