@@ -393,6 +393,21 @@ describe("block analytics", () => {
       expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
     });
 
+    /* One person on two pages is one visitor on the dashboard, and the same day's series says so too. */
+    it("counts a visitor across pages once", async () => {
+      const { agent, pages } = await twoPages(app);
+      const sameVisitor = { "User-Agent": "cross-page-agent", "X-Forwarded-For": "203.0.113.77" };
+
+      await postView(app, pages[0].slug, {}, sameVisitor).expect(201);
+      await postView(app, pages[1].slug, {}, sameVisitor).expect(201);
+
+      const { body } = await agent.get("/analytics/overview").expect(200);
+
+      expect(body.totals).toEqual({ views: 2, visitors: 1, clicks: 0 });
+      expect(body.timeseries).toEqual([{ date: today(), views: 2, visitors: 1, clicks: 0 }]);
+      expect(body.links.map((row: { visitors: number }) => row.visitors)).toEqual([1, 1]);
+    });
+
     it("sums the owner's pages", async () => {
       const { agent, pages } = await twoPages(app);
 
@@ -486,6 +501,21 @@ describe("block analytics", () => {
 
       expect((await reload()).status).toBe(429);
       expect(await viewCount(app, id)).toBe(10);
+    });
+
+    /*
+      The reload guard belongs to one page: a visitor opening many pages in a minute is browsing, not
+      reloading, and losing those views would make a busy owner's pages look quiet.
+    */
+    it("keeps one visitor's budget per page", async () => {
+      const first = await publishPage(app);
+      const second = await publishPage(app);
+      const visitor = { "User-Agent": "browsing-agent" };
+
+      for (let attempt = 0; attempt < 6; attempt += 1) {
+        expect((await postView(app, first.slug, {}, visitor)).status).toBe(201);
+        expect((await postView(app, second.slug, {}, visitor)).status).toBe(201);
+      }
     });
 
     it("leaves another visitor's budget alone", async () => {

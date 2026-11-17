@@ -30,6 +30,14 @@ describe("VisitsChart", () => {
     expect(bars[6]?.attributes("data-views")).toBe("9");
   });
 
+  /* A bar's height is relative; hovering it has to say which day it is and how many visits it holds. */
+  it("names every bar with its date and its count", () => {
+    const bars = mount(VisitsChart, { props: { points: sparse, preset: "7d", now } }).findAll("rect");
+
+    expect(bars[6]?.find("title").text()).toBe("2026-11-17 — 9");
+    expect(bars[5]?.find("title").text()).toBe("2026-11-16 — 0");
+  });
+
   /* An empty page still gets an axis, so the screen reads "nothing yet" rather than a chart with no days. */
   it("draws a flat range for a page with no visits", () => {
     const wrapper = mount(VisitsChart, { props: { points: [], preset: "30d", now } });

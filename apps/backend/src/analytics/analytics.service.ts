@@ -55,6 +55,15 @@ interface LinkGroup {
 
 const emptyTotals = (): StatsTotals => ({ views: 0, visitors: 0, clicks: 0 });
 
+/**
+ * SQLite stores `createdAt` as `YYYY-MM-DD HH:MM:SS`, and comparing text to text is what lets the
+ * `(linkId, createdAt)` index serve the window. Wrapping the column in `datetime()` would compare a
+ * function of it instead, and every dashboard read would scan all the rows the page ever collected.
+ */
+function sqliteDatetime(iso: string): string {
+  return new Date(iso).toISOString().slice(0, 19).replace("T", " ");
+}
+
 @Injectable()
 export class AnalyticsService {
   /**
@@ -66,8 +75,11 @@ export class AnalyticsService {
   /**
    * Views get their own window, so neither kind of event can spend the other's budget and a busy page's
    * clicks never silence its visits. A page load is one event, so the per-key limit is a reload guard —
-   * keyed by the visitor's rotating hash, the one place a window is not keyed by content — and the page
-   * ceiling is what bounds a page's traffic.
+   * keyed by the page plus the visitor's rotating hash, the one place a window is not keyed by content —
+   * and the page ceiling is what bounds a page's traffic.
+   *
+   * The page belongs in the key: a visitor opening many pages in a minute is browsing, not reloading, and
+   * a site-wide budget would silently drop those visits.
    */
   private readonly viewWindow = new SlidingWindow({ perKey: 10, perScope: 300 });
 
@@ -81,7 +93,7 @@ export class AnalyticsService {
    * or the window would not be the only thing it changed.
    */
   async recordView(linkId: string, visitorHash: string, source: SourceColumns) {
-    this.viewWindow.admit(linkId, visitorHash, refusedView);
+    this.viewWindow.admit(linkId, `${linkId}:${visitorHash}`, refusedView);
 
     await this.views.save(this.views.create({ linkId, visitorHash, ...source }));
   }
@@ -148,9 +160,19 @@ export class AnalyticsService {
       perLink.set(row.linkId, totals);
     }
 
+    const timeseries = this.mergeSeries(viewDays, clickDays);
+
     return {
-      totals: this.totalOf(views, clicks),
-      timeseries: this.mergeSeries(viewDays, clickDays),
+      /*
+        The headline visitor count comes from the merged series, not from the per-page rows: one person who
+        opened two pages today is one visitor here and one on each page's own screen, and the card must agree
+        with the series and the source table drawn under it.
+      */
+      totals: {
+        ...this.totalOf(views, clicks),
+        visitors: timeseries.reduce((sum, point) => sum + point.visitors, 0),
+      },
+      timeseries,
       sources: this.mergeSources(viewSources, clickSources),
       links: links.map((link) => ({
         id: link.id,
@@ -290,9 +312,8 @@ export class AnalyticsService {
     alias: string,
     range: StatsQueryDto,
   ): SelectQueryBuilder<Entity> {
-    /* `createdAt` is stored in SQLite's own format, so both sides go through `datetime()` to compare. */
-    if (range.from) query.andWhere(`datetime(${alias}.createdAt) >= datetime(:from)`, { from: range.from });
-    if (range.to) query.andWhere(`datetime(${alias}.createdAt) <= datetime(:to)`, { to: range.to });
+    if (range.from) query.andWhere(`${alias}.createdAt >= :from`, { from: sqliteDatetime(range.from) });
+    if (range.to) query.andWhere(`${alias}.createdAt <= :to`, { to: sqliteDatetime(range.to) });
 
     return query;
   }

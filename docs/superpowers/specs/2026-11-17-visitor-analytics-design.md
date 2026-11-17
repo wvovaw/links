@@ -188,8 +188,9 @@ be), `referrerInternal` — optional boolean. Naming every field is what makes t
 Rate limits. Views get their own `SlidingWindow`, separate from clicks so neither can spend the
 other's budget:
 
-- views: key `visitorHash`, 10 per minute; scope `linkId`, 300 per minute. A page load is one event,
-  so the key limit is the reload guard, not a traffic ceiling.
+- views: key `linkId:visitorHash`, 10 per minute; scope `linkId`, 300 per minute. A page load is one
+  event, so the key limit is the reload guard, not a traffic ceiling. The page belongs in the key: a
+  visitor opening many pages in a minute is browsing, and a site-wide budget would silently drop views.
 - clicks: unchanged — key `linkId:blockId`, 60 per minute; scope `linkId`, 300 per minute.
 
 This is the one place where a window key stops being content: `sliding-window.ts`'s comment ("the keys
@@ -256,6 +257,10 @@ Rules that keep the numbers explainable:
 - **`visitors` is `COUNT(DISTINCT visitorHash)`** over the same filtered rows — the per-day figure, per
   the hash section above. On a multi-day range it is the sum of daily uniques, and the UI labels the
   card with the range it covers.
+- **`overview`'s `totals.visitors` comes from the merged daily series**, not from the per-page rows: one
+  person who opened two pages today is one visitor on the dashboard and one on each page's own screen,
+  and the card must agree with the series and the source table drawn under it. `links[].visitors` stays
+  per page, which is why the rows can sum to more than the headline.
 - **`blocks` only carries clicks**, plus `visitors` for distinct clickers per block. The dead `views`
   field goes, and so does the comment in `block-stats.vue` that explains why it was always zero.
 

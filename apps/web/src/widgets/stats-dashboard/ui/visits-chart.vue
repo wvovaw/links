@@ -54,7 +54,9 @@ function heightOf(views: number) {
           :width="slot * 0.8"
           :height="heightOf(day.views)"
           rx="1"
-        />
+        >
+          <title>{{ day.date }} — {{ day.views }}</title>
+        </rect>
       </svg>
     </UICard.Body>
   </UICard.Root>
