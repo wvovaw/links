@@ -131,12 +131,12 @@ function setRowValue(index: number, key: string, value: unknown) {
 </script>
 
 <template>
-  <UIInputLabel :for="id">
-    {{ field.label }}
-  </UIInputLabel>
-  <p v-if="rows.length === 0" class="text-moon-14 text-trunks">No rows yet — add the first one.</p>
-  <div class="w-full flex flex-col gap-2">
-    <AccordionRoot v-model="openRows" type="multiple">
+  <div class="flex flex-col gap-2">
+    <UIInputLabel :for="id">
+      {{ field.label }}
+    </UIInputLabel>
+    <p v-if="rows.length === 0" class="text-moon-14 text-trunks">No rows yet — add the first one.</p>
+    <AccordionRoot v-model="openRows" type="multiple" class="w-full flex flex-col gap-2">
       <AccordionItem
         v-for="(row, index) of rows"
         :key="index"
@@ -218,17 +218,17 @@ function setRowValue(index: number, key: string, value: unknown) {
         </AccordionContent>
       </AccordionItem>
     </AccordionRoot>
+    <UIButton
+      data-testid="list-add"
+      variant="outline"
+      icon="i-lucide:plus"
+      :disabled="rows.length >= maximumItems"
+      @click="addRow"
+    >
+      Add row
+    </UIButton>
+    <UIInputHint v-if="field.hint">
+      {{ field.hint }}
+    </UIInputHint>
   </div>
-  <UIButton
-    data-testid="list-add"
-    variant="outline"
-    icon="i-lucide:plus"
-    :disabled="rows.length >= maximumItems"
-    @click="addRow"
-  >
-    Add row
-  </UIButton>
-  <UIInputHint v-if="field.hint">
-    {{ field.hint }}
-  </UIInputHint>
 </template>
