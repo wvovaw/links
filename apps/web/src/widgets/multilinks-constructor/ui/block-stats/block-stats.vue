@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BlockStats } from "~shared/api/backend";
 
-import { LinksApi } from "~shared/api/backend";
+import { AnalyticsApi } from "~shared/api/backend";
 
 import { useConstructorStore } from "../../model";
 
@@ -19,18 +19,17 @@ const stats = ref<BlockStats[]>([]);
 
 onMounted(async () => {
   const id = linkId.value;
-  if (id) stats.value = await LinksApi.getLinkStats(id);
+  if (id) stats.value = (await AnalyticsApi.getLinkStats(id)).stats?.blocks ?? [];
 });
 
 const counters = computed<BlockStats>(
-  () => stats.value.find((entry) => entry.blockId === props.blockId) ?? { blockId: props.blockId, clicks: 0, views: 0 },
+  () => stats.value.find((entry) => entry.blockId === props.blockId) ?? { blockId: props.blockId, clicks: 0, visitors: 0 },
 );
 
 /*
-  Only clicks are shown. The API stores and aggregates views as well, but nothing in the app reports an
-  impression yet, so a Views cell could only ever read 0 — a metric that is never filled is a lie, not a
-  placeholder. Impressions need their own design: a beacon per block per visit would exhaust the per-block
-  window and answer 429 to real clicks.
+  Only clicks are shown. Views belong to the page, not to a block: the page reports one visit per document,
+  and a beacon per block per visit would exhaust the per-block window and answer 429 to real clicks. The
+  statistics screen is where a page's views and its sources are read.
 */
 </script>
 

@@ -6,14 +6,14 @@ import { reactive, ref } from "vue";
 
 const mocks = vi.hoisted(() => ({ getLinkStats: vi.fn() }));
 
-vi.mock("~shared/api/backend", () => ({ LinksApi: { getLinkStats: mocks.getLinkStats } }));
+vi.mock("~shared/api/backend", () => ({ AnalyticsApi: { getLinkStats: mocks.getLinkStats } }));
 /* The panel only reads the page it belongs to; a ref inside a reactive store keeps `storeToRefs` happy. */
 vi.mock("../../model", () => ({ useConstructorStore: () => reactive({ linkId: ref("link-1") }) }));
 
 import BlockStats from "./block-stats.vue";
 
 function counted(counters: Counters[]) {
-  mocks.getLinkStats.mockResolvedValue(counters);
+  mocks.getLinkStats.mockResolvedValue({ stats: { blocks: counters }, failed: false });
 }
 
 async function countersOf(blockId: string) {
@@ -29,7 +29,7 @@ describe("BlockStats", () => {
   });
 
   it("shows the clicks the page collected for the selected block", async () => {
-    counted([{ blockId: "b1", clicks: 3, views: 7 }]);
+    counted([{ blockId: "b1", clicks: 3, visitors: 2 }]);
 
     expect(await countersOf("b1")).toEqual(["3"]);
     expect(mocks.getLinkStats).toHaveBeenCalledWith("link-1");
@@ -42,8 +42,12 @@ describe("BlockStats", () => {
     expect(await countersOf("b2")).toEqual(["0"]);
   });
 
+  /*
+    This panel is a counter beside an editor, not a dashboard: a failed read still reads `0` here, while the
+    statistics screens tell "nothing yet" from "we could not ask".
+  */
   it("shows zeros when the counters cannot be read at all", async () => {
-    mocks.getLinkStats.mockResolvedValue([]);
+    mocks.getLinkStats.mockResolvedValue({ stats: null, failed: true });
 
     expect(await countersOf("b1")).toEqual(["0"]);
   });
