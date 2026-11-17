@@ -72,6 +72,12 @@ fresh clone must be built before anything importing the preset runs, the web tes
 - Blocks render by resolving a component per block name
   (`src/shared/blocks/use-blocks-resolver.ts`); a block receives `properties` and falls back to theme
   CSS variables for unset values.
+- **A Vue component under `src/shared/blocks/components/` never uses `@links/ui`** — not its
+  components, not its UnoCSS preset utilities (the `text-*`/`bg-*` palette tokens). The page a
+  visitor reads belongs to the link, not to the constructor: its look comes from the page theme
+  variables in `src/shared/blocks/theme.css` and `page-theme.ts`, and
+  `src/shared/blocks/components/no-ui-kit.test.ts` enforces the rule. Native controls that read
+  those variables live in `src/shared/blocks/components/controls/` (input, textarea, button, label).
 - Content (MDC docs) lives in `apps/web/content/`; `packages/ui/docs/` is a separate Nuxt site.
 
 ## apps/backend — data and migrations
@@ -88,18 +94,32 @@ fresh clone must be built before anything importing the preset runs, the web tes
   delete the file and let migrations rebuild it.
 - Env is read straight from `process.env`, each variable at its point of use with an inline default.
 
-| Variable        | Read in                                                     |
-| --------------- | ----------------------------------------------------------- |
-| `PORT`          | `main.ts`                                                   |
-| `FRONTEND_URL`  | `main.ts` (CORS origin)                                     |
-| `DATABASE_PATH` | `database/database.config.ts`                               |
-| `UPLOADS_PATH`  | `storage/local-storage.service.ts`                          |
-| `IMAGES_PATH`   | `storage/local-storage.service.ts`                          |
-| `JWT_SECRET`    | `auth/auth.tokens.ts` — required in production              |
-| `NODE_ENV`      | `auth/auth.controller.ts` — gates the secure refresh cookie |
+| Variable             | Read in                                                     |
+| -------------------- | ----------------------------------------------------------- |
+| `PORT`               | `main.ts`                                                   |
+| `FRONTEND_URL`       | `main.ts` (CORS origin)                                     |
+| `DATABASE_PATH`      | `database/database.config.ts`                               |
+| `UPLOADS_PATH`       | `storage/local-storage.service.ts`                          |
+| `IMAGES_PATH`        | `storage/local-storage.service.ts`                          |
+| `ASSETS_PATH`        | `storage/local-storage.service.ts`                          |
+| `MAX_IMAGE_BYTES`    | `storage/local-storage.service.ts` — multer's upload limit  |
+| `MAX_VIDEO_BYTES`    | `storage/local-storage.service.ts` — largest video upload   |
+| `MAX_AUDIO_BYTES`    | `storage/local-storage.service.ts` — largest audio upload   |
+| `MAX_DOCUMENT_BYTES` | `storage/local-storage.service.ts` — largest pdf upload     |
+| `JWT_SECRET`         | `auth/auth.tokens.ts` — required in production              |
+| `NODE_ENV`           | `auth/auth.controller.ts` — gates the secure refresh cookie |
 
 - Auth: JWT access tokens plus cookie-based refresh sessions. Uploads go through multer into
-  `apps/backend/uploads` (gitignored).
+  `apps/backend/uploads` (gitignored): images under `IMAGES_PATH`, and the video, audio and pdf files
+  the asset endpoints accept under `ASSETS_PATH`. A file's extension comes from its declared
+  mimetype, never from the name the uploader gave it.
+- Accepted types are an allowlist on the server, and a picker offers exactly what that allowlist
+  stores — `image/*` would offer files the API answers 400 for:
+  - images: `image/png`, `image/jpeg` (and the legacy `image/jpg` spelling), `image/webp`, `image/gif`.
+    An svg is deliberately not stored: it is scriptable when served same-origin.
+  - assets: `video/mp4`, `video/webm`, `audio/mpeg`, `audio/ogg`, `audio/mp4`, `application/pdf`.
+
+  `image-field.vue` carries the image list as `IMAGE_ACCEPT`; a new type has to be added to both.
 
 ## blocks versioning
 
@@ -126,8 +146,12 @@ the only thing that keeps the models and thinking levels the same on someone els
 not cover the other fields — a user-level override that sets `tools` still wins. Change both or
 neither.
 
-Prompt bodies are copied from the bundled `pi-subagents` agents (`worker` is our `implementer`), so
-upstream fixes arrive by re-copying the body and keeping the frontmatter. Only frontmatter is ours.
+**A dispatch never names a model.** The pinned model in the agent file is the model the agent runs on,
+and a `model:` passed to `subagent()` overrides it for that call — which quietly turns a cheap worker
+into an expensive one for the whole run. If a task seems to need a stronger model, change the pin in
+`.pi/agents/` (and in `agentOverrides`) so the choice is visible and reviewable, or split the task;
+never override it from inside a session. The same holds for role guidance that asks for "the most
+capable available model": use `reviewer` as pinned.
 
 `implementer` and `reviewer` name the project skills they can load (`skills:`), because
 `inheritSkills: false` is what keeps every other skill out. An agent with no `skills:` line sees none

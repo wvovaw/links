@@ -26,7 +26,6 @@ body:json {
         "content": "Hello World"
       }
     ],
-    "background": "#ffffff",
     "status": "DRAFT"
   }
 }
@@ -41,13 +40,12 @@ tests {
     expect(body).to.have.property("id");
     expect(body.blocks).to.be.an("array");
     expect(body.blocks[0].type).to.equal("heading");
-    expect(body.background).to.equal("#ffffff");
     expect(body.status).to.equal("DRAFT");
   });
 }
 
 docs {
-  Update the content blocks, background, and status of a link.
+  Update the content blocks and status of a link.
 
   **Auth:** Bearer token (required)
 
@@ -56,8 +54,12 @@ docs {
 
   **Request body (all optional):**
   - `blocks` (array) — content blocks
-  - `background` (string) — background color/image
   - `status` (string) — `FRESH`, `DRAFT`, or `PUBLISHED`
+  - `imageFileIds` (string[]) — image file IDs to keep, others are deleted
+
+  **Note:** the page background is no longer accepted here, because it is not free-form CSS any
+  more. Use `PATCH /links/:id/theme` (see Update Link Theme) — `background` in this body is rejected
+  with 400.
 
   **Response:** 200 — Updated `LinkDto`
 }

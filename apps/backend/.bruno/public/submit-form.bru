@@ -1,0 +1,58 @@
+meta {
+  name: Submit Form
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/public/links/{{link_slug}}/submissions
+  body: json
+}
+
+body:json {
+  {
+    "blockId": "{{block_id}}",
+    "kind": "contact",
+    "name": "Ada",
+    "email": "ada@example.com",
+    "message": "Hello from the Bruno collection",
+    "company": ""
+  }
+}
+
+tests {
+  test("should return 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should acknowledge without echoing anything", function () {
+    const body = res.getBody();
+    expect(body).to.deep.equal({ ok: true });
+  });
+}
+
+docs {
+  Store one filled-in form on a published page. Public endpoint — no auth required.
+
+  **Set first:**
+  - `link_slug` — the slug of a **published** page
+  - `block_id` — the id of a `ContactForm` or `EmailCapture` block on that page
+
+  **Path params:** `slug` (string, required) — the page's slug, which is not repeated in the body
+
+  **Request body:**
+  - `blockId` (string, required) — a block of this page; any other id is 400
+  - `kind` (string, required) — `contact` or `subscribe`
+  - `email` (string, required) — validated, at most 200 characters
+  - `name` (string, optional) — at most 100
+  - `message` (string, optional) — at most 2000
+  - `company` (string, optional) — the honeypot; a person leaves it empty (see Submit Form Honeypot)
+
+  **Response:** 201 — `{ ok: true }`
+  **Response:** 400 — a bad email, an over-long value, a field the DTO does not name, or a block this
+  page does not hold
+  **Response:** 404 — no page holds this slug as published
+  **Response:** 429 — past 30 submissions a minute on that form, or 300 a minute on the page
+
+  Messages are stored on the page and read by its owner; nothing is emailed.
+}

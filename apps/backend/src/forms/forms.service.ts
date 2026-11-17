@@ -1,0 +1,80 @@
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+
+import type { CreateSubmissionDto, SubmissionsQueryDto } from "./dto/submission.dto";
+import type { FormSubmissionPayload } from "./form-submission.entity";
+
+import { SlidingWindow } from "../common/sliding-window";
+import { toSubmissionDto } from "./form-submission.dto";
+import { FormSubmission } from "./form-submission.entity";
+
+/** A list without an explicit `limit` is one screen of rows, not the page's whole history. */
+const defaultLimit = 50;
+
+/** What a visitor is told when one of the two windows refuses a submission. */
+const refusedSubmission = {
+  key: "Too many submissions for this form. Try again in a minute.",
+  scope: "Too many submissions on this page. Try again in a minute.",
+};
+
+@Injectable()
+export class FormsService {
+  /**
+   * A form takes 30 submissions a minute and a page takes 300 across all its forms. One busy form must not
+   * lock visitors out of the other, and a page must not multiply its budget by the number of forms it holds.
+   */
+  private readonly window = new SlidingWindow({ perKey: 30, perScope: 300 });
+
+  constructor(@InjectRepository(FormSubmission) private readonly submissions: Repository<FormSubmission>) {}
+
+  /**
+   * Stores an accepted submission. A honeypot hit is answered as if it were stored and leaves no row: the
+   * bot learns nothing, and the page's owner does not have to read its spam. It does not open the window
+   * either — a robot filling the trap must not be able to spend the minute a real visitor needs.
+   */
+  async create(linkId: string, body: CreateSubmissionDto) {
+    if (body.company) return;
+
+    this.window.admit(linkId, `${linkId}:${body.blockId}`, refusedSubmission);
+
+    await this.submissions.save(
+      this.submissions.create({
+        linkId,
+        blockId: body.blockId,
+        kind: body.kind,
+        payload: payloadOf(body),
+      }),
+    );
+  }
+
+  /** The owner's own list: one page's rows, newest first, optionally of one form block. */
+  async list(linkId: string, query: SubmissionsQueryDto) {
+    const submissions = this.submissions
+      .createQueryBuilder("submission")
+      .where("submission.linkId = :linkId", { linkId })
+      .orderBy("submission.createdAt", "DESC")
+      /*
+        `createdAt` is stored to the second, so a burst of rows shares one value; rowid — SQLite's
+        insertion counter — breaks those ties by the order they arrived, oldest last.
+      */
+      .addOrderBy("submission.rowid", "DESC")
+      .take(query.limit ?? defaultLimit);
+
+    if (query.blockId) submissions.andWhere("submission.blockId = :blockId", { blockId: query.blockId });
+
+    return (await submissions.getMany()).map(toSubmissionDto);
+  }
+}
+
+/**
+ * Only the fields the form asked for reach the table: the honeypot and every field an empty input sends as
+ * `undefined` are left out, so a stored payload reads exactly what a visitor filled in.
+ */
+function payloadOf(body: CreateSubmissionDto): FormSubmissionPayload {
+  const payload: FormSubmissionPayload = { email: body.email };
+  if (body.name !== undefined) payload.name = body.name;
+  if (body.message !== undefined) payload.message = body.message;
+
+  return payload;
+}

@@ -14,15 +14,16 @@ export const useLinksStore = defineStore("links", () => {
   const links = computed(() => linksList.value);
 
   /* Actions */
+  /** Resolves `true` only when the user confirmed and both content and metadata were stored. */
   async function updateLink(params: {
     id: string;
     title: string;
     blocks: unknown[];
     seo: Record<string, unknown>;
-    background: string;
     status: LinkStatus;
     imageFileIds?: string[];
-  }) {
+    assetFileIds?: string[];
+  }): Promise<boolean> {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
     const confirm = createConfirmation({
@@ -31,35 +32,37 @@ export const useLinksStore = defineStore("links", () => {
     });
 
     const { data } = await confirm();
-    if (data) {
-      try {
-        await LinksApi.updateContent({
-          id: params.id,
-          blocks: params.blocks,
-          background: params.background,
-          status: params.status,
-          imageFileIds: params.imageFileIds,
-        });
-        await LinksApi.updateMetadata({
-          id: params.id,
-          title: params.title,
-          seo: params.seo,
-          status: params.status,
-        });
+    if (!data) return false;
+
+    try {
+      await LinksApi.updateContent({
+        id: params.id,
+        blocks: params.blocks,
+        status: params.status,
+        imageFileIds: params.imageFileIds,
+        assetFileIds: params.assetFileIds,
+      });
+      await LinksApi.updateMetadata({
+        id: params.id,
+        title: params.title,
+        seo: params.seo,
+        status: params.status,
+      });
+      toast({
+        title: "Succes",
+        content: "The link is successfully updated",
+        variant: "success",
+      });
+      return true;
+    } catch (e: unknown) {
+      if (e instanceof Error) {
         toast({
-          title: "Succes",
-          content: "The link is successfully updated",
-          variant: "success",
+          title: "Saving error",
+          content: e.message,
+          variant: "error",
         });
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          toast({
-            title: "Saving error",
-            content: e.message,
-            variant: "error",
-          });
-        }
       }
+      return false;
     }
   }
   async function deleteLink(id: string) {

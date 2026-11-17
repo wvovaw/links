@@ -1,9 +1,216 @@
-export const BLOCK_NAMES = ["Avatar", "Button", "Paragraph", "Picture"] as const;
+export const BLOCK_NAMES = [
+  "Avatar",
+  "Button",
+  "ContactForm",
+  "Countdown",
+  "Divider",
+  "EmailCapture",
+  "Faq",
+  "Gallery",
+  "Heading",
+  "Map",
+  "Music",
+  "Paragraph",
+  "Picture",
+  "Products",
+  "QrCode",
+  "SocialIcons",
+  "Spacer",
+  "Testimonials",
+  "Video",
+] as const;
 export type BlockName = (typeof BLOCK_NAMES)[number];
 
-export const blocksList = BLOCK_NAMES.map((name) => ({ name }));
+export const BLOCK_CATEGORIES = ["Content", "Media", "Links", "Social", "Commerce", "Layout"] as const;
+export type BlockCategory = (typeof BLOCK_CATEGORIES)[number];
 
-export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image";
+export interface BlockMeta {
+  readonly name: BlockName;
+  readonly label: string;
+  readonly description: string;
+  readonly icon: string;
+  readonly category: BlockCategory;
+  readonly keywords: readonly string[];
+}
+
+/**
+ * Every icon referenced by `BLOCK_META` must be listed here: UnoCSS generates icon classes at build
+ * time, so an icon missing from the web app's safelist renders as an empty box without any error.
+ */
+export const BLOCK_ICONS: readonly string[] = [
+  "i-lucide:circle-user-round",
+  "i-lucide:link",
+  "i-lucide:mail",
+  "i-lucide:timer",
+  "i-lucide:minus",
+  "i-lucide:at-sign",
+  "i-lucide:heading",
+  "i-lucide:circle-help",
+  "i-lucide:images",
+  "i-lucide:map",
+  "i-lucide:music",
+  "i-lucide:align-left",
+  "i-lucide:image",
+  "i-lucide:shopping-bag",
+  "i-lucide:qr-code",
+  "i-lucide:move-vertical",
+  "i-lucide:share-2",
+  "i-lucide:quote",
+  "i-lucide:video",
+];
+
+/**
+ * The icons a link card may show. A subset of `BLOCK_ICONS`, because the two lists answer different
+ * questions: `BLOCK_ICONS` is what the palette needs drawn, while this is what reads as a decoration
+ * on a link — a structural icon such as `minus` has no business in every button's icon picker.
+ */
+export const LINK_ICONS: readonly string[] = [
+  "i-lucide:circle-user-round",
+  "i-lucide:link",
+  "i-lucide:align-left",
+  "i-lucide:image",
+];
+
+/** English fallbacks: the i18n layer overrides them through `blocks.<Name>.label` / `.description`. */
+export const BLOCK_META: Record<BlockName, Omit<BlockMeta, "name">> = {
+  Avatar: {
+    label: "Avatar",
+    description: "A round profile photo with a short caption.",
+    icon: "i-lucide:circle-user-round",
+    category: "Content",
+    keywords: ["profile", "photo", "user"],
+  },
+  Button: {
+    label: "Button",
+    description: "A large clickable link to another page or site.",
+    icon: "i-lucide:link",
+    category: "Links",
+    keywords: ["link", "cta", "action"],
+  },
+  ContactForm: {
+    label: "Contact form",
+    description: "A form that stores a name, an address and a message on the page.",
+    icon: "i-lucide:mail",
+    category: "Commerce",
+    keywords: ["contact", "form", "message", "email", "feedback", "inquiry"],
+  },
+  Countdown: {
+    label: "Countdown",
+    description: "A live countdown to a date and time.",
+    icon: "i-lucide:timer",
+    category: "Content",
+    keywords: ["countdown", "timer", "deadline", "date", "event", "launch"],
+  },
+  Divider: {
+    label: "Divider",
+    description: "A line or a gap that separates two blocks.",
+    icon: "i-lucide:minus",
+    category: "Layout",
+    keywords: ["separator", "line", "rule"],
+  },
+  EmailCapture: {
+    label: "Email capture",
+    description: "A one-field form that stores a visitor's email address.",
+    icon: "i-lucide:at-sign",
+    category: "Commerce",
+    keywords: ["email", "subscribe", "newsletter", "signup", "capture"],
+  },
+  Faq: {
+    label: "FAQ",
+    description: "Questions and answers that open in place.",
+    icon: "i-lucide:circle-help",
+    category: "Content",
+    keywords: ["faq", "questions", "answers", "accordion", "help"],
+  },
+  Gallery: {
+    label: "Gallery",
+    description: "A set of images shown as a grid or one at a time in a carousel.",
+    icon: "i-lucide:images",
+    category: "Media",
+    keywords: ["gallery", "images", "photos", "grid", "strip", "carousel", "album"],
+  },
+  Heading: {
+    label: "Heading",
+    description: "A title that starts a section of the page.",
+    icon: "i-lucide:heading",
+    category: "Content",
+    keywords: ["title", "section", "h1", "h2", "h3"],
+  },
+  Map: {
+    label: "Map",
+    description: "A map of an address or a place, opened in place.",
+    icon: "i-lucide:map",
+    category: "Media",
+    keywords: ["map", "location", "address", "google maps", "place"],
+  },
+  Music: {
+    label: "Music",
+    description: "A track, an album or a playlist from Spotify, SoundCloud, Apple Music or YouTube Music.",
+    icon: "i-lucide:music",
+    category: "Media",
+    keywords: ["spotify", "soundcloud", "apple music", "youtube music", "track", "album", "playlist", "embed"],
+  },
+  Paragraph: {
+    label: "Paragraph",
+    description: "A block of text for a bio, an address or a note.",
+    icon: "i-lucide:align-left",
+    category: "Content",
+    keywords: ["text", "copy", "about"],
+  },
+  Picture: {
+    label: "Picture",
+    description: "A single image with an optional caption.",
+    icon: "i-lucide:image",
+    category: "Media",
+    keywords: ["image", "photo", "gallery"],
+  },
+  Products: {
+    label: "Products",
+    description: "A list or a grid of products with prices and a link to their checkout.",
+    icon: "i-lucide:shopping-bag",
+    category: "Commerce",
+    keywords: ["products", "shop", "store", "price", "buy", "checkout", "payment link", "merch"],
+  },
+  QrCode: {
+    label: "QR code",
+    description: "A QR code that opens a link when scanned.",
+    icon: "i-lucide:qr-code",
+    category: "Content",
+    keywords: ["qr", "qr code", "scan", "link", "url"],
+  },
+  SocialIcons: {
+    label: "Social icons",
+    description: "A row of icons linking to your social profiles and an email address.",
+    icon: "i-lucide:share-2",
+    category: "Social",
+    keywords: ["social", "telegram", "instagram", "youtube", "tiktok", "x", "vk", "whatsapp", "email", "contacts"],
+  },
+  Spacer: {
+    label: "Spacer",
+    description: "Empty space between two blocks.",
+    icon: "i-lucide:move-vertical",
+    category: "Layout",
+    keywords: ["gap", "space", "margin"],
+  },
+  Testimonials: {
+    label: "Testimonials",
+    description: "Quotes from customers, shown as a list or a grid.",
+    icon: "i-lucide:quote",
+    category: "Content",
+    keywords: ["testimonials", "reviews", "quotes", "feedback", "praise", "clients"],
+  },
+  Video: {
+    label: "Video",
+    description: "A video from YouTube, Vimeo or TikTok, played in place.",
+    icon: "i-lucide:video",
+    category: "Media",
+    keywords: ["youtube", "vimeo", "tiktok", "clip", "embed"],
+  },
+};
+
+export const blocksList: readonly BlockMeta[] = BLOCK_NAMES.map((name) => ({ name, ...BLOCK_META[name] }));
+
+export type BlockPropertyType = "text" | "number" | "boolean" | "select" | "color" | "url" | "image" | "date" | "list";
 
 export interface IBlockPropertyCommon<T = unknown> {
   id: number;
@@ -42,24 +249,88 @@ export interface IBlockPropertySelect<T = string> extends IBlockPropertyCommon<T
   options: { value: T; label: string }[];
   isMultiple?: boolean;
 }
+/**
+ * A select that holds several of its options at once: the same `options`, but the stored value is the
+ * list of the ones chosen. A single select keeps one value, which is what the interface above describes.
+ */
+export interface IBlockPropertySelectMultiple extends IBlockPropertyCommon<string[]> {
+  type: "select";
+  options: { value: string; label: string }[];
+  isMultiple: true;
+}
 export interface IBlockPropertyImage<T = string> extends IBlockPropertyCommon<T> {
   type: "image";
   accept?: string;
+}
+/**
+ * The value is an ISO string. `withTime` asks for an instant rather than a calendar date, so the field
+ * offers a time of day as well and the picker reads the value in the browser's timezone.
+ */
+export interface IBlockPropertyDate<T = string> extends IBlockPropertyCommon<T> {
+  type: "date";
+  withTime?: boolean;
+}
+/**
+ * The kinds of field a list row may contain: every property except a nested list. A row is one flat
+ * object of scalars, so the editor renders it with the same field components a block uses.
+ */
+export type BlockItemField = (
+  | IBlockPropertyText
+  | IBlockPropertyNumber
+  | IBlockPropertyBoolean
+  | IBlockPropertySelect
+  | IBlockPropertyColor
+  | IBlockPropertyUrl
+  | IBlockPropertyImage
+  | IBlockPropertyDate
+) & {
+  /**
+   * The property name each stored row keeps this value under. It is data, not presentation: a label may
+   * be reworded or translated, while the key is what the rows already saved and every renderer name.
+   */
+  key: string;
+};
+/**
+ * A repeating group of rows, each row an object keyed by its item fields' `key`. `minItems` and
+ * `maxItems` bound what the editor lets a user add or remove; what a renderer can draw is still its
+ * own question, answered by `completeRows`.
+ */
+export interface IBlockPropertyList<T = Record<string, unknown>[]> extends IBlockPropertyCommon<T> {
+  type: "list";
+  itemFields: BlockItemField[];
+  minItems?: number;
+  maxItems?: number;
 }
 export type BlockProperty =
   | IBlockPropertyText
   | IBlockPropertyNumber
   | IBlockPropertyBoolean
   | IBlockPropertySelect
+  | IBlockPropertySelectMultiple
   | IBlockPropertyUrl
   | IBlockPropertyColor
-  | IBlockPropertyImage;
+  | IBlockPropertyImage
+  | IBlockPropertyDate
+  | IBlockPropertyList;
+
+/**
+ * A schedule belongs to the block, not to one of its properties: it decides whether the block is on the
+ * page at all. `from` and `to` are ISO instants — `from` is inclusive and `to` is exclusive, so a block
+ * scheduled to end at 12:00 is gone at 12:00 exactly. A bound the parser cannot read is ignored rather
+ * than hiding the block forever.
+ */
+export interface IBlockVisibility {
+  hidden?: boolean;
+  from?: string;
+  to?: string;
+}
 
 export interface IBlock<K extends BlockName = BlockName> {
   id: string;
   name: K;
   properties: Record<string, BlockProperty>;
   version: number;
+  visibility?: IBlockVisibility;
 }
 
 export interface BlockModuleSchema {

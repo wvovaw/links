@@ -4,6 +4,18 @@
     --links-theme-<blocks-name>-<property>-<variant>
   */
 
+  /*
+    Page tokens: a page with a stored theme overrides these inline (see `shared/blocks/page-theme.ts`).
+    The values below are the look a page has without one, chosen to match what the blocks rendered
+    before the theme existed, so a legacy page keeps its appearance.
+  */
+  --links-page-accent: #2563eb;
+  --links-page-fg: #171515;
+  --links-page-overlay: transparent;
+  --links-page-radius: 10px;
+  /* A themed page sets the font stack inline; without one the page keeps the font it inherited. */
+  --links-font: inherit;
+
   /* Button */
   --links-theme-button-bg: hsl(215, 94%, 45%);
   --links-theme-button-fg: hsl(204, 22%, 95%);
@@ -12,22 +24,48 @@
   --links-theme-button-font-size-md: 1rem;
   --links-theme-button-font-size-lg: 1.2rem;
 
+  /*
+    Form fields: the page's own text colour at low strength, so a field reads on any preset. A themed
+    page replaces these inline from its text colour (see `shared/blocks/page-theme.ts`).
+  */
+  --links-theme-field-fg: var(--links-page-fg);
+  --links-theme-field-bg: rgba(23, 21, 21, 0.08);
+  --links-theme-field-border: rgba(23, 21, 21, 0.28);
+  --links-theme-field-placeholder: rgba(23, 21, 21, 0.56);
+  --links-theme-error: #c0242b;
+
   /* Paragraph */
-  --links-theme-paragraph-fg: #171515;
+  --links-theme-paragraph-fg: var(--links-page-fg);
   --links-theme-paragraph-inline-padding: 0px;
+
+  --links-theme-paragraph-font-size-sm: 0.8rem;
+  --links-theme-paragraph-font-size-md: 1rem;
+  --links-theme-paragraph-font-size-lg: 1.2rem;
 
   /* Avatar */
 
   /* Picture */
-  --links-theme-picture-radius: 10px;
+  --links-theme-picture-radius: var(--links-page-radius);
 }
 
 .link {
+  position: relative;
   flex-grow: 1;
   width: 100%;
+  font-family: var(--links-font, inherit);
+}
+
+/* The scrim sits under the blocks, so an overlay of 0 leaves the gradient untouched. */
+.link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--links-page-overlay);
+  pointer-events: none;
 }
 
 .link__container {
+  position: relative;
   margin-inline: auto;
   max-width: 640px;
   padding: 2em 1em;

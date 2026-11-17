@@ -19,3 +19,4 @@ const uploads = mkdtempSync(join(tmpdir(), "links-test-uploads-"));
 
 process.env.UPLOADS_PATH = join(uploads, "avatars");
 process.env.IMAGES_PATH = join(uploads, "images");
+process.env.ASSETS_PATH = join(uploads, "assets");

@@ -12,7 +12,8 @@
   "exports": {
     ".": {
       "types": "./dist/main.d.mts",
-      "import": "./dist/main.mjs"
+      "import": "./dist/main.mjs",
+      "require": "./dist/main.mjs"
     }
   },
   "scripts": {
@@ -23,6 +24,9 @@
     "lint:fix": "oxlint --config oxlint.config.ts . --fix",
     "fmt": "oxfmt --config oxfmt.config.ts --check .",
     "fmt:write": "oxfmt --config oxfmt.config.ts --write .",
+    "typecheck": "tsc6 --noEmit -p tsconfig.test.json",
+    "test": "pnpm run typecheck && vitest run",
+    "test:watch": "vitest watch",
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
@@ -30,6 +34,7 @@
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "tsdown": "^0.23.7",
-    "typescript": "npm:@typescript/typescript6@^6.0.2"
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vitest": "^5.1.0"
   }
 }

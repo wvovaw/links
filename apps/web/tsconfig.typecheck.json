@@ -1,0 +1,21 @@
+{
+  /*
+    `pnpm typecheck` covers the surfaces whose correctness is a type, not a test: the properties editor
+    dispatches on `BlockPropertyType` through `Record<BlockPropertyType, Component>`, so a property type
+    without a field is a compile error — but only where a type checker runs. The Nuxt build strips types,
+    so without this file nothing catches a missing field.
+
+    It is deliberately narrower than `./.nuxt/tsconfig.json`: a project-wide run still reports errors in
+    files this plan does not own (`theme-editor.vue`, three test files, and `uno.config.ts`, which needs
+    `unocss` as a direct dependency). Widen the `include` once those are clean.
+  */
+  "extends": "./.nuxt/tsconfig.json",
+  "include": [
+    "./.nuxt/nuxt.d.ts",
+    "src/widgets/multilinks-constructor/ui/block-properties-editor/**/*.vue",
+    "src/widgets/multilinks-constructor/ui/block-properties-editor/**/*.ts",
+    "src/shared/blocks/**/*.ts",
+    "src/shared/blocks/**/*.vue"
+  ],
+  "exclude": ["src/**/*.test.ts"]
+}

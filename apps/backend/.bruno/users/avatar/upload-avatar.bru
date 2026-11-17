@@ -45,7 +45,7 @@ docs {
   **Auth:** Bearer token (required)
   
   **Request body:** `multipart/form-data`
-  - `avatar` (file, required) — JPEG or PNG, max 5MB
+  - `avatar` (file, required) — JPEG or PNG, at most `MAX_IMAGE_BYTES` (5 MB by default)
   
   **Response:** 200 — Updated `UserDto` with `avatarUrl`
   

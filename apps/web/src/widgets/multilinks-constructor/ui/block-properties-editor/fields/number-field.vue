@@ -11,10 +11,14 @@ const props = defineProps<ITextFieldProps>();
 const model = defineModel<IBlockPropertyNumber["value"]>();
 
 /**
- Increment or decrement field value depending on what 1 or -1 provided
+ Increment or decrement field value depending on what 1 or -1 provided.
+
+ A cleared `type="number"` input hands the model an empty string, and `"" + 1` is the text `"1"`,
+ which passes the range check and is stored as text: the value is read as a number before the
+ arithmetic so the field always writes back a number.
  */
 function stepValue(modifier: 1 | -1) {
-  const newVal = (model.value ?? 0) + props.field.step * modifier;
+  const newVal = Number(model.value ?? 0) + props.field.step * modifier;
   if (newVal <= props.field.max && newVal >= props.field.min) model.value = newVal;
 }
 </script>

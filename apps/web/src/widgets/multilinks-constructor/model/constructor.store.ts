@@ -1,10 +1,18 @@
-import type { BlockName, IBlock } from "@links/blocks";
+import type { BlockName, IBlock, IBlockPropertyImage, PageTheme } from "@links/blocks";
 
-import { checkBlockUpToDate, createBlock, migrateBlock } from "@links/blocks";
+import {
+  checkBlockUpToDate,
+  createBlock,
+  DEFAULT_PAGE_THEME,
+  itemFieldsOf,
+  listRows,
+  migrateBlock,
+} from "@links/blocks";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useLinksStore } from "~entities/links";
 import { LinkStatus, LinksApi } from "~shared/api/backend";
+import { isAbsoluteImageUrl, storesAsset } from "~shared/blocks";
 import { randomString } from "~shared/lib/utils";
 
 const defaultPageTitle = "New multilinks page";
@@ -28,6 +36,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   const linkName = ref<string | null>(null);
   const publishStatus = ref<LinkStatus>(LinkStatus.DRAFT);
   const blocks = ref<IBlock[]>(defaultBlocksState);
+  /* `null` means the page has no stored theme yet: it keeps rendering its raw legacy `background`. */
+  const theme = ref<PageTheme | null>(null);
   const background = ref<string>(defaultBackground);
   const seo = ref<Record<string, unknown>>({});
   const selectedBlockId = ref<string | null>(null);
@@ -64,8 +74,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     blocks.value.length = 0;
     blocks.value.push(...newBlocks);
   }
-  function setBackground(newBackground: string) {
-    background.value = newBackground;
+  /** A first edit turns a themeless (legacy) page into a themed one, starting from the defaults. */
+  function setTheme(patch: Partial<PageTheme>) {
+    theme.value = { ...(theme.value ?? DEFAULT_PAGE_THEME), ...patch };
   }
   function selectBlock(id: string) {
     selectedBlockId.value = id;
@@ -73,9 +84,9 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
   function getBlock(id: string): IBlock | undefined {
     return blocks.value.find((b) => b.id === id);
   }
-  function addBlock(name: BlockName) {
+  function addBlock(name: BlockName, index: number = blocks.value.length) {
     const id = generateBlockId();
-    blocks.value.push(createBlock(name, id));
+    blocks.value.splice(index, 0, createBlock(name, id));
     selectBlock(id);
   }
   function removeBlock(id: string | null) {
@@ -91,33 +102,75 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks.value.splice(index, 0, { ...structuredClone(toRaw(block)), id: newBlockId });
     }
   }
-  function collectImageFileIds(blocksList: IBlock[]): string[] {
-    const ids: string[] = [];
+
+  /**
+   * A stored file id, or `null` for a value that names no stored file. A migrated Avatar may still hold
+   * a pasted url: it must never be sent as a file, or the backend would try to keep `https://…` as an
+   * existing image.
+   */
+  function storedFileId(value: unknown): string | null {
+    if (typeof value !== "string" || !value) return null;
+
+    return isAbsoluteImageUrl(value) ? null : value;
+  }
+
+  /**
+   * The stored file ids a page holds, split by the endpoint that stores them. A file of an `image`
+   * property goes to the list that endpoint keeps; an `accept` that names anything but an image means
+   * the field uploaded an asset instead.
+   */
+  function collectAttachmentFileIds(blocksList: IBlock[]): { imageFileIds: string[]; assetFileIds: string[] } {
+    const imageFileIds: string[] = [];
+    const assetFileIds: string[] = [];
+    const listFor = (accept?: string) => (storesAsset(accept) ? assetFileIds : imageFileIds);
+    const collect = (value: unknown, ids: string[]) => {
+      const fileId = storedFileId(value);
+      if (fileId) ids.push(fileId);
+    };
+
     for (const block of blocksList) {
       for (const prop of Object.values(block.properties)) {
-        if (prop.type === "image" && prop.value) {
-          ids.push(prop.value);
+        if (prop.type === "image") collect(prop.value, listFor(prop.accept));
+
+        /*
+          A block that repeats images draws them from rows, not from an `image` property, and the API
+          deletes every stored file it is not told about. Every stored row counts, complete or not: a
+          half-filled row still holds the file its owner uploaded.
+        */
+        if (prop.type === "list") {
+          const fileFields = itemFieldsOf(prop)
+            .filter((field): field is IBlockPropertyImage & { key: string } => field.type === "image")
+            .map((field) => ({ key: field.key, ids: listFor(field.accept) }));
+          for (const row of listRows(prop)) {
+            for (const field of fileFields) collect(row[field.key], field.ids);
+          }
         }
       }
     }
-    return ids;
+    return { imageFileIds, assetFileIds };
   }
 
   async function saveCurrentState() {
     const { updateLink } = useLinksStore();
-    if (linkId.value) {
-      const imageFileIds = collectImageFileIds(blocks.value);
-      await updateLink({
-        id: linkId.value,
-        title: title.value,
-        blocks: blocks.value,
-        seo: seo.value,
-        background: background.value,
-        status: publishStatus.value,
-        imageFileIds,
-      });
-      savedDataHash.value = computeStoreHash();
-    }
+    const id = linkId.value;
+    if (!id) return;
+
+    const { imageFileIds, assetFileIds } = collectAttachmentFileIds(blocks.value);
+    const contentSaved = await updateLink({
+      id,
+      title: title.value,
+      blocks: blocks.value,
+      seo: seo.value,
+      status: publishStatus.value,
+      imageFileIds,
+      assetFileIds,
+    });
+    /* Cancelled or failed content update: nothing else is persisted and the page stays unsaved. */
+    if (!contentSaved) return;
+
+    /* A page that was never re-themed keeps its raw CSS, so it has no theme to store. */
+    if (theme.value) await LinksApi.updateTheme({ id, theme: toRaw(theme.value) });
+    savedDataHash.value = computeStoreHash();
   }
   function undo() {
     blocksUndo();
@@ -139,6 +192,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
       blocks: toRaw(blocks.value),
       title: toRaw(title.value),
       seo: toRaw(seo.value),
+      theme: toRaw(theme.value),
     });
   }
   function hasUnsavedChanges() {
@@ -152,6 +206,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     linkName.value = null;
     publishStatus.value = LinkStatus.DRAFT;
     blocks.value = defaultBlocksState;
+    theme.value = null;
     background.value = defaultBackground;
     seo.value = {};
     selectedBlockId.value = null;
@@ -168,7 +223,8 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
         linkName.value = data.slug;
         setTitle(data.title);
         setPublishStatus(data.status);
-        setBackground(data.background);
+        theme.value = data.theme;
+        background.value = data.background;
 
         // Blocks are already parsed from the backend
         const blocksList: IBlock[] = data.blocks as IBlock[];
@@ -200,6 +256,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     publishStatus,
     title,
     blocks,
+    theme,
     background,
     canUndo,
     canRedo,
@@ -211,7 +268,7 @@ export const useConstructorStore = defineStore("multilinks-constructor", () => {
     resumeHistory,
     setBlocks,
     setTitle,
-    setBackground,
+    setTheme,
     setPublishStatus,
     getBlock,
     selectBlock,

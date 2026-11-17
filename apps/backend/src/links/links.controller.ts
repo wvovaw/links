@@ -1,15 +1,24 @@
-import { Controller, Delete, Get, HttpCode, Param, Patch, Post, Body, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 
+import { AnalyticsService } from "../analytics/analytics.service";
+import { BlockStatsQueryDto } from "../analytics/dto/block-event.dto";
 import { AuthGuard } from "../common/auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
+import { SubmissionsQueryDto } from "../forms/dto/submission.dto";
+import { FormsService } from "../forms/forms.service";
 import { User } from "../users/user.entity";
 import { CreateLinkDto, UpdateContentDto, UpdateMetadataDto, UpdateSlugDto } from "./dto/link.dto";
+import { UpdateThemeDto } from "./dto/theme.dto";
 import { toLinkDto } from "./link.dto";
 import { LinksService } from "./links.service";
 
 @Controller("links")
 export class LinksController {
-  constructor(private readonly linksService: LinksService) {}
+  constructor(
+    private readonly linksService: LinksService,
+    private readonly analytics: AnalyticsService,
+    private readonly forms: FormsService,
+  ) {}
 
   @Post()
   @UseGuards(AuthGuard)
@@ -34,10 +43,40 @@ export class LinksController {
     return toLinkDto(await this.linksService.getOwned(user, id));
   }
 
+  /**
+   * Ownership is settled before any aggregate runs: `getOwned` answers 404 for a link the caller does not
+   * own, so one owner cannot read another page's counters.
+   */
+  @Get(":id/stats")
+  @UseGuards(AuthGuard)
+  async stats(@CurrentUser() user: User, @Param("id") id: string, @Query() query: BlockStatsQueryDto) {
+    const link = await this.linksService.getOwned(user, id);
+
+    return { blocks: await this.analytics.blockStats(link.id, query) };
+  }
+
+  /**
+   * Ownership is settled before any query runs: `getOwned` answers 404 for a link the caller does not own,
+   * so one owner cannot read the messages visitors left on another page.
+   */
+  @Get(":id/submissions")
+  @UseGuards(AuthGuard)
+  async submissions(@CurrentUser() user: User, @Param("id") id: string, @Query() query: SubmissionsQueryDto) {
+    const link = await this.linksService.getOwned(user, id);
+
+    return { submissions: await this.forms.list(link.id, query) };
+  }
+
   @Patch(":id/content")
   @UseGuards(AuthGuard)
   async updateContent(@CurrentUser() user: User, @Param("id") id: string, @Body() body: UpdateContentDto) {
     return toLinkDto(await this.linksService.updateContent(user, id, body));
+  }
+
+  @Patch(":id/theme")
+  @UseGuards(AuthGuard)
+  async updateTheme(@CurrentUser() user: User, @Param("id") id: string, @Body() body: UpdateThemeDto) {
+    return toLinkDto(await this.linksService.updateTheme(user, id, body));
   }
 
   @Patch(":id/metadata")

@@ -1,0 +1,47 @@
+meta {
+  name: Upload Oversized Image
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/storage/images
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:multipart-form {
+  file: @file(oversized-image.jpg) @contentType(image/jpeg)
+}
+
+tests {
+  test("should return 413", function () {
+    expect(res.getStatus()).to.equal(413);
+  });
+
+  test("should name the limit", function () {
+    const body = res.getBody();
+    expect(body.message).to.contain("bytes or smaller");
+  });
+}
+
+docs {
+  Upload an image above `MAX_IMAGE_BYTES` (5 MB by default), which the server refuses before it
+  writes anything.
+
+  **Fixture:** `oversized-image.jpg` is generated, not committed — create it once at the
+  collection root (where `test-image.jpg` lives; `@file` paths resolve from there) before running
+  the request:
+
+  `head -c 6000000 /dev/zero > oversized-image.jpg`
+
+  **Auth:** Bearer token (required)
+
+  **Request body:** `multipart/form-data` — `file` (image above the limit)
+
+  **Response:** 413 — `{ message: "File must be <limit> bytes or smaller." }`
+}

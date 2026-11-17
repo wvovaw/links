@@ -55,6 +55,9 @@ not define them.
 3. Block schema changes follow the backward-compatibility flow in `packages/blocks/README.md`.
 4. `lint` / `fmt` never write. When you mean to change files, use `lint:fix` / `fmt:write`.
 5. One documentation directory: lowercase `docs/` at the root. Docs contain no version numbers.
+6. No Vue component under `apps/web/src/shared/blocks/components/` uses `@links/ui` — neither its
+   components nor its UnoCSS preset utilities. A visitor's page is styled only by the page theme
+   variables; controls meant for blocks live in `src/shared/blocks/components/controls/`.
 
 ## Working rules
 
@@ -62,6 +65,11 @@ not define them.
 - Before saying something works, run it. `pnpm verify` is the floor for anything touching packages;
   runtime behaviour also gets exercised — the API through its Bruno collection
   (`apps/backend/.bruno`), the constructor and a public page in a browser.
+- Browser verification reports text, not pixels: a selector, a computed style, a value read back. Never
+  `read` a screenshot into the session — it stays in the context and is re-sent with every later
+  request. Take it inside a subagent whose context ends with the run, or leave it for the user to open.
+- A subagent's returned result is what you act on. Open its run output file only to get evidence for a
+  finding you are fixing right now — not to re-read a verdict you already have.
 - Docs describe the repo as it is: a behaviour change and its doc change are one commit.
 - Conventional commits — enforced by husky + commitlint.
 
@@ -72,7 +80,7 @@ not define them.
   Vue testing, Pinia, NestJS, UnoCSS, ponytail.
 - Subagents are project-defined in [`.pi/agents/`](.pi/agents/) and only those run — see
   [docs/conventions.md](docs/conventions.md#subagents). MCP servers for them come from `~/.config/mcp/mcp.json` — see
-  [docs/conventions.md](docs/conventions.md#mcp).
+  [docs/conventions.md](docs/conventions.md#mcp). Dispatch them as configured: never pass a model override.
 - Superpowers (brainstorming, writing-plans, TDD, code review, verification) is a Pi package
   declared in `.pi/settings.json`. It loads only after project trust is granted. Designs and plans it
   produces live in [`docs/superpowers/`](docs/superpowers/).

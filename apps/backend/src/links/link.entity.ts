@@ -1,3 +1,5 @@
+import type { PageTheme } from "@links/blocks";
+
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +10,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { BlockAsset } from "../storage/block-asset.entity";
 import { BlockImage } from "../storage/block-image.entity";
 import { User } from "../users/user.entity";
 import { LinkStatus } from "./link-status";
@@ -32,6 +35,9 @@ export class Link {
   @Column()
   background!: string;
 
+  @Column({ type: "simple-json", nullable: true })
+  theme!: PageTheme | null;
+
   @Column({ type: "text", default: LinkStatus.FRESH })
   status!: LinkStatus;
 
@@ -40,6 +46,9 @@ export class Link {
 
   @OneToMany(() => BlockImage, (image) => image.link)
   images!: BlockImage[];
+
+  @OneToMany(() => BlockAsset, (asset) => asset.link)
+  assets!: BlockAsset[];
 
   @CreateDateColumn()
   createdAt!: Date;

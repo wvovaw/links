@@ -1,0 +1,77 @@
+meta {
+  name: Update Link Theme
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/links/:id/theme
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:path {
+  id: {{link_id}}
+}
+
+body:json {
+  {
+    "backgroundPreset": "marine",
+    "overlayOpacity": 0.35,
+    "accent": "#2563eb",
+    "text": "#171515",
+    "fontPreset": "dm-sans",
+    "radius": 12,
+    "buttonVariant": "solid",
+    "colorScheme": "light"
+  }
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return the link with the stored theme", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.theme).to.deep.equal({
+      backgroundPreset: "marine",
+      overlayOpacity: 0.35,
+      accent: "#2563eb",
+      text: "#171515",
+      fontPreset: "dm-sans",
+      radius: 12,
+      buttonVariant: "solid",
+      colorScheme: "light"
+    });
+  });
+}
+
+docs {
+  Store the whole page theme of a link.
+
+  **Auth:** Bearer token (required)
+
+  **Path params:**
+  - `id` (UUID, required) — link ID
+
+  **Request body (every field required, no others accepted):**
+  - `backgroundPreset` (string) — an id from `BACKGROUND_PRESETS` (`@links/blocks`), e.g. `marine`
+  - `overlayOpacity` (number) — 0 to 1
+  - `accent` (string) — hex colour, `#rrggbb`
+  - `text` (string) — hex colour, `#rrggbb`
+  - `fontPreset` (string) — `dm-sans` or `system`
+  - `radius` (integer) — 0 to 40
+  - `buttonVariant` (string) — `solid`, `outline`, or `ghost`
+  - `colorScheme` (string) — `light` or `dark`
+
+  The body above is `DEFAULT_PAGE_THEME`. Pages published before themes existed keep `theme: null`
+  and their raw `background` CSS.
+
+  **Response:** 200 — `LinkDto` with `theme`
+}

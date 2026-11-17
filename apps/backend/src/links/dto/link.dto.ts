@@ -25,10 +25,6 @@ export class UpdateContentDto {
   blocks?: unknown[];
 
   @IsOptional()
-  @IsString()
-  background?: string;
-
-  @IsOptional()
   @IsEnum(LinkStatus)
   status?: LinkStatus;
 
@@ -36,6 +32,11 @@ export class UpdateContentDto {
   @IsArray()
   @IsString({ each: true })
   imageFileIds?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  assetFileIds?: string[];
 }
 
 export class UpdateMetadataDto {
