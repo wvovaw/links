@@ -35,7 +35,7 @@ export class PublicEventsController {
   }
 
   @Post("links/:slug/events")
-  async record(@Param("slug") slug: string, @Body() body: RecordBlockEventDto) {
+  async record(@Param("slug") slug: string, @Body() body: RecordBlockEventDto, @Req() req: Request) {
     const link = await this.linksService.getPublishedBySlug(slug);
 
     /*
@@ -45,7 +45,7 @@ export class PublicEventsController {
     */
     if (!blockIdsOf(link).has(body.blockId)) throw new BadRequestException("This page has no such block.");
 
-    await this.analytics.record(link.id, body.blockId, body.kind);
+    await this.analytics.record(link.id, body.blockId, body.kind, this.visitorOf(req), toSourceColumns(body));
 
     return { ok: true };
   }

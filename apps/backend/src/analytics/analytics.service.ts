@@ -63,10 +63,10 @@ export class AnalyticsService {
    * Stores an accepted event, or refuses before touching the table: a rejected request must leave no row
    * behind, or the window would not be the only thing it changed.
    */
-  async record(linkId: string, blockId: string, kind: BlockEventKind) {
+  async record(linkId: string, blockId: string, kind: BlockEventKind, visitorHash: string, source: SourceColumns) {
     this.window.admit(linkId, `${linkId}:${blockId}`, refusedEvent);
 
-    await this.events.save(this.events.create({ linkId, blockId, kind }));
+    await this.events.save(this.events.create({ linkId, blockId, kind, visitorHash, ...source }));
   }
 
   /** One grouped query: the database counts, and a block with no events simply has no row. */

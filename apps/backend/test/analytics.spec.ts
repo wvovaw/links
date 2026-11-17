@@ -243,6 +243,42 @@ describe("block analytics", () => {
     expect(await eventCount(app, id)).toBe(0);
   });
 
+  it("stores the source on a click", async () => {
+    const { id, slug } = await publishPage(app);
+
+    await request(app.getHttpServer())
+      .post(`/public/links/${slug}/events`)
+      .set({ "User-Agent": "click-source-agent", "X-Forwarded-For": "198.51.100.31" })
+      .send({ blockId: "b1", kind: "click", utmSource: "Telegram" })
+      .expect(201);
+
+    const [row] = await app.get(DataSource).getRepository(BlockEvent).find({ where: { linkId: id } });
+
+    expect(row.utmSource).toBe("telegram");
+    expect(row.visitorHash).toBe(
+      visitorHashOf({ ip: "198.51.100.31", userAgent: "click-source-agent", at: new Date() }),
+    );
+  });
+
+  /*
+    Every click already in the table predates the source columns. It must keep counting as a click and as no
+    distinct clicker — inventing a hash would report one visitor per legacy block, and deleting the rows
+    would erase numbers the owner has already read.
+  */
+  it("keeps a row written before the source existed", async () => {
+    const { agent, slug } = await publishPage(app);
+    const id = await linkId(agent, slug);
+    const events = app.get(DataSource).getRepository(BlockEvent);
+
+    await events.save(events.create({ linkId: id, blockId: "b1", kind: "click" }));
+
+    const [row] = await events.find({ where: { linkId: id } });
+
+    expect(row.visitorHash).toBeNull();
+    expect(row.utmSource).toBeNull();
+    expect(row.referrerInternal).toBe(false);
+  });
+
   describe("page views", () => {
     it("stores a view with its source", async () => {
       const { id, slug } = await publishPage(app);
