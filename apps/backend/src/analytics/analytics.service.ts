@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import type { BlockEventKind } from "./block-event.entity";
-import type { BlockStatsQueryDto } from "./dto/block-event.dto";
+import type { StatsQueryDto } from "./dto/block-event.dto";
 
 import { SlidingWindow } from "../common/sliding-window";
 import { BlockEvent } from "./block-event.entity";
@@ -41,7 +41,7 @@ export class AnalyticsService {
   }
 
   /** One grouped query: the database counts, and a block with no events simply has no row. */
-  async blockStats(linkId: string, range: BlockStatsQueryDto): Promise<BlockStats[]> {
+  async blockStats(linkId: string, range: StatsQueryDto): Promise<BlockStats[]> {
     const query = this.events
       .createQueryBuilder("event")
       .select("event.blockId", "blockId")
