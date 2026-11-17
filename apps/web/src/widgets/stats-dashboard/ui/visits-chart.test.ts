@@ -71,10 +71,10 @@ describe("VisitsChart", () => {
     const tooltip = mount(VisitsChart, { props: { points: sparse, preset: "7d", now }, global: { stubs } })
       .findComponent({ name: "VisTooltip" })
       .props("triggers");
-    const describe = Object.values(tooltip as Record<string, (row: unknown) => string>)[0];
+    const describeBar = Object.values(tooltip as Record<string, (row: unknown) => string>)[0];
 
     expect(Object.keys(tooltip as object)).toEqual([".vis-stacked-bar .bar-group"]);
-    expect(describe?.({ index: 6, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 })).toBe(
+    expect(describeBar?.({ index: 6, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 })).toBe(
       "2026-11-17 — 9",
     );
   });
