@@ -390,3 +390,22 @@ response.
    mean a filter on every query and a source bucket that can never hold a row.
 6. **Legacy clicks keep their counts and lose their clickers.** `block_events.visitorHash` is nullable;
    rows from before this change count as clicks with no distinct visitors, and as `direct`.
+
+## Addendum: presentation
+
+The first pass rendered the two screens as bare tables and a bare chart — correct numbers, no page
+container, no heading, no states. The screens were rebuilt on the app's own vocabulary:
+
+- The container every other screen uses (`p-4 sm:p-10`, an inner `mx-auto max-w-6xl w-full`), a
+  `text-moon-24 font-semibold` heading, and `UIToggleGroup` for the range — not three free-floating
+  buttons.
+- Totals are `UICard`s: one number per card, `text-moon-24` over a `text-moon-12 text-trunks` label. CTR
+  appears only on the per-page screen, where it means one page's rate rather than an average of rates.
+- The chart lives in a card with a title and the `Days are UTC` subtitle. It stays hand-rolled bars: one
+  series, honest zeros, no dependency.
+- Sources, pages and blocks are `UITable`s inside cards, two columns on a wide screen and stacked on a
+  phone.
+- Every screen has its three states: `UISkeleton` while loading, a card with the failure message when the
+  request failed, and a line of text when there is nothing to show — never an empty table.
+- The per-page screen gained a header with the page's title, its slug, and the two moves an owner wants
+  from there: edit it, or open it. Without it the screen did not say which page you were reading.

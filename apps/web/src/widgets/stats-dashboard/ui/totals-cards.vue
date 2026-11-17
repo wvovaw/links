@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { StatsTotals } from "~shared/api/backend";
 
+import { UICard } from "@links/ui";
+
 const props = defineProps<{
   totals: StatsTotals;
   /** The per-page screen shows CTR; the overview does not, because it would average the pages' rates. */
@@ -13,25 +15,27 @@ const { t } = useI18n();
 const ctr = computed(() =>
   props.totals.views ? `${Math.round((props.totals.clicks / props.totals.views) * 100)}%` : "—",
 );
+
+const metrics = computed(() => [
+  { id: "views", label: t("stats.totals.views"), value: props.totals.views },
+  { id: "visitors", label: t("stats.totals.visitors"), value: props.totals.visitors },
+  { id: "clicks", label: t("stats.totals.clicks"), value: props.totals.clicks },
+  ...(props.showCtr ? [{ id: "ctr", label: t("stats.totals.ctr"), value: ctr.value }] : []),
+]);
 </script>
 
 <template>
-  <dl class="flex flex-wrap gap-8">
-    <div class="flex flex-col" data-metric="views">
-      <dt class="text-moon-12 text-trunks">{{ t("stats.totals.views") }}</dt>
-      <dd class="text-moon-16 font-semibold">{{ props.totals.views }}</dd>
-    </div>
-    <div class="flex flex-col" data-metric="visitors">
-      <dt class="text-moon-12 text-trunks">{{ t("stats.totals.visitors") }}</dt>
-      <dd class="text-moon-16 font-semibold">{{ props.totals.visitors }}</dd>
-    </div>
-    <div class="flex flex-col" data-metric="clicks">
-      <dt class="text-moon-12 text-trunks">{{ t("stats.totals.clicks") }}</dt>
-      <dd class="text-moon-16 font-semibold">{{ props.totals.clicks }}</dd>
-    </div>
-    <div v-if="props.showCtr" class="flex flex-col" data-metric="ctr">
-      <dt class="text-moon-12 text-trunks">{{ t("stats.totals.ctr") }}</dt>
-      <dd class="text-moon-16 font-semibold">{{ ctr }}</dd>
-    </div>
+  <dl class="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+    <UICard.Root
+      v-for="metric of metrics"
+      :key="metric.id"
+      :data-metric="metric.id"
+      class="rounded-moon-s-md bg-gohan shadow-moon-sm"
+    >
+      <UICard.Body class="flex flex-col gap-1">
+        <dt class="text-moon-12 text-trunks">{{ metric.label }}</dt>
+        <dd class="text-moon-24 font-semibold">{{ metric.value }}</dd>
+      </UICard.Body>
+    </UICard.Root>
   </dl>
 </template>

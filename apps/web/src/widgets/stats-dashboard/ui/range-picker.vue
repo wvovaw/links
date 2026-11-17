@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UIButton } from "@links/ui";
+import { UIToggleGroup, UIToggleGroupItem } from "@links/ui";
 
 import type { StatsRangePreset } from "../model";
 
@@ -12,17 +12,13 @@ const presets: StatsRangePreset[] = ["7d", "30d", "all"];
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-2">
-    <UIButton
-      v-for="preset of presets"
-      :key="preset"
-      size="xs"
-      :variant="preset === props.modelValue ? 'fill' : 'ghost'"
-      :aria-pressed="preset === props.modelValue"
-      :data-preset="preset"
-      @click="emit('update:modelValue', preset)"
-    >
+  <UIToggleGroup
+    :model-value="props.modelValue"
+    size="sm"
+    @update:model-value="(value) => emit('update:modelValue', (value || props.modelValue) as StatsRangePreset)"
+  >
+    <UIToggleGroupItem v-for="preset of presets" :key="preset" :value="preset" :data-preset="preset">
       {{ t(`stats.range.${preset}`) }}
-    </UIButton>
-  </div>
+    </UIToggleGroupItem>
+  </UIToggleGroup>
 </template>
