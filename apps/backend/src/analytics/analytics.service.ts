@@ -1,20 +1,13 @@
 import type { ObjectLiteral, SelectQueryBuilder } from "typeorm";
-import type { BlockEventKind } from "./block-event.entity";
-import type { StatsQueryDto } from "./dto/block-event.dto";
-import type { SourceColumns } from "./source";
-import type {
-  BlockClicks,
-  LinkStats,
-  OverviewStats,
-  SourceLabel,
-  StatsPoint,
-  StatsSource,
-  StatsTotals,
-} from "./stats";
 
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+
+import type { BlockEventKind } from "./block-event.entity";
+import type { StatsQueryDto } from "./dto/block-event.dto";
+import type { SourceColumns } from "./source";
+import type { BlockClicks, LinkStats, OverviewStats, SourceLabel, StatsPoint, StatsSource, StatsTotals } from "./stats";
 
 import { SlidingWindow } from "../common/sliding-window";
 import { BlockEvent } from "./block-event.entity";
@@ -131,10 +124,7 @@ export class AnalyticsService {
    * The owner's whole portfolio. It starts from the pages, not from the events: a page nobody opened is a
    * row of zeros, because "this page got nothing" is the thing the owner needs to see.
    */
-  async overview(
-    links: { id: string; slug: string; title: string }[],
-    range: StatsQueryDto,
-  ): Promise<OverviewStats> {
+  async overview(links: { id: string; slug: string; title: string }[], range: StatsQueryDto): Promise<OverviewStats> {
     /* An empty `IN ()` is not valid SQL, and an owner with no pages has nothing to aggregate anyway. */
     if (!links.length) return { totals: emptyTotals(), timeseries: [], sources: [], links: [] };
 

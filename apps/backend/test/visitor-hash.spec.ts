@@ -37,8 +37,6 @@ describe("visitorHashOf", () => {
   });
 
   it("separates two visitors on the same page", () => {
-    expect(visitorHashOf({ ...base, at: day })).not.toBe(
-      visitorHashOf({ ...base, ip: "203.0.113.8", at: day }),
-    );
+    expect(visitorHashOf({ ...base, at: day })).not.toBe(visitorHashOf({ ...base, ip: "203.0.113.8", at: day }));
   });
 });

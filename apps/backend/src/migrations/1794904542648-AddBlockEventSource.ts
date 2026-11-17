@@ -26,7 +26,9 @@ export class AddBlockEventSource1794904542648 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "block_events" ADD COLUMN "visitorHash" varchar`);
 
     await queryRunner.query(`CREATE INDEX "IDX_1c0ac1d2e835a7b6babe5a94af" ON "block_events" ("linkId", "createdAt")`);
-    await queryRunner.query(`CREATE INDEX "IDX_8ab78e1f3532ac3f676626a9ca" ON "block_events" ("linkId", "visitorHash")`);
+    await queryRunner.query(
+      `CREATE INDEX "IDX_8ab78e1f3532ac3f676626a9ca" ON "block_events" ("linkId", "visitorHash")`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

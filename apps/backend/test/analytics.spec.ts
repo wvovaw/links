@@ -57,7 +57,10 @@ const postView = (
 
 /** How many visits one page stored: the suite shares a database, so a bare count would see other pages’ rows. */
 async function viewCount(app: INestApplication, id: string) {
-  return app.get(DataSource).getRepository(PageView).count({ where: { linkId: id } });
+  return app
+    .get(DataSource)
+    .getRepository(PageView)
+    .count({ where: { linkId: id } });
 }
 
 /** The id the owner's list reports for a slug, which is how a page is addressed from the public side. */
@@ -255,7 +258,10 @@ describe("block analytics", () => {
       .send({ blockId: "b1", kind: "click", utmSource: "Telegram" })
       .expect(201);
 
-    const [row] = await app.get(DataSource).getRepository(BlockEvent).find({ where: { linkId: id } });
+    const [row] = await app
+      .get(DataSource)
+      .getRepository(BlockEvent)
+      .find({ where: { linkId: id } });
 
     expect(row.utmSource).toBe("telegram");
     expect(row.visitorHash).toBe(
@@ -349,7 +355,10 @@ describe("block analytics", () => {
         const slug = `overview-${randomUUID().slice(0, 8)}`;
         const created = await agent.post("/links").send({ slug, title: slug }).expect(201);
 
-        await agent.patch(`/links/${created.body.id}/content`).send({ blocks: pageBlocks, status: LinkStatus.PUBLISHED }).expect(200);
+        await agent
+          .patch(`/links/${created.body.id}/content`)
+          .send({ blocks: pageBlocks, status: LinkStatus.PUBLISHED })
+          .expect(200);
         pages.push({ id: created.body.id as string, slug });
       }
 
@@ -387,7 +396,12 @@ describe("block analytics", () => {
     it("sums the owner's pages", async () => {
       const { agent, pages } = await twoPages(app);
 
-      await postView(app, pages[0].slug, { utmSource: "tg", utmMedium: "social" }, { "User-Agent": "overview-a" }).expect(201);
+      await postView(
+        app,
+        pages[0].slug,
+        { utmSource: "tg", utmMedium: "social" },
+        { "User-Agent": "overview-a" },
+      ).expect(201);
       await postView(app, pages[1].slug, {}, { "User-Agent": "overview-b" }).expect(201);
 
       const { body } = await agent.get("/analytics/overview").expect(200);
@@ -433,7 +447,10 @@ describe("block analytics", () => {
       expect(response.status).toBe(201);
       expect(response.body).toEqual({ ok: true });
 
-      const [row] = await app.get(DataSource).getRepository(PageView).find({ where: { linkId: id } });
+      const [row] = await app
+        .get(DataSource)
+        .getRepository(PageView)
+        .find({ where: { linkId: id } });
 
       expect(row.utmSource).toBe("telegram");
       expect(row.utmMedium).toBe("social");
@@ -485,18 +502,14 @@ describe("block analytics", () => {
     it("reads the visitor from the forwarded address", async () => {
       const { id, slug } = await publishPage(app);
 
-      await postView(
-        app,
-        slug,
-        {},
-        { "User-Agent": "forwarded-agent", "X-Forwarded-For": "198.51.100.9" },
-      ).expect(201);
+      await postView(app, slug, {}, { "User-Agent": "forwarded-agent", "X-Forwarded-For": "198.51.100.9" }).expect(201);
 
-      const [row] = await app.get(DataSource).getRepository(PageView).find({ where: { linkId: id } });
+      const [row] = await app
+        .get(DataSource)
+        .getRepository(PageView)
+        .find({ where: { linkId: id } });
 
-      expect(row.visitorHash).toBe(
-        visitorHashOf({ ip: "198.51.100.9", userAgent: "forwarded-agent", at: new Date() }),
-      );
+      expect(row.visitorHash).toBe(visitorHashOf({ ip: "198.51.100.9", userAgent: "forwarded-agent", at: new Date() }));
     });
   });
 });
