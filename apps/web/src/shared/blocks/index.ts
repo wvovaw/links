@@ -1,4 +1,4 @@
-export { trackBlockEvent } from "./analytics";
+export { trackBlockEvent, trackPageView } from "./analytics";
 export type { BlockEventKind, TrackBlockEventInput } from "./analytics";
 export { useBlocksResolver } from "./use-blocks-resolver";
 export { resolvePageStyle } from "./page-theme";

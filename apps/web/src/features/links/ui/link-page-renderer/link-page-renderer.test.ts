@@ -94,6 +94,36 @@ describe("LinkPageRenderer block visibility", () => {
   });
 });
 
+describe("LinkPageRenderer page views", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  /* One document is one visit: the page reports it once, as soon as it is in front of a visitor. */
+  it("reports one view when the page is served", () => {
+    const beacon = vi.fn(() => true);
+    vi.stubGlobal("navigator", { sendBeacon: beacon });
+
+    mount(LinkPageRenderer, { props: { blocks: [paragraphWith("One")], now, slug: "my-page" } });
+
+    expect(beacon).toHaveBeenCalledTimes(1);
+
+    const [url] = beacon.mock.calls[0] as [string, Blob];
+
+    expect(url).toContain("/public/links/my-page/views");
+  });
+
+  /* The constructor and the preview draw this same renderer; neither of them is a visitor. */
+  it("reports no view where no slug is passed", () => {
+    const beacon = vi.fn(() => true);
+    vi.stubGlobal("navigator", { sendBeacon: beacon });
+
+    mount(LinkPageRenderer, { props: { blocks: [paragraphWith("One")], now } });
+
+    expect(beacon).not.toHaveBeenCalled();
+  });
+});
+
 describe("LinkPageRenderer click reporting", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -117,6 +147,8 @@ describe("LinkPageRenderer click reporting", () => {
     const wrapper = mount(LinkPageRenderer, {
       props: { blocks: [paragraphWith("One"), paragraphWith("Two")], now, slug: "my-page" },
     });
+    /* Mounting reports the view; this test is about the click that follows it. */
+    beacon.mockClear();
     await wrapper.findAll("[data-block-id]")[1]!.trigger("click");
 
     expect(beacon).toHaveBeenCalledTimes(1);
