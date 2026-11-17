@@ -89,12 +89,6 @@ const to = computed({
 
 <template>
   <template v-if="selectedBlockId">
-    <OptionsSection title="Visibility">
-      <BooleanField id="visibility-hidden" v-model="hidden" :field="hiddenField" />
-      <DateField id="visibility-from" v-model="from" :field="fromField" />
-      <DateField id="visibility-to" v-model="to" :field="toField" />
-    </OptionsSection>
-    <UISeparator />
     <template v-for="(group, name) of groupedProperties" :key="name">
       <OptionsSection :title="name ? name : 'Other'">
         <div v-for="field of group" :key="field.id">
@@ -116,6 +110,12 @@ const to = computed({
     </template>
     <OptionsSection title="Statistics">
       <BlockStats :block-id="selectedBlockId" />
+    </OptionsSection>
+    <UISeparator />
+    <OptionsSection title="Visibility">
+      <BooleanField id="visibility-hidden" v-model="hidden" :field="hiddenField" />
+      <DateField id="visibility-from" v-model="from" :field="fromField" />
+      <DateField id="visibility-to" v-model="to" :field="toField" />
     </OptionsSection>
     <UISeparator />
     <div class="p-3">
