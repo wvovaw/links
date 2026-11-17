@@ -414,3 +414,47 @@ container, no heading, no states. The screens were rebuilt on the app's own voca
   request failed, and a line of text when there is nothing to show — never an empty table.
 - The per-page screen gained a header with the page's title, its slug, and the two moves an owner wants
   from there: edit it, or open it. Without it the screen did not say which page you were reading.
+
+## Addendum: the chart
+
+The first chart was sixty lines of hand-drawn `<rect>` arithmetic that had already grown a tooltip, tick
+thinning and a colour of its own. It is now `@unovis/vue` — SVG, tree-shaken, no canvas, actively kept — and
+what stays ours is only the data: `chartRows` numbers the days, `tickIndexes` thins a month to seven labels,
+`describeDay` says what a hovered bar is, `withEmptyDays` keeps the quiet days as real zeros.
+
+Two things the browser proved and a unit test could not: the bars were drawn in `goten`, which in this palette
+is white — invisible on the white card — so they take the accent `piccolo`; and the tooltip's datum lives on
+the bar's _group_ (`VisStackedBarSelectors.barGroup`), not on the bar, so a trigger keyed on `.bar` fired with
+`undefined — undefined`.
+
+## Tagging a link: how a source is chosen
+
+Sharing one page in different places is a matter of the link you paste. The rules, in order:
+
+1. A `utm_*` tag wins over everything else.
+2. Without tags, the referring host decides — search engine → `search`, a network → `social`, anything else →
+   `referral`.
+3. A click from another page of the owner is `internal`, not `direct` (see decision 5).
+4. Nothing at all — a pasted link, a bookmark, a QR — is `direct`.
+5. A `utm_source` without `utm_medium` classifies as `referral`: the source is known, its nature is not.
+
+| The link                                                        | The dashboard reads                                 |
+| --------------------------------------------------------------- | --------------------------------------------------- |
+| `?utm_source=telegram&utm_medium=social`                        | telegram · social                                   |
+| `?utm_source=newsletter&utm_medium=email&utm_campaign=november` | newsletter · email (campaign stored, not shown yet) |
+| `?utm_source=site&utm_medium=referral`                          | site · referral                                     |
+| `?utm_source=qr-menu`                                           | qr-menu · referral                                  |
+| untagged post in a Telegram channel                             | t.me · social                                       |
+| untagged result in Google                                       | google.<tld> · search                               |
+| untagged link on a partner's site                               | that host · referral                                |
+| pasted into the address bar                                     | — · direct                                          |
+
+Practical tagging, one tag set per channel: a Telegram channel post `?utm_source=telegram&utm_medium=social`,
+an Instagram bio `?utm_source=instagram&utm_medium=social`, a newsletter `?utm_source=newsletter&utm_medium=email&utm_campaign=<month>`,
+a partner's button `?utm_source=<their name>&utm_medium=referral`, a printed QR code
+`?utm_source=qr-<place>&utm_medium=offline`. The medium is free text — a value outside the four known ones is
+printed as sent, which is how `offline` or `video` stay readable.
+
+Tags are lowercased and cut at 100 characters, the host at 253; an empty `?utm_source=` counts as absent. The
+source is read once, when the page document loads: the page is a single server-rendered document, so a tag
+cannot change mid-visit and cleaning the address bar afterwards changes nothing.

@@ -2,10 +2,11 @@
 import type { StatsPoint } from "~shared/api/backend";
 
 import { UICard } from "@links/ui";
+import { VisAxis, VisStackedBar, VisStackedBarSelectors, VisTooltip, VisXYContainer } from "@unovis/vue";
 
-import type { StatsRangePreset } from "../model";
+import type { ChartRow, StatsRangePreset } from "../model";
 
-import { withEmptyDays } from "../model";
+import { chartRows, describeDay, tickIndexes, withEmptyDays } from "../model";
 
 const props = defineProps<{
   points: StatsPoint[];
@@ -17,14 +18,18 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const days = computed(() => withEmptyDays(props.points, props.preset, props.now));
+const rows = computed(() => chartRows(days.value));
+/** Bars are measured against the range's own peak; a quiet range still needs a scale to stand on. */
+const peak = computed(() => Math.max(1, ...rows.value.map((row) => row.views)));
+const ticks = computed(() => tickIndexes(rows.value.length));
 
-/** A quiet range has no maximum to scale against; one keeps every bar at zero instead of dividing by it. */
-const peak = computed(() => Math.max(1, ...days.value.map((day) => day.views)));
-const slot = computed(() => 100 / Math.max(1, days.value.length));
-
-function heightOf(views: number) {
-  return (views / peak.value) * 100;
-}
+const x = (row: ChartRow) => row.index;
+const y = (row: ChartRow) => row.views;
+/** The bars take the accent colour the buttons use: `goten` is white here, and white bars on a white card are invisible. */
+const color = () => "currentColor";
+const formatTick = (tick: number | Date) => rows.value[Number(tick)]?.label ?? "";
+/** The datum hangs on the bar's group, not on the bar: the group is what the tooltip can read a day from. */
+const triggers = { [VisStackedBarSelectors.barGroup]: describeDay };
 </script>
 
 <template>
@@ -35,29 +40,19 @@ function heightOf(views: number) {
     </UICard.Header>
     <UICard.Body>
       <!--
-        The bars are decoration around numbers printed elsewhere — the totals and the source table carry the
-        meaning — so the drawing is hidden from assistive technology rather than given a second name.
+        The chart measures its container, so it exists in the browser only; the box holds its height on the
+        server so the card does not jump when the bars arrive. Hovering a bar names its day and its count —
+        the totals and the source table keep the meaning for a reader who never hovers.
       -->
-      <svg
-        class="h-32 w-full fill-current text-goten"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <rect
-          v-for="(day, index) of days"
-          :key="day.date"
-          :data-date="day.date"
-          :data-views="day.views"
-          :x="index * slot"
-          :y="100 - heightOf(day.views)"
-          :width="slot * 0.8"
-          :height="heightOf(day.views)"
-          rx="1"
-        >
-          <title>{{ day.date }} — {{ day.views }}</title>
-        </rect>
-      </svg>
+      <div class="h-32 w-full text-piccolo">
+        <ClientOnly>
+          <VisXYContainer :data="rows" :height="128" :y-domain="[0, peak]">
+            <VisStackedBar :x="x" :y="y" :color="color" :rounded-corners="2" />
+            <VisAxis type="x" :tick-values="ticks" :tick-format="formatTick" :grid-line="false" :domain-line="false" />
+            <VisTooltip :triggers="triggers" />
+          </VisXYContainer>
+        </ClientOnly>
+      </div>
     </UICard.Body>
   </UICard.Root>
 </template>

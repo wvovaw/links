@@ -1,7 +1,7 @@
 import type { StatsPoint } from "~shared/api/backend";
 
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import VisitsChart from "./visits-chart.vue";
 
@@ -13,36 +13,74 @@ const sparse: StatsPoint[] = [
   { date: "2026-11-17", views: 9, visitors: 7, clicks: 2 },
 ];
 
+/*
+  The drawing is the library's business and it is measured in a browser, not here — happy-dom has no layout.
+  What this card must get right is what it hands over: every day of the range, zeros included, counted.
+*/
+vi.mock("@unovis/vue", async () => {
+  const { defineComponent, h } = await import("vue");
+
+  return {
+    VisXYContainer: defineComponent({
+      name: "VisXYContainer",
+      props: { data: { type: Array, default: () => [] } },
+      setup(props, { slots }) {
+        return () =>
+          h(
+            "div",
+            {
+              "data-chart": "",
+              "data-rows": String(props.data.length),
+              "data-series": props.data.map((row) => `${row.date}:${row.views}`).join(","),
+            },
+            slots.default?.(),
+          );
+      },
+    }),
+    VisStackedBar: defineComponent({ setup: () => () => h("i") }),
+    VisAxis: defineComponent({ setup: () => () => h("i") }),
+    VisTooltip: defineComponent({
+      name: "VisTooltip",
+      props: { triggers: { type: Object, default: () => ({}) } },
+      setup: () => () => h("i"),
+    }),
+    VisStackedBarSelectors: { bar: ".vis-stacked-bar .bar", barGroup: ".vis-stacked-bar .bar-group" },
+  };
+});
+
+const stubs = { ClientOnly: { template: "<div><slot /></div>" } };
+
+function chartOf(points: StatsPoint[], preset: "7d" | "30d" = "7d") {
+  return mount(VisitsChart, { props: { points, preset, now }, global: { stubs } }).find("[data-chart]");
+}
+
 describe("VisitsChart", () => {
-  it("draws one bar per day of the range", () => {
-    const wrapper = mount(VisitsChart, { props: { points: sparse, preset: "7d", now } });
-
-    expect(wrapper.findAll("rect")).toHaveLength(7);
+  it("hands the chart one bar per day of the range", () => {
+    expect(chartOf(sparse).attributes("data-rows")).toBe("7");
   });
 
-  /* Read back as attributes, never as pixels: the axis is the UTC day, and the quiet days are zeros. */
-  it("labels every bar with its UTC date and its own count", () => {
-    const bars = mount(VisitsChart, { props: { points: sparse, preset: "7d", now } }).findAll("rect");
-
-    expect(bars[0]?.attributes("data-date")).toBe("2026-11-11");
-    expect(bars[5]?.attributes("data-date")).toBe("2026-11-16");
-    expect(bars[5]?.attributes("data-views")).toBe("0");
-    expect(bars[6]?.attributes("data-views")).toBe("9");
+  /* The quiet days are real zeros: a chart that skips them turns three visits into a solid block. */
+  it("fills the quiet days with zeros and keeps every UTC date", () => {
+    expect(chartOf(sparse).attributes("data-series")).toBe(
+      "2026-11-11:0,2026-11-12:0,2026-11-13:0,2026-11-14:0,2026-11-15:4,2026-11-16:0,2026-11-17:9",
+    );
   });
 
-  /* A bar's height is relative; hovering it has to say which day it is and how many visits it holds. */
-  it("names every bar with its date and its count", () => {
-    const bars = mount(VisitsChart, { props: { points: sparse, preset: "7d", now } }).findAll("rect");
+  /* Hovering a bar is the only place the exact daily numbers live, so the trigger has to carry both. */
+  it("describes a bar with its date and its count", () => {
+    const tooltip = mount(VisitsChart, { props: { points: sparse, preset: "7d", now }, global: { stubs } })
+      .findComponent({ name: "VisTooltip" })
+      .props("triggers");
+    const describe = Object.values(tooltip as Record<string, (row: unknown) => string>)[0];
 
-    expect(bars[6]?.find("title").text()).toBe("2026-11-17 — 9");
-    expect(bars[5]?.find("title").text()).toBe("2026-11-16 — 0");
+    expect(Object.keys(tooltip as object)).toEqual([".vis-stacked-bar .bar-group"]);
+    expect(describe?.({ index: 6, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 })).toBe(
+      "2026-11-17 — 9",
+    );
   });
 
   /* An empty page still gets an axis, so the screen reads "nothing yet" rather than a chart with no days. */
   it("draws a flat range for a page with no visits", () => {
-    const wrapper = mount(VisitsChart, { props: { points: [], preset: "30d", now } });
-
-    expect(wrapper.findAll("rect")).toHaveLength(30);
-    expect(wrapper.findAll("rect").every((bar) => bar.attributes("data-views") === "0")).toBe(true);
+    expect(chartOf([], "30d").attributes("data-rows")).toBe("30");
   });
 });
