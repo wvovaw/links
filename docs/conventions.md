@@ -107,6 +107,7 @@ fresh clone must be built before anything importing the preset runs, the web tes
 | `MAX_AUDIO_BYTES`    | `storage/local-storage.service.ts` — largest audio upload   |
 | `MAX_DOCUMENT_BYTES` | `storage/local-storage.service.ts` — largest pdf upload     |
 | `JWT_SECRET`         | `auth/auth.tokens.ts` — required in production              |
+| `ANALYTICS_SALT`     | `analytics/visitor-hash.ts` — optional, falls back to `JWT_SECRET` |
 | `NODE_ENV`           | `auth/auth.controller.ts` — gates the secure refresh cookie |
 
 - Auth: JWT access tokens plus cookie-based refresh sessions. Uploads go through multer into
@@ -120,6 +121,15 @@ fresh clone must be built before anything importing the preset runs, the web tes
   - assets: `video/mp4`, `video/webm`, `audio/mpeg`, `audio/ogg`, `audio/mp4`, `application/pdf`.
 
   `image-field.vue` carries the image list as `IMAGE_ACCEPT`; a new type has to be added to both.
+
+- Analytics stores one row per event and aggregates at read time: `page_views` (one per page load) and
+  `block_events` (one per click). Nothing identifies a visitor — the visitor hash is the address, the
+  user agent and a salt that rotates at UTC midnight, so a range's distinct count is the **sum of its
+  days**, and a query grouping by day must count visitors per day rather than over the range.
+- Neither event table is pruned. They grow with traffic, and a retention decision is still open.
+- The backend expects **exactly one** trusted proxy hop (`trust proxy` in `configure-app.ts`). Without
+  it `req.ip` is the proxy's address for every visitor, the hash collapses to one value, and every page
+  reports a single unique visitor however much traffic it gets.
 
 ## blocks versioning
 

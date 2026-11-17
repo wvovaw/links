@@ -1,0 +1,52 @@
+meta {
+  name: Overview
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/analytics/overview
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:query {
+  from: 
+  to: 
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should list every owned page", function () {
+    expect(res.getBody().links).to.be.an("array");
+  });
+
+  test("should carry the totals, the series and the sources", function () {
+    const body = res.getBody();
+    expect(body).to.have.property("totals");
+    expect(body).to.have.property("timeseries");
+    expect(body).to.have.property("sources");
+  });
+}
+
+docs {
+  The home dashboard: totals, a daily series and sources across **every** page the caller owns, plus one
+  row per page — including the pages nobody opened, which appear with zeros.
+
+  **Query params:** `from`, `to` — ISO-8601; absent means unbounded on that side
+
+  **Response:** 200 — `{ totals, timeseries, sources, links }`
+  **Response:** 400 — a bound that is not ISO-8601
+  **Response:** 401 — no session
+
+  `visitors` is a count of distinct visitor hashes, and the hash rotates at UTC midnight: a multi-day range
+  reports the sum of its days, not distinct people over the range. A day with no events is absent from
+  `timeseries`; the client fills the range it asked for.
+}

@@ -1,0 +1,47 @@
+meta {
+  name: Record Page View
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/public/links/{{link_slug}}/views
+  body: json
+}
+
+body:json {
+  {
+    "utmSource": "telegram",
+    "utmMedium": "social"
+  }
+}
+
+tests {
+  test("should return 201", function () {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should acknowledge without echoing anything", function () {
+    expect(res.getBody()).to.deep.equal({ ok: true });
+  });
+}
+
+docs {
+  Report one page view. The public page sends this once per document, through `navigator.sendBeacon`.
+  Public endpoint — no auth required.
+
+  **Set first:** `link_slug` — the slug of a **published** page
+
+  **Request body** (all optional — a page sends only what its address and referrer hold):
+  - `utmSource`, `utmMedium`, `utmCampaign` (string) — lowercased and capped at 100 characters
+  - `referrerHost` (string) — the external host the visitor came from, capped at 253
+  - `referrerInternal` (boolean) — the referrer was this site's own address
+
+  **Response:** 201 — `{ ok: true }`
+  **Response:** 400 — a field the DTO does not name, such as `ip` or `userAgent`
+  **Response:** 404 — no page holds this slug as published
+  **Response:** 429 — past 10 views a minute from one visitor, or 300 a minute on the page
+
+  Nothing here identifies a visitor: the server hashes the address, the agent and a salt that rotates at
+  UTC midnight, and stores only that hash.
+}
