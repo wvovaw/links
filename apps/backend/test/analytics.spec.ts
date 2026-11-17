@@ -99,7 +99,7 @@ describe("block analytics", () => {
 
     const stats = await agent.get(`/links/${await linkId(agent, slug)}/stats`);
 
-    expect(stats.body.blocks).toEqual([{ blockId: "b1", clicks: 1, views: 0 }]);
+    expect(stats.body.blocks).toEqual([{ blockId: "b1", clicks: 1, visitors: 1 }]);
   });
 
   it("refuses events for a draft page and for unknown fields", async () => {
@@ -203,9 +203,9 @@ describe("block analytics", () => {
     const statsIn = (from?: string, to?: string) =>
       agent.get(`/links/${id}/stats`).query({ ...(from && { from }), ...(to && { to }) });
 
-    expect((await statsIn(hourAgo)).body.blocks).toEqual([{ blockId: "b1", clicks: 1, views: 0 }]);
+    expect((await statsIn(hourAgo)).body.blocks).toEqual([{ blockId: "b1", clicks: 1, visitors: 1 }]);
     expect((await statsIn(undefined, hourAgo)).body.blocks).toEqual([]);
-    expect((await statsIn(hourAgo, hourAhead)).body.blocks).toEqual([{ blockId: "b1", clicks: 1, views: 0 }]);
+    expect((await statsIn(hourAgo, hourAhead)).body.blocks).toEqual([{ blockId: "b1", clicks: 1, visitors: 1 }]);
     expect((await statsIn("yesterday")).status).toBe(400);
   });
 
@@ -277,6 +277,66 @@ describe("block analytics", () => {
     expect(row.visitorHash).toBeNull();
     expect(row.utmSource).toBeNull();
     expect(row.referrerInternal).toBe(false);
+  });
+
+  describe("aggregation", () => {
+    /** Today in the UTC the queries group by, which is the day every event written now lands on. */
+    const today = () => new Date().toISOString().slice(0, 10);
+
+    const click = (server: INestApplication, slug: string, userAgent: string) =>
+      request(server.getHttpServer())
+        .post(`/public/links/${slug}/events`)
+        .set({ "User-Agent": userAgent })
+        .send({ blockId: "b1", kind: "click" });
+
+    it("aggregates views, sources and clicks for one page", async () => {
+      const { agent, id, slug } = await publishPage(app);
+
+      const tagged = { utmSource: "telegram", utmMedium: "social" };
+
+      await postView(app, slug, tagged, { "User-Agent": "agg-a" }).expect(201);
+      await postView(app, slug, tagged, { "User-Agent": "agg-b" }).expect(201);
+      await postView(app, slug, {}, { "User-Agent": "agg-c" }).expect(201);
+
+      await click(app, slug, "agg-a").expect(201);
+      await click(app, slug, "agg-b").expect(201);
+
+      const { body } = await agent.get(`/links/${id}/stats`).expect(200);
+
+      expect(body.totals).toEqual({ views: 3, visitors: 3, clicks: 2 });
+      expect(body.blocks).toEqual([{ blockId: "b1", clicks: 2, visitors: 2 }]);
+      expect(body.timeseries).toEqual([{ date: today(), views: 3, visitors: 3, clicks: 2 }]);
+
+      /* Visitors count views only: a clicker is a click in this table, never a second visitor. */
+      expect(body.sources).toEqual([
+        { source: "telegram", medium: "social", views: 2, visitors: 2, clicks: 0 },
+        { source: "direct", medium: "direct", views: 1, visitors: 1, clicks: 2 },
+      ]);
+    });
+
+    /* The hash is the whole visitor count: the same address and agent twice is one person who reloaded. */
+    it("counts the same visitor once", async () => {
+      const { agent, id, slug } = await publishPage(app);
+
+      await postView(app, slug, {}, { "User-Agent": "same-visitor" }).expect(201);
+      await postView(app, slug, {}, { "User-Agent": "same-visitor" }).expect(201);
+
+      expect((await agent.get(`/links/${id}/stats`)).body.totals).toEqual({ views: 2, visitors: 1, clicks: 0 });
+    });
+
+    /* A page nobody opened is the number the owner most needs: zeros, not a 404 and not a blank. */
+    it("answers zeros for a page with no traffic", async () => {
+      const { agent, slug } = await publishPage(app);
+
+      const { body } = await agent.get(`/links/${await linkId(agent, slug)}/stats`).expect(200);
+
+      expect(body).toEqual({
+        totals: { views: 0, visitors: 0, clicks: 0 },
+        timeseries: [],
+        sources: [],
+        blocks: [],
+      });
+    });
   });
 
   describe("page views", () => {

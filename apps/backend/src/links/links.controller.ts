@@ -52,7 +52,7 @@ export class LinksController {
   async stats(@CurrentUser() user: User, @Param("id") id: string, @Query() query: StatsQueryDto) {
     const link = await this.linksService.getOwned(user, id);
 
-    return { blocks: await this.analytics.blockStats(link.id, query) };
+    return this.analytics.linkStats(link.id, query);
   }
 
   /**
