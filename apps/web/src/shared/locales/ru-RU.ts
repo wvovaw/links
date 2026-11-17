@@ -9,6 +9,7 @@ export default defineI18nLocale(async (_locale) => {
     "pages.account-danger.title": "Аккаунт: Опасная зона",
     "pages.links.index.title": "Мои страницы",
     "pages.links.constructor.title": "Конструктор страницы",
+    "pages.links.stats.title": "Статистика страницы",
     "pages.preview.title": "Предосмотр страницы",
     "pages.link.404": "Этой ссылки не существует",
 
@@ -26,6 +27,11 @@ export default defineI18nLocale(async (_locale) => {
     "stats.medium.search": "поиск",
     "stats.medium.social": "соцсеть",
     "stats.medium.referral": "переход",
+    "stats.links.title": "Страницы",
+    "stats.links.empty": "Страниц пока нет",
+    "stats.blocks.title": "Блоки",
+    "stats.blocks.empty": "В этом периоде по блокам не кликали",
+    "stats.failed": "Статистику не удалось загрузить",
 
     "blocks.Avatar.label": "Аватар",
     "blocks.Avatar.description": "Круглое фото профиля с короткой подписью.",

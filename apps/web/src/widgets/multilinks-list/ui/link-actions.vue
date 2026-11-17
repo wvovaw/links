@@ -13,6 +13,9 @@ const { deleteLink } = useLinksStore();
     <NuxtLinkLocale :to="{ name: 'links-constructor-id', params: { id: linkId } }">
       <UIButton size="xs" icon="i-lucide:hammer" as="span"> Edit </UIButton>
     </NuxtLinkLocale>
+    <NuxtLinkLocale :to="{ name: 'links-id-stats', params: { id: linkId } }">
+      <UIButton size="xs" icon="i-lucide:chart-no-axes-column" as="span"> Statistics </UIButton>
+    </NuxtLinkLocale>
     <NuxtLinkLocale :to="{ name: 'links-preview-id', params: { id: linkId } }">
       <UIButton size="xs" icon="i-lucide:eye" as="span"> Preview </UIButton>
     </NuxtLinkLocale>
@@ -30,6 +33,12 @@ const { deleteLink } = useLinksStore();
           <UIDropdownMenu.Item>
             <UIDropdownMenu.ItemTitle>Edit</UIDropdownMenu.ItemTitle>
             <UIDropdownMenu.ItemIcon icon="i-lucide:hammer" />
+          </UIDropdownMenu.Item>
+        </NuxtLinkLocale>
+        <NuxtLinkLocale :to="{ name: 'links-id-stats', params: { id: linkId } }">
+          <UIDropdownMenu.Item>
+            <UIDropdownMenu.ItemTitle>Statistics</UIDropdownMenu.ItemTitle>
+            <UIDropdownMenu.ItemIcon icon="i-lucide:chart-no-axes-column" />
           </UIDropdownMenu.Item>
         </NuxtLinkLocale>
         <NuxtLinkLocale :to="{ name: 'links-preview-id', params: { id: linkId } }">

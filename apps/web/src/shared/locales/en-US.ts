@@ -9,6 +9,7 @@ export default defineI18nLocale(async (_locale) => {
     "pages.account-danger.title": "Account: Danger zone",
     "pages.links.index.title": "My pages",
     "pages.links.constructor.title": "Page Constructor",
+    "pages.links.stats.title": "Page statistics",
     "pages.preview.title": "Preview page",
     "pages.link.404": "This link does not exist",
 
@@ -26,6 +27,11 @@ export default defineI18nLocale(async (_locale) => {
     "stats.medium.search": "search",
     "stats.medium.social": "social",
     "stats.medium.referral": "referral",
+    "stats.links.title": "Pages",
+    "stats.links.empty": "No pages yet",
+    "stats.blocks.title": "Blocks",
+    "stats.blocks.empty": "Nobody clicked a block in this range",
+    "stats.failed": "Statistics could not be loaded",
 
     "blocks.Avatar.label": "Avatar",
     "blocks.Avatar.description": "A round profile photo with a short caption.",
