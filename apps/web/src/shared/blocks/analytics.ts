@@ -100,7 +100,10 @@ function sourceReferrer(source: EventSource): void {
       return;
     }
 
-    source.referrerHost = referrer.hostname.toLowerCase().replace(/^www\./, "").slice(0, hostLimit);
+    source.referrerHost = referrer.hostname
+      .toLowerCase()
+      .replace(/^www\./, "")
+      .slice(0, hostLimit);
   } catch {
     /* An address the browser wrote but we cannot parse is no referrer at all. */
   }

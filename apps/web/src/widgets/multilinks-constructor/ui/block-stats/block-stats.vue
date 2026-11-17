@@ -23,7 +23,8 @@ onMounted(async () => {
 });
 
 const counters = computed<BlockStats>(
-  () => stats.value.find((entry) => entry.blockId === props.blockId) ?? { blockId: props.blockId, clicks: 0, visitors: 0 },
+  () =>
+    stats.value.find((entry) => entry.blockId === props.blockId) ?? { blockId: props.blockId, clicks: 0, visitors: 0 },
 );
 
 /*
