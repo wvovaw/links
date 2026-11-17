@@ -6,6 +6,7 @@ import { DataSource } from "typeorm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { BlockEvent } from "../src/analytics/block-event.entity";
+import { PageView } from "../src/analytics/page-view.entity";
 import { LinkStatus } from "../src/links/link-status";
 import { authenticate } from "./authenticate";
 import { createTestApp } from "./create-test-app";
@@ -196,6 +197,21 @@ describe("block analytics", () => {
     const stranger = await authenticate(app);
 
     expect((await stranger.get(`/links/${await linkId(owner.agent, owner.slug)}/stats`)).status).toBe(404);
+  });
+
+  it("deletes views with the page", async () => {
+    const { agent, slug } = await publishPage(app);
+    const id = await linkId(agent, slug);
+    const views = app.get(DataSource).getRepository(PageView);
+
+    await views.save(views.create({ linkId: id, visitorHash: "0123456789abcdef" }));
+
+    expect(await views.count({ where: { linkId: id } })).toBe(1);
+
+    await agent.delete(`/links/${id}`).expect(204);
+
+    /* A row nothing can read is a row that only grows the file: the foreign key takes it with the page. */
+    expect(await views.count({ where: { linkId: id } })).toBe(0);
   });
 
   it("deletes events with the link", async () => {
