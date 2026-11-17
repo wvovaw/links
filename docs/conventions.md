@@ -94,21 +94,21 @@ fresh clone must be built before anything importing the preset runs, the web tes
   delete the file and let migrations rebuild it.
 - Env is read straight from `process.env`, each variable at its point of use with an inline default.
 
-| Variable             | Read in                                                     |
-| -------------------- | ----------------------------------------------------------- |
-| `PORT`               | `main.ts`                                                   |
-| `FRONTEND_URL`       | `main.ts` (CORS origin)                                     |
-| `DATABASE_PATH`      | `database/database.config.ts`                               |
-| `UPLOADS_PATH`       | `storage/local-storage.service.ts`                          |
-| `IMAGES_PATH`        | `storage/local-storage.service.ts`                          |
-| `ASSETS_PATH`        | `storage/local-storage.service.ts`                          |
-| `MAX_IMAGE_BYTES`    | `storage/local-storage.service.ts` — multer's upload limit  |
-| `MAX_VIDEO_BYTES`    | `storage/local-storage.service.ts` — largest video upload   |
-| `MAX_AUDIO_BYTES`    | `storage/local-storage.service.ts` — largest audio upload   |
-| `MAX_DOCUMENT_BYTES` | `storage/local-storage.service.ts` — largest pdf upload     |
-| `JWT_SECRET`         | `auth/auth.tokens.ts` — required in production              |
+| Variable             | Read in                                                            |
+| -------------------- | ------------------------------------------------------------------ |
+| `PORT`               | `main.ts`                                                          |
+| `FRONTEND_URL`       | `main.ts` (CORS origin)                                            |
+| `DATABASE_PATH`      | `database/database.config.ts`                                      |
+| `UPLOADS_PATH`       | `storage/local-storage.service.ts`                                 |
+| `IMAGES_PATH`        | `storage/local-storage.service.ts`                                 |
+| `ASSETS_PATH`        | `storage/local-storage.service.ts`                                 |
+| `MAX_IMAGE_BYTES`    | `storage/local-storage.service.ts` — multer's upload limit         |
+| `MAX_VIDEO_BYTES`    | `storage/local-storage.service.ts` — largest video upload          |
+| `MAX_AUDIO_BYTES`    | `storage/local-storage.service.ts` — largest audio upload          |
+| `MAX_DOCUMENT_BYTES` | `storage/local-storage.service.ts` — largest pdf upload            |
+| `JWT_SECRET`         | `auth/auth.tokens.ts` — required in production                     |
 | `ANALYTICS_SALT`     | `analytics/visitor-hash.ts` — optional, falls back to `JWT_SECRET` |
-| `NODE_ENV`           | `auth/auth.controller.ts` — gates the secure refresh cookie |
+| `NODE_ENV`           | `auth/auth.controller.ts` — gates the secure refresh cookie        |
 
 - Auth: JWT access tokens plus cookie-based refresh sessions. Uploads go through multer into
   `apps/backend/uploads` (gitignored): images under `IMAGES_PATH`, and the video, audio and pdf files
