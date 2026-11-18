@@ -25,6 +25,9 @@ export default defineI18nLocale(async (_locale) => {
 
     "stats.chart.title": "Visits by day",
     "stats.chart.subtitle": "Days are UTC",
+    "stats.chart.metric.views": "Visits",
+    "stats.chart.metric.visitors": "Visitors",
+    "stats.chart.metric.clicks": "Clicks",
     "stats.sources.title": "Sources",
     "stats.sources.source": "Source",
     "stats.sources.medium": "Medium",

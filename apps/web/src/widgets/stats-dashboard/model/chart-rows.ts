@@ -15,16 +15,19 @@ export function chartRows(days: StatsDay[]): ChartRow[] {
   }));
 }
 
+/** The three series the owner can draw. One chart, one of them at a time. */
+export type ChartMetric = "views" | "visitors" | "clicks";
+
+/** What hovering a point says: the full UTC date and the day's own count of the drawn metric. */
+export function describeDay(row: ChartRow, metric: ChartMetric): string {
+  return `${row.date} — ${row[metric]}`;
+}
+
 /**
  * Which days get a label under the axis. A week labels every day; a month would be a wall of overlapping
  * dates, so it keeps a handful, evenly spaced and always including the last one — the owner reads "today"
  * off the right edge.
  */
-/** What hovering a bar says: the full UTC date and the day's own count. */
-export function describeDay(row: ChartRow): string {
-  return `${row.date} — ${row.views}`;
-}
-
 export function tickIndexes(count: number, maxTicks = 7): number[] {
   if (count <= maxTicks) return Array.from({ length: count }, (_, index) => index);
 

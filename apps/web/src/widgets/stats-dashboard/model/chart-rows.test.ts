@@ -18,10 +18,15 @@ describe("chartRows", () => {
 });
 
 describe("describeDay", () => {
-  it("says the day and the count", () => {
-    expect(describeDay({ index: 1, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 })).toBe(
-      "2026-11-17 — 9",
-    );
+  const row = { index: 1, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 };
+
+  it("says the day and the count of the metric the chart draws", () => {
+    expect(describeDay(row, "clicks")).toBe("2026-11-17 — 2");
+  });
+
+  it("reads the chosen metric, not the views", () => {
+    expect(describeDay(row, "views")).toBe("2026-11-17 — 9");
+    expect(describeDay(row, "visitors")).toBe("2026-11-17 — 7");
   });
 });
 

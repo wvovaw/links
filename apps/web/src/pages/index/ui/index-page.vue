@@ -3,7 +3,7 @@ import type { OverviewStats } from "~shared/api/backend";
 
 import { UICard, UISkeleton, UITable } from "@links/ui";
 import { AnalyticsApi } from "~shared/api/backend";
-import { RangePicker, SourcesTable, TotalsCards, VisitsChart, useStatsRange } from "~widgets/stats-dashboard";
+import { RangePicker, SourcesTable, TotalsCards, TrafficChart, useStatsRange } from "~widgets/stats-dashboard";
 
 const { t } = useI18n();
 
@@ -51,7 +51,7 @@ watch(range, load, { immediate: true });
 
       <template v-else-if="stats">
         <TotalsCards :totals="stats.totals" />
-        <VisitsChart :points="stats.timeseries" :preset="preset" :now="now" />
+        <TrafficChart :points="stats.timeseries" :preset="preset" :now="now" />
 
         <div class="grid gap-4 lg:grid-cols-2 lg:items-start">
           <SourcesTable :sources="stats.sources" />

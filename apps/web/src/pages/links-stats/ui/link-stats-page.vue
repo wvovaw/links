@@ -3,7 +3,7 @@ import type { LinkStats } from "~shared/api/backend";
 
 import { UIButton, UICard, UISkeleton, UITable } from "@links/ui";
 import { AnalyticsApi, LinksApi } from "~shared/api/backend";
-import { RangePicker, SourcesTable, TotalsCards, VisitsChart, useStatsRange } from "~widgets/stats-dashboard";
+import { RangePicker, SourcesTable, TotalsCards, TrafficChart, useStatsRange } from "~widgets/stats-dashboard";
 
 const props = defineProps<{ linkId: string }>();
 
@@ -88,7 +88,7 @@ onMounted(loadPage);
 
       <template v-else-if="stats">
         <TotalsCards :totals="stats.totals" show-ctr />
-        <VisitsChart :points="stats.timeseries" :preset="preset" :now="now" />
+        <TrafficChart :points="stats.timeseries" :preset="preset" :now="now" />
 
         <div class="grid gap-4 lg:grid-cols-2 lg:items-start">
           <SourcesTable :sources="stats.sources" />
