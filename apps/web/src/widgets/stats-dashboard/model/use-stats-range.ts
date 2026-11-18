@@ -10,11 +10,15 @@ import type { StatsRangePreset } from "./fill-days";
  * sends neither bound; the other two count back from the same clock the chart draws its axis from, so the
  * query and the bars always describe one window.
  */
-export function useStatsRange(now: Date = new Date()): {
+export function useStatsRange(
+  now: Date = new Date(),
+  /** The window a screen opens on; a portfolio reads a month, a single page a week. */
+  initial: StatsRangePreset = "7d",
+): {
   preset: Ref<StatsRangePreset>;
   range: ComputedRef<StatsRange>;
 } {
-  const preset = ref<StatsRangePreset>("7d");
+  const preset = ref<StatsRangePreset>(initial);
 
   const range = computed<StatsRange>(() => {
     if (preset.value === "all") return {};
