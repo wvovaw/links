@@ -29,6 +29,7 @@ vi.mock("@unovis/vue", async () => {
         height: { type: Number, default: 0 },
         /* Left undeclared in type on purpose: the real container treats "unset" differently from "false". */
         preventEmptyDomain: { default: undefined },
+        padding: { default: undefined },
       },
       setup(props, { slots }) {
         return () =>
@@ -38,6 +39,7 @@ vi.mock("@unovis/vue", async () => {
               "data-rows": String(props.data.length),
               "data-height": String(props.height),
               "data-flat": String(props.preventEmptyDomain),
+              "data-padding": JSON.stringify(props.padding),
             },
             slots.default?.(),
           );
@@ -107,11 +109,20 @@ describe("SeriesChart", () => {
 
   /*
     A card with nothing on any day still has to draw a line: a domain of one value collapses, and a sparkline
-    that disappears reads as "the number above it is nothing", which is not the same fact.
+    that disappears reads as "the number above it is nothing", which is not the same fact. The line then sits
+    on the floor, so the cards inset it — a stroke on the very edge loses half its width to the box.
   */
-  it("keeps a flat line on the floor instead of an empty domain", () => {
-    expect(mountChart({ compact: true }).get("div[data-height]").attributes("data-flat")).toBe("true");
-    /* Unset, never false: the library's own default already guards the big chart's empty axis. */
-    expect(mountChart().get("div[data-height]").attributes("data-flat")).toBe("undefined");
+  it("keeps a flat line inside the box instead of an empty domain", () => {
+    const compact = mountChart({ compact: true }).get("div[data-height]");
+
+    expect(compact.attributes("data-flat")).toBe("true");
+    expect(compact.attributes("data-padding")).toBe('{"top":2,"bottom":2}');
+
+    /* Unset, never false: the library's own default already guards the big chart's empty axis, and its box
+       keeps the edges it has always had. */
+    const full = mountChart().get("div[data-height]");
+
+    expect(full.attributes("data-flat")).toBe("undefined");
+    expect(full.attributes("data-padding")).toBe(undefined);
   });
 });

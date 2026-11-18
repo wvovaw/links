@@ -63,8 +63,16 @@ const describePoint = (row: ChartRow) => describeDay(row, props.metric);
         `prevent-empty-domain` is the line's own guard: a series whose every day is zero has a domain of one
         value, and the library collapses it to nothing. Undefined, not false, for the big chart: the library's
         own default keeps it off a collapsed axis, and "false" would turn that off.
+
+        A flat series then lies on the floor of the box, where half the stroke is clipped — so the line is
+        inset, and the screen's chart keeps the edges it has always had.
       -->
-      <VisXYContainer :data="rows" :height="height" :prevent-empty-domain="compact ? true : undefined">
+      <VisXYContainer
+        :data="rows"
+        :height="height"
+        :prevent-empty-domain="compact ? true : undefined"
+        :padding="compact ? { top: 2, bottom: 2 } : undefined"
+      >
         <VisLine v-if="compact" :x="x" :y="y" :color="stroke" :line-width="2" />
         <template v-else>
           <VisArea :x="x" :y="y" :color="fill" :line="true" :line-color="stroke" :line-width="2" />

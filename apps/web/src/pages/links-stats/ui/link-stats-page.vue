@@ -87,7 +87,7 @@ onMounted(loadPage);
       </template>
 
       <template v-else-if="stats">
-        <TotalsCards :totals="stats.totals" show-ctr />
+        <TotalsCards :totals="stats.totals" show-ctr :series="{ points: stats.timeseries, preset, now }" />
         <TrafficChart :points="stats.timeseries" :preset="preset" :now="now" />
 
         <div class="grid gap-4 lg:grid-cols-2 lg:items-start">

@@ -54,7 +54,7 @@ watch(range, load, { immediate: true });
           Every card is `min-w-0`: a card whose own content is wide (a table, the chart's svg) must be allowed
           to shrink below it, or the whole page inherits that width and scrolls sideways on a phone.
         -->
-        <TotalsCards :totals="stats.totals" class="min-w-0" />
+        <TotalsCards :totals="stats.totals" :series="{ points: stats.timeseries, preset, now }" class="min-w-0" />
         <TrafficChart :points="stats.timeseries" :preset="preset" :now="now" class="min-w-0" />
 
         <div class="grid gap-4 lg:grid-cols-2 lg:items-start">
