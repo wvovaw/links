@@ -77,23 +77,28 @@ const metrics = computed(() => {
       :data-metric="metric.id"
       class="rounded-moon-s-md bg-gohan shadow-moon-sm"
     >
-      <UICard.Body class="flex flex-col gap-1">
-        <dt class="flex items-center gap-2 text-moon-12 text-trunks">
-          <span :class="metric.icon" class="text-moon-16" aria-hidden="true" />
-          {{ metric.label }}
-        </dt>
-        <dd class="flex items-baseline gap-2">
-          <span class="text-moon-24 font-semibold">{{ metric.value }}</span>
-          <span
-            v-if="metric.delta"
-            data-delta
-            class="rounded-moon-i-xs bg-goku px-1 text-moon-12 font-medium"
-            :class="TONES[metric.delta.direction]"
-            :title="t('stats.totals.previous')"
-          >
-            {{ ARROWS[metric.delta.direction] }} {{ `${metric.delta.value > 0 ? "+" : ""}${metric.delta.value}%` }}
-          </span>
-        </dd>
+      <!-- `pt-6`: a headerless body drops its top padding, and the stat card wants the frame on all four sides. -->
+      <UICard.Body class="flex items-start gap-3 pt-6">
+        <span
+          :class="metric.icon"
+          class="flex size-10 shrink-0 items-center justify-center rounded-full bg-jiren text-moon-20 text-piccolo"
+          aria-hidden="true"
+        />
+        <div class="flex flex-col gap-1">
+          <dt class="text-moon-12 text-trunks">{{ metric.label }}</dt>
+          <dd class="flex flex-col gap-1">
+            <span class="text-moon-24 font-semibold">{{ metric.value }}</span>
+            <span
+              v-if="metric.delta"
+              data-delta
+              class="self-start text-moon-12 font-medium"
+              :class="TONES[metric.delta.direction]"
+              :title="t('stats.totals.previous')"
+            >
+              {{ ARROWS[metric.delta.direction] }} {{ `${metric.delta.value > 0 ? "+" : ""}${metric.delta.value}%` }}
+            </span>
+          </dd>
+        </div>
       </UICard.Body>
     </UICard.Root>
   </dl>
