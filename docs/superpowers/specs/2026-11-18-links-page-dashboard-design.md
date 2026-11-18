@@ -83,14 +83,14 @@ Manage your links and track their performance
 
 ### Where each thing comes from
 
-| Shown                                    | Source                                     | Change    |
-| ---------------------------------------- | ------------------------------------------ | --------- |
-| Card totals, deltas, per-link metrics    | `GET /analytics/overview` (`totals`, `previous`, `links[]`) | none |
-| Per-card sparkline                       | `overview.timeseries` + the chosen preset  | derived    |
-| Row status                               | `GET /links` (`LinkStatus`)                | none      |
-| Row "Updated"                            | `LinkDto.updatedAt`                        | **new field** |
-| Row title, slug                           | `GET /links`                               | none      |
-| Public link and its copy button          | `public.baseUrl` + slug                    | none      |
+| Shown                                 | Source                                                      | Change        |
+| ------------------------------------- | ----------------------------------------------------------- | ------------- |
+| Card totals, deltas, per-link metrics | `GET /analytics/overview` (`totals`, `previous`, `links[]`) | none          |
+| Per-card sparkline                    | `overview.timeseries` + the chosen preset                   | derived       |
+| Row status                            | `GET /links` (`LinkStatus`)                                 | none          |
+| Row "Updated"                         | `LinkDto.updatedAt`                                         | **new field** |
+| Row title, slug                       | `GET /links`                                                | none          |
+| Public link and its copy button       | `public.baseUrl` + slug                                     | none          |
 
 Two reads on mount — the overview for the numbers, the owner's list for the rows — joined by id. A page the
 overview has no numbers for reads as zeros; a failed overview renders the failed card instead of the cards
