@@ -84,6 +84,23 @@ async function eventCount(app: INestApplication, id: string) {
     .count({ where: { linkId: id } });
 }
 
+/**
+ * A beacon only ever writes "now", so a window in the past can only be seeded straight into the table. The
+ * hash is fixed on purpose: two pages seeded this way share one visitor, which is what the series says.
+ */
+async function seedPreviousView(app: INestApplication, id: string, at: Date) {
+  const views = app.get(DataSource).getRepository(PageView);
+
+  await views.save(views.create({ linkId: id, visitorHash: "seed-visitor", createdAt: at }));
+}
+
+/** Ten days back sits inside the window before a seven-day range, and outside the range itself. */
+const tenDaysAgo = () => new Date(Date.now() - 10 * 86_400_000);
+const sevenDaysAgo = () => new Date(Date.now() - 7 * 86_400_000);
+
+/** A seven-day range ending a minute from now, which leaves the trailing window's bounds unambiguous. */
+const lastSevenDays = () => ({ from: sevenDaysAgo().toISOString(), to: new Date(Date.now() + 60_000).toISOString() });
+
 describe("block analytics", () => {
   let app: INestApplication;
 
@@ -338,10 +355,35 @@ describe("block analytics", () => {
 
       expect(body).toEqual({
         totals: { views: 0, visitors: 0, clicks: 0 },
+        previous: null,
         timeseries: [],
         sources: [],
         blocks: [],
       });
+    });
+  });
+
+  describe("previous period", () => {
+    it("counts the window before the range and leaves the range alone", async () => {
+      const { agent, id, slug } = await publishPage(app);
+
+      await seedPreviousView(app, id, tenDaysAgo());
+      await postView(app, slug, {}, { "User-Agent": "previous-agent" }).expect(201);
+
+      const { body } = await agent.get(`/analytics/links/${id}`).query(lastSevenDays()).expect(200);
+
+      expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
+      expect(body.previous).toEqual({ views: 1, visitors: 1, clicks: 0 });
+    });
+
+    /* An unbounded range is "all time": there is no earlier window to compare it against. */
+    it("has no previous period when a bound is missing", async () => {
+      const { agent, id } = await publishPage(app);
+
+      const oneBound = { from: sevenDaysAgo().toISOString() };
+
+      expect((await agent.get(`/analytics/links/${id}`).expect(200)).body.previous).toBeNull();
+      expect((await agent.get(`/analytics/links/${id}`).query(oneBound).expect(200)).body.previous).toBeNull();
     });
   });
 
@@ -427,6 +469,22 @@ describe("block analytics", () => {
         { source: "tg", medium: "social", views: 1, visitors: 1, clicks: 0 },
       ]);
       expect(body.timeseries).toEqual([{ date: today(), views: 2, visitors: 2, clicks: 0 }]);
+    });
+
+    /*
+      The dashboard's visitor card comes from the merged series, so its previous period must too: one person
+      on two pages ten days ago is one visitor in the series and two across the per-page rows.
+    */
+    it("compares the previous period against the series, not the per-page rows", async () => {
+      const { agent, pages } = await twoPages(app);
+
+      await seedPreviousView(app, pages[0].id, tenDaysAgo());
+      await seedPreviousView(app, pages[1].id, tenDaysAgo());
+
+      const { body } = await agent.get("/analytics/overview").query(lastSevenDays()).expect(200);
+
+      expect(body.totals).toEqual({ views: 0, visitors: 0, clicks: 0 });
+      expect(body.previous).toEqual({ views: 2, visitors: 1, clicks: 0 });
     });
 
     it("keeps another user's pages out", async () => {

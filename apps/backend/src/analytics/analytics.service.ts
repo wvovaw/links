@@ -12,6 +12,7 @@ import type { BlockClicks, LinkStats, OverviewStats, SourceLabel, StatsPoint, St
 import { SlidingWindow } from "../common/sliding-window";
 import { BlockEvent } from "./block-event.entity";
 import { PageView } from "./page-view.entity";
+import { previousRange } from "./range";
 import { classifySource } from "./stats";
 
 /** What a visitor is told when one of the two windows refuses an event. */
@@ -114,7 +115,7 @@ export class AnalyticsService {
    */
   async linkStats(linkId: string, range: StatsQueryDto): Promise<LinkStats> {
     const scope = { linkId };
-    const [views, clicks, viewDays, clickDays, viewSources, clickSources, blocks] = await Promise.all([
+    const [views, clicks, viewDays, clickDays, viewSources, clickSources, blocks, previous] = await Promise.all([
       this.viewTotals(scope, range),
       this.clickTotals(scope, range),
       this.viewDays(scope, range),
@@ -122,10 +123,12 @@ export class AnalyticsService {
       this.viewSources(scope, range),
       this.clickSources(scope, range),
       this.blockClicks(scope, range),
+      this.previousOf(scope, range),
     ]);
 
     return {
       totals: this.totalOf(views, clicks),
+      previous,
       timeseries: this.mergeSeries(viewDays, clickDays),
       sources: this.mergeSources(viewSources, clickSources),
       blocks,
@@ -138,16 +141,26 @@ export class AnalyticsService {
    */
   async overview(links: { id: string; slug: string; title: string }[], range: StatsQueryDto): Promise<OverviewStats> {
     /* An empty `IN ()` is not valid SQL, and an owner with no pages has nothing to aggregate anyway. */
-    if (!links.length) return { totals: emptyTotals(), timeseries: [], sources: [], links: [] };
+    if (!links.length) {
+      /* No pages means no rows in either window either, so a bounded range still has a previous period: zeros. */
+      return {
+        totals: emptyTotals(),
+        previous: previousRange(range) ? emptyTotals() : null,
+        timeseries: [],
+        sources: [],
+        links: [],
+      };
+    }
 
     const scope = { ids: links.map((link) => link.id) };
-    const [views, clicks, viewDays, clickDays, viewSources, clickSources] = await Promise.all([
+    const [views, clicks, viewDays, clickDays, viewSources, clickSources, previous] = await Promise.all([
       this.viewTotals(scope, range),
       this.clickTotals(scope, range),
       this.viewDays(scope, range),
       this.clickDays(scope, range),
       this.viewSources(scope, range),
       this.clickSources(scope, range),
+      this.previousOf(scope, range),
     ]);
 
     const perLink = new Map<string, StatsTotals>();
@@ -172,6 +185,7 @@ export class AnalyticsService {
         ...this.totalOf(views, clicks),
         visitors: timeseries.reduce((sum, point) => sum + point.visitors, 0),
       },
+      previous,
       timeseries,
       sources: this.mergeSources(viewSources, clickSources),
       links: links.map((link) => ({
@@ -189,6 +203,32 @@ export class AnalyticsService {
       views: views.reduce((sum, row) => sum + Number(row.views ?? 0), 0),
       visitors: views.reduce((sum, row) => sum + Number(row.visitors ?? 0), 0),
       clicks: clicks.reduce((sum, row) => sum + Number(row.clicks ?? 0), 0),
+    };
+  }
+
+  /**
+   * The other half of a delta: what the same cards read over the window before the caller's range. An
+   * unbounded range has no earlier window, and inventing one would compare the dashboard against days that
+   * were never collected.
+   *
+   * Views and clicks are row sums. Visitors are the days' own distinct counts added up, not the per-page
+   * scan's: that scan counts a person once per page, and the card this is compared against is drawn from the
+   * merged series, which counts them once per day.
+   */
+  private async previousOf(scope: Scope, range: StatsQueryDto): Promise<StatsTotals | null> {
+    const previous = previousRange(range);
+
+    if (!previous) return null;
+
+    const [views, clicks, viewDays] = await Promise.all([
+      this.viewTotals(scope, previous),
+      this.clickTotals(scope, previous),
+      this.viewDays(scope, previous),
+    ]);
+
+    return {
+      ...this.totalOf(views, clicks),
+      visitors: viewDays.reduce((sum, day) => sum + Number(day.visitors ?? 0), 0),
     };
   }
 

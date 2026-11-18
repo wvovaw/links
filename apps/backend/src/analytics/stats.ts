@@ -33,6 +33,8 @@ export interface BlockClicks {
 
 export interface LinkStats {
   totals: StatsTotals;
+  /** The same cards read over the window before this one, so they can print a delta; `null` when unbounded. */
+  previous: StatsTotals | null;
   timeseries: StatsPoint[];
   sources: StatsSource[];
   blocks: BlockClicks[];
@@ -49,6 +51,7 @@ export interface OverviewLinkRow {
 
 export interface OverviewStats {
   totals: StatsTotals;
+  previous: StatsTotals | null;
   timeseries: StatsPoint[];
   sources: StatsSource[];
   links: OverviewLinkRow[];
