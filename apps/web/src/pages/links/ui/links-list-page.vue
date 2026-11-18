@@ -44,7 +44,8 @@ watch(range, load, { immediate: true });
   <main class="flex flex-1 flex-col gap-4 p-4 sm:gap-8 sm:p-10">
     <div class="mx-auto flex max-w-6xl w-full flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <span class="grid size-12 shrink-0 place-content-center rounded-moon-s-md bg-piccolo text-moon-24 text-goku">
+        <!-- `goten`, not `goku`: the icon sits on the accent, and `goku` turns near-black in the dark theme. -->
+        <span class="grid size-12 shrink-0 place-content-center rounded-moon-s-md bg-piccolo text-moon-24 text-goten">
           <span class="i-lucide:link" aria-hidden="true" />
         </span>
 
