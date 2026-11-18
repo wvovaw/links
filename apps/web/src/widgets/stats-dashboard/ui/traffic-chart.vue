@@ -60,8 +60,17 @@ const describePoint = (row: ChartRow) => describeDay(row, metric.value);
         The chart measures its container, so it exists in the browser only; the box holds its height on the
         server so the card does not jump when the area arrives. Hovering a day names it and the chosen
         metric's count — the totals and the source table keep the meaning for a reader who never hovers.
+
+        `contain: inline-size` keeps the pixel width the library writes on its own svg out of the page's
+        min-content: without it that fixed width pins the card, and with the card the whole page, at a
+        desktop size, so a phone scrolls sideways instead of the chart re-measuring.
       -->
-      <div class="relative h-32 w-full text-piccolo" data-chart :data-metric="metric" :data-rows="rows.length">
+      <div
+        class="relative h-32 w-full text-piccolo [contain:inline-size]"
+        data-chart
+        :data-metric="metric"
+        :data-rows="rows.length"
+      >
         <!-- The fill is defined here because the library draws the path and only takes its colour from us. -->
         <svg class="absolute size-0" aria-hidden="true">
           <defs>
