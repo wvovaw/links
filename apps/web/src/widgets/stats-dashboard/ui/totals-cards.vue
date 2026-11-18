@@ -84,7 +84,11 @@ const metrics = computed(() => {
 </script>
 
 <template>
-  <dl class="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+  <!--
+    Four across only where a card fits: it carries an icon, a wrapped label and the range's line, and a
+    narrower window would rather stack them two by two than scroll the page sideways.
+  -->
+  <dl class="grid grid-cols-2 gap-3 xl:grid-cols-4 xl:gap-4">
     <UICard.Root
       v-for="metric of metrics"
       :key="metric.id"
