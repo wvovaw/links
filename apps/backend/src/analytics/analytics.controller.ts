@@ -5,6 +5,7 @@ import { CurrentUser } from "../common/current-user.decorator";
 import { LinksService } from "../links/links.service";
 import { User } from "../users/user.entity";
 import { AnalyticsService } from "./analytics.service";
+import { ActivityQueryDto } from "./dto/activity-query.dto";
 import { StatsQueryDto } from "./dto/block-event.dto";
 
 /**
@@ -14,9 +15,9 @@ import { StatsQueryDto } from "./dto/block-event.dto";
  * It is registered by `LinksModule`, which already imports this module; declaring it here would make the
  * two modules import each other.
  *
- * `StatsQueryDto` and `User` are value imports on purpose: Nest reads the parameter types off the emitted
- * metadata to decide what to validate, and an `import type` erases the class before that metadata is
- * written — the endpoint would then accept `?from=yesterday` and hand it to SQLite.
+ * `StatsQueryDto`, `ActivityQueryDto` and `User` are value imports on purpose: Nest reads the parameter types
+ * off the emitted metadata to decide what to validate, and an `import type` erases the class before that
+ * metadata is written — the endpoint would then accept `?from=yesterday` and hand it to SQLite.
  */
 @Controller("analytics")
 @UseGuards(AuthGuard)
@@ -30,6 +31,15 @@ export class AnalyticsController {
   @Get("overview")
   async overview(@CurrentUser() user: User, @Query() query: StatsQueryDto) {
     return this.analytics.overview(await this.linksService.list(user), query);
+  }
+
+  /**
+   * The live feed across every page the caller owns. It takes no range on purpose: switching the range picker
+   * must never empty it, and the `all time` preset needs no special case.
+   */
+  @Get("activity")
+  async activity(@CurrentUser() user: User, @Query() query: ActivityQueryDto) {
+    return { items: await this.analytics.activity(await this.linksService.list(user), query.limit) };
   }
 
   /**

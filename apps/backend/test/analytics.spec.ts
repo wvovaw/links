@@ -94,6 +94,27 @@ async function seedViewAt(app: INestApplication, id: string, at: Date) {
   await views.save(views.create({ linkId: id, visitorHash: "seed-visitor", createdAt: at }));
 }
 
+/**
+ * The feed's two kinds of row, written straight to the tables for the same reason a past window is: a beacon
+ * only ever records "now". The click lands a second after the view so the newest-first order is observable.
+ */
+async function seedFeedAt(app: INestApplication, id: string, at: Date) {
+  const data = app.get(DataSource);
+  const views = data.getRepository(PageView);
+  const events = data.getRepository(BlockEvent);
+
+  await views.save(views.create({ linkId: id, visitorHash: "feed-visitor", createdAt: at }));
+  await events.save(
+    events.create({
+      linkId: id,
+      blockId: "b1",
+      kind: "click",
+      visitorHash: "feed-visitor",
+      createdAt: new Date(at.getTime() + 1000),
+    }),
+  );
+}
+
 /** Ten days back sits inside the window before a seven-day range, and outside the range itself. */
 const tenDaysAgo = () => new Date(Date.now() - 10 * 86_400_000);
 const sevenDaysAgo = () => new Date(Date.now() - 7 * 86_400_000);
@@ -565,6 +586,87 @@ describe("block analytics", () => {
     it("answers 401 without a session", async () => {
       expect((await request(app.getHttpServer()).get("/analytics/overview")).status).toBe(401);
       expect((await request(app.getHttpServer()).get("/analytics/links/anything")).status).toBe(401);
+    });
+  });
+
+  describe("activity", () => {
+    /** The feed reads newest-first, so each seeded pair is a view and then the click a second later. */
+    it("lists the newest views and clicks across the owner's pages", async () => {
+      const { agent, id, slug } = await publishPage(app);
+      const started = new Date(Math.floor(Date.now() / 1000) * 1000 - 60_000);
+
+      await seedFeedAt(app, id, started);
+
+      const { body } = await agent.get("/analytics/activity").expect(200);
+
+      expect(body.items).toEqual([
+        {
+          id: expect.any(String),
+          kind: "click",
+          linkId: id,
+          slug,
+          title: "Analytics test page",
+          blockId: "b1",
+          source: "direct",
+          medium: "direct",
+          at: new Date(started.getTime() + 1000).toISOString(),
+        },
+        {
+          id: expect.any(String),
+          kind: "view",
+          linkId: id,
+          slug,
+          title: "Analytics test page",
+          /* Nothing writes `block_events.kind = "view"`, so a view names no block. */
+          blockId: null,
+          source: "direct",
+          medium: "direct",
+          at: started.toISOString(),
+        },
+      ]);
+    });
+
+    /* A live feed, not a period view: the range picker has no say over it, so `from` is not even a field. */
+    it("takes a limit and no range", async () => {
+      const { agent, id } = await publishPage(app);
+
+      await seedFeedAt(app, id, new Date(Math.floor(Date.now() / 1000) * 1000 - 60_000));
+
+      expect((await agent.get("/analytics/activity").query({ limit: 1 }).expect(200)).body.items).toHaveLength(1);
+      expect((await agent.get("/analytics/activity").query({ from: "2026-01-01T00:00:00.000Z" })).status).toBe(400);
+    });
+
+    /* A limit is a request: 100 asks for more than the feed serves and gets 50, not a rejection. */
+    it("clamps the limit instead of refusing it", async () => {
+      const { agent } = await publishPage(app);
+
+      const { body } = await agent.get("/analytics/activity").query({ limit: 100 }).expect(200);
+
+      expect(body.items.length).toBeLessThanOrEqual(50);
+    });
+
+    it("refuses a limit that is not a positive whole number", async () => {
+      const { agent } = await publishPage(app);
+      const ask = (limit: unknown) => agent.get("/analytics/activity").query({ limit: limit as string });
+
+      expect((await ask(0)).status).toBe(400);
+      expect((await ask(1.5)).status).toBe(400);
+      expect((await ask("abc")).status).toBe(400);
+    });
+
+    /* The feed is one dashboard read like the others: it starts at the caller's pages, never at a query id. */
+    it("keeps another owner's pages out of the feed", async () => {
+      const owner = await publishPage(app);
+      const stranger = await authenticate(app);
+
+      await seedFeedAt(app, owner.id, new Date(Math.floor(Date.now() / 1000) * 1000 - 60_000));
+
+      expect((await owner.agent.get("/analytics/activity").expect(200)).body.items).toHaveLength(2);
+      expect((await stranger.get("/analytics/activity").expect(200)).body.items).toEqual([]);
+    });
+
+    it("answers 401 without a session", async () => {
+      expect((await request(app.getHttpServer()).get("/analytics/activity")).status).toBe(401);
     });
   });
 

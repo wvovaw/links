@@ -65,6 +65,20 @@ export interface OverviewStats {
   links: OverviewLinkRow[];
 }
 
+/** One row of the live feed: the newest views and clicks across the owner's pages, newest first. */
+export interface ActivityItem {
+  id: string;
+  kind: "view" | "click";
+  linkId: string;
+  slug: string;
+  title: string;
+  /** A click names its block; a view has none, because nothing ever writes `block_events.kind = "view"`. */
+  blockId: string | null;
+  source: string;
+  medium: string;
+  at: string;
+}
+
 export interface SourceLabel {
   source: string;
   medium: string;

@@ -8,6 +8,7 @@ import type { BlockEventKind } from "./block-event.entity";
 import type { StatsQueryDto } from "./dto/block-event.dto";
 import type { SourceColumns } from "./source";
 import type {
+  ActivityItem,
   BlockClicks,
   LinkStats,
   OverviewStats,
@@ -64,6 +65,9 @@ interface LinkGroup {
 }
 
 const emptyTotals = (): StatsTotals => ({ views: 0, visitors: 0, clicks: 0 });
+
+/** The feed answers with at most this many rows: a larger `limit` is a request, not a command. */
+const feedLimit = 50;
 
 /**
  * SQLite stores `createdAt` as `YYYY-MM-DD HH:MM:SS`, and comparing text to text is what lets the
@@ -220,6 +224,53 @@ export class AnalyticsService {
     };
   }
 
+  /**
+   * The live feed: the owner's newest views and clicks, merged newest-first. It takes no range on purpose — a
+   * range picker must never empty it — and the only argument it honours is a limit, which is clamped rather
+   * than refused.
+   *
+   * Views are read from `page_views` alone: nothing writes `block_events.kind = "view"`, so a click is the
+   * only row that can name a block. `createdAt` keeps whole seconds, so the id breaks the tie — without it two
+   * rows of the same second swap places and the feed's order is unstable.
+   */
+  async activity(links: { id: string; slug: string; title: string }[], limit = 10): Promise<ActivityItem[]> {
+    if (!links.length) return [];
+
+    const cap = Math.min(limit, feedLimit);
+    const scope = { ids: links.map((link) => link.id) };
+    const [views, clicks] = await Promise.all([this.latestViews(scope, cap), this.latestClicks(scope, cap)]);
+    const pages = new Map(links.map((link) => [link.id, link]));
+    const items: ActivityItem[] = [];
+
+    for (const { kind, blockId, row } of [
+      ...views.map((view) => ({ kind: "view" as const, blockId: null, row: view })),
+      ...clicks.map((click) => ({ kind: "click" as const, blockId: click.blockId, row: click })),
+    ]) {
+      const page = pages.get(row.linkId);
+
+      /* The scan is scoped to these pages, so a miss is only the type system asking; a row it cannot name has
+         no place in a feed labelled by page. */
+      if (!page) continue;
+
+      items.push({
+        id: row.id,
+        kind,
+        linkId: row.linkId,
+        slug: page.slug,
+        title: page.title,
+        blockId,
+        ...classifySource(row),
+        at: row.createdAt.toISOString(),
+      });
+    }
+
+    /* Newest first, the id breaking a second's tie: the order is what makes it a feed. */
+    // oxlint-disable-next-line unicorn/no-array-sort
+    items.sort((left, right) => right.at.localeCompare(left.at) || right.id.localeCompare(left.id));
+
+    return items.slice(0, cap);
+  }
+
   /** Every row of the two per-page scans adds up to one number each. */
   private totalOf(views: LinkGroup[], clicks: LinkGroup[]): StatsTotals {
     return {
@@ -253,6 +304,24 @@ export class AnalyticsService {
       ...this.totalOf(views, clicks),
       visitors: viewDays.reduce((sum, day) => sum + Number(day.visitors ?? 0), 0),
     };
+  }
+
+  /** The newest page loads in scope: one row per visit, which is what the feed lists as a view. */
+  private latestViews(scope: Scope, cap: number): Promise<PageView[]> {
+    return this.scoped("v", scope, this.views.createQueryBuilder("v"))
+      .orderBy("v.createdAt", "DESC")
+      .addOrderBy("v.id", "DESC")
+      .take(cap)
+      .getMany();
+  }
+
+  private latestClicks(scope: Scope, cap: number): Promise<BlockEvent[]> {
+    return this.scoped("e", scope, this.events.createQueryBuilder("e"))
+      .andWhere("e.kind = :kind", { kind: "click" })
+      .orderBy("e.createdAt", "DESC")
+      .addOrderBy("e.id", "DESC")
+      .take(cap)
+      .getMany();
   }
 
   /** Views per page, with the distinct visitors behind them. */
