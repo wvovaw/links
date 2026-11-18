@@ -373,7 +373,7 @@ Expected: FAIL — module not found.
 
 - [ ] **Step 4: Write the failing component test**
 
-Mount `TotalsCards` with `totals = { views: 112, visitors: 40, clicks: 12, }` and `previous = { views: 100, visitors: 40, clicks: 6 }`, `showCtr`. Assert: four cards render (three metrics + CTR); the `views` card text contains `+12%`; a card whose previous equals current shows no arrow (flat `0%`); with `previous` omitted, no card shows a delta. Assert the CTR delta is `pointsDelta`, not `countDelta`, by giving `totals.clicks/totals.views` and `previous.clicks/previous.views` a known gap. Use `data-metric` attributes to target cards.
+Mount `TotalsCards` with `totals = { views: 112, visitors: 40, clicks: 12, }` and `previous = { views: 100, visitors: 40, clicks: 6 }`, `showCtr`. Assert: four cards render (three metrics + CTR); the `views` card text contains `+12%`; a card whose previous equals current shows a flat `→ 0%` chip (a delta exists; only a zero baseline suppresses it); with `previous` omitted, no card shows a delta. Assert the CTR delta is `pointsDelta`, not `countDelta`, by giving `totals.clicks/totals.views` and `previous.clicks/previous.views` a known gap. Use `data-metric` attributes to target cards.
 
 - [ ] **Step 5: Run it to verify it fails**
 
