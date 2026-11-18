@@ -88,7 +88,7 @@ async function eventCount(app: INestApplication, id: string) {
  * A beacon only ever writes "now", so a window in the past can only be seeded straight into the table. The
  * hash is fixed on purpose: two pages seeded this way share one visitor, which is what the series says.
  */
-async function seedPreviousView(app: INestApplication, id: string, at: Date) {
+async function seedViewAt(app: INestApplication, id: string, at: Date) {
   const views = app.get(DataSource).getRepository(PageView);
 
   await views.save(views.create({ linkId: id, visitorHash: "seed-visitor", createdAt: at }));
@@ -367,13 +367,44 @@ describe("block analytics", () => {
     it("counts the window before the range and leaves the range alone", async () => {
       const { agent, id, slug } = await publishPage(app);
 
-      await seedPreviousView(app, id, tenDaysAgo());
+      await seedViewAt(app, id, tenDaysAgo());
       await postView(app, slug, {}, { "User-Agent": "previous-agent" }).expect(201);
 
       const { body } = await agent.get(`/analytics/links/${id}`).query(lastSevenDays()).expect(200);
 
       expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
       expect(body.previous).toEqual({ views: 1, visitors: 1, clicks: 0 });
+    });
+
+    /*
+      The two windows share no second: a row written exactly at `from` belongs to the range the caller asked
+      about, and counting it in the previous one too would inflate the delta the pair feeds.
+
+      The row is inserted rather than saved because the column's own default is what a beacon's row gets, and
+      that default keeps whole seconds — `save()` with an explicit date stores milliseconds, which no read
+      window can coincide with.
+    */
+    it("counts a row on the boundary once", async () => {
+      const { agent, id } = await publishPage(app);
+      const from = new Date(Math.floor(sevenDaysAgo().getTime() / 1000) * 1000);
+      const stored = from.toISOString().slice(0, 19).replace("T", " ");
+
+      await app
+        .get(DataSource)
+        .query("insert into page_views (id, linkId, visitorHash, createdAt) values (?, ?, ?, ?)", [
+          randomUUID(),
+          id,
+          "boundary-visitor",
+          stored,
+        ]);
+
+      const { body } = await agent
+        .get(`/analytics/links/${id}`)
+        .query({ from: from.toISOString(), to: new Date(Date.now() + 60_000).toISOString() })
+        .expect(200);
+
+      expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
+      expect(body.previous).toEqual({ views: 0, visitors: 0, clicks: 0 });
     });
 
     /* An unbounded range is "all time": there is no earlier window to compare it against. */
@@ -478,8 +509,8 @@ describe("block analytics", () => {
     it("compares the previous period against the series, not the per-page rows", async () => {
       const { agent, pages } = await twoPages(app);
 
-      await seedPreviousView(app, pages[0].id, tenDaysAgo());
-      await seedPreviousView(app, pages[1].id, tenDaysAgo());
+      await seedViewAt(app, pages[0].id, tenDaysAgo());
+      await seedViewAt(app, pages[1].id, tenDaysAgo());
 
       const { body } = await agent.get("/analytics/overview").query(lastSevenDays()).expect(200);
 

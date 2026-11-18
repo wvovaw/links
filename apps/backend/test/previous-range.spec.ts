@@ -3,10 +3,11 @@ import { describe, expect, it } from "vitest";
 import { previousRange } from "../src/analytics/range";
 
 describe("previousRange", () => {
+  /* The upper bound is exclusive: the second the range starts in must not be counted by both windows. */
   it("returns the same-length window immediately before the range", () => {
     expect(previousRange({ from: "2026-11-10T00:00:00.000Z", to: "2026-11-17T00:00:00.000Z" })).toEqual({
       from: "2026-11-03T00:00:00.000Z",
-      to: "2026-11-10T00:00:00.000Z",
+      to: "2026-11-09T23:59:59.000Z",
     });
   });
 
