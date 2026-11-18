@@ -18,6 +18,8 @@ export interface Link {
   background: string;
   theme: PageTheme | null;
   status: LinkStatus;
+  /** When the page was last written; the links list prints it beside the page. */
+  updatedAt: string;
 }
 
 export interface PublicLink {

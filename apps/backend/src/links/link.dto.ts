@@ -12,6 +12,8 @@ export interface LinkDto {
   background: string;
   theme: PageTheme | null;
   status: string;
+  /** When the page was last written; the list screen prints it beside the page. */
+  updatedAt: string;
 }
 
 export function toLinkDto(link: Link): LinkDto {
@@ -24,6 +26,7 @@ export function toLinkDto(link: Link): LinkDto {
     background: link.background,
     theme: link.theme ?? null,
     status: link.status,
+    updatedAt: link.updatedAt.toISOString(),
   };
 }
 
