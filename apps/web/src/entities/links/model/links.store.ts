@@ -65,7 +65,8 @@ export const useLinksStore = defineStore("links", () => {
       return false;
     }
   }
-  async function deleteLink(id: string) {
+  /** Resolves `true` only when the user confirmed and the link was really deleted. */
+  async function deleteLink(id: string): Promise<boolean> {
     const { toast } = useToast();
     const { createConfirmation } = useConfirmation();
     const confirm = createConfirmation({
@@ -74,24 +75,26 @@ export const useLinksStore = defineStore("links", () => {
     });
 
     const { data } = await confirm();
-    if (data) {
-      try {
-        await LinksApi.deleteLink(id);
+    if (!data) return false;
+
+    try {
+      await LinksApi.deleteLink(id);
+      toast({
+        title: "Succes",
+        content: "The link deleted successfully",
+        variant: "success",
+      });
+      await refreshLinksList();
+      return true;
+    } catch (e: unknown) {
+      if (e instanceof Error) {
         toast({
-          title: "Succes",
-          content: "The link deleted successfully",
-          variant: "success",
+          title: "Deletion error",
+          content: e.message,
+          variant: "error",
         });
-        await refreshLinksList();
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          toast({
-            title: "Deletion error",
-            content: e.message,
-            variant: "error",
-          });
-        }
       }
+      return false;
     }
   }
   async function refreshLinksList() {

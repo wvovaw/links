@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { UIButton, UISheet } from "@links/ui";
+
+const { t } = useI18n();
 </script>
 
 <template>
   <UISheet.Root>
     <UISheet.Trigger as-child>
-      <UIButton class="w-52!" full-width icon="i-lucide:plus" icon-pos="right"> Create new link </UIButton>
+      <UIButton size="sm" icon="i-lucide:plus">{{ t("links.create") }}</UIButton>
     </UISheet.Trigger>
     <UISheet.Content class="w-full sm:min-w-md sm:w-fit">
       <UISheet.Header>

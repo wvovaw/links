@@ -57,3 +57,30 @@ describe("links store updateLink result", () => {
     expect(updateMetadata).not.toHaveBeenCalled();
   });
 });
+
+/* The list screen recounts its cards only when the page is really gone, so the result has to say which. */
+describe("links store deleteLink result", () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+    confirmation.confirmed = true;
+    vi.restoreAllMocks();
+  });
+
+  it("resolves true once the page is gone and the list is reread", async () => {
+    const deleted = vi.spyOn(LinksApi, "deleteLink").mockResolvedValue(undefined);
+    vi.spyOn(LinksApi, "listLinks").mockResolvedValue([]);
+
+    await expect(useLinksStore().deleteLink("link-1")).resolves.toBe(true);
+
+    expect(deleted).toHaveBeenCalledWith("link-1");
+  });
+
+  it("resolves false without touching the API when the deletion is cancelled", async () => {
+    confirmation.confirmed = false;
+    const deleted = vi.spyOn(LinksApi, "deleteLink");
+
+    await expect(useLinksStore().deleteLink("link-1")).resolves.toBe(false);
+
+    expect(deleted).not.toHaveBeenCalled();
+  });
+});
