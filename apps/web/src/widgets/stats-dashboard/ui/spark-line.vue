@@ -10,7 +10,9 @@ const points = computed(() => {
   const peak = Math.max(0, ...props.values);
   const last = Math.max(props.values.length - 1, 1);
 
-  return props.values.map((value, index) => `${(index / last) * 100},${22 - (peak ? (value / peak) * 20 : 0)}`).join(" ");
+  return props.values
+    .map((value, index) => `${(index / last) * 100},${22 - (peak ? (value / peak) * 20 : 0)}`)
+    .join(" ");
 });
 </script>
 

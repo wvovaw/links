@@ -1,9 +1,9 @@
-import type { LinksListRow } from "../model";
-
 import { mount } from "@vue/test-utils";
 import { createPinia } from "pinia";
 import { describe, expect, it } from "vitest";
 import { LinkStatus } from "~shared/api/backend";
+
+import type { LinksListRow } from "../model";
 
 import MultilinksList from "./multilinks-list.vue";
 
@@ -74,7 +74,9 @@ describe("MultilinksList", () => {
   });
 
   it("sends a row to its statistics and its constructor", () => {
-    const html = mountList([row(1)]).get("[data-link-slug='page-1']").html();
+    const html = mountList([row(1)])
+      .get("[data-link-slug='page-1']")
+      .html();
 
     expect(html).toContain("links-id-stats");
     expect(html).toContain("links-constructor-id");

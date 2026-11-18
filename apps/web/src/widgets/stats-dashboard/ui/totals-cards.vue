@@ -3,8 +3,9 @@ import type { StatsPoint, StatsTotals } from "~shared/api/backend";
 
 import { UICard } from "@links/ui";
 
-import { countDelta, type MetricDelta, pointsDelta } from "../model/delta";
 import type { StatsRangePreset } from "../model/fill-days";
+
+import { countDelta, type MetricDelta, pointsDelta } from "../model/delta";
 import { metricSpark, type SparkMetric } from "../model/spark";
 import SparkLine from "./spark-line.vue";
 

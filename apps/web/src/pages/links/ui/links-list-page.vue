@@ -2,8 +2,8 @@
 import type { OverviewStats } from "~shared/api/backend";
 
 import { UICard, UISkeleton } from "@links/ui";
-import { AnalyticsApi } from "~shared/api/backend";
 import { useLinksStore } from "~entities/links";
+import { AnalyticsApi } from "~shared/api/backend";
 import { linksRows, MultilinksList } from "~widgets/multilinks-list";
 import { RangePicker, TotalsCards, useStatsRange } from "~widgets/stats-dashboard";
 

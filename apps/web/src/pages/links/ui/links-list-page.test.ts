@@ -99,7 +99,8 @@ describe("LinksListPage", () => {
     await mountPage();
     await flushPromises();
 
-    const { from, to } = mocks.getOverview.mock.calls[0]?.[0] as { from: string; to: string };
+    const call = mocks.getOverview.mock.calls[0] as [{ from: string; to: string }];
+    const { from, to } = call[0];
 
     expect(Math.round((Date.parse(to) - Date.parse(from)) / 86_400_000)).toBe(29);
   });

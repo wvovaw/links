@@ -7,6 +7,7 @@ import { LinkStatus } from "~shared/api/backend";
 import { LoadingSpinner } from "~shared/ui/loading-spinner";
 
 import type { LinksListRow } from "../model";
+
 import EmptyState from "./empty-state.vue";
 import LinkActions from "./link-actions.vue";
 
@@ -94,62 +95,62 @@ async function remove(id: string) {
           </UITable.Row>
 
           <template v-else>
-          <UITable.Row
-            v-for="row of visible"
-            :key="row.id"
-            :data-link-slug="row.slug"
-            :data-clicks="row.clicks"
-            :data-visitors="row.visitors"
-          >
-            <UITable.Cell class="min-w-0">
-              <div class="flex items-center gap-3">
-                <!-- No page preview image exists to show, so the page gets its own initial. -->
-                <span
-                  class="grid size-10 shrink-0 place-content-center rounded-moon-s-xs bg-heles text-moon-16 font-semibold uppercase"
-                  aria-hidden="true"
-                >
-                  {{ row.title.slice(0, 1) }}
-                </span>
-                <div class="flex min-w-0 flex-col gap-1">
-                  <span class="truncate font-semibold">{{ row.title }}</span>
-                  <span class="flex items-center gap-2">
-                    <span class="truncate text-moon-12 text-trunks">/{{ row.slug }}</span>
-                    <UITag size="xs" :variant="row.status === LinkStatus.DRAFT ? 'outline' : 'fill'">
-                      {{ row.status }}
-                    </UITag>
+            <UITable.Row
+              v-for="row of visible"
+              :key="row.id"
+              :data-link-slug="row.slug"
+              :data-clicks="row.clicks"
+              :data-visitors="row.visitors"
+            >
+              <UITable.Cell class="min-w-0">
+                <div class="flex items-center gap-3">
+                  <!-- No page preview image exists to show, so the page gets its own initial. -->
+                  <span
+                    class="grid size-10 shrink-0 place-content-center rounded-moon-s-xs bg-heles text-moon-16 font-semibold uppercase"
+                    aria-hidden="true"
+                  >
+                    {{ row.title.slice(0, 1) }}
                   </span>
+                  <div class="flex min-w-0 flex-col gap-1">
+                    <span class="truncate font-semibold">{{ row.title }}</span>
+                    <span class="flex items-center gap-2">
+                      <span class="truncate text-moon-12 text-trunks">/{{ row.slug }}</span>
+                      <UITag size="xs" :variant="row.status === LinkStatus.DRAFT ? 'outline' : 'fill'">
+                        {{ row.status }}
+                      </UITag>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </UITable.Cell>
+              </UITable.Cell>
 
-            <UITable.Cell>
-              <div class="flex items-center gap-2">
-                <a
-                  :href="address(row.slug)"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="max-w-56 truncate text-piccolo hover:underline"
-                >
-                  {{ address(row.slug) }}
-                </a>
-                <UIButton
-                  size="xs"
-                  variant="ghost"
-                  icon-only
-                  icon="i-lucide:copy"
-                  :aria-label="t('links.copy')"
-                  @click="copyAddress(row.slug)"
-                />
-              </div>
-            </UITable.Cell>
+              <UITable.Cell>
+                <div class="flex items-center gap-2">
+                  <a
+                    :href="address(row.slug)"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="max-w-56 truncate text-piccolo hover:underline"
+                  >
+                    {{ address(row.slug) }}
+                  </a>
+                  <UIButton
+                    size="xs"
+                    variant="ghost"
+                    icon-only
+                    icon="i-lucide:copy"
+                    :aria-label="t('links.copy')"
+                    @click="copyAddress(row.slug)"
+                  />
+                </div>
+              </UITable.Cell>
 
-            <UITable.Cell>{{ row.clicks }}</UITable.Cell>
-            <UITable.Cell>{{ row.visitors }}</UITable.Cell>
-            <UITable.Cell class="whitespace-nowrap text-trunks">{{ formatUpdatedAt(row.updatedAt) }}</UITable.Cell>
-            <UITable.Cell>
-              <LinkActions :link-id="row.id" :slug="row.slug" @deleted="remove" />
-            </UITable.Cell>
-          </UITable.Row>
+              <UITable.Cell>{{ row.clicks }}</UITable.Cell>
+              <UITable.Cell>{{ row.visitors }}</UITable.Cell>
+              <UITable.Cell class="whitespace-nowrap text-trunks">{{ formatUpdatedAt(row.updatedAt) }}</UITable.Cell>
+              <UITable.Cell>
+                <LinkActions :link-id="row.id" :slug="row.slug" @deleted="remove" />
+              </UITable.Cell>
+            </UITable.Row>
           </template>
         </UITable.Body>
       </UITable.Root>
