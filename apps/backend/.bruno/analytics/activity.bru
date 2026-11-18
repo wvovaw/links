@@ -1,0 +1,54 @@
+meta {
+  name: Activity
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/analytics/activity
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+params:query {
+  limit: 
+}
+
+tests {
+  test("should return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should list the feed as an array", function () {
+    expect(res.getBody().items).to.be.an("array");
+  });
+
+  test("should name every item's kind, source and time", function () {
+    res.getBody().items.forEach(function (item) {
+      expect(item).to.have.property("kind");
+      expect(item).to.have.property("source");
+      expect(item).to.have.property("at");
+    });
+  });
+}
+
+docs {
+  The live feed: the newest views and clicks across **every** page the caller owns, newest first, each
+  labelled by the page it happened on and the source it came from.
+
+  **Query params:** `limit` — a positive whole number, default 10
+
+  **Response:** 200 — `{ items: [{ id, kind, linkId, slug, title, blockId, source, medium, at }] }`
+  **Response:** 400 — a `limit` that is zero, negative, fractional or not a number, or any other parameter
+  **Response:** 401 — no session
+
+  The feed takes **no** `from`/`to`: it is a live feed, not a period view, so changing the range picker never
+  empties it and an explicit bound is a 400. `limit` is **clamped** to 50 — asking for 100 answers with at
+  most 50 items rather than an error. `blockId` is always set on a click and always `null` on a view, because
+  nothing writes `block_events.kind = "view"`; views come from `page_views` alone. `source`/`medium` are the
+  same `classifySource` labels the source table prints, so a host list that grows relabels history here too.
+}

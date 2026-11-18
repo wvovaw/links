@@ -44,6 +44,19 @@ describe("LinkStatsPage", () => {
     expect(block.text()).toContain("120");
   });
 
+  /* A card is a number and its shape: the same chart the screen draws, in the card's own corner. */
+  it("draws each card's line over the range's days", async () => {
+    mocks.getLinkStats.mockResolvedValue({ stats, failed: false });
+
+    const wrapper = mountPage();
+    await flushPromises();
+
+    const charts = wrapper.findAll("[data-metric] [data-chart]");
+
+    expect(charts.map((chart) => chart.attributes("data-metric"))).toEqual(["clicks", "visitors", "ctr", "views"]);
+    expect(charts.map((chart) => chart.attributes("data-rows"))).toEqual(["7", "7", "7", "7"]);
+  });
+
   /* A rate over no visits does not exist: the cell says so rather than printing NaN. */
   it("shows CTR as a dash when the page has no visits", async () => {
     mocks.getLinkStats.mockResolvedValue({
@@ -63,7 +76,7 @@ describe("LinkStatsPage", () => {
     const wrapper = mountPage();
     await flushPromises();
 
-    await wrapper.get("[data-preset='30d']").trigger("click");
+    await wrapper.get("select").setValue("30d");
     await flushPromises();
 
     expect(mocks.getLinkStats).toHaveBeenCalledTimes(2);

@@ -84,6 +84,44 @@ async function eventCount(app: INestApplication, id: string) {
     .count({ where: { linkId: id } });
 }
 
+/**
+ * A beacon only ever writes "now", so a window in the past can only be seeded straight into the table. The
+ * hash is fixed on purpose: two pages seeded this way share one visitor, which is what the series says.
+ */
+async function seedViewAt(app: INestApplication, id: string, at: Date) {
+  const views = app.get(DataSource).getRepository(PageView);
+
+  await views.save(views.create({ linkId: id, visitorHash: "seed-visitor", createdAt: at }));
+}
+
+/**
+ * The feed's two kinds of row, written straight to the tables for the same reason a past window is: a beacon
+ * only ever records "now". The click lands a second after the view so the newest-first order is observable.
+ */
+async function seedFeedAt(app: INestApplication, id: string, at: Date) {
+  const data = app.get(DataSource);
+  const views = data.getRepository(PageView);
+  const events = data.getRepository(BlockEvent);
+
+  await views.save(views.create({ linkId: id, visitorHash: "feed-visitor", createdAt: at }));
+  await events.save(
+    events.create({
+      linkId: id,
+      blockId: "b1",
+      kind: "click",
+      visitorHash: "feed-visitor",
+      createdAt: new Date(at.getTime() + 1000),
+    }),
+  );
+}
+
+/** Ten days back sits inside the window before a seven-day range, and outside the range itself. */
+const tenDaysAgo = () => new Date(Date.now() - 10 * 86_400_000);
+const sevenDaysAgo = () => new Date(Date.now() - 7 * 86_400_000);
+
+/** A seven-day range ending a minute from now, which leaves the trailing window's bounds unambiguous. */
+const lastSevenDays = () => ({ from: sevenDaysAgo().toISOString(), to: new Date(Date.now() + 60_000).toISOString() });
+
 describe("block analytics", () => {
   let app: INestApplication;
 
@@ -338,10 +376,66 @@ describe("block analytics", () => {
 
       expect(body).toEqual({
         totals: { views: 0, visitors: 0, clicks: 0 },
+        previous: null,
         timeseries: [],
         sources: [],
         blocks: [],
       });
+    });
+  });
+
+  describe("previous period", () => {
+    it("counts the window before the range and leaves the range alone", async () => {
+      const { agent, id, slug } = await publishPage(app);
+
+      await seedViewAt(app, id, tenDaysAgo());
+      await postView(app, slug, {}, { "User-Agent": "previous-agent" }).expect(201);
+
+      const { body } = await agent.get(`/analytics/links/${id}`).query(lastSevenDays()).expect(200);
+
+      expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
+      expect(body.previous).toEqual({ views: 1, visitors: 1, clicks: 0 });
+    });
+
+    /*
+      The two windows share no second: a row written exactly at `from` belongs to the range the caller asked
+      about, and counting it in the previous one too would inflate the delta the pair feeds.
+
+      The row is inserted rather than saved because the column's own default is what a beacon's row gets, and
+      that default keeps whole seconds — `save()` with an explicit date stores milliseconds, which no read
+      window can coincide with.
+    */
+    it("counts a row on the boundary once", async () => {
+      const { agent, id } = await publishPage(app);
+      const from = new Date(Math.floor(sevenDaysAgo().getTime() / 1000) * 1000);
+      const stored = from.toISOString().slice(0, 19).replace("T", " ");
+
+      await app
+        .get(DataSource)
+        .query("insert into page_views (id, linkId, visitorHash, createdAt) values (?, ?, ?, ?)", [
+          randomUUID(),
+          id,
+          "boundary-visitor",
+          stored,
+        ]);
+
+      const { body } = await agent
+        .get(`/analytics/links/${id}`)
+        .query({ from: from.toISOString(), to: new Date(Date.now() + 60_000).toISOString() })
+        .expect(200);
+
+      expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
+      expect(body.previous).toEqual({ views: 0, visitors: 0, clicks: 0 });
+    });
+
+    /* An unbounded range is "all time": there is no earlier window to compare it against. */
+    it("has no previous period when a bound is missing", async () => {
+      const { agent, id } = await publishPage(app);
+
+      const oneBound = { from: sevenDaysAgo().toISOString() };
+
+      expect((await agent.get(`/analytics/links/${id}`).expect(200)).body.previous).toBeNull();
+      expect((await agent.get(`/analytics/links/${id}`).query(oneBound).expect(200)).body.previous).toBeNull();
     });
   });
 
@@ -389,6 +483,7 @@ describe("block analytics", () => {
         views: 0,
         visitors: 0,
         clicks: 0,
+        spark: [],
       });
       expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
     });
@@ -429,6 +524,52 @@ describe("block analytics", () => {
       expect(body.timeseries).toEqual([{ date: today(), views: 2, visitors: 2, clicks: 0 }]);
     });
 
+    /*
+      The dashboard's visitor card comes from the merged series, so its previous period must too: one person
+      on two pages ten days ago is one visitor in the series and two across the per-page rows.
+    */
+    it("compares the previous period against the series, not the per-page rows", async () => {
+      const { agent, pages } = await twoPages(app);
+
+      await seedViewAt(app, pages[0].id, tenDaysAgo());
+      await seedViewAt(app, pages[1].id, tenDaysAgo());
+
+      const { body } = await agent.get("/analytics/overview").query(lastSevenDays()).expect(200);
+
+      expect(body.totals).toEqual({ views: 0, visitors: 0, clicks: 0 });
+      expect(body.previous).toEqual({ views: 2, visitors: 1, clicks: 0 });
+    });
+
+    /*
+      One scan grouped by page and day feeds every row's sparkline: two views on the same day are one point,
+      and a page nobody opened gets an empty series rather than another page's days.
+    */
+    it("gives every page its own sparse daily views", async () => {
+      const { agent, pages } = await twoPages(app);
+      const [opened, quiet] = pages;
+      const now = new Date();
+      const yesterday = new Date(now.getTime() - 86_400_000);
+      const day = (at: Date) => at.toISOString().slice(0, 10);
+
+      await seedViewAt(app, opened.id, yesterday);
+      await seedViewAt(app, opened.id, now);
+      await seedViewAt(app, opened.id, now);
+
+      const { body } = await agent
+        .get("/analytics/overview")
+        .query({
+          from: new Date(now.getTime() - 2 * 86_400_000).toISOString(),
+          to: new Date(now.getTime() + 60_000).toISOString(),
+        })
+        .expect(200);
+
+      expect(body.links.find((row: { id: string }) => row.id === opened.id).spark).toEqual([
+        { date: day(yesterday), views: 1 },
+        { date: day(now), views: 2 },
+      ]);
+      expect(body.links.find((row: { id: string }) => row.id === quiet.id).spark).toEqual([]);
+    });
+
     it("keeps another user's pages out", async () => {
       const owner = await twoPages(app);
       const stranger = await authenticate(app);
@@ -445,6 +586,87 @@ describe("block analytics", () => {
     it("answers 401 without a session", async () => {
       expect((await request(app.getHttpServer()).get("/analytics/overview")).status).toBe(401);
       expect((await request(app.getHttpServer()).get("/analytics/links/anything")).status).toBe(401);
+    });
+  });
+
+  describe("activity", () => {
+    /** The feed reads newest-first, so each seeded pair is a view and then the click a second later. */
+    it("lists the newest views and clicks across the owner's pages", async () => {
+      const { agent, id, slug } = await publishPage(app);
+      const started = new Date(Math.floor(Date.now() / 1000) * 1000 - 60_000);
+
+      await seedFeedAt(app, id, started);
+
+      const { body } = await agent.get("/analytics/activity").expect(200);
+
+      expect(body.items).toEqual([
+        {
+          id: expect.any(String),
+          kind: "click",
+          linkId: id,
+          slug,
+          title: "Analytics test page",
+          blockId: "b1",
+          source: "direct",
+          medium: "direct",
+          at: new Date(started.getTime() + 1000).toISOString(),
+        },
+        {
+          id: expect.any(String),
+          kind: "view",
+          linkId: id,
+          slug,
+          title: "Analytics test page",
+          /* Nothing writes `block_events.kind = "view"`, so a view names no block. */
+          blockId: null,
+          source: "direct",
+          medium: "direct",
+          at: started.toISOString(),
+        },
+      ]);
+    });
+
+    /* A live feed, not a period view: the range picker has no say over it, so `from` is not even a field. */
+    it("takes a limit and no range", async () => {
+      const { agent, id } = await publishPage(app);
+
+      await seedFeedAt(app, id, new Date(Math.floor(Date.now() / 1000) * 1000 - 60_000));
+
+      expect((await agent.get("/analytics/activity").query({ limit: 1 }).expect(200)).body.items).toHaveLength(1);
+      expect((await agent.get("/analytics/activity").query({ from: "2026-01-01T00:00:00.000Z" })).status).toBe(400);
+    });
+
+    /* A limit is a request: 100 asks for more than the feed serves and gets 50, not a rejection. */
+    it("clamps the limit instead of refusing it", async () => {
+      const { agent } = await publishPage(app);
+
+      const { body } = await agent.get("/analytics/activity").query({ limit: 100 }).expect(200);
+
+      expect(body.items.length).toBeLessThanOrEqual(50);
+    });
+
+    it("refuses a limit that is not a positive whole number", async () => {
+      const { agent } = await publishPage(app);
+      const ask = (limit: unknown) => agent.get("/analytics/activity").query({ limit: limit as string });
+
+      expect((await ask(0)).status).toBe(400);
+      expect((await ask(1.5)).status).toBe(400);
+      expect((await ask("abc")).status).toBe(400);
+    });
+
+    /* The feed is one dashboard read like the others: it starts at the caller's pages, never at a query id. */
+    it("keeps another owner's pages out of the feed", async () => {
+      const owner = await publishPage(app);
+      const stranger = await authenticate(app);
+
+      await seedFeedAt(app, owner.id, new Date(Math.floor(Date.now() / 1000) * 1000 - 60_000));
+
+      expect((await owner.agent.get("/analytics/activity").expect(200)).body.items).toHaveLength(2);
+      expect((await stranger.get("/analytics/activity").expect(200)).body.items).toEqual([]);
+    });
+
+    it("answers 401 without a session", async () => {
+      expect((await request(app.getHttpServer()).get("/analytics/activity")).status).toBe(401);
     });
   });
 

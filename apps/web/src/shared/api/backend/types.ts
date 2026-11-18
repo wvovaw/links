@@ -18,6 +18,8 @@ export interface Link {
   background: string;
   theme: PageTheme | null;
   status: LinkStatus;
+  /** When the page was last written; the links list prints it beside the page. */
+  updatedAt: string;
 }
 
 export interface PublicLink {
@@ -51,6 +53,12 @@ export interface StatsPoint {
   clicks: number;
 }
 
+/** One day of a page's own series, for its row's sparkline. Days with no views are absent here too. */
+export interface SparkPoint {
+  date: string;
+  views: number;
+}
+
 /** One traffic source, as the dashboard prints it: a utm tag, a host, or nothing at all. */
 export interface StatsSource {
   source: string;
@@ -70,6 +78,8 @@ export interface BlockStats {
 /** One page's statistics. */
 export interface LinkStats {
   totals: StatsTotals;
+  /** The same cards read over the window before this one, so they can print a delta; `null` when unbounded. */
+  previous: StatsTotals | null;
   timeseries: StatsPoint[];
   sources: StatsSource[];
   blocks: BlockStats[];
@@ -83,14 +93,31 @@ export interface OverviewLinkRow {
   views: number;
   visitors: number;
   clicks: number;
+  /** The page's own days, sparse like the main series: the client fills the range before drawing. */
+  spark: SparkPoint[];
 }
 
 /** Everything the home dashboard shows: the owner's pages together, and one row each. */
 export interface OverviewStats {
   totals: StatsTotals;
+  previous: StatsTotals | null;
   timeseries: StatsPoint[];
   sources: StatsSource[];
   links: OverviewLinkRow[];
+}
+
+/** One row of the live feed: the newest views and clicks across the owner's pages, newest first. */
+export interface ActivityItem {
+  id: string;
+  kind: "view" | "click";
+  linkId: string;
+  slug: string;
+  title: string;
+  /** A click names its block; a view has none, because nothing ever writes `block_events.kind = "view"`. */
+  blockId: string | null;
+  source: string;
+  medium: string;
+  at: string;
 }
 
 /** The window a caller asks about; an absent bound is unbounded on that side. */

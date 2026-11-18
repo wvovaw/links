@@ -48,8 +48,15 @@ const { isLogedIn } = storeToRefs(sessionStore);
         </template>
       </TopNavbar>
 
+      <!--
+        `min-w-0`: a grid item's automatic minimum size is its content's, so without it a page holding
+        something wide — a table, a row of cards — widens the whole document and the reader scrolls sideways
+        instead of the table scrolling inside its own card.
+      -->
       <div class="grid min-h-[calc(100vh-var(--navbar-height))]">
-        <slot />
+        <div class="min-w-0 flex flex-col">
+          <slot />
+        </div>
       </div>
     </Body>
   </Html>

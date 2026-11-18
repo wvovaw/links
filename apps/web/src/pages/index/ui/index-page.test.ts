@@ -58,6 +58,19 @@ describe("IndexPage", () => {
     expect(wrapper.find("[data-metric='views']").exists()).toBe(false);
   });
 
+  /* Every card draws its own metric over the range's days, with the same chart the screen below it draws. */
+  it("draws each card's line over the range's days", async () => {
+    mocks.getOverview.mockResolvedValue({ stats: overview, failed: false });
+
+    const wrapper = mountPage();
+    await flushPromises();
+
+    const charts = wrapper.findAll("[data-metric] [data-chart]");
+
+    expect(charts.map((chart) => chart.attributes("data-metric"))).toEqual(["clicks", "visitors", "views"]);
+    expect(charts.map((chart) => chart.attributes("data-rows"))).toEqual(["7", "7", "7"]);
+  });
+
   it("lists one row per page, each linking to its own statistics screen", async () => {
     mocks.getOverview.mockResolvedValue({ stats: overview, failed: false });
 
