@@ -21,6 +21,8 @@ export default defineI18nLocale(async (_locale) => {
     "stats.totals.visitors": "Посетители (по дням)",
     "stats.totals.clicks": "Клики",
     "stats.totals.ctr": "CTR",
+    "stats.totals.previous": "В сравнении с прошлым периодом",
+
     "stats.chart.title": "Визиты по дням",
     "stats.chart.subtitle": "Дни указаны по UTC",
     "stats.sources.title": "Источники",
