@@ -96,6 +96,12 @@ Two reads on mount — the overview for the numbers, the owner's list for the ro
 overview has no numbers for reads as zeros; a failed overview renders the failed card instead of the cards
 and the table. Deleting a row refetches both, so the cards never describe a list the table no longer shows.
 
+The card's line and the screen's chart are **one component**, `stats-dashboard/ui/series-chart.vue`: the same
+unovis area over the same rows, the card asking for the compact box — no axis, no crosshair, no tooltip, and
+`prevent-empty-domain` so an all-zero range is a line on the floor rather than a collapsed one. A card cannot
+drift from the chart it is a smaller copy of, and CTR is a row's own value (`ChartRow.ctr`, the day's clicks
+over its views), not a series the API sends.
+
 ### Decisions taken with the owner
 
 1. **Monogram instead of a thumbnail** — there is no preview image to show.
@@ -113,16 +119,17 @@ heads, the copy action and its confirmation, and the footer's "show" / "per page
 ### Tests
 
 - `LinkDto` carries `updatedAt` as an ISO string.
-- `metricSpark` returns one number per day of every preset, zero-fills the quiet days, and derives CTR per
-  day from that day's clicks and views (a day with no views is 0, not `NaN`).
+- `chartRows` carries each day's own CTR, and a day with no views has no rate to divide by — 0, never `NaN`.
 - `linksRows` joins metrics by id in the links list's order, and a page with no metrics reads as zeros.
-- The metric cards draw a sparkline only when a series is given, and keep their deltas as they are.
+- The shared chart hands the library one point per day of every preset, draws a card's line with no axis and
+  the screen's chart with one, and plots the metric it was asked for, CTR included.
+- The metric cards draw a line only when a series is given, and keep their deltas as they are.
 - The links card pages the rows, refetches on delete, and shows the empty state when there are no pages.
 - The page renders the header, the four cards and one row per page; a failed overview shows the failed card
   and no rows.
 
 ## What is left to the builder
 
-- The exact spacing of the card and the row, the monogram's size, the sparkline's stroke weight.
+- The exact spacing of the card and the row, the monogram's size, the line's stroke weight.
 - Which icons the card and the header use, and the primary button's variant.
 - The date format of the "Updated" cell (`dateStyle: "medium"`, in the reader's locale).

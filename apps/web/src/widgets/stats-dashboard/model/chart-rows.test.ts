@@ -11,14 +11,28 @@ describe("chartRows", () => {
     ]);
 
     expect(rows).toEqual([
-      { index: 0, date: "2026-11-16", label: "16.11", views: 0, visitors: 0, clicks: 0 },
-      { index: 1, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 },
+      { index: 0, date: "2026-11-16", label: "16.11", views: 0, visitors: 0, clicks: 0, ctr: 0 },
+      { index: 1, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2, ctr: 2 / 9 },
     ]);
+  });
+
+  /*
+    CTR has no series of its own: the card that draws it reads the day's own rate, and a day nobody visited
+    has none to draw. The period's average rate would draw a line the reader cannot explain.
+  */
+  it("carries each day's own CTR, and no rate for a day with no views", () => {
+    const rows = chartRows([
+      { date: "2026-11-16", views: 0, visitors: 0, clicks: 3 },
+      { date: "2026-11-17", views: 4, visitors: 2, clicks: 1 },
+    ]);
+
+    expect(rows[0]?.ctr).toBe(0);
+    expect(rows[1]?.ctr).toBe(0.25);
   });
 });
 
 describe("describeDay", () => {
-  const row = { index: 1, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2 };
+  const row = { index: 1, date: "2026-11-17", label: "17.11", views: 9, visitors: 7, clicks: 2, ctr: 2 / 9 };
 
   it("says the day and the count of the metric the chart draws", () => {
     expect(describeDay(row, "clicks")).toBe("2026-11-17 — 2");

@@ -1,7 +1,7 @@
 import type { StatsPoint, StatsTotals } from "~shared/api/backend";
 
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import TotalsCards from "./totals-cards.vue";
 
@@ -11,21 +11,47 @@ const previous: StatsTotals = { views: 100, visitors: 40, clicks: 6 };
 const points: StatsPoint[] = [{ date: "2026-11-17", views: 4, visitors: 2, clicks: 2 }];
 const now = new Date("2026-11-17T12:00:00.000Z");
 
-function cardOf(
-  id: string,
-  props: {
-    totals: StatsTotals;
-    previous?: StatsTotals | null;
-    showCtr?: boolean;
-    series?: { points: StatsPoint[]; preset: "7d" | "30d" | "all"; now: Date };
-  },
-) {
-  return mount(TotalsCards, { props }).find(`[data-metric="${id}"]`);
+/*
+  The library draws in a box it measures, and happy-dom has no layout — so it stands in here. What the cards
+  must get right is which series each one asks for.
+*/
+vi.mock("@unovis/vue", async () => {
+  const { defineComponent, h } = await import("vue");
+
+  return {
+    VisXYContainer: defineComponent({
+      name: "VisXYContainer",
+      props: { data: { type: Array, default: () => [] } },
+      setup(props, { slots }) {
+        return () => h("div", { "data-inner-rows": String(props.data.length) }, slots.default?.());
+      },
+    }),
+    VisLine: defineComponent({ name: "VisLine", setup: () => () => h("i") }),
+    VisArea: defineComponent({ name: "VisArea", setup: () => () => h("i") }),
+    VisAxis: defineComponent({ name: "VisAxis", setup: () => () => h("i") }),
+    VisCrosshair: defineComponent({ name: "VisCrosshair", setup: () => () => h("i") }),
+    VisTooltip: defineComponent({ name: "VisTooltip", setup: () => () => h("i") }),
+  };
+});
+
+const stubs = { ClientOnly: { template: "<div><slot /></div>" } };
+
+type Props = {
+  totals: StatsTotals;
+  previous?: StatsTotals | null;
+  showCtr?: boolean;
+  series?: { points: StatsPoint[]; preset: "7d" | "30d" | "all"; now: Date };
+};
+
+function cardOf(id: string, props: Props) {
+  return mount(TotalsCards, { props, global: { stubs } }).find(`[data-metric="${id}"]`);
 }
 
 describe("TotalsCards", () => {
   it("gives every metric a card, CTR included when the screen shows it", () => {
-    const cards = mount(TotalsCards, { props: { totals, previous, showCtr: true } }).findAll("[data-metric]");
+    const cards = mount(TotalsCards, { props: { totals, previous, showCtr: true }, global: { stubs } }).findAll(
+      "[data-metric]",
+    );
 
     expect(cards.map((card) => card.attributes("data-metric"))).toEqual(["clicks", "visitors", "ctr", "views"]);
   });
@@ -53,17 +79,23 @@ describe("TotalsCards", () => {
     expect(visitors).not.toContain("↓");
   });
 
-  /* The window's shape: one line per card, the range's quiet days included. */
-  it("draws each metric over the range it was asked for", () => {
-    const wrapper = mount(TotalsCards, { props: { totals, series: { points, preset: "7d", now } } });
+  /* Each card draws its own metric over the same days: one range, four shapes. */
+  it("draws every card over the days of the range it was asked for", () => {
+    const charts = mount(TotalsCards, {
+      props: { totals, series: { points, preset: "7d", now } },
+      global: { stubs },
+    }).findAll("[data-chart]");
 
-    expect(wrapper.findAll("[data-spark]")).toHaveLength(3);
-    expect(wrapper.find("[data-metric='clicks'] [data-spark]").attributes("data-points").split(" ")).toHaveLength(7);
+    expect(charts).toHaveLength(3);
+    expect(charts.map((chart) => chart.attributes("data-metric"))).toEqual(["clicks", "visitors", "views"]);
+    expect(charts.map((chart) => chart.attributes("data-rows"))).toEqual(["7", "7", "7"]);
   });
 
   /* No series, no line: a card drawn from a chart nobody asked for would show a shape that is not there. */
   it("draws no sparkline without a series", () => {
-    expect(mount(TotalsCards, { props: { totals, previous } }).find("[data-spark]").exists()).toBe(false);
+    expect(mount(TotalsCards, { props: { totals, previous }, global: { stubs } }).find("[data-chart]").exists()).toBe(
+      false,
+    );
   });
 
   /* No previous period — an unbounded range, or the API's `null` — and no baseline to compare against. */
@@ -72,7 +104,7 @@ describe("TotalsCards", () => {
       { totals, showCtr: true },
       { totals, previous: null, showCtr: true },
     ]) {
-      const wrapper = mount(TotalsCards, { props });
+      const wrapper = mount(TotalsCards, { props, global: { stubs } });
 
       expect(wrapper.findAll("[data-metric]")).toHaveLength(4);
       expect(wrapper.find("[data-delta]").exists()).toBe(false);

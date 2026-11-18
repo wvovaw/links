@@ -2,13 +2,12 @@
 import type { StatsPoint } from "~shared/api/backend";
 
 import { UICard, UIToggleGroup, UIToggleGroupItem } from "@links/ui";
-import { VisArea, VisAxis, VisCrosshair, VisTooltip, VisXYContainer } from "@unovis/vue";
 
-import type { ChartMetric, ChartRow, StatsRangePreset } from "../model";
+import type { ChartMetric, StatsRangePreset } from "../model";
 
-import { chartRows, describeDay, tickIndexes, withEmptyDays } from "../model";
+import SeriesChart from "./series-chart.vue";
 
-const props = defineProps<{
+defineProps<{
   points: StatsPoint[];
   preset: StatsRangePreset;
   /** The clock the axis is drawn from, passed in so a test — and the screen beside it — use one instant. */
@@ -19,20 +18,6 @@ const { t } = useI18n();
 
 const metrics: ChartMetric[] = ["views", "visitors", "clicks"];
 const metric = ref<ChartMetric>("views");
-
-const days = computed(() => withEmptyDays(props.points, props.preset, props.now));
-const rows = computed(() => chartRows(days.value));
-const ticks = computed(() => tickIndexes(rows.value.length));
-
-const x = (row: ChartRow) => row.index;
-/** A fresh function per metric: the library compares accessors by reference, and an unchanged one draws the old series. */
-const y = computed(() => (row: ChartRow) => row[metric.value]);
-/** The accent token fades downward, so the area reads as traffic under a line rather than a solid block. */
-const fill = () => "url(#traffic-chart-fill)";
-const stroke = () => "currentColor";
-const formatTick = (tick: number | Date) => rows.value[Number(tick)]?.label ?? "";
-/** The area's own datum is the whole series, so the day under the pointer comes from the crosshair. */
-const describePoint = (row: ChartRow) => describeDay(row, metric.value);
 </script>
 
 <template>
@@ -56,39 +41,7 @@ const describePoint = (row: ChartRow) => describeDay(row, metric.value);
       </div>
     </UICard.Header>
     <UICard.Body>
-      <!--
-        The chart measures its container, so it exists in the browser only; the box holds its height on the
-        server so the card does not jump when the area arrives. Hovering a day names it and the chosen
-        metric's count — the totals and the source table keep the meaning for a reader who never hovers.
-
-        `contain: inline-size` keeps the pixel width the library writes on its own svg out of the page's
-        min-content: without it that fixed width pins the card, and with the card the whole page, at a
-        desktop size, so a phone scrolls sideways instead of the chart re-measuring.
-      -->
-      <div
-        class="relative h-32 w-full text-piccolo [contain:inline-size]"
-        data-chart
-        :data-metric="metric"
-        :data-rows="rows.length"
-      >
-        <!-- The fill is defined here because the library draws the path and only takes its colour from us. -->
-        <svg class="absolute size-0" aria-hidden="true">
-          <defs>
-            <linearGradient id="traffic-chart-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="currentColor" stop-opacity="0.35" />
-              <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <ClientOnly>
-          <VisXYContainer :data="rows" :height="128">
-            <VisArea :x="x" :y="y" :color="fill" :line="true" :line-color="stroke" :line-width="2" />
-            <VisAxis type="x" :tick-values="ticks" :tick-format="formatTick" :grid-line="false" :domain-line="false" />
-            <VisCrosshair :template="describePoint" />
-            <VisTooltip />
-          </VisXYContainer>
-        </ClientOnly>
-      </div>
+      <SeriesChart :points="points" :preset="preset" :now="now" :metric="metric" />
     </UICard.Body>
   </UICard.Root>
 </template>

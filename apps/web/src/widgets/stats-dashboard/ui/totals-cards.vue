@@ -3,11 +3,11 @@ import type { StatsPoint, StatsTotals } from "~shared/api/backend";
 
 import { UICard } from "@links/ui";
 
+import type { SparkMetric } from "../model/chart-rows";
 import type { StatsRangePreset } from "../model/fill-days";
 
 import { countDelta, type MetricDelta, pointsDelta } from "../model/delta";
-import { metricSpark, type SparkMetric } from "../model/spark";
-import SparkLine from "./spark-line.vue";
+import SeriesChart from "./series-chart.vue";
 
 const props = defineProps<{
   totals: StatsTotals;
@@ -81,13 +81,6 @@ const metrics = computed(() => {
     },
   ];
 });
-
-/** The card's own line: the days of the range, so a quiet week reads as the flat line it was. */
-function sparkOf(metric: SparkMetric): number[] {
-  const { series } = props;
-
-  return series ? metricSpark(series.points, metric, series.preset, series.now) : [];
-}
 </script>
 
 <template>
@@ -121,10 +114,14 @@ function sparkOf(metric: SparkMetric): number[] {
           </dd>
         </div>
         <!-- A phone's two-column card has no room for the line; the number is what it must keep. -->
-        <SparkLine
+        <SeriesChart
           v-if="series"
-          class="ms-auto hidden shrink-0 self-center text-piccolo sm:block"
-          :values="sparkOf(metric.spark)"
+          compact
+          class="ms-auto hidden shrink-0 self-center sm:block"
+          :points="series.points"
+          :preset="series.preset"
+          :now="series.now"
+          :metric="metric.spark"
         />
       </UICard.Body>
     </UICard.Root>
