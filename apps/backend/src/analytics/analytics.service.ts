@@ -7,7 +7,16 @@ import { Repository } from "typeorm";
 import type { BlockEventKind } from "./block-event.entity";
 import type { StatsQueryDto } from "./dto/block-event.dto";
 import type { SourceColumns } from "./source";
-import type { BlockClicks, LinkStats, OverviewStats, SourceLabel, StatsPoint, StatsSource, StatsTotals } from "./stats";
+import type {
+  BlockClicks,
+  LinkStats,
+  OverviewStats,
+  SourceLabel,
+  SparkPoint,
+  StatsPoint,
+  StatsSource,
+  StatsTotals,
+} from "./stats";
 
 import { SlidingWindow } from "../common/sliding-window";
 import { BlockEvent } from "./block-event.entity";
@@ -153,7 +162,7 @@ export class AnalyticsService {
     }
 
     const scope = { ids: links.map((link) => link.id) };
-    const [views, clicks, viewDays, clickDays, viewSources, clickSources, previous] = await Promise.all([
+    const [views, clicks, viewDays, clickDays, viewSources, clickSources, previous, sparks] = await Promise.all([
       this.viewTotals(scope, range),
       this.clickTotals(scope, range),
       this.viewDays(scope, range),
@@ -161,6 +170,7 @@ export class AnalyticsService {
       this.viewSources(scope, range),
       this.clickSources(scope, range),
       this.previousOf(scope, range),
+      this.sparkByLink(scope, range),
     ]);
 
     const perLink = new Map<string, StatsTotals>();
@@ -171,6 +181,18 @@ export class AnalyticsService {
       totals.visitors += Number(row.visitors ?? 0);
       totals.clicks += Number(row.clicks ?? 0);
       perLink.set(row.linkId, totals);
+    }
+
+    /*
+      One scan feeds every row's sparkline. A page with no views gets an empty series, and the client fills
+      the shared span for it exactly as it fills the days a page skipped.
+    */
+    const sparksOf = new Map<string, SparkPoint[]>();
+    for (const row of sparks) {
+      const points = sparksOf.get(row.linkId) ?? [];
+
+      points.push({ date: String(row.date), views: Number(row.views) });
+      sparksOf.set(row.linkId, points);
     }
 
     const timeseries = this.mergeSeries(viewDays, clickDays);
@@ -193,6 +215,7 @@ export class AnalyticsService {
         slug: link.slug,
         title: link.title,
         ...(perLink.get(link.id) ?? emptyTotals()),
+        spark: sparksOf.get(link.id) ?? [],
       })),
     };
   }
@@ -262,6 +285,22 @@ export class AnalyticsService {
       .groupBy("date(v.createdAt)");
 
     return this.inRange(query, "v", range).getRawMany<Partial<StatsPoint>>();
+  }
+
+  /**
+   * Views per page per day: the per-row sparkline, sparse like the main series and ordered oldest first, so
+   * one scan answers every row of the list.
+   */
+  private sparkByLink(scope: Scope, range: StatsQueryDto): Promise<{ linkId: string; date: string; views: number }[]> {
+    const query = this.scoped("v", scope, this.views.createQueryBuilder("v"))
+      .select("v.linkId", "linkId")
+      .addSelect("date(v.createdAt)", "date")
+      .addSelect("COUNT(*)", "views")
+      .groupBy("v.linkId")
+      .addGroupBy("date(v.createdAt)")
+      .orderBy("date(v.createdAt)", "ASC");
+
+    return this.inRange(query, "v", range).getRawMany<{ linkId: string; date: string; views: number }>();
   }
 
   private clickDays(scope: Scope, range: StatsQueryDto): Promise<Partial<StatsPoint>[]> {

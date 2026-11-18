@@ -462,6 +462,7 @@ describe("block analytics", () => {
         views: 0,
         visitors: 0,
         clicks: 0,
+        spark: [],
       });
       expect(body.totals).toEqual({ views: 1, visitors: 1, clicks: 0 });
     });
@@ -516,6 +517,36 @@ describe("block analytics", () => {
 
       expect(body.totals).toEqual({ views: 0, visitors: 0, clicks: 0 });
       expect(body.previous).toEqual({ views: 2, visitors: 1, clicks: 0 });
+    });
+
+    /*
+      One scan grouped by page and day feeds every row's sparkline: two views on the same day are one point,
+      and a page nobody opened gets an empty series rather than another page's days.
+    */
+    it("gives every page its own sparse daily views", async () => {
+      const { agent, pages } = await twoPages(app);
+      const [opened, quiet] = pages;
+      const now = new Date();
+      const yesterday = new Date(now.getTime() - 86_400_000);
+      const day = (at: Date) => at.toISOString().slice(0, 10);
+
+      await seedViewAt(app, opened.id, yesterday);
+      await seedViewAt(app, opened.id, now);
+      await seedViewAt(app, opened.id, now);
+
+      const { body } = await agent
+        .get("/analytics/overview")
+        .query({
+          from: new Date(now.getTime() - 2 * 86_400_000).toISOString(),
+          to: new Date(now.getTime() + 60_000).toISOString(),
+        })
+        .expect(200);
+
+      expect(body.links.find((row: { id: string }) => row.id === opened.id).spark).toEqual([
+        { date: day(yesterday), views: 1 },
+        { date: day(now), views: 2 },
+      ]);
+      expect(body.links.find((row: { id: string }) => row.id === quiet.id).spark).toEqual([]);
     });
 
     it("keeps another user's pages out", async () => {

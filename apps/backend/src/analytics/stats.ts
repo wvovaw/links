@@ -17,6 +17,12 @@ export interface StatsPoint {
   clicks: number;
 }
 
+/** One day of a page's own series, for its row's sparkline. Days with no views are absent here too. */
+export interface SparkPoint {
+  date: string;
+  views: number;
+}
+
 export interface StatsSource {
   source: string;
   medium: string;
@@ -47,6 +53,8 @@ export interface OverviewLinkRow {
   views: number;
   visitors: number;
   clicks: number;
+  /** The page's own days, sparse like the main series: the client fills the range before drawing. */
+  spark: SparkPoint[];
 }
 
 export interface OverviewStats {
