@@ -63,7 +63,7 @@ describe("LinkStatsPage", () => {
     const wrapper = mountPage();
     await flushPromises();
 
-    await wrapper.get("[data-preset='30d']").trigger("click");
+    await wrapper.get("select").setValue("30d");
     await flushPromises();
 
     expect(mocks.getLinkStats).toHaveBeenCalledTimes(2);

@@ -14,6 +14,7 @@ export default defineI18nLocale(async (_locale) => {
     "pages.link.404": "Этой ссылки не существует",
 
     "stats.title": "Статистика",
+    "stats.range.label": "Период",
     "stats.range.7d": "7 дней",
     "stats.range.30d": "30 дней",
     "stats.range.all": "Всё время",
