@@ -114,8 +114,8 @@ git commit -m "feat(backend): expose a page's update time on the link DTO"
   `metricSpark(points: StatsPoint[], metric: SparkMetric, preset: StatsRangePreset, now: Date): number[]` —
   one number per day of the range.
 - Produces: `SparkLine` props `{ values: number[] }`, rendering `<svg data-spark :data-points>`.
-- Produces: `TotalsCards` props gain `points?: StatsPoint[]; preset?: StatsRangePreset; now?: Date`; card
-  order becomes clicks, visitors, views, CTR (CTR last, only with `showCtr`).
+- Produces: `TotalsCards` props gain `series?: { points: StatsPoint[]; preset: StatsRangePreset; now: Date }`;
+  card order becomes clicks, visitors, CTR, views (CTR only with `showCtr`).
 
 - [ ] **Step 1: Write the failing model test**
 
@@ -154,10 +154,10 @@ baseline. `preserveAspectRatio="none"`, `vector-effect="non-scaling-stroke"`, st
 
 - [ ] **Step 5: Wire the cards and extend their test**
 
-`TotalsCards` gains the three optional props, drops the CTR card to last, and renders
-`<SparkLine v-if="points?.length" class="ms-auto self-center text-piccolo" :values="…">` in the card's body.
-Extend `totals-cards.test.ts`: the card order is `["clicks", "visitors", "views", "ctr"]`; with `points` and
-`preset` every card has `[data-spark]`; without `points` none does.
+`TotalsCards` gains the optional `series`, reorders its cards, and renders
+`<SparkLine v-if="series" class="…" :values="sparkOf(metric)">` in the card's body. Extend
+`totals-cards.test.ts`: the card order is `["clicks", "visitors", "ctr", "views"]`; with `series` every card
+has `[data-spark]`; without it none does.
 
 - [ ] **Step 6: Run the web tests**
 
