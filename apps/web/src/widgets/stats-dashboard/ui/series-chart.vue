@@ -24,8 +24,15 @@ const ticks = computed(() => tickIndexes(rows.value.length));
 const height = computed(() => (props.compact ? 24 : 128));
 
 const x = (row: ChartRow) => row.index;
-/** A fresh function per metric: the library compares accessors by reference, and an unchanged one draws the old series. */
-const y = computed(() => (row: ChartRow) => row[props.metric]);
+/**
+ * A fresh function per metric: the library compares accessors by reference, so an unchanged one leaves the
+ * old series on the screen. The metric has to be read here, in the computed's own body — read inside the
+ * accessor it would be untracked, and the computed would hand out its first function forever.
+ */
+const y = computed(() => {
+  const metric = props.metric;
+  return (row: ChartRow) => row[metric];
+});
 /** The accent token fades downward, so the area reads as traffic under a line rather than a solid block. */
 const fill = () => "url(#traffic-chart-fill)";
 const stroke = () => "currentColor";
@@ -67,11 +74,15 @@ const describePoint = (row: ChartRow) => describeDay(row, props.metric);
         A flat series then lies on the floor of the box, where half the stroke is clipped — so the line is
         inset, and the screen's chart keeps the edges it has always had.
       -->
+      <!--
+        `v-bind`, not a prop bound to `undefined`: the library copies every vnode prop over its own default,
+        so `:padding="… : undefined"` replaces `{ top: 0, bottom: 0, left: 0, right: 0 }` with `undefined`
+        and the chart throws on `padding.left` before it draws a thing.
+      -->
       <VisXYContainer
         :data="rows"
         :height="height"
-        :prevent-empty-domain="compact ? true : undefined"
-        :padding="compact ? { top: 2, bottom: 2 } : undefined"
+        v-bind="compact ? { preventEmptyDomain: true, padding: { top: 2, bottom: 2 } } : {}"
       >
         <VisLine v-if="compact" :x="x" :y="y" :color="stroke" :line-width="2" />
         <template v-else>
