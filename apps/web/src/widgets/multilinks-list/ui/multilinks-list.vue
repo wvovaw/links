@@ -36,8 +36,9 @@ watch([() => props.links.length, perPage], () => {
 const address = (slug: string) => `${config.public.baseUrl}/${slug}`;
 
 async function copyAddress(slug: string) {
-  await copy(address(slug));
-  toast({ title: t("links.copy.done"), content: address(slug), variant: "success" });
+  const url = address(slug);
+  await copy(url);
+  toast({ title: t("links.copy.done"), content: url, variant: "success" });
 }
 
 /** The API writes ISO strings; a reader gets the date in their own locale, and a dash if it cannot parse. */
